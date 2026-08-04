@@ -1,0 +1,829 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="en-US" original="SL Chronext Webshop">
+    <body>
+      <group id="body">
+        <trans-unit id="Table 2307618253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General Sales Price Setup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 2764702207 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 1 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Cat 1 Non Stock % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3767559402 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 2 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Cat 2 Non Stock % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 609445297 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 3 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Cat 3 Non Stock % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3885887661 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If Stock Price From Cat 1</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field If Stock Price From Cat 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3248191044 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If Stock Price From Cat 2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field If Stock Price From Cat 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 2610494427 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If Stock Price From Cat 3</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field If Stock Price From Cat 3 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3496316770 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If Stock Price To Cat 1</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field If Stock Price To Cat 1 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 1583226919 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If Stock Price To Cat 2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field If Stock Price To Cat 2 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 2220923536 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>If Stock Price To Cat 3</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field If Stock Price To Cat 3 - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3328137719 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Minimum Margin %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Minimum Margin % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3984894204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non Stock Price Threshold %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Non Stock Price Threshold % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 2233414263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Price Export Active</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Price Export Active - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 1663593181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Primary Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Primary Key - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 3467753585 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stock Price Threshold %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field Stock Price Threshold % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Archive</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 3495442685 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Accept New Setup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Accept New Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2790486453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Comment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Comment - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2542713143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Country Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Country Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 4198939294 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 458406397 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Ending Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 4160221838 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Ending Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 3521145799 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exchange Rate Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Exchange Rate Amount - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2781008495 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exchange Rate Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Exchange Rate Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 568743302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2626717425 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Modified Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Last Modified Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 3037641201 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Modified UserID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Last Modified UserID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 932068758 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Non Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2347701878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Old Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 1908046867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Reason Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 263956574 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Recom. Retail Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Recom. Retail Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2969163710 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remark</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Remark - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 3083491432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remark Backup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Remark Backup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 460889064 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Starting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 980877959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Starting Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 131209735 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 3563804617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Strike Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Strike Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 2931278654 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validated</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Validated - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4197073420 - Field 1684721775 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Version No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Version No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Checking</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3495442685 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Accept New Setup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Accept New Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 4041162204 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Approved By</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Approved By - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2790486453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Comment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Comment - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2542713143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Country Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Country Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 4198939294 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3978715042 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DE Price Processed</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field DE Price Processed - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 458406397 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Ending Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 4160221838 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Ending Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3521145799 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exchange Rate Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Exchange Rate Amount - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2781008495 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exchange Rate Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Exchange Rate Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 568743302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2626717425 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Modified Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Last Modified Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3037641201 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Modified UserID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Last Modified UserID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 932068758 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Non Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2347701878 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Old Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Old Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 1908046867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Reason Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 263956574 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Recom. Retail Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Recom. Retail Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2969163710 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remark</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Remark - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3083491432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remark Backup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Remark Backup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 460889064 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Starting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 980877959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Starting Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 131209735 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3563804617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Strike Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Strike Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2931278654 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validated</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Validated - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 1684721775 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Version No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Version No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1947516947 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Import Protocol</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Import Protocol - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1947516947 - Field 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Created At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Import Protocol - Field Created At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1947516947 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Import Protocol - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1947516947 - Field 3080618677 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Message</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Import Protocol - Field Message - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1947516947 - Field 3627141058 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Import Protocol - Field Source Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Inbound File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Field 1545435603 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filename</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Filename - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Field 2658601029 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inserted At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Inserted At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Field 2446130881 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Processed At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Field 2731678701 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field SourceFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 869291131 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Outbound File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 1545435603 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filename</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Filename - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 2658601029 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inserted At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Inserted At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 3982411418 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Message Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Message Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 3616952928 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Number of Attempts</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Number of Attempts - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 2446130881 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Processed At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 2731678701 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field SourceFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 2708250016 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>User ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field User ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3946361192 - NamedType 1580460770" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error while processing sales prices.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Import Sales Prices - NamedType ProcessingErrorErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3946361192 - NamedType 3876616298" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Read lines: %1, marked for processing: %2.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Import Sales Prices - NamedType RowCountDifferingErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3946361192 - NamedType 3995164781" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unkown Column: %1.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Import Sales Prices - NamedType UnknownColumnErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General Sales Price Setup</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 2254596456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non Stock Price Formula</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Non Stock Price Formula - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 2764702207 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 1 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 1 Non Stock % - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 2764702207 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 1 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 1 Non Stock % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 382154248 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 1 Stock Price From</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 1 Stock Price From - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 382154248 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 1 Stock Price From</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 1 Stock Price From - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 2369035507 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 1 Stock Price To</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 1 Stock Price To - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 2369035507 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 1 Stock Price To</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 1 Stock Price To - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 3767559402 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 2 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 2 Non Stock % - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 4240889881 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 2 Stock Price From</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 2 Stock Price From - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 4240889881 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 2 Stock Price From</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 2 Stock Price From - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 234268950 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 2 Stock Price To</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 2 Stock Price To - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 234268950 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 2 Stock Price To</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 2 Stock Price To - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 609445297 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 3 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 3 Non Stock % - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 609445297 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 3 Non Stock %</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 3 Non Stock % - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 3082002122 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 3 Stock Price From</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 3 Stock Price From - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 3082002122 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 3 Stock Price From</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 3 Stock Price From - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 71192373 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Category 3 Stock Price To</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 3 Stock Price To - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 71192373 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Cat 3 Stock Price To</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Cat 3 Stock Price To - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 131209735 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 3328137719 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Watch will be deactivated on WebShop if the sales price is below min. margin</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Minimum Margin % - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 176142393 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Threshold</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Threshold - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4197073420 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Archive</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Archive - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Checking List</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 3152858700" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Are you sure want to upload sales price?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT000</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 2515162083" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Final Price %1% less than existing Final Price %2</source>
+          <note from="Developer" annotates="general" priority="2">%1 = percent, %2 = old price</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT001</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 3790555317" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Final Price has %1% profit, less than %2% setup margin</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT003</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 4259342911" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code %1 is not set for Country %2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT005</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1877465466" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date %1 cannot be greater than Ending Date %2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT006</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1239768849" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New Final Price %1% greater than existing Final Price %2</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT007</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 3321767723" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Please delete existing entries to import new price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT009</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Control 2913119229 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Approved</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control Approved - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Control 700150807 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Approver</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control Approver - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Control 3569840675 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>FinalPrice</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control FinalPrice - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Control 307716701 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>DE Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control NonDEPrice - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Control 307716701 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non DE Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control NonDEPrice - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 3201496503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Import - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 3603415378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add All Countries</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Add All Countries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 803889193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Approve</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Approve - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 3822058245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import CSV</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Import CSV - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 3657829122 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validate</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Validate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 4137353997 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Validation - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 304293994 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Upload Sales Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Upload Sales Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1708629873 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Import Sales Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1708629873 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Option</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1708629873 - Control 1001245461 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Set Price for All Countries</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - Control SetPriceForAllCountries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 277553233 - Field 1819850387 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Delivery Time (Days)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Country Region - Field Delivery Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 277553233 - Field 3494206396 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Sales Price Activated</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Country Region - Field Sales Price Activated - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 277553233 - Field 3485997273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Sales Price Currency Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Country Region - Field Sales Price Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 277553233 - Field 454223836 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Taxation Type</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Country Region - Field Taxation Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 2790486453 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Comment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Comment - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 284764054 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Country/Region Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Country/Region Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 1908046867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Reason Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Reason Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 2160061737 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Recom. Retail Price incl. VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Recom. Retail Price incl. VAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 2969163710 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Remark</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Remark - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 950198769 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Strike-Price incl. VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Strike-Price incl. VAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 1708449288 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Unit Price (LCY)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Unit Price (LCY) - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2615087502 - Field 1193518619 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
+          <source>Unit Price (LCY) incl. VAT</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Unit Price (LCY) incl. VAT - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 3844911025 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Canceled</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue Canceled - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 2248886284 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue Error - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 2849448176 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>In Process</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue In Process - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 4137051400 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue New - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 342756159 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Notification</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue Notification - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 3208180638 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue Processed - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2997533691 - EnumValue 976627620 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>To Process</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue To Process - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2668283973 - EnumValue 2940224144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CatMan</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Sales Price Reason Code - EnumValue CatMan - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2668283973 - EnumValue 940377800 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Marketing</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Sales Price Reason Code - EnumValue Marketing - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2668283973 - EnumValue 1554716946 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchasing</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Sales Price Reason Code - EnumValue Purchasing - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3144645257 - EnumValue 1371923692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source> </source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue   - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3144645257 - EnumValue 1562294763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Both</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue Both - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3144645257 - EnumValue 470052015 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Differential Taxation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue Diff - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3144645257 - EnumValue 2007862461 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Full Taxation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue Full - Property Caption</note>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,98 @@
+// Migriert aus NAV Table 50006 "General Sales Price Setup" (1:1, Objekt-ID umnummeriert
+// wegen app.json idRanges 51000-51049, Feld-IDs 1-13 unverändert übernommen).
+table 51000 "SL General Sales Price Setup"
+{
+    Caption = 'General Sales Price Setup';
+    DataClassification = ToBeClassified;
+
+    fields
+    {
+        field(1; "Primary Key"; Code[10])
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(2; "Minimum Margin %"; Decimal)
+        {
+            Caption = 'Minimum Margin %';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 2;
+        }
+        field(3; "If Stock Price From Cat 1"; Decimal)
+        {
+            Caption = 'If Stock Price From Cat 1';
+            DataClassification = ToBeClassified;
+        }
+        field(4; "If Stock Price To Cat 1"; Decimal)
+        {
+            Caption = 'If Stock Price To Cat 1';
+            DataClassification = ToBeClassified;
+        }
+        field(5; "If Stock Price From Cat 2"; Decimal)
+        {
+            Caption = 'If Stock Price From Cat 2';
+            DataClassification = ToBeClassified;
+        }
+        field(6; "If Stock Price To Cat 2"; Decimal)
+        {
+            Caption = 'If Stock Price To Cat 2';
+            DataClassification = ToBeClassified;
+        }
+        field(7; "If Stock Price From Cat 3"; Decimal)
+        {
+            Caption = 'If Stock Price From Cat 3';
+            DataClassification = ToBeClassified;
+        }
+        field(8; "If Stock Price To Cat 3"; Decimal)
+        {
+            Caption = 'If Stock Price To Cat 3';
+            DataClassification = ToBeClassified;
+        }
+        field(9; "Cat 1 Non Stock %"; Decimal)
+        {
+            Caption = 'Cat 1 Non Stock %';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 2;
+        }
+        field(10; "Cat 2 Non Stock %"; Decimal)
+        {
+            Caption = 'Cat 2 Non Stock %';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 2;
+        }
+        field(11; "Cat 3 Non Stock %"; Decimal)
+        {
+            Caption = 'Cat 3 Non Stock %';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 2;
+        }
+        field(12; "Stock Price Threshold %"; Decimal)
+        {
+            Caption = 'Stock Price Threshold %';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 2;
+        }
+        field(13; "Non Stock Price Threshold %"; Decimal)
+        {
+            Caption = 'Non Stock Price Threshold %';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 2;
+        }
+        // Neu (nicht Teil der Quelltabelle): schlanker Ersatz für die Prüfung
+        // "Ext. Interface Setup 'UPDPRI' aktiv?" aus dem ISV-Modul EXIN in Codeunit 82001.
+        // Steuert, ob Codeunit 51000 "SL Export Gateway Sales Price" bei Sales-Price-Änderungen
+        // eine Outbound-Datei (Table 51004) erzeugt.
+        field(14; "Price Export Active"; Boolean)
+        {
+            Caption = 'Price Export Active';
+            DataClassification = ToBeClassified;
+        }
+    }
+
+    keys
+    {
+        key(PK; "Primary Key")
+        {
+            Clustered = true;
+        }
+    }
+}
