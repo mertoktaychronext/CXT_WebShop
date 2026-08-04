@@ -115,6 +115,8 @@ table 51001 "SL Sales Price Checking"
             Caption = 'Country Code';
             DataClassification = ToBeClassified;
             TableRelation = "Country/Region";
+            // Blank bedeutet: die Zeile gilt für alle Länder, die dieselbe "Currency Code" verwenden
+            // (erzeugt durch Page 51001, Action "Add all Currencies"), nicht für ein bestimmtes Land.
 
             trigger OnValidate()
             begin
@@ -175,9 +177,12 @@ table 51001 "SL Sales Price Checking"
             Caption = 'Old Stock Price';
             DataClassification = ToBeClassified;
         }
-        field(24; "DE Price Processed"; Boolean)
+        // war "DE Price Processed" - umbenannt, da die Erweiterung jetzt pro Währung statt pro Land
+        // erfolgt (Page 51001, Action "Add all Currencies"). Gleiche ID, gleiche Boolean-Semantik:
+        // wird gesetzt, sobald eine Basiszeile erfolgreich auf alle Fremdwährungen erweitert wurde.
+        field(24; "Currencies Processed"; Boolean)
         {
-            Caption = 'DE Price Processed';
+            Caption = 'Currencies Processed';
             DataClassification = ToBeClassified;
         }
         field(25; "Approved By"; Code[20])

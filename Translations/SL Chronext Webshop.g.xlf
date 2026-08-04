@@ -228,15 +228,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Country Code - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2835222237 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currencies Processed</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Currencies Processed - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2923533672 - Field 4198939294 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Currency Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Currency Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2923533672 - Field 3978715042 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DE Price Processed</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field DE Price Processed - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2923533672 - Field 458406397 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Ending Date</source>
@@ -648,10 +648,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Import - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2205381466 - Action 3603415378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Add All Countries</source>
+        <trans-unit id="Page 2205381466 - Action 699038459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add all Currencies</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Add All Countries - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Add all Currencies - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - Action 803889193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Approve</source>
@@ -672,11 +672,6 @@
           <source>Validation</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Validation - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 2205381466 - Action 304293994 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Upload Sales Price</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Upload Sales Price - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 1708629873 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Sales Price</source>

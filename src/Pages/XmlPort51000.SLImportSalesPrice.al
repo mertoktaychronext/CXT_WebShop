@@ -60,7 +60,8 @@ xmlport 51000 "SL Import Sales Price"
                     // 1) "Set Price for All Countries": legte für jedes Land mit "Sales Price Activated" = true
                     //    zusätzliche "SL Sales Price Checking"-Zeilen mit umgerechnetem Preis an.
                     //    Eine aktive, gleichwertige Implementierung existiert bereits in
-                    //    Page 51001 "SL Sales Price Checking List", Action "Add All Countries".
+                    //    Page 51001 "SL Sales Price Checking List", Action "Add all Currencies"
+                    //    (früher "Add All Countries", ersetzt durch OpenSpec-Change "add-all-currencies").
                     // 2) Non-Stock-Preis-Berechnung je Kategorie (Cat 1-3) aus
                     //    "SL General Sales Price Setup". Eine aktive, gleichwertige Implementierung
                     //    existiert bereits in Page 51001, Prozedur fnCalcNonStockPrice.

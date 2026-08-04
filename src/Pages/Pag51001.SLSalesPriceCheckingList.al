@@ -8,10 +8,18 @@
 // migriert und in Action "Import CSV" verdrahtet (siehe XmlPort51000.SLImportSalesPrice.al).
 //
 // Scope-Reduktion auf Kundenwunsch (nach vollständiger Migration): Nur noch "Import CSV", "Validate",
-// "Approve" und "Add All Countries" (Pro-Land-Kopie) werden aktiv gebraucht. Entfernt wurden die
-// Debug-Actions "UnValidate"/"TempImport"/"Clear" sowie die Actions "Upload Sales Price (DE)" und
-// "Upload Sales Price (Non DE)" (inkl. der zugehörigen Differenzbesteuerungs-/CHF-Sonderregel und
+// "Approve" und "Add all Currencies" (Pro-Währung-Kopie, siehe unten) werden aktiv gebraucht. Entfernt
+// wurden die Debug-Actions "UnValidate"/"TempImport"/"Clear" sowie die Actions "Upload Sales Price (DE)"
+// und "Upload Sales Price (Non DE)" (inkl. der zugehörigen Differenzbesteuerungs-/CHF-Sonderregel und
 // Table 51003 "SL Item Attribute Collection", die ausschließlich von der DE-Action genutzt wurde).
+//
+// OpenSpec-Change "add-all-currencies" (openspec/changes/add-all-currencies/): Die ursprüngliche Action
+// "Add All Countries" wurde ersatzlos durch "Add all Currencies" ersetzt. Statt einer neuen Zeile pro
+// aktiviertem Land entsteht jetzt genau eine Zeile pro distinkter Währung (Länder, die sich eine Währung
+// teilen, erzeugen keine doppelten Zeilen mehr). Neue Zeilen haben "Country Code" = '' (gelten für alle
+// Länder mit dieser Währung). Das Feld "DE Price Processed" wurde dafür in "Currencies Processed"
+// umbenannt (gleiche ID/Semantik). Schleife, Guards und Feldkopie-Logik entsprechen ansonsten 1:1 der
+// alten Action; einziger Unterschied ist ein Get()-Dedup-Check pro Währung vor dem Insert.
 // Die Action "Upload Sales Price" (ursprünglich Codeunit 82001-Legacy-Action) bleibt bewusst als
 // Platzhalter erhalten - die Funktionalität dahinter wird zu einem späteren Zeitpunkt überarbeitet.
 // Codeunit 51000 "SL Export Gateway Sales Price" (war Codeunit 82001, native JsonObject statt
@@ -237,7 +245,7 @@ page 51001 "SL Sales Price Checking List"
                         // Im Original bereits auskommentiert (toter Code), unverändert übernommen:
                         // g_recSalesPriceCheck.Reset();
                         // g_recSalesPriceCheck.SetFilter("Country Code", '%1', 'DE');
-                        // g_recSalesPriceCheck.SetRange("DE Price Processed", false);
+                        // g_recSalesPriceCheck.SetRange("Currencies Processed", false);
                         // if g_recSalesPriceCheck.FindFirst() then
                         //     Error('Please click on Add All countries');
 
@@ -326,10 +334,10 @@ page 51001 "SL Sales Price Checking List"
                         end;
                     end;
                 }
-                action("Add All Countries")
+                action("Add all Currencies")
                 {
                     ApplicationArea = All;
-                    Caption = 'Add All Countries';
+                    Caption = 'Add all Currencies';
                     Enabled = not NonDEPrice;
                     Image = Add;
                     Promoted = true;
@@ -348,7 +356,7 @@ page 51001 "SL Sales Price Checking List"
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetFilter("Country Code", '%1', 'DE');
-                        g_recSalesPriceCheck.SetRange("DE Price Processed", false);
+                        g_recSalesPriceCheck.SetRange("Currencies Processed", false);
                         if not g_recSalesPriceCheck.FindFirst() then
                             Error('Nothing to process');
 
@@ -367,13 +375,13 @@ page 51001 "SL Sales Price Checking List"
                         // Im Original bereits auskommentiert (toter Code), unverändert übernommen:
                         // g_recSalesPriceCheck.Reset();
                         // g_recSalesPriceCheck.SetFilter("Country Code", '%1', 'DE');
-                        // g_recSalesPriceCheck.SetRange("DE Price Processed", false);
+                        // g_recSalesPriceCheck.SetRange("Currencies Processed", false);
                         // if g_recSalesPriceCheck.FindFirst() then
                         //     Error('Please click on Add All countries');
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetFilter("Country Code", '%1', 'DE');
-                        g_recSalesPriceCheck.SetRange("DE Price Processed", false);
+                        g_recSalesPriceCheck.SetRange("Currencies Processed", false);
                         if g_recSalesPriceCheck.FindSet() then
                             repeat
                                 g_recCountry.Reset();
@@ -381,12 +389,21 @@ page 51001 "SL Sales Price Checking List"
                                 g_recCountry.SetRange("Sales Price Activated", true);
                                 if g_recCountry.FindSet() then
                                     repeat
-                                        g_recSalesPriceCheck2.Init();
-                                        g_recSalesPriceCheck2."Item No." := g_recSalesPriceCheck."Item No.";
-                                        g_recSalesPriceCheck2."Variant Code" := g_recSalesPriceCheck."Variant Code";
-                                        g_recSalesPriceCheck2."Country Code" := g_recCountry.Code;
-                                        g_recSalesPriceCheck2."Currency Code" := g_recCountry."Sales Price Currency Code";
-                                        if g_recSalesPriceCheck2."Currency Code" <> '' then begin
+                                        // Dedup pro Währung (statt pro Land): eine Zeile für diese Währung
+                                        // existiert bereits (in dieser Tabelle bzw. bereits in diesem Lauf
+                                        // eingefügt), oder das Land nutzt gar keine/die Quellwährung selbst -
+                                        // dann überspringen. Country Code bleibt bei neuen Zeilen leer, da
+                                        // die Zeile für alle Länder mit dieser Währung gilt, nicht nur für
+                                        // g_recCountry.
+                                        if (g_recCountry."Sales Price Currency Code" <> '') and
+                                           (g_recCountry."Sales Price Currency Code" <> g_recSalesPriceCheck."Currency Code") and
+                                           (not g_recSalesPriceCheck2.Get(g_recSalesPriceCheck."Item No.", g_recSalesPriceCheck."Variant Code", g_recCountry."Sales Price Currency Code", ''))
+                                        then begin
+                                            g_recSalesPriceCheck2.Init();
+                                            g_recSalesPriceCheck2."Item No." := g_recSalesPriceCheck."Item No.";
+                                            g_recSalesPriceCheck2."Variant Code" := g_recSalesPriceCheck."Variant Code";
+                                            g_recSalesPriceCheck2."Country Code" := '';
+                                            g_recSalesPriceCheck2."Currency Code" := g_recCountry."Sales Price Currency Code";
                                             g_recCurrExcRate.Reset();
                                             g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."Currency Code");
                                             if g_recCurrExcRate.FindLast() then begin
@@ -397,24 +414,20 @@ page 51001 "SL Sales Price Checking List"
                                                 g_recSalesPriceCheck2."Exchange Rate Amount" := 1 / g_decExchangeRateAmt;
                                                 g_recSalesPriceCheck2."Exchange Rate Date" := g_dateExchangeRateDate;
                                             end;
-                                        end else begin
-                                            g_recSalesPriceCheck2."Stock Price" := g_recSalesPriceCheck."Stock Price";
-                                            g_recSalesPriceCheck2."Recom. Retail Price" := g_recSalesPriceCheck."Recom. Retail Price";
-                                            g_recSalesPriceCheck2."Strike Price" := g_recSalesPriceCheck."Strike Price";
+                                            g_recSalesPriceCheck2."Starting Date" := g_recSalesPriceCheck."Starting Date";
+                                            g_recSalesPriceCheck2."Starting Time" := g_recSalesPriceCheck."Starting Time";
+                                            g_recSalesPriceCheck2."Ending Date" := g_recSalesPriceCheck."Ending Date";
+                                            g_recSalesPriceCheck2."Ending Time" := g_recSalesPriceCheck."Ending Time";
+                                            g_recSalesPriceCheck2."Reason Code" := g_recSalesPriceCheck."Reason Code";
+                                            g_recSalesPriceCheck2.Comment := g_recSalesPriceCheck.Comment;
+                                            g_recSalesPriceCheck2.Validated := true;
+                                            g_recSalesPriceCheck2."Approved By" := g_recSalesPriceCheck."Approved By";
+                                            g_recSalesPriceCheck2."Accept New Setup" := g_recSalesPriceCheck."Accept New Setup";
+                                            g_recSalesPriceCheck2.Insert(true);
                                         end;
-                                        g_recSalesPriceCheck2."Starting Date" := g_recSalesPriceCheck."Starting Date";
-                                        g_recSalesPriceCheck2."Starting Time" := g_recSalesPriceCheck."Starting Time";
-                                        g_recSalesPriceCheck2."Ending Date" := g_recSalesPriceCheck."Ending Date";
-                                        g_recSalesPriceCheck2."Ending Time" := g_recSalesPriceCheck."Ending Time";
-                                        g_recSalesPriceCheck2."Reason Code" := g_recSalesPriceCheck."Reason Code";
-                                        g_recSalesPriceCheck2.Comment := g_recSalesPriceCheck.Comment;
-                                        g_recSalesPriceCheck2.Validated := true;
-                                        g_recSalesPriceCheck2."Approved By" := g_recSalesPriceCheck."Approved By";
-                                        g_recSalesPriceCheck2."Accept New Setup" := g_recSalesPriceCheck."Accept New Setup";
-                                        g_recSalesPriceCheck2.Insert(true);
                                     until g_recCountry.Next() = 0;
                                 UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."Item No.", g_recSalesPriceCheck."Variant Code", g_recSalesPriceCheck."Currency Code", g_recSalesPriceCheck."Country Code");
-                                UpdateSalesPriceCheck."DE Price Processed" := true;
+                                UpdateSalesPriceCheck."Currencies Processed" := true;
                                 UpdateSalesPriceCheck.Modify();
                             until g_recSalesPriceCheck.Next() = 0;
 
@@ -464,7 +477,7 @@ page 51001 "SL Sales Price Checking List"
 
                 //         g_recSalesPriceCheck.Reset();
                 //         g_recSalesPriceCheck.SetFilter("Country Code", '%1', 'DE');
-                //         g_recSalesPriceCheck.SetRange("DE Price Processed", false);
+                //         g_recSalesPriceCheck.SetRange("Currencies Processed", false);
                 //         if g_recSalesPriceCheck.FindFirst() then
                 //             Error('Please click on Add All countries');
 
