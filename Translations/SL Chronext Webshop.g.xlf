@@ -148,11 +148,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Comment - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4197073420 - Field 2542713143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Country Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Country Code - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 4197073420 - Field 4198939294 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Currency Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -853,11 +848,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension SL Sales Prices - Control Comment - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="PageExtension 3372775515 - Control 284764054 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 352260082">
-          <source>Specifies the country/region this sales price applies to.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension SL Sales Prices - Control Country/Region Code - Property ToolTip</note>
-        </trans-unit>
         <trans-unit id="PageExtension 3372775515 - Control 1908046867 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 352260082">
           <source>Specifies the reason for this price or price change.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -907,11 +897,6 @@
           <source>Comment</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Comment - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="TableExtension 2615087502 - Field 284764054 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
-          <source>Country/Region Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Country/Region Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2615087502 - Field 1908046867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
           <source>Reason Code</source>

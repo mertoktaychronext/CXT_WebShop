@@ -44,10 +44,6 @@ page 51002 "SL Sales Price Archive"
                 {
                     ApplicationArea = All;
                 }
-                field("Country Code"; Rec."Country Code")
-                {
-                    ApplicationArea = All;
-                }
                 field("Version No."; Rec."Version No.")
                 {
                     ApplicationArea = All;

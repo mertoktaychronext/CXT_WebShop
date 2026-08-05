@@ -1,6 +1,6 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-05 (vollständig neu erstellt – Export-Anbindung und Preis-Übernahme in "Sales Price"/Archiv ergänzt)
+**Erstellt am:** 2026-08-05 (aktualisiert – Artikelvarianten und Country Code vollständig aus dem Datenmodell entfernt)
 **Analysierte Projekte:** 1
 **Gesamtanzahl Funktionen:** 47
 
@@ -54,7 +54,7 @@
 | SL Chronext Webshop | SL Import Sales Price | XMLport | `OnPreXmlPort` | Trigger | – | Bereitet den Import vor (Kopfzeilen-Erkennung zurücksetzen). |
 | SL Chronext Webshop | SL Import Sales Price | XMLport | `OnPostXmlPort` | Trigger | – | Zeigt Abschlussmeldung nach Import. |
 | SL Chronext Webshop | SL Export Gateway Sales Price | Codeunit | `WriteBackAndArchive` | Prozedur | Public | Übernimmt eine freigegebene Preiszeile in "Sales Price" (neu oder aktualisiert, immer "Für alle Kunden") und legt danach eine neue Version im Archiv ab. |
-| SL Chronext Webshop | SL Export Gateway Sales Price | Codeunit | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Land, Preis, Vergleichspreise, Grund und Anmerkung auf den Verkaufspreis-Datensatz. |
+| SL Chronext Webshop | SL Export Gateway Sales Price | Codeunit | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Preis, Vergleichspreise, Grund und Anmerkung auf den Verkaufspreis-Datensatz. |
 | SL Chronext Webshop | SL Export Gateway Sales Price | Codeunit | `ArchiveCheckingLine` | Prozedur | Internal | Ermittelt die nächste Versionsnummer und legt eine neue Archivkopie der Preiszeile an. |
 | SL Chronext Webshop | SL Export Gateway Sales Price | Codeunit | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis in eine JSON-Datei um und stößt den Versand an. |
 | SL Chronext Webshop | SL Export Gateway Sales Price | Codeunit | `SendToApiInterface` | Prozedur | Internal | Sendet die JSON-Datei per HTTP an die externe Schnittstelle und vermerkt das Ergebnis. |
@@ -90,7 +90,7 @@ Nur ein Projekt vorhanden – keine projektübergreifenden Überschneidungen. In
 | Funktionsbereich | Betroffene Projekte | Empfehlung |
 |---|---|---|
 | Export-Anbindung an externe Systeme | SL Chronext Webshop | Codeunit 51000, Table 51004/51007, Page 51003 und Enum 51004 sind fachlich generisch (konfigurierbare Endpunkte, Authentifizierung, JSON-Versand per Reflection) und nicht an Verkaufspreise gebunden – als eigenständige, wiederverwendbare "Export-Gateway"-Extension geeignet, sobald ein zweiter Anwendungsfall ansteht. |
-| Dateibasierter Preisimport | SL Chronext Webshop | Sobald eine Job-Queue-Anbindung erfolgt, als eigene, wiederverwendbare Extension anlegen – vermeidet späteres, aufwändigeres Herauslösen aus dem Kernmodul. Vor der Aktivierung sollte der `SalesPrice.Get(...)`-Aufruf in `WriteSalesPrices` geprüft werden (siehe Hinweis im Einzelregister zu Codeunit 51001). |
+| Dateibasierter Preisimport | SL Chronext Webshop | Sobald eine Job-Queue-Anbindung erfolgt, als eigene, wiederverwendbare Extension anlegen – vermeidet späteres, aufwändigeres Herauslösen aus dem Kernmodul. |
 
 ### Mittlere Priorität
 | Funktionsbereich | Betroffene Projekte | Empfehlung |
@@ -105,4 +105,4 @@ Nur ein Projekt vorhanden, `dependencies` in `app.json` ist leer – keine Abhä
 
 ---
 
-**Hinweis zu diesem Update:** Gegenüber der Vorversion (2026-08-05, 20 Objekte/31 Funktionen) wurden sechs zwischenzeitlich hinzugekommene Objekte erstmals erfasst: Codeunit 51000 "SL Export Gateway Sales Price", Table 51004 "SL Sales Price Outbound File", Table 51007 "SL API Interface Setup", Page 51003 "SL API Interface Setup", Enum 51003 "SL Sales Price Export Status" und Enum 51004 "SL API Auth Type". Neu in Codeunit 51000 ist die Prozedur `WriteBackAndArchive`, die freigegebene Preiszeilen vor dem Dateiversand automatisch in "Sales Price" (immer "Für alle Kunden") und ins versionierte Archiv "SL Sales Price Archive" überträgt. Außerdem neu erfasst: Action "Upload Sales Price" auf Page 51001 und das OnValidate-Trigger auf Table 51000, Feld "API Interface Code". Ergebnis: 26 Objekte, 47 Funktionen.
+**Hinweis zu diesem Update:** Gegenüber der Vorversion (2026-08-05, 26 Objekte/47 Funktionen) hat sich die Objekt- und Funktionsanzahl nicht verändert. Zwei Changes (`remove-item-variants`, `remove-country-code`) haben `"Variant Code"` (Table 51001/51002), `"Country Code"` (Table 51002) und `"Country/Region Code"` (TableExtension 51001) entfernt, ohne Prozeduren/Trigger/Events hinzuzufügen oder zu löschen; betroffene Beschreibungen (u. a. `UpdateSalesPriceFields`) wurden angepasst. Ergebnis unverändert: 26 Objekte, 47 Funktionen.

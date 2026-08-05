@@ -29,7 +29,6 @@ codeunit 51000 "SL Export Gateway Sales Price"
     local procedure UpdateSalesPriceFields(var vSalesPrice: Record "Sales Price"; pSalesPriceChecking: Record "SL Sales Price Checking")
     begin
         vSalesPrice.Validate("Currency Code", pSalesPriceChecking."Currency Code");
-        vSalesPrice.Validate("Country/Region Code", '');
         vSalesPrice.Validate("Unit Price", pSalesPriceChecking."Stock Price");
         vSalesPrice."Strike-Price incl. VAT" := pSalesPriceChecking."Strike Price";
         vSalesPrice."Recom. Retail Price incl. VAT" := pSalesPriceChecking."Recom. Retail Price";
@@ -47,7 +46,6 @@ codeunit 51000 "SL Export Gateway Sales Price"
         l_recSalesPriceArchive.LockTable();
         l_recSalesPriceArchive.SetRange("Item No.", pSalesPriceChecking."Item No.");
         l_recSalesPriceArchive.SetRange("Currency Code", pSalesPriceChecking."Currency Code");
-        l_recSalesPriceArchive.SetRange("Country Code", '');
         if l_recSalesPriceArchive.FindLast() then
             l_intNextVersionNo := l_recSalesPriceArchive."Version No." + 1
         else
@@ -55,7 +53,6 @@ codeunit 51000 "SL Export Gateway Sales Price"
 
         l_recSalesPriceArchive.Init();
         l_recSalesPriceArchive.TransferFields(pSalesPriceChecking, false);
-        l_recSalesPriceArchive."Country Code" := '';
         l_recSalesPriceArchive."Version No." := l_intNextVersionNo;
         l_recSalesPriceArchive.Insert(true);
     end;

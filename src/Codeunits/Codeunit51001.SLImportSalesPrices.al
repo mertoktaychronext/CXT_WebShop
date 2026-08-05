@@ -88,17 +88,15 @@ codeunit 51001 "SL Import Sales Prices"
                     else
                         vSalesPriceTemp."Currency Code" := '';
                 5:
-                    vSalesPriceTemp."Country/Region Code" := CopyStr(Value, 1, MaxStrLen(vSalesPriceTemp."Country/Region Code"));
-                6:
                     if Evaluate(DecimalValue, Value) then
                         vSalesPriceTemp."Unit Price" := DecimalValue;
-                7:
+                6:
                     if Evaluate(BoolValue, Value) then
                         vSalesPriceTemp."Price Includes VAT" := BoolValue;
-                8:
+                7:
                     if Evaluate(DecimalValue, Value) then
                         vSalesPriceTemp."Strike-Price incl. VAT" := DecimalValue;
-                9:
+                8:
                     if Evaluate(DecimalValue, Value) then
                         vSalesPriceTemp."Recom. Retail Price incl. VAT" := DecimalValue;
             end;
@@ -117,7 +115,6 @@ codeunit 51001 "SL Import Sales Prices"
         ExpectedValues.Add('Sales Type');
         ExpectedValues.Add('Sales Code');
         ExpectedValues.Add('Currency Code');
-        ExpectedValues.Add('Country_Region Code');
         ExpectedValues.Add('Unit Price');
         ExpectedValues.Add('Price Includes VAT');
         ExpectedValues.Add('Strike-Price incl_ VAT');
@@ -174,7 +171,7 @@ codeunit 51001 "SL Import Sales Prices"
             repeat
                 if not SalesPrice.Get(
                      vSalesPriceTemp."Item No.", vSalesPriceTemp."Sales Type", vSalesPriceTemp."Sales Code",
-                     vSalesPriceTemp."Starting Date", vSalesPriceTemp."Currency Code", vSalesPriceTemp."Country/Region Code",
+                     vSalesPriceTemp."Starting Date", vSalesPriceTemp."Currency Code", '',
                      vSalesPriceTemp."Unit of Measure Code", vSalesPriceTemp."Minimum Quantity")
                 then begin
                     SalesPrice.Init();
@@ -183,7 +180,6 @@ codeunit 51001 "SL Import Sales Prices"
                     SalesPrice.Validate("Sales Code", vSalesPriceTemp."Sales Code");
                     if vSalesPriceTemp."Currency Code" <> GenLedgerSetup."LCY Code" then
                         SalesPrice.Validate("Currency Code", vSalesPriceTemp."Currency Code");
-                    SalesPrice.Validate("Country/Region Code", vSalesPriceTemp."Country/Region Code");
                     SalesPrice.Validate("Unit Price", vSalesPriceTemp."Unit Price");
                     SalesPrice.Validate("Price Includes VAT", vSalesPriceTemp."Price Includes VAT");
                     SalesPrice."Strike-Price incl. VAT" := vSalesPriceTemp."Strike-Price incl. VAT";

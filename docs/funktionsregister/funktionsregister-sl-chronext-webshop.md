@@ -3,7 +3,7 @@
 **Version:** 1.0.0.0
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-05 (vollständig neu erstellt – Export-Anbindung und Preis-Übernahme in "Sales Price"/Archiv ergänzt)
+**Erstellt am:** 2026-08-05 (aktualisiert – Artikelvarianten und Country Code vollständig aus dem Datenmodell entfernt)
 **Abhängigkeiten:** keine
 
 ---
@@ -43,7 +43,7 @@ Einzige Einstellungstabelle (Singleton) für Mindestmarge, Preisschwankungs-Schw
 
 ### Tabelle: SL Sales Price Checking (ID: 51001)
 
-Das zentrale Arbeitstabelle für neu importierte, noch nicht freigegebene Verkaufspreise. Preiszeilen werden nur noch je Artikel/Variante/Währung geführt – ein eigener Ländercode existiert auf dieser Tabelle nicht mehr.
+Das zentrale Arbeitstabelle für neu importierte, noch nicht freigegebene Verkaufspreise. Preiszeilen werden nur noch je Artikel/Währung geführt – weder ein eigener Variantencode noch ein Ländercode existieren auf dieser Tabelle.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -108,7 +108,7 @@ Ergänzt Land/Region um Zusatzangaben für den Webshop-Betrieb: Besteuerungsart,
 
 ### Tabellenerweiterung: SL Sales Price (ID: 51001, erweitert Verkaufspreis)
 
-Ergänzt den Standard-Verkaufspreis um Webshop-spezifische Felder (Grund, Kommentar, Anmerkung, Vergleichspreise, Land/Region, Vergleichs-Einzelpreis in Landeswährung). Über die Seitenerweiterung `SL Sales Prices` (ID 51001) pflegbar; wird seit "Upload Sales Price" auch automatisiert durch Codeunit 51000 beschrieben.
+Ergänzt den Standard-Verkaufspreis um Webshop-spezifische Felder (Grund, Kommentar, Anmerkung, Vergleichspreise, Vergleichs-Einzelpreis in Landeswährung). Über die Seitenerweiterung `SL Sales Prices` (ID 51001) pflegbar; wird seit "Upload Sales Price" auch automatisiert durch Codeunit 51000 beschrieben.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -185,7 +185,7 @@ Manueller CSV-Import direkt in die Arbeitsliste (Page 51001, Action "Import CSV"
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `WriteBackAndArchive` | Prozedur | Public | Übernimmt eine freigegebene Preiszeile in die produktive Verkaufspreis-Tabelle (legt sie neu an oder aktualisiert eine bestehende, immer gültig für "Alle Kunden") und legt anschließend eine neue, versionierte Kopie im Preisarchiv ab. Läuft vor jeder Dateierzeugung für den externen Versand. |
-| 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Land, Verkaufspreis, Vergleichspreise, Grund und Anmerkung von der Preiszeile auf den Verkaufspreis-Datensatz. |
+| 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Verkaufspreis, Vergleichspreise, Grund und Anmerkung von der Preiszeile auf den Verkaufspreis-Datensatz. |
 | 3 | `ArchiveCheckingLine` | Prozedur | Internal | Ermittelt die nächste freie Versionsnummer für eine Preiszeile im Archiv und legt dort eine neue, vollständige Kopie der Preiszeile ab. |
 | 4 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis-Datensatz vollständig in eine JSON-Datei um, legt sie in der Ausgangsdatei-Tabelle ab und stößt den Versand an die externe Schnittstelle an. |
 | 5 | `SendToApiInterface` | Prozedur | Internal | Sendet die erzeugte JSON-Datei per HTTP an die in der Einrichtung hinterlegte externe Schnittstelle und vermerkt Erfolg oder Fehlermeldung am Dateieintrag. |
@@ -205,7 +205,7 @@ Automatisierter, dateibasierter CSV-Import (unabhängig vom manuellen Import üb
 | 6 | `WriteSalesPrices` | Prozedur | Internal | Übernimmt die eingelesenen Preiszeilen in die echte Verkaufspreis-Tabelle – legt neue Preise an oder aktualisiert bestehende. |
 | 7 | `OnAfterSalesPriceModify` | Event Publisher | Public | Signalisiert nach jeder Änderung eines bestehenden Verkaufspreises durch den automatisierten Import, inklusive Vorher-/Nachher-Stand – ermöglicht eigene Erweiterungen, ohne diese Codeunit selbst anzupassen. |
 
-> **Hinweis:** `WriteSalesPrices` ruft `SalesPrice.Get(...)` mit dem Zusatzparameter "Country/Region Code" auf; der tatsächliche Primärschlüssel der Standardtabelle "Sales Price" enthält dieses Feld nicht (siehe Codeunit 51000, das dies bei der Neuentwicklung berücksichtigt hat). Dieser Baustein ist aktuell nicht produktiv verdrahtet – vor einer Aktivierung sollte der Aufruf geprüft werden.
+> **Hinweis:** `WriteSalesPrices` ruft `SalesPrice.Get(...)` inzwischen mit genau den 8 echten Primärschlüsselfeldern der Standardtabelle "Sales Price" auf (mit `''` für "Variant Code"); die frühere Schlüssel-Abweichung an dieser Stelle ist behoben. Dieser Baustein ist weiterhin an keiner Stelle produktiv verdrahtet.
 
 ### Enum: SL Taxation Type (ID: 51000)
 
@@ -243,4 +243,4 @@ Deckt den Lese-/Schreibzugriff auf alle sieben eigenen Tabellen sowie die Ausfü
 
 ---
 
-**Hinweis zu diesem Update:** Gegenüber der Vorversion (2026-08-05, 20 Objekte/31 Funktionen) wurden folgende, zwischenzeitlich hinzugekommene Objekte erstmals erfasst: Codeunit 51000 "SL Export Gateway Sales Price" (Export-Anbindung, inkl. neuer Prozedur `WriteBackAndArchive` zur Preis-Übernahme in "Sales Price"/Archiv vor dem Dateiversand), Table 51004 "SL Sales Price Outbound File", Table 51007 "SL API Interface Setup", Page 51003 "SL API Interface Setup", Enum 51003 "SL Sales Price Export Status" und Enum 51004 "SL API Auth Type". Außerdem wurde die neue Action "Upload Sales Price" auf Page 51001 sowie das neue OnValidate-Trigger auf Table 51000 (Feld "API Interface Code") ergänzt. Ergebnis: 26 Objekte, 47 Funktionen.
+**Hinweis zu diesem Update:** Gegenüber der Vorversion (2026-08-05, 26 Objekte/47 Funktionen) hat sich die Objekt- und Funktionsanzahl nicht verändert – zwei Changes (`remove-item-variants`, `remove-country-code`) haben ausschließlich Felder (`"Variant Code"` auf Table 51001/51002, `"Country Code"` auf Table 51002, `"Country/Region Code"` auf TableExtension 51001) sowie zugehörige Spalten und Codezeilen innerhalb bestehender Prozeduren entfernt, ohne neue Prozeduren/Trigger/Events einzuführen oder bestehende zu löschen. Betroffene Beschreibungen wurden entsprechend angepasst: Table 51001 (Zusammenfassung), TableExtension 51001 (Zusammenfassung), `UpdateSalesPriceFields` (Codeunit 51000). Der Hinweis zu Codeunit 51001 wurde aktualisiert, da die dort beschriebene Schlüssel-Abweichung in `WriteSalesPrices` als Nebeneffekt von `remove-country-code` behoben wurde. Ergebnis unverändert: 26 Objekte, 47 Funktionen.

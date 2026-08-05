@@ -124,13 +124,11 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 |---|---|---|
 | 51000 SL General Sales Price Setup | Primary Key (Singleton) | Grundeinstellungen, inkl. Export-Schalter und ausgewählter API-Schnittstelle |
 | 51001 SL Sales Price Checking | Item No., Currency Code | Zwischenablage für Import/Prüfung/Freigabe |
-| 51002 SL Sales Price Archive | + Country Code, Version No. | Historie; wird bei "Upload Sales Price" (Page 51001) über Codeunit 51000 automatisch befüllt, Version No. je Item No./Currency Code hochgezählt |
+| 51002 SL Sales Price Archive | + Version No. | Historie; wird bei "Upload Sales Price" (Page 51001) über Codeunit 51000 automatisch befüllt, Version No. je Item No./Currency Code hochgezählt |
 | 51004 SL Sales Price Outbound File | Entry No. | Gesendete JSON-Nutzdaten mit Versandstatus und Antworttext, zur Fehleranalyse fehlgeschlagener Übertragungen |
 | 51005 SL Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import |
 | 51007 SL API Interface Setup | Code | Endpunkt-URL, Authentifizierungsart und (im Isolated Storage abgelegter) API-Schlüssel je externer Schnittstelle |
-
-> Hinweis: Table 51002 "SL Sales Price Archive" führt aus historischen Gründen weiterhin einen eigenen Ländercode – das Archiv wurde bei der Umstellung von Land auf Währung (Table 51001) nicht mit umgestellt. `Codeunit 51000` schreibt ihn stets leer, passend zum "gilt für jedes Land mit dieser Währung"-Modell aus `sales-price-currency-copy`; Details dazu in `openspec/changes/sales-price-checking-writeback/design.md`.
 
 ## Permission Set
 
@@ -156,6 +154,5 @@ Kein CI/CD-Setup (z. B. AL-Go-Workflow) im Projekt gefunden. Deployment erfolgt 
 - **"Approve" selbst übernimmt Preise nicht in die Standardtabelle "Sales Price" oder in "SL Sales Price Archive".** Die Aktion setzt nur die Freigabe-Kennzeichen auf Table 51001. Die Übernahme erfolgt erst im nachgelagerten Schritt "Upload Sales Price" (Page 51001, Codeunit 51000), der vor der Dateierzeugung sowohl "Sales Price" (Sales Type = All Customers) als auch "SL Sales Price Archive" (mit hochgezählter Version No.) beschreibt.
 - **`"Unit Price"` (Standardfeld, von Codeunit 51000 beschrieben) und `"Unit Price (LCY)"` (Zusatzfeld, von der eigenen `fnValidate`-Vergleichslogik auf Page 51001 gelesen) sind zwei getrennte Felder, die auseinanderlaufen können** – `WriteBackAndArchive` schreibt nur das erste. `fnValidate` ist davon heute unberührt, da es eine eigene, separate Suche durchführt, aber `"Unit Price (LCY)"` könnte veralten, sobald regelmäßig Preise hochgeladen werden; als Folgepunkt für den Fachbereich vermerkt, hier bewusst nicht gelöst (siehe `openspec/changes/sales-price-checking-writeback/design.md`, Risks/Trade-offs).
 - **`Reason Code` als Enum ohne echten Leerwert**: Das Enum hat immer einen Default-Wert (`CatMan`), es gibt keinen Zustand "kein Grund angegeben".
-- **Dateibasierter Import (Codeunit 51001, Tables 51005–51006)** ist vollständig implementiert, aber an keiner Stelle produktiv verdrahtet oder terminiert (kein Job Queue Eintrag). `WriteSalesPrices` ruft `SalesPrice.Get(...)` mit dem Zusatzparameter "Country/Region Code" auf; der tatsächliche Primärschlüssel der Standardtabelle "Sales Price" (verifiziert anhand der Symbole in `.alpackages/Microsoft_Base Application_*.app`) enthält dieses Feld nicht. Vor einer Aktivierung dieses Bausteins sollte der Aufruf geprüft werden (Codeunit 51000 berücksichtigt dies bereits korrekt).
+- **Dateibasierter Import (Codeunit 51001, Tables 51005–51006)** ist vollständig implementiert, aber an keiner Stelle produktiv verdrahtet oder terminiert (kein Job Queue Eintrag). `WriteSalesPrices` ruft `SalesPrice.Get(...)` jetzt mit genau den 8 echten Primärschlüsselfeldern der Standardtabelle "Sales Price" auf (verifiziert anhand der Symbole in `.alpackages/Microsoft_Base Application_*.app`), mit `''` für "Variant Code" – die zuvor dokumentierte Schlüssel-Abweichung ist damit behoben.
 - **Keine automatisierten Tests** vorhanden.
-- **Tabelle 51002 "SL Sales Price Archive"** führt weiterhin einen eigenen Ländercode statt eines Währungscodes (siehe Tabellenübersicht oben) – bei einer künftigen Aktivierung der automatischen Archivierung sollte geprüft werden, ob das Archivschema an das Currency-Modell von Table 51001 angeglichen werden soll.

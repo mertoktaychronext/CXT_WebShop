@@ -29,12 +29,6 @@ tableextension 51001 "SL Sales Price" extends "Sales Price"
             DataClassification = ToBeClassified;
             AutoFormatType = 1;
         }
-        field(51005; "Country/Region Code"; Code[10])
-        {
-            Caption = 'Country/Region Code';
-            DataClassification = ToBeClassified;
-            TableRelation = "Country/Region";
-        }
         field(51006; "Unit Price (LCY)"; Decimal)
         {
             Caption = 'Unit Price (LCY)';

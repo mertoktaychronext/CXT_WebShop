@@ -124,13 +124,11 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 |---|---|---|
 | 51000 SL General Sales Price Setup | Primary Key (singleton) | Base settings, incl. export toggle and selected API interface |
 | 51001 SL Sales Price Checking | Item No., Currency Code | Staging area for import/validation/approval |
-| 51002 SL Sales Price Archive | + Country Code, Version No. | History; populated automatically by "Upload Sales Price" (Page 51001) via Codeunit 51000, "Version No." incremented per Item No./Currency Code |
+| 51002 SL Sales Price Archive | + Version No. | History; populated automatically by "Upload Sales Price" (Page 51001) via Codeunit 51000, "Version No." incremented per Item No./Currency Code |
 | 51004 SL Sales Price Outbound File | Entry No. | Sent JSON payloads with delivery status and response message, for troubleshooting failed transmissions |
 | 51005 SL Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Error log for the automated import |
 | 51007 SL API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface |
-
-> Note: Table 51002 "SL Sales Price Archive" still carries its own country code for historical reasons — the archive was not migrated to the currency model alongside Table 51001. `Codeunit 51000` always writes it blank, consistent with `sales-price-currency-copy`'s "applies to every country using that currency" model; see `openspec/changes/sales-price-checking-writeback/design.md` for the rationale.
 
 ## Permission Set
 
@@ -156,6 +154,5 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 - **"Approve" itself does not carry prices into the standard "Sales Price" table or into "SL Sales Price Archive".** The action only sets the approval flags on Table 51001. The carry-over happens in the downstream "Upload Sales Price" step (Page 51001, Codeunit 51000), which writes both "Sales Price" (Sales Type = All Customers) and "SL Sales Price Archive" (with an incremented "Version No.") before the outbound file is generated.
 - **`"Unit Price"` (standard field, written by Codeunit 51000) and `"Unit Price (LCY)"` (custom field, read by Page 51001's own `fnValidate` comparison logic) are two separate fields that can diverge** — `WriteBackAndArchive` only writes the former. `fnValidate` is unaffected today since it does its own separate lookup, but `"Unit Price (LCY)"` may go stale once prices are regularly uploaded; flagged for the business owner as a follow-up rather than resolved here (see `openspec/changes/sales-price-checking-writeback/design.md`, Risks/Trade-offs).
 - **`Reason Code` as an enum with no true blank value**: the enum always has a default value (`CatMan`) — there is no "no reason given" state.
-- **The file-based import component (Codeunit 51001, Tables 51005–51006)** is fully implemented but not wired into any live process or scheduled anywhere (no job queue entry). `WriteSalesPrices` calls `SalesPrice.Get(...)` with an extra "Country/Region Code" argument; the standard "Sales Price" table's actual primary key (verified against the symbols in `.alpackages/Microsoft_Base Application_*.app`) does not include that field. The call should be reviewed before this component is activated (Codeunit 51000 already accounts for this correctly).
+- **The file-based import component (Codeunit 51001, Tables 51005–51006)** is fully implemented but not wired into any live process or scheduled anywhere (no job queue entry). `WriteSalesPrices`'s `SalesPrice.Get(...)` call now passes exactly the standard "Sales Price" table's 8 real primary-key segments (verified against the symbols in `.alpackages/Microsoft_Base Application_*.app`), with `''` for "Variant Code" — the previously-documented key mismatch here is resolved.
 - **No automated tests** exist.
-- **Table 51002 "SL Sales Price Archive"** still carries its own country code instead of a currency code (see Table Overview above) — if automatic archiving is enabled in the future, consider whether the archive schema should be aligned with Table 51001's currency model.

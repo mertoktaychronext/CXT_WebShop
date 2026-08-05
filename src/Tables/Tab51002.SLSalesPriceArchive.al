@@ -72,12 +72,6 @@ table 51002 "SL Sales Price Archive"
             Caption = 'Accept New Setup';
             DataClassification = ToBeClassified;
         }
-        field(14; "Country Code"; Code[10])
-        {
-            Caption = 'Country Code';
-            DataClassification = ToBeClassified;
-            TableRelation = "Country/Region";
-        }
         field(15; "Reason Code"; Enum "SL Sales Price Reason Code")
         {
             Caption = 'Reason Code';
@@ -136,7 +130,7 @@ table 51002 "SL Sales Price Archive"
 
     keys
     {
-        key(PK; "Item No.", "Currency Code", "Country Code", "Version No.")
+        key(PK; "Item No.", "Currency Code", "Version No.")
         {
             Clustered = true;
         }

@@ -8,11 +8,6 @@ pageextension 51001 "SL Sales Prices" extends "Sales Prices"
             {
                 Caption = 'Webshop Details';
 
-                field("Country/Region Code"; Rec."Country/Region Code")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the country/region this sales price applies to.';
-                }
                 field("Reason Code"; Rec."Reason Code")
                 {
                     ApplicationArea = All;
