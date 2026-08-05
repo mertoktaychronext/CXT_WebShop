@@ -75,7 +75,7 @@ table 51001 "SL Sales Price Checking"
             trigger OnValidate()
             begin
                 if (not xRec."Accept New Setup") and Rec."Accept New Setup" and (not Rec.Validated) then
-                    Error('Please click Validate button.');
+                    Error(PleaseValidateErr);
 
                 if Rec."Accept New Setup" then begin
                     Rec."Remark Backup" := Rec.Remark;
@@ -193,4 +193,5 @@ table 51001 "SL Sales Price Checking"
 
     var
         Country: Record "Country/Region";
+        PleaseValidateErr: Label 'Please click Validate button.';
 }

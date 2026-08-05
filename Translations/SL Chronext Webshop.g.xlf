@@ -253,6 +253,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2923533672 - NamedType 3345922759" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Please click Validate button.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - NamedType PleaseValidateErr</note>
+        </trans-unit>
         <trans-unit id="Table 2923533672 - Field 3495442685 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Accept New Setup</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -688,10 +693,30 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1834196676" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Are you sure want to Accept New Price Setup?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType AcceptNewPriceSetupQst</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
+          <source>done</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType DoneMsg</note>
+        </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 of %2 approved lines exported. Lines already exported were skipped.</source>
           <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ExportResultMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 3659624548" size-unit="char" translate="yes" xml:space="preserve">
+          <source>not possible</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ModifyNotAllowedErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1494644" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing to process</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType NothingToProcessErr</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 4266715801" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 line(s) were already sent previously. Do you want to send them again?</source>
@@ -727,6 +752,16 @@
           <source>Please delete existing entries to import new price</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT009</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1147378721" size-unit="char" translate="yes" xml:space="preserve">
+          <source>validate data is done</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ValidateDoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 419106825" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validating Sales Price @1@@@@@@@@@@@@@@@</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ValidatingProgressMsg</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - Control 2913119229 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Approved</source>
@@ -807,6 +842,11 @@
           <source>Import Sales Price</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1708629873 - NamedType 664955600" size-unit="char" translate="yes" xml:space="preserve">
+          <source>done</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - NamedType ImportDoneMsg</note>
         </trans-unit>
         <trans-unit id="XmlPort 1708629873 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Option</source>

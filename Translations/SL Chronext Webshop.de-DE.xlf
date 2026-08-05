@@ -303,6 +303,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2923533672 - NamedType 3345922759" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Please click Validate button.</source>
+          <target>Bitte klicken Sie auf die Schaltfläche 'Überprüfen'.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - NamedType PleaseValidateErr</note>
+        </trans-unit>
         <trans-unit id="Table 2923533672 - Field 3495442685 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Accept New Setup</source>
           <target>Neue Einrichtung akzeptieren</target>
@@ -525,25 +531,25 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Status - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 248831540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 248831540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Outbound File</source>
           <target>Verkaufspreis Ausgangsdatei</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 248831540 - Field 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 248831540 - Field 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Created At</source>
           <target>Erstellt am</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Created At - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 248831540 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 248831540 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Entry No.</source>
           <target>Lfd. Nr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Entry No. - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 248831540 - Field 1545435603 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 248831540 - Field 1545435603 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Filename</source>
           <target>Dateiname</target>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -555,13 +561,13 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Response Message - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 248831540 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 248831540 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Status</source>
           <target>Status</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Status - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 248831540 - Field 286726321 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 248831540 - Field 286726321 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Target File</source>
           <target>Zieldatei</target>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -825,11 +831,35 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Property Caption</note>
         </trans-unit>
-<trans-unit id="Page 2205381466 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2205381466 - NamedType 1834196676" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Are you sure want to Accept New Price Setup?</source>
+          <target>Sind Sie sicher, dass Sie die neue Preiseinstellung akzeptieren möchten?</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType AcceptNewPriceSetupQst</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 4288424883" size-unit="char" translate="yes" xml:space="preserve">
+          <source>done</source>
+          <target>erledigt</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType DoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 of %2 approved lines exported. Lines already exported were skipped.</source>
           <target>%1 von %2 freigegebenen Zeilen exportiert. Bereits exportierte Zeilen wurden übersprungen.</target>
           <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ExportResultMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 3659624548" size-unit="char" translate="yes" xml:space="preserve">
+          <source>not possible</source>
+          <target>nicht möglich</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ModifyNotAllowedErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1494644" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Nothing to process</source>
+          <target>Nichts zu verarbeiten</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType NothingToProcessErr</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 4266715801" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 line(s) were already sent previously. Do you want to send them again?</source>
@@ -873,6 +903,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType TXT009</note>
         </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 1147378721" size-unit="char" translate="yes" xml:space="preserve">
+          <source>validate data is done</source>
+          <target>Prüfung der Daten abgeschlossen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ValidateDoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 419106825" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Validating Sales Price @1@@@@@@@@@@@@@@@</source>
+          <target>Verkaufspreise werden geprüft @1@@@@@@@@@@@@@@@</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ValidatingProgressMsg</note>
+        </trans-unit>
         <trans-unit id="Page 2205381466 - Control 2913119229 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Approved</source>
           <target>Genehmigt</target>
@@ -915,19 +957,19 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action SalesPriceArchiveNav - Property Caption</note>
         </trans-unit>
-<trans-unit id="Page 2205381466 - Action 36190024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2205381466 - Action 36190024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Export</source>
           <target>Export</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Export - Property Caption</note>
         </trans-unit>
-<trans-unit id="Page 2205381466 - Action 304293994 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2205381466 - Action 304293994 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Exports the approved sales prices to the outbound interface file.</source>
           <target>Exportiert die freigegebenen Verkaufspreise in die Ausgangs-Schnittstellendatei.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Upload Sales Price - Property ToolTip</note>
         </trans-unit>
-<trans-unit id="Page 2205381466 - Action 304293994 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 2205381466 - Action 304293994 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Upload Sales Price</source>
           <target>Verkaufspreis hochladen</target>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -968,6 +1010,12 @@
           <target>Verkaufspreis importieren</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="XmlPort 1708629873 - NamedType 664955600" size-unit="char" translate="yes" xml:space="preserve">
+          <source>done</source>
+          <target>erledigt</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">XmlPort SL Import Sales Price - NamedType ImportDoneMsg</note>
         </trans-unit>
         <trans-unit id="XmlPort 1708629873 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Option</source>
@@ -1211,8 +1259,9 @@
         </trans-unit>
         <trans-unit id="Enum 3144645257 - EnumValue 1371923692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source> </source>
-          <target> </target>
+          <target>[NAB: REVIEW] </target>
           <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue   - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3144645257 - EnumValue 1562294763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

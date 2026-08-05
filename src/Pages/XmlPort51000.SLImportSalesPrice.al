@@ -88,10 +88,11 @@ xmlport 51000 "SL Import Sales Price"
 
     trigger OnPostXmlPort()
     begin
-        Message('done');
+        Message(ImportDoneMsg);
     end;
 
     var
         g_booCaptionRow: Boolean;
         g_booAllCountries: Boolean;
+        ImportDoneMsg: Label 'done';
 }

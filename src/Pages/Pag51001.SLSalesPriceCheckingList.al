@@ -178,11 +178,11 @@ page 51001 "SL Sales Price Checking List"
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetRange(Validated, true);
                         if g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
                         if not g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetFilter("Stock Price", '>%1', 0);
@@ -199,7 +199,7 @@ page 51001 "SL Sales Price Checking List"
 
                         fnValidate();
 
-                        Message('validate data is done');
+                        Message(ValidateDoneMsg);
                     end;
                 }
                 action(Approve)
@@ -221,19 +221,19 @@ page 51001 "SL Sales Price Checking List"
 
                         g_recSalesPriceCheck.Reset();
                         if not g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetRange(Validated, false);
                         if g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetRange("Accept New Setup", true);
                         if g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
-                        if Confirm('Are you sure want to Accept New Price Setup?', false) then begin
+                        if Confirm(AcceptNewPriceSetupQst, false) then begin
                             l_recSalesPriceCheck.Reset();
                             if l_recSalesPriceCheck.FindSet() then begin
                                 repeat
@@ -243,7 +243,7 @@ page 51001 "SL Sales Price Checking List"
                                     l_recSalesPriceCheck."Approved By" := UserId;
                                     l_recSalesPriceCheck.Modify();
                                 until l_recSalesPriceCheck.Next() = 0;
-                                Message('done');
+                                Message(DoneMsg);
                             end;
                         end;
                     end;
@@ -265,23 +265,23 @@ page 51001 "SL Sales Price Checking List"
 
                         g_recSalesPriceCheck.Reset();
                         if not g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
 
                         g_recSalesPriceCheck.SetRange("Currencies Processed", false);
                         if not g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetRange(Validated, false);
                         if g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
                         g_recSalesPriceCheck.SetRange("Accept New Setup", false);
                         if g_recSalesPriceCheck.FindFirst() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
 
@@ -328,7 +328,7 @@ page 51001 "SL Sales Price Checking List"
                                 UpdateSalesPriceCheck.Modify();
                             until g_recSalesPriceCheck.Next() = 0;
 
-                        Message('done');
+                        Message(DoneMsg);
                     end;
                 }
             }
@@ -363,7 +363,7 @@ page 51001 "SL Sales Price Checking List"
                         l_recSalesPriceCheck.Reset();
                         l_recSalesPriceCheck.SetRange("Accept New Setup", true);
                         if not l_recSalesPriceCheck.FindSet() then
-                            Error('Nothing to process');
+                            Error(NothingToProcessErr);
 
                         l_recSalesPriceCheck.Reset();
                         l_recSalesPriceCheck.SetRange("Accept New Setup", true);
@@ -404,7 +404,7 @@ page 51001 "SL Sales Price Checking List"
     trigger OnModifyRecord(): Boolean
     begin
         if Rec."Accept New Setup" then
-            Error('not possible');
+            Error(ModifyNotAllowedErr);
 
     end;
 
@@ -437,13 +437,19 @@ page 51001 "SL Sales Price Checking List"
         g_cuExportGatewaySalesPrice: Codeunit "SL Export Gateway Sales Price";
         ExportResultMsg: Label '%1 of %2 approved lines exported. Lines already exported were skipped.', Comment = '%1 = number of lines actually exported, %2 = number of approved lines considered';
         ResendAlreadySentQst: Label '%1 line(s) were already sent previously. Do you want to send them again?', Comment = '%1 = number of previously sent lines';
+        NothingToProcessErr: Label 'Nothing to process';
+        ValidateDoneMsg: Label 'validate data is done';
+        AcceptNewPriceSetupQst: Label 'Are you sure want to Accept New Price Setup?';
+        DoneMsg: Label 'done';
+        ModifyNotAllowedErr: Label 'not possible';
+        ValidatingProgressMsg: Label 'Validating Sales Price @1@@@@@@@@@@@@@@@';
 
     local procedure fnValidate()
     begin
         g_recSalesPriceCheck.Reset();
         g_recSalesPriceCheck.SetRange(Validated, false);
         if g_recSalesPriceCheck.FindSet() then begin
-            ProgressWindow.Open('Validating Sales Price @1@@@@@@@@@@@@@@@');
+            ProgressWindow.Open(ValidatingProgressMsg);
             TotalCount := g_recSalesPriceCheck.Count();
             repeat
                 Clear(g_recSalesPriceCheck.Remark);
