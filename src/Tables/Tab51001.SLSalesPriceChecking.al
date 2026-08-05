@@ -1,5 +1,3 @@
-// Migriert aus NAV Table 50007 "Sales Price Checking" (1:1, Objekt-ID umnummeriert
-// wegen app.json idRanges 51000-51049, Feld-IDs unverändert übernommen).
 table 51001 "SL Sales Price Checking"
 {
     Caption = 'Sales Price Checking';
@@ -25,18 +23,6 @@ table 51001 "SL Sales Price Checking"
         {
             Caption = 'Stock Price';
             DataClassification = ToBeClassified;
-
-            trigger OnValidate()
-            begin
-                // Im NAV-Quellcode war der komplette Trigger-Inhalt bereits mit "{ }" auskommentiert
-                // (toter Code) und wurde daher unverändert deaktiviert übernommen:
-                // if Rec."Stock Price" <> xRec."Stock Price" then begin
-                //     Rec.Validated := false;
-                //     Rec."Accept New Setup" := false;
-                //     Rec."Non Stock Price" := 0;
-                //     Rec.Remark := '';
-                // end;
-            end;
         }
         field(4; "Non Stock Price"; Decimal)
         {
@@ -95,10 +81,8 @@ table 51001 "SL Sales Price Checking"
 
             trigger OnValidate()
             begin
-                if (not xRec."Accept New Setup") and Rec."Accept New Setup" and (not Rec.Validated) then begin
-                    Message('Please click Validate button.');
-                    Error('');
-                end;
+                if (not xRec."Accept New Setup") and Rec."Accept New Setup" and (not Rec.Validated) then
+                    Error('Please click Validate button.');
 
                 if Rec."Accept New Setup" then begin
                     Rec."Remark Backup" := Rec.Remark;
@@ -110,28 +94,11 @@ table 51001 "SL Sales Price Checking"
                     Rec.Validated := false;
             end;
         }
-        field(14; "Country Code"; Code[10])
-        {
-            Caption = 'Country Code';
-            DataClassification = ToBeClassified;
-            TableRelation = "Country/Region";
-            // Blank bedeutet: die Zeile gilt für alle Länder, die dieselbe "Currency Code" verwenden
-            // (erzeugt durch Page 51001, Action "Add all Currencies"), nicht für ein bestimmtes Land.
 
-            trigger OnValidate()
-            begin
-                Country.Get("Country Code");
-                Country.TestField("Sales Price Activated", true);
-                "Currency Code" := Country."Sales Price Currency Code";
-            end;
-        }
         field(15; "Reason Code"; Enum "SL Sales Price Reason Code")
         {
             Caption = 'Reason Code';
             DataClassification = ToBeClassified;
-            // war Code[10] mit TableRelation="System Value Line"."System Code" WHERE (System Value No.=CONST(55001)).
-            // Tabelle "System Value Line" wurde laut Kundenvorgabe NICHT migriert, sondern durch dieses
-            // Enum mit den bekannten 3 Werten ersetzt.
         }
         field(16; Comment; Text[250])
         {
@@ -177,17 +144,19 @@ table 51001 "SL Sales Price Checking"
             Caption = 'Old Stock Price';
             DataClassification = ToBeClassified;
         }
-        // war "DE Price Processed" - umbenannt, da die Erweiterung jetzt pro Währung statt pro Land
-        // erfolgt (Page 51001, Action "Add all Currencies"). Gleiche ID, gleiche Boolean-Semantik:
-        // wird gesetzt, sobald eine Basiszeile erfolgreich auf alle Fremdwährungen erweitert wurde.
         field(24; "Currencies Processed"; Boolean)
         {
             Caption = 'Currencies Processed';
             DataClassification = ToBeClassified;
         }
-        field(25; "Approved By"; Code[20])
+        field(25; "Approved By"; Code[50])
         {
             Caption = 'Approved By';
+            DataClassification = ToBeClassified;
+        }
+        field(26; "Export Processed"; Boolean)
+        {
+            Caption = 'Export Processed';
             DataClassification = ToBeClassified;
         }
         field(50000; "Version No."; Integer)
@@ -199,7 +168,7 @@ table 51001 "SL Sales Price Checking"
 
     keys
     {
-        key(PK; "Item No.", "Variant Code", "Currency Code", "Country Code")
+        key(PK; "Item No.", "Variant Code", "Currency Code")
         {
             Clustered = true;
         }
@@ -215,12 +184,6 @@ table 51001 "SL Sales Price Checking"
     begin
         "Last Modified Date" := CurrentDateTime;
         "Last Modified UserID" := UserId;
-
-        if Rec."Country Code" <> xRec."Country Code" then begin
-            Rec.Validated := false;
-            Rec."Accept New Setup" := false;
-            Rec.Remark := '';
-        end;
 
         if Rec."Currency Code" <> xRec."Currency Code" then begin
             Rec.Validated := false;
