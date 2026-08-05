@@ -31,6 +31,11 @@ table 51004 "SL Sales Price Outbound File"
             Caption = 'Created At';
             DataClassification = SystemMetadata;
         }
+        field(6; "Response Message"; Text[250])
+        {
+            Caption = 'Response Message';
+            DataClassification = SystemMetadata;
+        }
     }
 
     keys

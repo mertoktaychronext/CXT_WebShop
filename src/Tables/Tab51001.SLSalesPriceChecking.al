@@ -154,9 +154,9 @@ table 51001 "SL Sales Price Checking"
             Caption = 'Approved By';
             DataClassification = ToBeClassified;
         }
-        field(26; "Export Processed"; Boolean)
+        field(26; "Export Status"; Enum "SL Sales Price Export Status")
         {
-            Caption = 'Export Processed';
+            Caption = 'Export Status';
             DataClassification = ToBeClassified;
         }
         field(50000; "Version No."; Integer)

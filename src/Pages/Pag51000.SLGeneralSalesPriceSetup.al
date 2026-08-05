@@ -115,8 +115,39 @@ page 51000 "SL General Sales Price Setup"
                     Visible = false;
                 }
             }
+            group(Export)
+            {
+                Caption = 'Export';
+
+                field("Price Export Active"; Rec."Price Export Active")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether approved sales prices are sent to an external system via the selected API interface.';
+                }
+                field("API Interface Code"; Rec."API Interface Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies which API interface is used to send approved sales prices to an external system.';
+                }
+            }
         }
     }
+
+    actions
+    {
+        area(Navigation)
+        {
+            action(APIInterfaceSetup)
+            {
+                ApplicationArea = All;
+                Caption = 'API Interface Setup';
+                ToolTip = 'Open the setup for outbound API interfaces.';
+                Image = Setup;
+                RunObject = page "SL API Interface Setup";
+            }
+        }
+    }
+
     trigger OnOpenPage()
     begin
         if not Rec.Get() then begin

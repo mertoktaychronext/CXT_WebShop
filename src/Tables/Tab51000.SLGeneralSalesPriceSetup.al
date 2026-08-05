@@ -80,6 +80,22 @@ table 51000 "SL General Sales Price Setup"
             Caption = 'Price Export Active';
             DataClassification = ToBeClassified;
         }
+        field(15; "API Interface Code"; Code[20])
+        {
+            Caption = 'API Interface Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "SL API Interface Setup".Code;
+
+            trigger OnValidate()
+            var
+                l_recApiInterfaceSetup: Record "SL API Interface Setup";
+            begin
+                if "API Interface Code" = '' then
+                    exit;
+                l_recApiInterfaceSetup.Get("API Interface Code");
+                l_recApiInterfaceSetup.TestField("Source Table No.", Database::"Sales Price");
+            end;
+        }
     }
 
     keys
