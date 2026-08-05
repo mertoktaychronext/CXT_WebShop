@@ -3,6 +3,16 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="SL Chronext Webshop">
     <body>
       <group id="body">
+        <trans-unit id="PageExtension 2466341954 - Control 3494206396 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 4081634891">
+          <source>Specifies whether the currency is activated for webshop sales prices.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension SLCurrencies - Control Sales Price Activated - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 4014354444 - Field 3494206396 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3561154705">
+          <source>Sales Price Activated</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SLCurrency - Field Sales Price Activated - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2307618253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General Sales Price Setup</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -223,11 +233,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Comment - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2923533672 - Field 2542713143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Country Code</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Country Code - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 2923533672 - Field 2835222237 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Currencies Processed</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -257,6 +262,11 @@
           <source>Exchange Rate Date</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Exchange Rate Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2923533672 - Field 2816584714 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export Processed</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Export Processed - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2923533672 - Field 568743302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Item No.</source>
@@ -398,6 +408,36 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Inbound File - Field Status - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 248831540 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Outbound File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 2570673311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Created At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Created At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 883711285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 1545435603 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Filename</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Filename - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 248831540 - Field 286726321 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Target File</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field TargetFile - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3946361192 - NamedType 234181524" size-unit="char" translate="yes" xml:space="preserve">
           <source>Expected %1 columns in the header row, but found %2.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -538,6 +578,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 of %2 approved lines exported. Lines already exported or without a matching sales price were skipped.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ExportResultMsg</note>
+        </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 2699353184" size-unit="char" translate="yes" xml:space="preserve">
           <source>Item %1, variant %2 has no country code. Please set a country code in the imported file or fill it in manually before validating.</source>
           <note from="Developer" annotates="general" priority="2">%1 = item no., %2 = variant code</note>
@@ -588,16 +633,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control FinalPrice - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2205381466 - Control 307716701 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>DE Price</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control NonDEPrice - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 2205381466 - Control 307716701 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Non DE Price</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Control NonDEPrice - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 2205381466 - Action 2743143464 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Open the general sales price setup (minimum margin, thresholds).</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -617,6 +652,21 @@
           <source>Sales Price Archive</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action SalesPriceArchiveNav - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 36190024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Export - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 304293994 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exports the approved sales prices to the outbound interface file.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Upload Sales Price - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - Action 304293994 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Upload Sales Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Upload Sales Price - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - Action 3201496503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import</source>
@@ -667,11 +717,6 @@
           <source>Specifies the standard delivery time in days for this country/region.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension SL Country Region Card - Control Delivery Time - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 2343175645 - Control 3494206396 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
-          <source>Specifies whether this country/region is included when generating webshop sales prices per currency (e.g. via "Add all Currencies").</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension SL Country Region Card - Control Sales Price Activated - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PageExtension 2343175645 - Control 3485997273 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
           <source>Specifies the currency that webshop sales prices for this country/region are maintained in.</source>
@@ -732,11 +777,6 @@
           <source>Delivery Time (Days)</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Country Region - Field Delivery Time - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="TableExtension 277553233 - Field 3494206396 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
-          <source>Sales Price Activated</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Country Region - Field Sales Price Activated - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 277553233 - Field 3485997273 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Sales Price Currency Code</source>

@@ -16,11 +16,15 @@ This extension for Microsoft Dynamics 365 Business Central helps you import, che
 
 Open the **"Sales Price Checking List"** page in Business Central. The list is automatically cleared when opened — only the prices you imported in the current run are shown.
 
+The navigation buttons at the top of the page also give you direct access to:
+- **"General Sales Price Setup"** – the base settings (see the Key User Manual)
+- **"Sales Price Archive"** – the archive of previously processed prices
+
 ## Main Features
 
 ### 1. Import a CSV file
 
-Click **"Import CSV"** and select your prepared file. The first line of the file (column headers) is skipped automatically. The file must contain the following columns in this order: item no., variant code, stock price, strike price, recommended retail price, country code, reason code, comment.
+Click **"Import CSV"** and select your prepared file. The first line of the file (column headers) is skipped automatically. The file must contain the following columns in this order: item no., variant code, stock price, strike price, recommended retail price, **currency code**, reason code, comment.
 
 > Note: Import is only possible while the list is empty. If there are already price lines present, reopen the page (the list clears itself automatically on open) before importing again.
 
@@ -28,7 +32,6 @@ Click **"Import CSV"** and select your prepared file. The first line of the file
 
 Click **"Validate"** after the import has finished. The system:
 - rounds the imported prices,
-- automatically fills in the matching currency code for each country,
 - compares every new price against the last active price and flags unusual jumps or an insufficient margin as a remark.
 
 Review any line with a remark carefully before approving.
@@ -41,15 +44,9 @@ Click **"Approve"** to release the checked prices. You will be asked to confirm.
 
 ### 4. Add prices for all foreign currencies
 
-Once you have imported, validated, and approved a German (base) price, use **"Add all Currencies"** to automatically generate one converted price line per foreign currency in use. The system considers every country with sales-price activation enabled and creates **one** line per distinct currency — even if several countries share the same currency.
+Once you have imported, validated, and approved a base price, use **"Add all Currencies"** to automatically generate one converted price line per currency that has been activated for this. The system considers every currency a key user has enabled (see the Key User Manual) and creates **one** line per currency.
 
-This action is only available while you are working in "German price" mode (see the "Non DE Price" field below).
-
-### 5. The "Non DE Price" field
-
-This toggle determines whether you are currently working with German or with international (non-German) prices. It can only be switched while the list is empty.
-
-### 6. Viewing the archive
+### 5. Viewing the archive
 
 Use the **"Sales Price Archive"** page to look up previously processed prices (read-only, no changes possible).
 
@@ -58,14 +55,11 @@ Use the **"Sales Price Archive"** page to look up previously processed prices (r
 **"Nothing to process" when clicking Validate/Approve/Add all Currencies**
 There are no matching price lines for this step — check whether the previous step (import or validate) actually completed.
 
-**"DE price not allowed" / "Non DE price not allowed"**
-You are trying to mix German and international prices in the list at the same time. Clear the list (reopen the page) and start again in the correct mode ("Non DE Price" toggle).
-
 **"Please click Validate button"**
 You tried to approve a price line directly without running "Validate" first. Run "Validate" first.
 
-**Why is the country code blank on some lines?**
-Lines generated via "Add all Currencies" apply to **all** countries sharing that currency, not to a single country — so the country code is intentionally left blank for those.
+**"not possible" when editing a price line**
+An already accepted/approved price line can no longer be changed afterwards.
 
 ## Help & Support
 

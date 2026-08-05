@@ -2,7 +2,7 @@
 
 ## Überblick
 
-Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkaufspreisen ab: CSV-Import in eine Zwischenablage-Tabelle, fachliche Prüfung (Marge, Preisschwankungen), Freigabe durch einen Sachbearbeiter, und optional die automatische Vervielfältigung eines Preises auf alle genutzten Fremdwährungen. Ein zweiter, unabhängiger Baustein für dateibasierten Preisimport (nicht produktiv) rundet das Projekt ab. Das Projekt ist eine 1:1-Migration aus einem gewachsenen Dynamics-NAV-Altsystem in modernes, SaaS-fähiges AL.
+Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkaufspreisen ab: CSV-Import in eine Zwischenablage-Tabelle, fachliche Prüfung (Marge, Preisschwankungen), Freigabe durch einen Sachbearbeiter, und optional die automatische Vervielfältigung eines Preises auf alle aktivierten Fremdwährungen. Ein zweiter, unabhängiger Baustein für dateibasierten Preisimport (nicht produktiv angebunden) rundet das Projekt ab. Das Projekt ist eine Migration aus einem gewachsenen Dynamics-NAV-Altsystem in modernes, SaaS-fähiges AL.
 
 ## Technischer Stack
 
@@ -20,11 +20,13 @@ Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkau
 ```
 app.json                          # Extension-Manifest, idRanges 51000-51049
 src/
-  Tables/                         # 6 Tabellen (51000, 51001, 51002, 51004, 51005, 51006)
-  TableExtensions/                # 2 Erweiterungen (Country/Region, Sales Price)
+  Tables/                         # 5 Tabellen (51000, 51001, 51002, 51005, 51006)
+  TableExtensions/                # 3 Erweiterungen (Country/Region, Sales Price, Currency)
+  PageExtensions/                 # 3 Erweiterungen (Countries/Regions, Sales Prices, Currencies)
   Pages/                          # 3 Seiten + 1 Xmlport
   Codeunits/                      # 1 Codeunit (Import Sales Prices)
   Enums/                          # 3 Enums
+  PermissionSets/                 # 1 Permission Set (SLChronWSAll)
 Translations/                     # .g.xlf (generiert) + de-DE.xlf (gepflegt)
 openspec/
   specs/                          # dauerhafte Capability-Spezifikationen (z.B. sales-price-currency-copy)
@@ -32,7 +34,7 @@ openspec/
 docs/                             # dieses Handbuch + Funktionsregister
 ```
 
-**Namenskonvention der Dateien:** `Tab<ID>.<PascalCaseName>.al`, `Pag<ID>.<Name>.al`, `TabExt<ID>.<Name>.al`, `Enum<ID>.<Name>.al`, `Codeunit<ID>.<Name>.al`, `XmlPort<ID>.<Name>.al`.
+**Namenskonvention der Dateien:** `Tab<ID>.<PascalCaseName>.al`, `Pag<ID>.<Name>.al`, `TabExt<ID>.<Name>.al`, `PagExt<ID>.<Name>.al`, `Enum<ID>.<Name>.al`, `Codeunit<ID>.<Name>.al`, `XmlPort<ID>.<Name>.al`.
 
 ## Lokale Entwicklungsumgebung einrichten
 
@@ -71,14 +73,20 @@ Xmlport 51000 "SL Import Sales Price"
    │  schreibt Zeilen in
    ▼
 Table 51001 "SL Sales Price Checking"  ◄── Page 51001 "SL Sales Price Checking List"
-   │                                        (Validate / Approve / Add all Currencies)
+   │  (Item No./Variant Code/Currency Code, kein eigener      (Validate / Approve / Add all Currencies)
+   │   Ländercode mehr auf dieser Tabelle)
    │
-   ├─► Table 51002 "SL Sales Price Archive"        (nur lesend über Page 51002 genutzt;
-   │                                                 automatische Befüllung derzeit inaktiv,
-   │                                                 siehe "Bekannte Einschränkungen")
-   │
-   └─► Table Extension "SL Sales Price" (auf Standard-Tabelle "Sales Price")
-        (Zielort für die Freigabe – Befüllung derzeit deaktiviert, siehe unten)
+   └─► Table 51002 "SL Sales Price Archive"        (nur lesend über Page 51002 genutzt;
+                                                      automatische Befüllung derzeit inaktiv,
+                                                      siehe "Bekannte Einschränkungen")
+
+Steuerdaten für "Add all Currencies":
+Table Extension "SLCurrency" (auf Standard-Tabelle "Currency", Feld "Sales Price Activated")
+   ◄── Page Extension "SLCurrencies" (auf Standard-Seite "Currencies")
+
+Land/Region liefert nur noch informative Zusatzangaben (Besteuerungsart, Lieferzeit,
+Standard-Fremdwährung) über Table Extension "SL Country Region" / Page Extension
+"SL Country Region Card" – keine Aktivierungslogik mehr.
 
 Unabhängiger, nicht produktiv angebundener Baustein:
 Datei (CSV) → Table 51005 "SL Sales Price Inbound File"
@@ -87,8 +95,6 @@ Datei (CSV) → Table 51005 "SL Sales Price Inbound File"
             → Fehler in Table 51006 "SL Sales Price Import Protocol"
 ```
 
-Die Tabellenerweiterung **"SL Country Region"** (auf Standard-Tabelle "Country/Region") liefert die Steuerdaten (Verkaufspreis aktiviert, Fremdwährung) für die Aktion "Add all Currencies".
-
 ## Objektschnittstellen (öffentliche Prozeduren & Events)
 
 Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsregister/funktionsregister-sl-chronext-webshop.md`. Die wichtigsten öffentlichen Schnittstellen:
@@ -96,22 +102,27 @@ Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsr
 | Objekt | Element | Zweck |
 |---|---|---|
 | Page 51001 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Berechnet den Nicht-Lagerpreis für Zeilen innerhalb einer Preisspanne. Aktuell aus keiner aktiven Stelle im Code aufgerufen. |
-| Codeunit 51001 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Wird ausgelöst, wenn der automatisierte Dateiimport einen bestehenden Verkaufspreis ändert. Aktuell ohne Subscriber (Codeunit 51000, die ursprünglich abonniert hatte, wurde entfernt – siehe unten). |
+| Codeunit 51001 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Wird ausgelöst, wenn der automatisierte Dateiimport einen bestehenden Verkaufspreis ändert. Aktuell ohne Subscriber. |
 
 ## Tabellenübersicht (Kurzreferenz)
 
 | Tabelle | Primärschlüssel | Zweck |
 |---|---|---|
 | 51000 SL General Sales Price Setup | Primary Key (Singleton) | Grundeinstellungen |
-| 51001 SL Sales Price Checking | Item No., Variant Code, Currency Code, Country Code | Zwischenablage für Import/Prüfung/Freigabe |
-| 51002 SL Sales Price Archive | + Version No. | Historie (aktuell nur lesend genutzt) |
-| 51004 SL Sales Price Outbound File | Entry No. | Für zukünftigen Preisexport (nicht produktiv) |
-| 51005 SL Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv) |
+| 51001 SL Sales Price Checking | Item No., Variant Code, Currency Code | Zwischenablage für Import/Prüfung/Freigabe |
+| 51002 SL Sales Price Archive | + Country Code, Version No. | Historie (aktuell nur lesend genutzt) |
+| 51005 SL Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import |
+
+> Hinweis: Table 51002 "SL Sales Price Archive" führt aus historischen Gründen weiterhin einen eigenen Ländercode – das Archiv wurde bei der Umstellung von Land auf Währung (Table 51001) nicht mit umgestellt, da es aktuell ohnehin nicht automatisch befüllt wird.
+
+## Permission Set
+
+Das Permission Set **`SLChronWSAll`** (ID 51000, `src/PermissionSets/SLChronWSAll.permissionset.al`) deckt Lese-/Schreibzugriff auf alle fünf Tabellen sowie Ausführungsrechte für Codeunit 51001, Xmlport 51000 und die drei Seiten der Erweiterung ab. Tabellenerweiterungen und Seitenerweiterungen benötigen keine eigenen Einträge, da sie über die Berechtigung des jeweiligen Basisobjekts (z. B. Standard-Zugriff auf "Currency"/"Country/Region") mit abgedeckt sind. Das Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
 
 ## Tests ausführen
 
-Es existieren aktuell **keine** AL-Testcodeunits in diesem Projekt. Als Grundlage für zukünftige Tests eignet sich die Spezifikation `openspec/specs/sales-price-currency-copy/spec.md` (10 Szenarien für die Aktion "Add all Currencies").
+Es existieren aktuell **keine** AL-Testcodeunits in diesem Projekt. Als Grundlage für zukünftige Tests eignet sich die Spezifikation `openspec/specs/sales-price-currency-copy/spec.md` (10 Szenarien für die Aktion "Add all Currencies") – zu beachten ist, dass diese Spezifikation vor der Umstellung von Land- auf Currency-Aktivierung entstand und vor Testerstellung gegen den aktuellen Stand geprüft werden sollte.
 
 ## Deployment
 
@@ -119,17 +130,16 @@ Kein CI/CD-Setup (z. B. AL-Go-Workflow) im Projekt gefunden. Deployment erfolgt 
 
 ## Beitragen / Konventionen
 
-- Alle neuen Objekte erhalten IDs im Bereich **51000–51049** (siehe `app.json`, `idRanges`).
-- Deutschsprachige Code-Kommentare dokumentieren bewusst Abweichungen vom migrierten NAV-Altsystem sowie offene TODOs – bei Änderungen bitte diesen Stil beibehalten.
+- Alle neuen Objekte erhalten IDs im Bereich **51000–51049** (siehe `app.json`, `idRanges`), pro Objekttyp unabhängig gezählt.
+- Der Code enthält bewusst **keine** Kommentare (auf ausdrücklichen Kundenwunsch entfernt) – fachliche Hintergründe und Design-Entscheidungen werden stattdessen in diesem Handbuch und im Funktionsregister dokumentiert. Bei Änderungen bitte diesen Stil beibehalten und Kontext hier statt im Code ergänzen.
 - Abgeschlossene, funktionale Änderungen werden als OpenSpec-Change dokumentiert (`openspec/changes/`, nach Fertigstellung archiviert unter `openspec/changes/archive/`) und als dauerhafte Spezifikation unter `openspec/specs/` abgelegt.
 - Übersetzungen: `.g.xlf` wird durch den Compiler erzeugt und darf **nicht** manuell editiert werden; Pflege erfolgt ausschließlich in `Translations/SL Chronext Webshop.de-DE.xlf`.
 
 ## Bekannte Einschränkungen
 
-- **Codeunit 51000 "SL Export Gateway Sales Price" existiert nicht mehr** – sie wurde bewusst entfernt, da nicht benötigt. Damit fehlt die Anbindung, die freigegebene Preise automatisch an ein externes System übergeben hätte. Die Referenz darauf in Page 51001 wurde vollständig entfernt; das Projekt kompiliert ohne sie.
-- **Action "Upload Sales Price"** in Page 51001 ist im Code vollständig auskommentiert (Platzhalter für eine spätere Überarbeitung). Dadurch werden freigegebene Preise aktuell **nicht** automatisch in die Standardtabelle "Sales Price" oder in "SL Sales Price Archive" übernommen.
-- **Feld `"Differential Taxation Purchase"`** auf der Standardtabelle "Item Ledger Entry" wurde im migrierten NAV-Quellsystem verwendet, aber nie geliefert/migriert. Die zugehörige Verzweigung in `fnValidate` (Page 51001) ist deaktiviert und verwendet immer den Standard-Zweig (siehe Kommentar im Code).
-- **`Reason Code` als Enum ohne echten Leerwert**: Die ursprüngliche NAV-Logik prüfte auf einen leeren Grundcode; das jetzige Enum hat immer einen Default-Wert (`CatMan`). Diese fachliche Frage ist noch offen (siehe TODO in Page 51001, Action "Approve").
-- **Dateibasierter Import/Export (Codeunit 51001, Tables 51004–51006)** ist vollständig implementiert, aber an keiner Stelle produktiv verdrahtet oder terminiert (kein Job Queue Eintrag).
+- **Codeunit 51000 "SL Export Gateway Sales Price" existiert nicht mehr** – sie wurde bewusst entfernt, da nicht benötigt. Damit fehlt die Anbindung, die freigegebene Preise automatisch an ein externes System übergeben hätte.
+- **Nach "Approve" werden Preise nicht automatisch in die Standardtabelle "Sales Price" oder in "SL Sales Price Archive" übernommen.** Die Aktion setzt nur die Freigabe-Kennzeichen auf Table 51001; eine Übernahme in die produktiven Verkaufspreise ist aktuell nicht implementiert.
+- **`Reason Code` als Enum ohne echten Leerwert**: Das Enum hat immer einen Default-Wert (`CatMan`), es gibt keinen Zustand "kein Grund angegeben".
+- **Dateibasierter Import (Codeunit 51001, Tables 51005–51006)** ist vollständig implementiert, aber an keiner Stelle produktiv verdrahtet oder terminiert (kein Job Queue Eintrag).
 - **Keine automatisierten Tests** vorhanden.
-- **Keine Permission Sets** für die Objekte dieser Erweiterung angelegt – vor einem produktiven Rollout sollte ein `PermissionSet`/`PermissionSetExtension` ergänzt werden.
+- **Tabelle 51002 "SL Sales Price Archive"** führt weiterhin einen eigenen Ländercode statt eines Währungscodes (siehe Tabellenübersicht oben) – bei einer künftigen Aktivierung der automatischen Archivierung sollte geprüft werden, ob das Archivschema an das Currency-Modell von Table 51001 angeglichen werden soll.
