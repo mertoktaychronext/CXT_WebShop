@@ -382,19 +382,15 @@ page 51001 "SL Sales Price Checking List"
                         if l_recSalesPriceCheck.FindSet() then
                             repeat
                                 if (l_recSalesPriceCheck."Export Status" <> l_recSalesPriceCheck."Export Status"::Sent) or l_boolResendAlreadySent then begin
-                                    l_recSP.Reset();
-                                    l_recSP.SetRange("Item No.", l_recSalesPriceCheck."Item No.");
-                                    l_recSP.SetRange("Variant Code", l_recSalesPriceCheck."Variant Code");
-                                    l_recSP.SetRange("Currency Code", l_recSalesPriceCheck."Currency Code");
-                                    if l_recSP.FindFirst() then begin
-                                        l_intTotal += 1;
-                                        if g_cuExportGatewaySalesPrice.CreateExternalInterfaceFile(l_recSP) then begin
-                                            l_recSalesPriceCheck."Export Status" := l_recSalesPriceCheck."Export Status"::Sent;
-                                            l_intExported += 1;
-                                        end else
-                                            l_recSalesPriceCheck."Export Status" := l_recSalesPriceCheck."Export Status"::Error;
-                                        l_recSalesPriceCheck.Modify();
-                                    end;
+                                    l_intTotal += 1;
+                                    if g_cuExportGatewaySalesPrice.WriteBackAndArchive(l_recSalesPriceCheck, l_recSP) and
+                                       g_cuExportGatewaySalesPrice.CreateExternalInterfaceFile(l_recSP)
+                                    then begin
+                                        l_recSalesPriceCheck."Export Status" := l_recSalesPriceCheck."Export Status"::Sent;
+                                        l_intExported += 1;
+                                    end else
+                                        l_recSalesPriceCheck."Export Status" := l_recSalesPriceCheck."Export Status"::Error;
+                                    l_recSalesPriceCheck.Modify();
                                 end;
                             until l_recSalesPriceCheck.Next() = 0;
 
@@ -445,7 +441,7 @@ page 51001 "SL Sales Price Checking List"
         TXT009: Label 'Please delete existing entries to import new price';
         UpdateSalesPriceCheck: Record "SL Sales Price Checking";
         g_cuExportGatewaySalesPrice: Codeunit "SL Export Gateway Sales Price";
-        ExportResultMsg: Label '%1 of %2 approved lines exported. Lines already exported or without a matching sales price were skipped.', Comment = '%1 = number of lines actually exported, %2 = number of approved lines considered';
+        ExportResultMsg: Label '%1 of %2 approved lines exported. Lines already exported were skipped.', Comment = '%1 = number of lines actually exported, %2 = number of approved lines considered';
         ResendAlreadySentQst: Label '%1 line(s) were already sent previously. Do you want to send them again?', Comment = '%1 = number of previously sent lines';
 
     local procedure fnValidate()

@@ -1,5 +1,66 @@
 codeunit 51000 "SL Export Gateway Sales Price"
 {
+    [TryFunction]
+    procedure WriteBackAndArchive(SalesPriceChecking: Record "SL Sales Price Checking"; var SalesPrice: Record "Sales Price")
+    begin
+        if not SalesPrice.Get(
+             SalesPriceChecking."Item No.", SalesPrice."Sales Type"::"All Customers", '',
+             SalesPriceChecking."Starting Date", SalesPriceChecking."Currency Code",
+             SalesPriceChecking."Variant Code", '', 0)
+        then begin
+            SalesPrice.Init();
+            SalesPrice."Item No." := SalesPriceChecking."Item No.";
+            SalesPrice.Validate("Sales Type", SalesPrice."Sales Type"::"All Customers");
+            SalesPrice."Sales Code" := '';
+            SalesPrice."Starting Date" := SalesPriceChecking."Starting Date";
+            SalesPrice."Variant Code" := SalesPriceChecking."Variant Code";
+            SalesPrice."Unit of Measure Code" := '';
+            SalesPrice."Minimum Quantity" := 0;
+            UpdateSalesPriceFields(SalesPrice, SalesPriceChecking);
+            SalesPrice.Insert(true);
+        end else begin
+            UpdateSalesPriceFields(SalesPrice, SalesPriceChecking);
+            SalesPrice.Modify(true);
+        end;
+
+        ArchiveCheckingLine(SalesPriceChecking);
+    end;
+
+    local procedure UpdateSalesPriceFields(var vSalesPrice: Record "Sales Price"; pSalesPriceChecking: Record "SL Sales Price Checking")
+    begin
+        vSalesPrice.Validate("Currency Code", pSalesPriceChecking."Currency Code");
+        vSalesPrice.Validate("Country/Region Code", '');
+        vSalesPrice.Validate("Unit Price", pSalesPriceChecking."Stock Price");
+        vSalesPrice."Strike-Price incl. VAT" := pSalesPriceChecking."Strike Price";
+        vSalesPrice."Recom. Retail Price incl. VAT" := pSalesPriceChecking."Recom. Retail Price";
+        vSalesPrice."Reason Code" := pSalesPriceChecking."Reason Code";
+        vSalesPrice.Comment := pSalesPriceChecking.Comment;
+        vSalesPrice.Remark := pSalesPriceChecking.Remark;
+    end;
+
+    local procedure ArchiveCheckingLine(pSalesPriceChecking: Record "SL Sales Price Checking")
+    var
+        l_recSalesPriceArchive: Record "SL Sales Price Archive";
+        l_intNextVersionNo: Integer;
+    begin
+        l_recSalesPriceArchive.Reset();
+        l_recSalesPriceArchive.LockTable();
+        l_recSalesPriceArchive.SetRange("Item No.", pSalesPriceChecking."Item No.");
+        l_recSalesPriceArchive.SetRange("Variant Code", pSalesPriceChecking."Variant Code");
+        l_recSalesPriceArchive.SetRange("Currency Code", pSalesPriceChecking."Currency Code");
+        l_recSalesPriceArchive.SetRange("Country Code", '');
+        if l_recSalesPriceArchive.FindLast() then
+            l_intNextVersionNo := l_recSalesPriceArchive."Version No." + 1
+        else
+            l_intNextVersionNo := 1;
+
+        l_recSalesPriceArchive.Init();
+        l_recSalesPriceArchive.TransferFields(pSalesPriceChecking, false);
+        l_recSalesPriceArchive."Country Code" := '';
+        l_recSalesPriceArchive."Version No." := l_intNextVersionNo;
+        l_recSalesPriceArchive.Insert(true);
+    end;
+
     procedure CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean
     var
         OutboundFile: Record "SL Sales Price Outbound File";

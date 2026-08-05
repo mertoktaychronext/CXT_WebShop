@@ -2,7 +2,7 @@
 
 ## Überblick
 
-Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkaufspreisen ab: CSV-Import in eine Zwischenablage-Tabelle, fachliche Prüfung (Marge, Preisschwankungen), Freigabe durch einen Sachbearbeiter, und optional die automatische Vervielfältigung eines Preises auf alle aktivierten Fremdwährungen. Ein zweiter, unabhängiger Baustein für dateibasierten Preisimport (nicht produktiv angebunden) rundet das Projekt ab. Das Projekt ist eine Migration aus einem gewachsenen Dynamics-NAV-Altsystem in modernes, SaaS-fähiges AL.
+Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkaufspreisen ab: CSV-Import in eine Zwischenablage-Tabelle, fachliche Prüfung (Marge, Preisschwankungen), Freigabe durch einen Sachbearbeiter, optional die automatische Vervielfältigung eines Preises auf alle aktivierten Fremdwährungen, und das Hochladen freigegebener Preise an ein externes System. Die Aktion "Upload Sales Price" schreibt jeden freigegebenen Preis in die Standardtabelle "Sales Price" und als versionierten Eintrag in "SL Sales Price Archive", bevor er an eine konfigurierbare API-Schnittstelle gesendet wird. Ein zweiter, unabhängiger Baustein für dateibasierten Preisimport (nicht produktiv angebunden) rundet das Projekt ab. Das Projekt ist eine Migration aus einem gewachsenen Dynamics-NAV-Altsystem in modernes, SaaS-fähiges AL.
 
 ## Technischer Stack
 
@@ -20,17 +20,17 @@ Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkau
 ```
 app.json                          # Extension-Manifest, idRanges 51000-51049
 src/
-  Tables/                         # 5 Tabellen (51000, 51001, 51002, 51005, 51006)
+  Tables/                         # 7 Tabellen (51000-51002, 51004-51007)
   TableExtensions/                # 3 Erweiterungen (Country/Region, Sales Price, Currency)
   PageExtensions/                 # 3 Erweiterungen (Countries/Regions, Sales Prices, Currencies)
-  Pages/                          # 3 Seiten + 1 Xmlport
-  Codeunits/                      # 1 Codeunit (Import Sales Prices)
-  Enums/                          # 3 Enums
+  Pages/                          # 4 Seiten + 1 Xmlport
+  Codeunits/                      # 2 Codeunits (Export Gateway Sales Price, Import Sales Prices)
+  Enums/                          # 5 Enums
   PermissionSets/                 # 1 Permission Set (SLChronWSAll)
 Translations/                     # .g.xlf (generiert) + de-DE.xlf (gepflegt)
 openspec/
   specs/                          # dauerhafte Capability-Spezifikationen (z.B. sales-price-currency-copy)
-  changes/archive/                # abgeschlossene, archivierte Change-Proposals
+  changes/                        # laufende und archivierte Change-Proposals
 docs/                             # dieses Handbuch + Funktionsregister
 ```
 
@@ -73,12 +73,21 @@ Xmlport 51000 "SL Import Sales Price"
    │  schreibt Zeilen in
    ▼
 Table 51001 "SL Sales Price Checking"  ◄── Page 51001 "SL Sales Price Checking List"
-   │  (Item No./Variant Code/Currency Code, kein eigener      (Validate / Approve / Add all Currencies)
-   │   Ländercode mehr auf dieser Tabelle)
+   │  (Item No./Variant Code/Currency Code, kein eigener   (Validate / Approve / Add all Currencies /
+   │   Ländercode mehr auf dieser Tabelle)                   Upload Sales Price)
    │
-   └─► Table 51002 "SL Sales Price Archive"        (nur lesend über Page 51002 genutzt;
-                                                      automatische Befüllung derzeit inaktiv,
-                                                      siehe "Bekannte Einschränkungen")
+   │  Action "Upload Sales Price" → Codeunit 51000 "SL Export Gateway Sales Price"
+   │
+   ├─► WriteBackAndArchive: legt Standardtabelle "Sales Price" neu an bzw.
+   │      aktualisiert sie (Sales Type = All Customers) und fügt eine neue,
+   │      hochgezählte Version in Table 51002 "SL Sales Price Archive" ein
+   │      (Ansicht über Page 51002, nur lesend)
+   │
+   └─► CreateExternalInterfaceFile: wandelt den "Sales Price"-Datensatz per
+          Reflection in JSON um, legt ihn in Table 51004 "SL Sales Price
+          Outbound File" ab und sendet ihn per HttpClient an den in Table
+          51007 "SL API Interface Setup" (Page 51003) hinterlegten Endpunkt –
+          ausgewählt über das Feld "API Interface Code" auf Table 51000.
 
 Steuerdaten für "Add all Currencies":
 Table Extension "SLCurrency" (auf Standard-Tabelle "Currency", Feld "Sales Price Activated")
@@ -101,24 +110,31 @@ Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsr
 
 | Objekt | Element | Zweck |
 |---|---|---|
+| Codeunit 51000 | `WriteBackAndArchive(SalesPriceChecking: Record "SL Sales Price Checking"; var SalesPrice: Record "Sales Price")` | Schreibt/aktualisiert einen "Sales Price"-Datensatz aus einer freigegebenen Preiszeile (Sales Type = All Customers) und archiviert eine neue Version. `[TryFunction]` – ein Fehlschlag wird abgefangen und als `false` zurückgemeldet, statt den gesamten Batch des Aufrufers abzubrechen. |
+| Codeunit 51000 | `CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean` | Wandelt einen "Sales Price"-Datensatz per Reflection in JSON um, legt ihn in Table 51004 ab und sendet ihn an die konfigurierte API-Schnittstelle. |
 | Page 51001 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Berechnet den Nicht-Lagerpreis für Zeilen innerhalb einer Preisspanne. Aktuell aus keiner aktiven Stelle im Code aufgerufen. |
 | Codeunit 51001 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Wird ausgelöst, wenn der automatisierte Dateiimport einen bestehenden Verkaufspreis ändert. Aktuell ohne Subscriber. |
+| Table 51007 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Speichert/liest den API-Schlüssel einer Schnittstelle im Isolated Storage (Modul-Scope) statt in einem Klartext-Tabellenfeld. |
+
+Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregister/gesamtuebersicht.md`.
 
 ## Tabellenübersicht (Kurzreferenz)
 
 | Tabelle | Primärschlüssel | Zweck |
 |---|---|---|
-| 51000 SL General Sales Price Setup | Primary Key (Singleton) | Grundeinstellungen |
+| 51000 SL General Sales Price Setup | Primary Key (Singleton) | Grundeinstellungen, inkl. Export-Schalter und ausgewählter API-Schnittstelle |
 | 51001 SL Sales Price Checking | Item No., Variant Code, Currency Code | Zwischenablage für Import/Prüfung/Freigabe |
-| 51002 SL Sales Price Archive | + Country Code, Version No. | Historie (aktuell nur lesend genutzt) |
+| 51002 SL Sales Price Archive | + Country Code, Version No. | Historie; wird bei "Upload Sales Price" (Page 51001) über Codeunit 51000 automatisch befüllt, Version No. je Item No./Variant Code/Currency Code hochgezählt |
+| 51004 SL Sales Price Outbound File | Entry No. | Gesendete JSON-Nutzdaten mit Versandstatus und Antworttext, zur Fehleranalyse fehlgeschlagener Übertragungen |
 | 51005 SL Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import |
+| 51007 SL API Interface Setup | Code | Endpunkt-URL, Authentifizierungsart und (im Isolated Storage abgelegter) API-Schlüssel je externer Schnittstelle |
 
-> Hinweis: Table 51002 "SL Sales Price Archive" führt aus historischen Gründen weiterhin einen eigenen Ländercode – das Archiv wurde bei der Umstellung von Land auf Währung (Table 51001) nicht mit umgestellt, da es aktuell ohnehin nicht automatisch befüllt wird.
+> Hinweis: Table 51002 "SL Sales Price Archive" führt aus historischen Gründen weiterhin einen eigenen Ländercode – das Archiv wurde bei der Umstellung von Land auf Währung (Table 51001) nicht mit umgestellt. `Codeunit 51000` schreibt ihn stets leer, passend zum "gilt für jedes Land mit dieser Währung"-Modell aus `sales-price-currency-copy`; Details dazu in `openspec/changes/sales-price-checking-writeback/design.md`.
 
 ## Permission Set
 
-Das Permission Set **`SLChronWSAll`** (ID 51000, `src/PermissionSets/SLChronWSAll.permissionset.al`) deckt Lese-/Schreibzugriff auf alle fünf Tabellen sowie Ausführungsrechte für Codeunit 51001, Xmlport 51000 und die drei Seiten der Erweiterung ab. Tabellenerweiterungen und Seitenerweiterungen benötigen keine eigenen Einträge, da sie über die Berechtigung des jeweiligen Basisobjekts (z. B. Standard-Zugriff auf "Currency"/"Country/Region") mit abgedeckt sind. Das Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
+Das Permission Set **`SLChronWSAll`** (ID 51000, `src/PermissionSets/SLChronWSAll.permissionset.al`) deckt Lese-/Schreibzugriff auf alle sieben Tabellen sowie Ausführungsrechte für beide Codeunits, Xmlport 51000 und die vier Seiten der Erweiterung ab. Tabellenerweiterungen und Seitenerweiterungen benötigen keine eigenen Einträge, da sie über die Berechtigung des jeweiligen Basisobjekts (z. B. Standard-Zugriff auf "Currency"/"Country/Region") mit abgedeckt sind; die Standardtabelle "Sales Price", in die Codeunit 51000 schreibt, ist ebenso über die Base-App-Berechtigungen abgedeckt, nicht über dieses Set. Das Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
 
 ## Tests ausführen
 
@@ -137,9 +153,9 @@ Kein CI/CD-Setup (z. B. AL-Go-Workflow) im Projekt gefunden. Deployment erfolgt 
 
 ## Bekannte Einschränkungen
 
-- **Codeunit 51000 "SL Export Gateway Sales Price" existiert nicht mehr** – sie wurde bewusst entfernt, da nicht benötigt. Damit fehlt die Anbindung, die freigegebene Preise automatisch an ein externes System übergeben hätte.
-- **Nach "Approve" werden Preise nicht automatisch in die Standardtabelle "Sales Price" oder in "SL Sales Price Archive" übernommen.** Die Aktion setzt nur die Freigabe-Kennzeichen auf Table 51001; eine Übernahme in die produktiven Verkaufspreise ist aktuell nicht implementiert.
+- **"Approve" selbst übernimmt Preise nicht in die Standardtabelle "Sales Price" oder in "SL Sales Price Archive".** Die Aktion setzt nur die Freigabe-Kennzeichen auf Table 51001. Die Übernahme erfolgt erst im nachgelagerten Schritt "Upload Sales Price" (Page 51001, Codeunit 51000), der vor der Dateierzeugung sowohl "Sales Price" (Sales Type = All Customers) als auch "SL Sales Price Archive" (mit hochgezählter Version No.) beschreibt.
+- **`"Unit Price"` (Standardfeld, von Codeunit 51000 beschrieben) und `"Unit Price (LCY)"` (Zusatzfeld, von der eigenen `fnValidate`-Vergleichslogik auf Page 51001 gelesen) sind zwei getrennte Felder, die auseinanderlaufen können** – `WriteBackAndArchive` schreibt nur das erste. `fnValidate` ist davon heute unberührt, da es eine eigene, separate Suche durchführt, aber `"Unit Price (LCY)"` könnte veralten, sobald regelmäßig Preise hochgeladen werden; als Folgepunkt für den Fachbereich vermerkt, hier bewusst nicht gelöst (siehe `openspec/changes/sales-price-checking-writeback/design.md`, Risks/Trade-offs).
 - **`Reason Code` als Enum ohne echten Leerwert**: Das Enum hat immer einen Default-Wert (`CatMan`), es gibt keinen Zustand "kein Grund angegeben".
-- **Dateibasierter Import (Codeunit 51001, Tables 51005–51006)** ist vollständig implementiert, aber an keiner Stelle produktiv verdrahtet oder terminiert (kein Job Queue Eintrag).
+- **Dateibasierter Import (Codeunit 51001, Tables 51005–51006)** ist vollständig implementiert, aber an keiner Stelle produktiv verdrahtet oder terminiert (kein Job Queue Eintrag). `WriteSalesPrices` ruft `SalesPrice.Get(...)` mit dem Zusatzparameter "Country/Region Code" auf; der tatsächliche Primärschlüssel der Standardtabelle "Sales Price" (verifiziert anhand der Symbole in `.alpackages/Microsoft_Base Application_*.app`) enthält dieses Feld nicht. Vor einer Aktivierung dieses Bausteins sollte der Aufruf geprüft werden (Codeunit 51000 berücksichtigt dies bereits korrekt).
 - **Keine automatisierten Tests** vorhanden.
 - **Tabelle 51002 "SL Sales Price Archive"** führt weiterhin einen eigenen Ländercode statt eines Währungscodes (siehe Tabellenübersicht oben) – bei einer künftigen Aktivierung der automatischen Archivierung sollte geprüft werden, ob das Archivschema an das Currency-Modell von Table 51001 angeglichen werden soll.

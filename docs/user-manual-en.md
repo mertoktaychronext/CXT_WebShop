@@ -8,6 +8,7 @@ This extension for Microsoft Dynamics 365 Business Central helps you import, che
 
 - Access to Business Central with a role that includes the "Sales Price Checking List" page.
 - The base settings (minimum margin, thresholds) must already be configured by a key user (see the Key User Manual).
+- For "Upload Sales Price", a key user must have enabled the price export and configured an API interface (see the Key User Manual).
 - A prepared CSV file with the new prices.
 
 ## Getting Started
@@ -46,9 +47,21 @@ Click **"Approve"** to release the checked prices. You will be asked to confirm.
 
 Once you have imported, validated, and approved a base price, use **"Add all Currencies"** to automatically generate one converted price line per currency that has been activated for this. The system considers every currency a key user has enabled (see the Key User Manual) and creates **one** line per currency.
 
-### 5. Viewing the archive
+### 5. Upload prices ("Upload Sales Price")
 
-Use the **"Sales Price Archive"** page to look up previously processed prices (read-only, no changes possible).
+Click **"Upload Sales Price"** to transmit all approved price lines to the external system (e.g. the webshop). For each line, the system automatically:
+
+1. Writes the price into the live sales price table (creating it or updating an existing one) — valid for **all customers**.
+2. Also stores a copy of the price in the **price archive**, with a running version number per item/variant/currency.
+3. Sends the price to the external system via the configured interface.
+
+At the end you get a message showing how many of the approved lines were transmitted successfully. Lines that were already sent successfully before ("Export Status" = "Sent") are **not** resent automatically when you click again — you are asked first whether you really want to resend them.
+
+> If the transmission fails for a single line (e.g. due to an invalid value), only that line is marked "Export Status" = "Error"; all other lines are still processed.
+
+### 6. Viewing the archive
+
+Use the **"Sales Price Archive"** page to look up previously uploaded prices (read-only, no changes possible). Every version of an uploaded price line appears here as its own, sequentially numbered entry.
 
 ## Frequently Asked Questions (FAQ)
 
@@ -60,6 +73,12 @@ You tried to approve a price line directly without running "Validate" first. Run
 
 **"not possible" when editing a price line**
 An already accepted/approved price line can no longer be changed afterwards.
+
+**"Nothing to process" when clicking "Upload Sales Price"**
+There are no approved (accepted) price lines. Run "Approve" first.
+
+**Message that the interface is not active or no API interface is configured**
+The price export has not been set up or is disabled. Contact a key user (see the Key User Manual).
 
 ## Help & Support
 

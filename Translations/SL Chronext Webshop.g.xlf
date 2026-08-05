@@ -18,6 +18,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4133394143 - NamedType 1471355834" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Auth Type is set to %1, but no API key has been entered for this interface.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = selected authentication type</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - NamedType MissingApiKeyErr</note>
+        </trans-unit>
         <trans-unit id="Table 4133394143 - Field 1090351696 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Active</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -483,6 +488,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field TargetFile - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1368247394 - NamedType 738529365" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API interface %1 (selected on the general sales price setup) no longer exists.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = API interface code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Export Gateway Sales Price - NamedType ApiInterfaceNotFoundErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 3946361192 - NamedType 234181524" size-unit="char" translate="yes" xml:space="preserve">
           <source>Expected %1 columns in the header row, but found %2.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -694,7 +704,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 of %2 approved lines exported. Lines already exported or without a matching sales price were skipped.</source>
+          <source>%1 of %2 approved lines exported. Lines already exported were skipped.</source>
           <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ExportResultMsg</note>
         </trans-unit>

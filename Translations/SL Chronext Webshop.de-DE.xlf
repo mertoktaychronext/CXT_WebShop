@@ -15,11 +15,65 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension SLCurrency - Field Sales Price Activated - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 4133394143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Interface Setup</source>
+          <target>API-Schnittstellen-Einrichtung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - NamedType 1471355834" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Auth Type is set to %1, but no API key has been entered for this interface.</source>
+          <target>Die Authentifizierungsart ist auf %1 gesetzt, aber für diese Schnittstelle wurde kein API-Schlüssel hinterlegt.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = selected authentication type</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - NamedType MissingApiKeyErr</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - Field 1090351696 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Active</source>
+          <target>Aktiv</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Field Active - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - Field 2722158932 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Auth Type</source>
+          <target>Authentifizierungsart</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Field Auth Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - Field 3004954119 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Code</source>
+          <target>Code</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Field Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - Field 3461834954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target>Beschreibung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Field Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - Field 1259723980 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Endpoint URL</source>
+          <target>Endpunkt-URL</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Field Endpoint URL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 4133394143 - Field 76420432 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table No.</source>
+          <target>Quelltabellennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL API Interface Setup - Field Source Table No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2307618253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General Sales Price Setup</source>
           <target>Allgemeine Verkaufspreiseinrichtung</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2307618253 - Field 1819730212 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Interface Code</source>
+          <target>API-Schnittstellencode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL General Sales Price Setup - Field API Interface Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2307618253 - Field 2764702207 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Cat 1 Non Stock %</source>
@@ -315,11 +369,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Exchange Rate Date - Property Caption</note>
         </trans-unit>
-<trans-unit id="Table 2923533672 - Field 2816584714 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Export Processed</source>
-          <target>Export verarbeitet</target>
+        <trans-unit id="Table 2923533672 - Field 1013459724 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export Status</source>
+          <target>Exportstatus</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Export Processed - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Export Status - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2923533672 - Field 568743302 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Item No.</source>
@@ -513,6 +567,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Filename - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 248831540 - Field 1099903468 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Response Message</source>
+          <target>Antwortmeldung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field Response Message - Property Caption</note>
+        </trans-unit>
 <trans-unit id="Table 248831540 - Field 513339096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Status</source>
           <target>Status</target>
@@ -524,6 +584,12 @@
           <target>Zieldatei</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field TargetFile - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1368247394 - NamedType 738529365" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API interface %1 (selected on the general sales price setup) no longer exists.</source>
+          <target>Die API-Schnittstelle %1 (ausgewählt in der allgemeinen Verkaufspreiseinrichtung) existiert nicht mehr.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = API interface code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Export Gateway Sales Price - NamedType ApiInterfaceNotFoundErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3946361192 - NamedType 234181524" size-unit="char" translate="yes" xml:space="preserve">
           <source>Expected %1 columns in the header row, but found %2.</source>
@@ -549,11 +615,83 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Import Sales Prices - NamedType UnexpectedColumnErr</note>
         </trans-unit>
+        <trans-unit id="Page 4133394143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Interface Setup</source>
+          <target>API-Schnittstellen-Einrichtung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 1090351696 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether this interface can be selected and used for sending data.</source>
+          <target>Gibt an, ob diese Schnittstelle ausgewählt und zum Senden von Daten verwendet werden kann.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control Active - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 3332662617 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the API key or token used to authenticate against the endpoint. The value is stored securely and is not shown again once saved.</source>
+          <target>Gibt den API-Schlüssel oder das Token an, mit dem sich gegenüber dem Endpunkt authentifiziert wird. Der Wert wird sicher gespeichert und nach dem Speichern nicht mehr angezeigt.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control ApiKey - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 3332662617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Key</source>
+          <target>API-Schlüssel</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control ApiKey - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 2722158932 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies how requests to this endpoint are authenticated.</source>
+          <target>Gibt an, wie Anfragen an diesen Endpunkt authentifiziert werden.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control Auth Type - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 3004954119 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the unique code of this API interface.</source>
+          <target>Gibt den eindeutigen Code dieser API-Schnittstelle an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies a description of this API interface.</source>
+          <target>Gibt eine Beschreibung dieser API-Schnittstelle an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 1259723980 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the endpoint URL that data is sent to.</source>
+          <target>Gibt die Endpunkt-URL an, an die Daten gesendet werden.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control Endpoint URL - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4133394143 - Control 76420432 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies which table this interface transmits data for.</source>
+          <target>Gibt an, für welche Tabelle diese Schnittstelle Daten überträgt.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL API Interface Setup - Control Source Table No. - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 2307618253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General Sales Price Setup</source>
           <target>Allgemeine Verkaufspreiseinrichtung</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 36190024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export</source>
+          <target>Export</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Export - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 1819730212 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies which API interface is used to send approved sales prices to an external system.</source>
+          <target>Gibt an, welche API-Schnittstelle verwendet wird, um freigegebene Verkaufspreise an ein externes System zu senden.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control API Interface Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Control 2233414263 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether approved sales prices are sent to an external system via the selected API interface.</source>
+          <target>Gibt an, ob freigegebene Verkaufspreise über die ausgewählte API-Schnittstelle an ein externes System gesendet werden.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Price Export Active - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 2307618253 - Control 2254596456 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Non Stock Price Formula</source>
@@ -681,6 +819,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Control Threshold - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2307618253 - Action 1658450078 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the setup for outbound API interfaces.</source>
+          <target>Öffnet die Einrichtung für ausgehende API-Schnittstellen.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Action APIInterfaceSetup - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2307618253 - Action 1658450078 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Interface Setup</source>
+          <target>API-Schnittstellen-Einrichtung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL General Sales Price Setup - Action APIInterfaceSetup - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 4197073420 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Archive</source>
           <target>Verkaufspreisarchiv</target>
@@ -694,8 +844,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Property Caption</note>
         </trans-unit>
 <trans-unit id="Page 2205381466 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 of %2 approved lines exported. Lines already exported or without a matching sales price were skipped.</source>
-          <target>%1 von %2 freigegebenen Zeilen exportiert. Bereits exportierte Zeilen oder Zeilen ohne passenden Verkaufspreis wurden übersprungen.</target>
+          <source>%1 of %2 approved lines exported. Lines already exported were skipped.</source>
+          <target>%1 von %2 freigegebenen Zeilen exportiert. Bereits exportierte Zeilen wurden übersprungen.</target>
           <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ExportResultMsg</note>
         </trans-unit>
@@ -704,6 +854,12 @@
           <target>Artikel %1, Variante %2 hat keinen Ländercode. Bitte legen Sie in der importierten Datei einen Ländercode fest, oder tragen Sie ihn vor der Validierung manuell ein.</target>
           <note from="Developer" annotates="general" priority="2">%1 = item no., %2 = variant code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType MissingCountryCodeErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2205381466 - NamedType 4266715801" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 line(s) were already sent previously. Do you want to send them again?</source>
+          <target>%1 Zeile(n) wurden bereits zuvor gesendet. Möchten Sie sie erneut senden?</target>
+          <note from="Developer" annotates="general" priority="2">%1 = number of previously sent lines</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ResendAlreadySentQst</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 2515162083" size-unit="char" translate="yes" xml:space="preserve">
           <source>New Final Price %1% less than existing Final Price %2</source>
@@ -993,6 +1149,24 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Unit Price (LCY) incl. VAT - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 2962880249 - EnumValue 811240172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Key (Header)</source>
+          <target>API-Schlüssel (Header)</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL API Auth Type - EnumValue ApiKeyHeader - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2962880249 - EnumValue 2810360006 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Basic Authentication</source>
+          <target>Basisauthentifizierung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL API Auth Type - EnumValue BasicAuth - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 2962880249 - EnumValue 3371220206 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>None</source>
+          <target>Keine</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL API Auth Type - EnumValue None - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 2997533691 - EnumValue 3844911025 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Canceled</source>
           <target>Storniert</target>
@@ -1034,6 +1208,24 @@
           <target>Zu verarbeiten</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum SL Ext Interface File Status - EnumValue To Process - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4195700702 - EnumValue 2248886284 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error</source>
+          <target>Fehler</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Sales Price Export Status - EnumValue Error - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4195700702 - EnumValue 3923323563 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Not Sent</source>
+          <target>Nicht gesendet</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Sales Price Export Status - EnumValue Not Sent - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4195700702 - EnumValue 2561328176 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sent</source>
+          <target>Gesendet</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum SL Sales Price Export Status - EnumValue Sent - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 2668283973 - EnumValue 2940224144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>CatMan</source>
