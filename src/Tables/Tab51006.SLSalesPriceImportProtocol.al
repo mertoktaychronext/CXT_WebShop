@@ -1,5 +1,3 @@
-// Schlanker, eigenständiger Ersatz für Table 5275379 "Ext. Interface Protocol" (ISV-Modul EXIN),
-// nur für Fehlermeldungen aus Codeunit 51001 "SL Import Sales Prices" (war WriteProtocol).
 table 51006 "SL Sales Price Import Protocol"
 {
     Caption = 'Sales Price Import Protocol';

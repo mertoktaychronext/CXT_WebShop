@@ -1,5 +1,3 @@
-// Migriert aus NAV Table 50006 "General Sales Price Setup" (1:1, Objekt-ID umnummeriert
-// wegen app.json idRanges 51000-51049, Feld-IDs 1-13 unverändert übernommen).
 table 51000 "SL General Sales Price Setup"
 {
     Caption = 'General Sales Price Setup';
@@ -77,10 +75,6 @@ table 51000 "SL General Sales Price Setup"
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 2;
         }
-        // Neu (nicht Teil der Quelltabelle): schlanker Ersatz für die Prüfung
-        // "Ext. Interface Setup 'UPDPRI' aktiv?" aus dem ISV-Modul EXIN in Codeunit 82001.
-        // Steuert, ob Codeunit 51000 "SL Export Gateway Sales Price" bei Sales-Price-Änderungen
-        // eine Outbound-Datei (Table 51004) erzeugt.
         field(14; "Price Export Active"; Boolean)
         {
             Caption = 'Price Export Active';

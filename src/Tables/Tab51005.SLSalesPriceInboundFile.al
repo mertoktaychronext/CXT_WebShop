@@ -1,5 +1,3 @@
-// Schlanker, eigenständiger Ersatz für Table 5275377 "Ext. Interface Inbound File" (ISV-Modul EXIN).
-// Nur das für Codeunit 51001 "SL Import Sales Prices" benötigte Minimum, keine ISV-Matrix.
 table 51005 "SL Sales Price Inbound File"
 {
     Caption = 'Sales Price Inbound File';

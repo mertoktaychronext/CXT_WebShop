@@ -1,5 +1,3 @@
-// Migriert aus NAV Table 50011 "Sales Price Archive" (1:1, Objekt-ID umnummeriert
-// wegen app.json idRanges 51000-51049, Feld-IDs unverändert übernommen).
 table 51002 "SL Sales Price Archive"
 {
     Caption = 'Sales Price Archive';
@@ -91,9 +89,6 @@ table 51002 "SL Sales Price Archive"
         {
             Caption = 'Reason Code';
             DataClassification = ToBeClassified;
-            // war Code[10] mit TableRelation="System Value Line"."System Code" WHERE (System Value No.=CONST(82010)).
-            // Tabelle "System Value Line" wurde laut Kundenvorgabe NICHT migriert, sondern durch dieses
-            // Enum (gemeinsam mit Table 51001) ersetzt.
         }
         field(16; Comment; Text[250])
         {

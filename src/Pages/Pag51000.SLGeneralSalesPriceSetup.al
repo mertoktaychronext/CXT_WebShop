@@ -1,10 +1,12 @@
-// Migriert aus NAV Page 50025 "General Sales Price Setup" (1:1, Objekt-ID umnummeriert
-// wegen app.json idRanges 51000-51049; Control-Struktur/Layout unverändert übernommen).
 page 51000 "SL General Sales Price Setup"
 {
     Caption = 'General Sales Price Setup';
     PageType = Card;
     SourceTable = "SL General Sales Price Setup";
+    ApplicationArea = All;
+    UsageCategory = Administration;
+    InsertAllowed = false;
+    DeleteAllowed = false;
 
     layout
     {
@@ -115,4 +117,11 @@ page 51000 "SL General Sales Price Setup"
             }
         }
     }
+    trigger OnOpenPage()
+    begin
+        if not Rec.Get() then begin
+            Rec.Init();
+            Rec.Insert();
+        end;
+    end;
 }

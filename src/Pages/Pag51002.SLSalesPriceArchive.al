@@ -1,5 +1,3 @@
-// Migriert aus NAV Page 50060 "Sales Price Archive" (1:1, Objekt-ID umnummeriert
-// wegen app.json idRanges 51000-51049).
 page 51002 "SL Sales Price Archive"
 {
     Caption = 'Sales Price Archive';
@@ -9,6 +7,8 @@ page 51002 "SL Sales Price Archive"
     InsertAllowed = false;
     DeleteAllowed = false;
     ModifyAllowed = false;
+    ApplicationArea = All;
+    UsageCategory = History;
 
     layout
     {

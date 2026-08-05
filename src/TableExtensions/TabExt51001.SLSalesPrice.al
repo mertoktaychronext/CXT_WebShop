@@ -1,14 +1,3 @@
-// Table Extension für die Standardtabelle "Sales Price" (7002). Diese Felder waren im NAV-Altsystem
-// kundenspezifische Ergänzungen der Standardtabelle und werden von Codeunit 51000
-// "SL Export Gateway Sales Price", Codeunit 51001 "SL Import Sales Prices" sowie Page 51001
-// "SL Sales Price Checking List" (Prozedur fnValidate) bereits verwendet, waren bisher aber noch
-// nicht als Table Extension angelegt.
-// "Reason Code" ist als Enum "SL Sales Price Reason Code" angelegt (nicht Code[10]), damit die direkte
-// Zuweisung aus "SL Sales Price Checking"."Reason Code" (ebenfalls dieses Enum) typkompatibel bleibt.
-// "Unit Price (LCY)" wird in Page 51001 nur lesend zum Vergleich mit "Stock Price" verwendet;
-// eine ursprüngliche Berechnungsvorschrift (z.B. CalcFormula/OnValidate) wurde nicht mitgeliefert.
-// Als einfaches, manuell zu pflegendes Decimal-Feld angelegt - bei Bedarf in ein FlowField ändern,
-// sobald die Berechnungslogik bekannt ist.
 tableextension 51001 "SL Sales Price" extends "Sales Price"
 {
     fields

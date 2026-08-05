@@ -1,15 +1,3 @@
-// Migriert aus NAV Codeunit 82012 "Import Sales Prices" (Objekt-ID umnummeriert wegen
-// app.json idRanges 51000-51049). TableNo zeigt jetzt auf "SL Sales Price Inbound File" (51005,
-// schlanker Ersatz für Table 5275377 "Ext. Interface Inbound File" - siehe Codeunit 51000 für die
-// Begründung, warum das ISV-Modul EXIN nicht 1:1 nachgebaut wurde).
-//
-// Abweichungen vom Original:
-//   - Die DotNet-basierte Zeilenaufteilung (System.String.Split) wurde durch die native AL-Methode
-//     Text.Split() ersetzt (DotNet-Interop ist in modernem/SaaS-fähigem AL nicht verfügbar).
-//   - "RunTriggerAndEvents := Rec.\"Ext Interface Setup Name\" <> 'IMPPRI'" entfällt, da es dieses
-//     ISV-Feld nicht mehr gibt; es wird immer TRUE gesetzt (Trigger/Events laufen immer normal).
-//   - "Ext. Interface Protocol" (Table 5275379) wurde durch die schlanke Table 51006
-//     "SL Sales Price Import Protocol" ersetzt.
 codeunit 51001 "SL Import Sales Prices"
 {
     TableNo = "SL Sales Price Inbound File";
@@ -21,7 +9,8 @@ codeunit 51001 "SL Import Sales Prices"
     end;
 
     var
-        UnknownColumnErr: Label 'Unkown Column: %1.';
+        ColumnCountErr: Label 'Expected %1 columns in the header row, but found %2.';
+        UnexpectedColumnErr: Label 'Unexpected column at position %1: expected "%2", found "%3".';
         RowCountDifferingErr: Label 'Read lines: %1, marked for processing: %2.';
         ProcessingErrorErr: Label 'Error while processing sales prices.';
         RunTriggerAndEvents: Boolean;
@@ -122,24 +111,30 @@ codeunit 51001 "SL Import Sales Prices"
 
     local procedure EvaluateHeaderRow(LineValues: List of [Text]; var vErrorText: Text[250]): Boolean
     var
-        AllowedValues: List of [Text];
+        ExpectedValues: List of [Text];
         Value: Text;
+        Index: Integer;
     begin
-        AllowedValues.Add('Item No_');
-        AllowedValues.Add('Variant Code');
-        AllowedValues.Add('Sales Type');
-        AllowedValues.Add('Sales Code');
-        AllowedValues.Add('Currency Code');
-        AllowedValues.Add('Country_Region Code');
-        AllowedValues.Add('Unit Price');
-        AllowedValues.Add('Price Includes VAT');
-        AllowedValues.Add('Strike-Price incl_ VAT');
-        AllowedValues.Add('Recom_ Retail Price incl_ VAT');
+        ExpectedValues.Add('Item No_');
+        ExpectedValues.Add('Variant Code');
+        ExpectedValues.Add('Sales Type');
+        ExpectedValues.Add('Sales Code');
+        ExpectedValues.Add('Currency Code');
+        ExpectedValues.Add('Country_Region Code');
+        ExpectedValues.Add('Unit Price');
+        ExpectedValues.Add('Price Includes VAT');
+        ExpectedValues.Add('Strike-Price incl_ VAT');
+        ExpectedValues.Add('Recom_ Retail Price incl_ VAT');
 
-        foreach Value in LineValues do begin
-            Value := Value.Replace('"', '');
-            if not AllowedValues.Contains(Value) then begin
-                vErrorText := StrSubstNo(UnknownColumnErr, Value);
+        if LineValues.Count <> ExpectedValues.Count then begin
+            vErrorText := StrSubstNo(ColumnCountErr, ExpectedValues.Count, LineValues.Count);
+            exit(false);
+        end;
+
+        for Index := 1 to LineValues.Count do begin
+            Value := LineValues.Get(Index).Replace('"', '');
+            if Value <> ExpectedValues.Get(Index) then begin
+                vErrorText := StrSubstNo(UnexpectedColumnErr, Index, ExpectedValues.Get(Index), Value);
                 exit(false);
             end;
         end;
@@ -182,7 +177,6 @@ codeunit 51001 "SL Import Sales Prices"
             repeat
                 if not SalesPrice.Get(
                      vSalesPriceTemp."Item No.", vSalesPriceTemp."Sales Type", vSalesPriceTemp."Sales Code",
-                     //vSalesPriceTemp."Promotion Medium No.", vSalesPriceTemp."Prom.Med.Tar.Grp.No.", vSalesPriceTemp."Set No.",
                      vSalesPriceTemp."Starting Date", vSalesPriceTemp."Currency Code", vSalesPriceTemp."Country/Region Code",
                      vSalesPriceTemp."Variant Code", vSalesPriceTemp."Unit of Measure Code", vSalesPriceTemp."Minimum Quantity")
                 then begin
