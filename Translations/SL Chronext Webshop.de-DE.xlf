@@ -297,12 +297,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Validated - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 4197073420 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Variant Code</source>
-          <target>Variantencode</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Archive - Field Variant Code - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 4197073420 - Field 1684721775 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Version No.</source>
           <target>Versionsnr.</target>
@@ -458,12 +452,6 @@
           <target>Geprüft</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Validated - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 2923533672 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Variant Code</source>
-          <target>Variantencode</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Checking - Field Variant Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2923533672 - Field 1684721775 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Version No.</source>
@@ -848,12 +836,6 @@
           <target>%1 von %2 freigegebenen Zeilen exportiert. Bereits exportierte Zeilen wurden übersprungen.</target>
           <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType ExportResultMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 2205381466 - NamedType 2699353184" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Item %1, variant %2 has no country code. Please set a country code in the imported file or fill it in manually before validating.</source>
-          <target>Artikel %1, Variante %2 hat keinen Ländercode. Bitte legen Sie in der importierten Datei einen Ländercode fest, oder tragen Sie ihn vor der Validierung manuell ein.</target>
-          <note from="Developer" annotates="general" priority="2">%1 = item no., %2 = variant code</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - NamedType MissingCountryCodeErr</note>
         </trans-unit>
         <trans-unit id="Page 2205381466 - NamedType 4266715801" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 line(s) were already sent previously. Do you want to send them again?</source>

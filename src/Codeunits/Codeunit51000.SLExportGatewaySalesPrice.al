@@ -6,14 +6,14 @@ codeunit 51000 "SL Export Gateway Sales Price"
         if not SalesPrice.Get(
              SalesPriceChecking."Item No.", SalesPrice."Sales Type"::"All Customers", '',
              SalesPriceChecking."Starting Date", SalesPriceChecking."Currency Code",
-             SalesPriceChecking."Variant Code", '', 0)
+             '', '', 0)
         then begin
             SalesPrice.Init();
             SalesPrice."Item No." := SalesPriceChecking."Item No.";
             SalesPrice.Validate("Sales Type", SalesPrice."Sales Type"::"All Customers");
             SalesPrice."Sales Code" := '';
             SalesPrice."Starting Date" := SalesPriceChecking."Starting Date";
-            SalesPrice."Variant Code" := SalesPriceChecking."Variant Code";
+            SalesPrice."Variant Code" := '';
             SalesPrice."Unit of Measure Code" := '';
             SalesPrice."Minimum Quantity" := 0;
             UpdateSalesPriceFields(SalesPrice, SalesPriceChecking);
@@ -46,7 +46,6 @@ codeunit 51000 "SL Export Gateway Sales Price"
         l_recSalesPriceArchive.Reset();
         l_recSalesPriceArchive.LockTable();
         l_recSalesPriceArchive.SetRange("Item No.", pSalesPriceChecking."Item No.");
-        l_recSalesPriceArchive.SetRange("Variant Code", pSalesPriceChecking."Variant Code");
         l_recSalesPriceArchive.SetRange("Currency Code", pSalesPriceChecking."Currency Code");
         l_recSalesPriceArchive.SetRange("Country Code", '');
         if l_recSalesPriceArchive.FindLast() then

@@ -20,10 +20,6 @@ page 51002 "SL Sales Price Archive"
                 {
                     ApplicationArea = All;
                 }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = All;
-                }
                 field("Stock Price"; Rec."Stock Price")
                 {
                     ApplicationArea = All;

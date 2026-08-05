@@ -8,11 +8,11 @@ Writing approved "SL Sales Price Checking" lines into "Sales Price" and archivin
 Before generating the outbound interface file for an "SL Sales Price Checking" line, the system SHALL write that line's data into the standard "Sales Price" table, updating an existing matching record or inserting a new one if none exists.
 
 #### Scenario: No matching Sales Price record exists yet
-- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Variant Code/Currency Code/Starting Date combination that has no existing "Sales Price" record with "Sales Type" = All Customers
+- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Currency Code/Starting Date combination that has no existing "Sales Price" record with "Sales Type" = All Customers
 - **THEN** the system inserts a new "Sales Price" record with the checking line's data before generating the outbound file, instead of skipping the line
 
 #### Scenario: A matching Sales Price record already exists
-- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Variant Code/Currency Code/Starting Date combination that already has a matching "Sales Price" record with "Sales Type" = All Customers
+- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Currency Code/Starting Date combination that already has a matching "Sales Price" record with "Sales Type" = All Customers
 - **THEN** the system updates that existing "Sales Price" record with the checking line's current data before generating the outbound file
 
 #### Scenario: Sales Type is always All Customers
@@ -28,14 +28,14 @@ Before generating the outbound interface file for an "SL Sales Price Checking" l
 - **THEN** the checking line's "Stock Price" value is written to the standard "Unit Price" field on "Sales Price"
 
 ### Requirement: Sales Price Archive snapshot before export
-Before generating the outbound interface file for an "SL Sales Price Checking" line, the system SHALL insert a new row into "SL Sales Price Archive" containing a snapshot of that checking line, with "Version No." incremented relative to any prior archive rows for the same Item No./Variant Code/Currency Code combination.
+Before generating the outbound interface file for an "SL Sales Price Checking" line, the system SHALL insert a new row into "SL Sales Price Archive" containing a snapshot of that checking line, with "Version No." incremented relative to any prior archive rows for the same Item No./Currency Code combination.
 
 #### Scenario: First archive entry for a combination
-- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Variant Code/Currency Code combination that has no prior "SL Sales Price Archive" rows
+- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Currency Code combination that has no prior "SL Sales Price Archive" rows
 - **THEN** the system inserts a new archive row with "Version No." = 1
 
 #### Scenario: Subsequent archive entry for a combination
-- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Variant Code/Currency Code combination that already has one or more "SL Sales Price Archive" rows
+- **WHEN** the "Upload Sales Price" action processes a checking line for an Item No./Currency Code combination that already has one or more "SL Sales Price Archive" rows
 - **THEN** the system inserts a new archive row with "Version No." set to one greater than the highest existing "Version No." for that combination
 
 #### Scenario: Archive row reflects checking line data

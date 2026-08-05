@@ -73,8 +73,8 @@ Xmlport 51000 "SL Import Sales Price"
    │  writes lines into
    ▼
 Table 51001 "SL Sales Price Checking"  ◄── Page 51001 "SL Sales Price Checking List"
-   │  (Item No./Variant Code/Currency Code, no        (Validate / Approve / Add all Currencies /
-   │   country code on this table anymore)              Upload Sales Price)
+   │  (Item No./Currency Code — no country code          (Validate / Approve / Add all Currencies /
+   │   and no variant code on this table)                Upload Sales Price)
    │
    │  Action "Upload Sales Price" → Codeunit 51000 "SL Export Gateway Sales Price"
    │
@@ -123,8 +123,8 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | Table | Primary Key | Purpose |
 |---|---|---|
 | 51000 SL General Sales Price Setup | Primary Key (singleton) | Base settings, incl. export toggle and selected API interface |
-| 51001 SL Sales Price Checking | Item No., Variant Code, Currency Code | Staging area for import/validation/approval |
-| 51002 SL Sales Price Archive | + Country Code, Version No. | History; populated automatically by "Upload Sales Price" (Page 51001) via Codeunit 51000, "Version No." incremented per Item No./Variant Code/Currency Code |
+| 51001 SL Sales Price Checking | Item No., Currency Code | Staging area for import/validation/approval |
+| 51002 SL Sales Price Archive | + Country Code, Version No. | History; populated automatically by "Upload Sales Price" (Page 51001) via Codeunit 51000, "Version No." incremented per Item No./Currency Code |
 | 51004 SL Sales Price Outbound File | Entry No. | Sent JSON payloads with delivery status and response message, for troubleshooting failed transmissions |
 | 51005 SL Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Error log for the automated import |

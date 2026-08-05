@@ -12,13 +12,6 @@ table 51001 "SL Sales Price Checking"
             NotBlank = true;
             TableRelation = Item;
         }
-        field(2; "Variant Code"; Code[20])
-        {
-            Caption = 'Variant Code';
-            DataClassification = ToBeClassified;
-            NotBlank = true;
-            TableRelation = "Item Variant".Code where("Item No." = field("Item No."));
-        }
         field(3; "Stock Price"; Decimal)
         {
             Caption = 'Stock Price';
@@ -168,7 +161,7 @@ table 51001 "SL Sales Price Checking"
 
     keys
     {
-        key(PK; "Item No.", "Variant Code", "Currency Code")
+        key(PK; "Item No.", "Currency Code")
         {
             Clustered = true;
         }

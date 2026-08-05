@@ -78,29 +78,27 @@ codeunit 51001 "SL Import Sales Prices"
                 1:
                     vSalesPriceTemp."Item No." := CopyStr(Value, 1, MaxStrLen(vSalesPriceTemp."Item No."));
                 2:
-                    vSalesPriceTemp."Variant Code" := CopyStr(Value, 1, MaxStrLen(vSalesPriceTemp."Variant Code"));
-                3:
                     if Evaluate(IntValue, Value) then
                         vSalesPriceTemp."Sales Type" := IntValue;
-                4:
+                3:
                     vSalesPriceTemp."Sales Code" := CopyStr(Value, 1, MaxStrLen(vSalesPriceTemp."Sales Code"));
-                5:
+                4:
                     if Value <> pGeneralLedgerSetup."LCY Code" then
                         vSalesPriceTemp."Currency Code" := CopyStr(Value, 1, MaxStrLen(vSalesPriceTemp."Currency Code"))
                     else
                         vSalesPriceTemp."Currency Code" := '';
-                6:
+                5:
                     vSalesPriceTemp."Country/Region Code" := CopyStr(Value, 1, MaxStrLen(vSalesPriceTemp."Country/Region Code"));
-                7:
+                6:
                     if Evaluate(DecimalValue, Value) then
                         vSalesPriceTemp."Unit Price" := DecimalValue;
-                8:
+                7:
                     if Evaluate(BoolValue, Value) then
                         vSalesPriceTemp."Price Includes VAT" := BoolValue;
-                9:
+                8:
                     if Evaluate(DecimalValue, Value) then
                         vSalesPriceTemp."Strike-Price incl. VAT" := DecimalValue;
-                10:
+                9:
                     if Evaluate(DecimalValue, Value) then
                         vSalesPriceTemp."Recom. Retail Price incl. VAT" := DecimalValue;
             end;
@@ -116,7 +114,6 @@ codeunit 51001 "SL Import Sales Prices"
         Index: Integer;
     begin
         ExpectedValues.Add('Item No_');
-        ExpectedValues.Add('Variant Code');
         ExpectedValues.Add('Sales Type');
         ExpectedValues.Add('Sales Code');
         ExpectedValues.Add('Currency Code');
@@ -178,11 +175,10 @@ codeunit 51001 "SL Import Sales Prices"
                 if not SalesPrice.Get(
                      vSalesPriceTemp."Item No.", vSalesPriceTemp."Sales Type", vSalesPriceTemp."Sales Code",
                      vSalesPriceTemp."Starting Date", vSalesPriceTemp."Currency Code", vSalesPriceTemp."Country/Region Code",
-                     vSalesPriceTemp."Variant Code", vSalesPriceTemp."Unit of Measure Code", vSalesPriceTemp."Minimum Quantity")
+                     vSalesPriceTemp."Unit of Measure Code", vSalesPriceTemp."Minimum Quantity")
                 then begin
                     SalesPrice.Init();
                     SalesPrice."Item No." := vSalesPriceTemp."Item No.";
-                    SalesPrice."Variant Code" := vSalesPriceTemp."Variant Code";
                     SalesPrice.Validate("Sales Type", vSalesPriceTemp."Sales Type");
                     SalesPrice.Validate("Sales Code", vSalesPriceTemp."Sales Code");
                     if vSalesPriceTemp."Currency Code" <> GenLedgerSetup."LCY Code" then

@@ -12,13 +12,9 @@ xmlport 51000 "SL Import Sales Price"
             tableelement(SalesPriceChecking; "SL Sales Price Checking")
             {
                 XmlName = 'SalesPrice';
-                SourceTableView = sorting("Item No.", "Variant Code", "Currency Code");
+                SourceTableView = sorting("Item No.", "Currency Code");
 
                 fieldelement(ItemNo; SalesPriceChecking."Item No.")
-                {
-                    MinOccurs = Zero;
-                }
-                fieldelement(VarCode; SalesPriceChecking."Variant Code")
                 {
                     MinOccurs = Zero;
                 }

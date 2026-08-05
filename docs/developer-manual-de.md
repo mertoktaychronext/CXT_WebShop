@@ -73,8 +73,8 @@ Xmlport 51000 "SL Import Sales Price"
    │  schreibt Zeilen in
    ▼
 Table 51001 "SL Sales Price Checking"  ◄── Page 51001 "SL Sales Price Checking List"
-   │  (Item No./Variant Code/Currency Code, kein eigener   (Validate / Approve / Add all Currencies /
-   │   Ländercode mehr auf dieser Tabelle)                   Upload Sales Price)
+   │  (Item No./Currency Code – kein eigener Länder-        (Validate / Approve / Add all Currencies /
+   │   code und kein Variantencode mehr auf dieser Tabelle)   Upload Sales Price)
    │
    │  Action "Upload Sales Price" → Codeunit 51000 "SL Export Gateway Sales Price"
    │
@@ -123,8 +123,8 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | Tabelle | Primärschlüssel | Zweck |
 |---|---|---|
 | 51000 SL General Sales Price Setup | Primary Key (Singleton) | Grundeinstellungen, inkl. Export-Schalter und ausgewählter API-Schnittstelle |
-| 51001 SL Sales Price Checking | Item No., Variant Code, Currency Code | Zwischenablage für Import/Prüfung/Freigabe |
-| 51002 SL Sales Price Archive | + Country Code, Version No. | Historie; wird bei "Upload Sales Price" (Page 51001) über Codeunit 51000 automatisch befüllt, Version No. je Item No./Variant Code/Currency Code hochgezählt |
+| 51001 SL Sales Price Checking | Item No., Currency Code | Zwischenablage für Import/Prüfung/Freigabe |
+| 51002 SL Sales Price Archive | + Country Code, Version No. | Historie; wird bei "Upload Sales Price" (Page 51001) über Codeunit 51000 automatisch befüllt, Version No. je Item No./Currency Code hochgezählt |
 | 51004 SL Sales Price Outbound File | Entry No. | Gesendete JSON-Nutzdaten mit Versandstatus und Antworttext, zur Fehleranalyse fehlgeschlagener Übertragungen |
 | 51005 SL Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import |

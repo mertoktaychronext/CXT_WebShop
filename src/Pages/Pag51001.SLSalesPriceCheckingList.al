@@ -21,10 +21,6 @@ page 51001 "SL Sales Price Checking List"
                 {
                     ApplicationArea = All;
                 }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = All;
-                }
                 field(FinalPrice; Rec."Stock Price")
                 {
                     ApplicationArea = All;
@@ -299,11 +295,10 @@ page 51001 "SL Sales Price Checking List"
                                     repeat
                                         if (g_recCurrencies."Code" <> '') and
                                            (g_recCurrencies."Code" <> g_recSalesPriceCheck."Currency Code") and
-                                           (not g_recSalesPriceCheck2.Get(g_recSalesPriceCheck."Item No.", g_recSalesPriceCheck."Variant Code", g_recCurrencies."Code"))
+                                           (not g_recSalesPriceCheck2.Get(g_recSalesPriceCheck."Item No.", g_recCurrencies."Code"))
                                         then begin
                                             g_recSalesPriceCheck2.Init();
                                             g_recSalesPriceCheck2."Item No." := g_recSalesPriceCheck."Item No.";
-                                            g_recSalesPriceCheck2."Variant Code" := g_recSalesPriceCheck."Variant Code";
 
                                             g_recSalesPriceCheck2."Currency Code" := g_recCurrencies."Code";
                                             g_recCurrExcRate.Reset();
@@ -328,7 +323,7 @@ page 51001 "SL Sales Price Checking List"
                                             g_recSalesPriceCheck2.Insert(true);
                                         end;
                                     until g_recCurrencies.Next() = 0;
-                                UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."Item No.", g_recSalesPriceCheck."Variant Code", g_recSalesPriceCheck."Currency Code");
+                                UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."Item No.", g_recSalesPriceCheck."Currency Code");
                                 UpdateSalesPriceCheck."Currencies Processed" := true;
                                 UpdateSalesPriceCheck.Modify();
                             until g_recSalesPriceCheck.Next() = 0;
@@ -427,7 +422,6 @@ page 51001 "SL Sales Price Checking List"
         TXT005: Label 'Currency Code %1 is not set for Country %2';
 
         TXT006: Label 'Starting Date %1 cannot be greater than Ending Date %2';
-        MissingCountryCodeErr: Label 'Item %1, variant %2 has no country code. Please set a country code in the imported file or fill it in manually before validating.', Comment = '%1 = item no., %2 = variant code';
         g_recCurrExcRate: Record "Currency Exchange Rate";
         g_dateExchangeRateDate: Date;
         g_decExchangeRateAmt: Decimal;
@@ -458,7 +452,6 @@ page 51001 "SL Sales Price Checking List"
 
                 g_recSP.Reset();
                 g_recSP.SetRange("Item No.", g_recSalesPriceCheck."Item No.");
-                g_recSP.SetRange("Variant Code", g_recSalesPriceCheck."Variant Code");
                 g_recSP.SetRange("Currency Code", g_recSalesPriceCheck."Currency Code");
                 g_recSP.SetRange("Starting Date", g_recSalesPriceCheck."Starting Date");
                 if g_recSP.FindFirst() then begin
@@ -484,7 +477,6 @@ page 51001 "SL Sales Price Checking List"
 
                 g_recILE.Reset();
                 g_recILE.SetRange("Item No.", g_recSalesPriceCheck."Item No.");
-                g_recILE.SetRange("Variant Code", g_recSalesPriceCheck."Variant Code");
                 g_recILE.SetRange("Invoiced Quantity", 1);
                 g_recILE.SetRange("Location Code", 'HL');
                 if g_recILE.FindLast() then begin

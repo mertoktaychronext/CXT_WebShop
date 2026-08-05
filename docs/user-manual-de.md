@@ -25,7 +25,9 @@ Diese Erweiterung für Microsoft Dynamics 365 Business Central hilft dabei, neue
 
 ### 1. CSV-Datei importieren
 
-Klicken Sie auf **"Import CSV"**. Wählen Sie die vorbereitete Datei aus. Die erste Zeile der Datei (Spaltenüberschriften) wird automatisch übersprungen. Die Datei muss folgende Spalten in dieser Reihenfolge enthalten: Artikelnummer, Variantencode, Verkaufspreis, Streichpreis, empfohlener Verkaufspreis, **Währungscode**, Grundcode, Kommentar.
+Klicken Sie auf **"Import CSV"**. Wählen Sie die vorbereitete Datei aus. Die erste Zeile der Datei (Spaltenüberschriften) wird automatisch übersprungen. Die Datei muss folgende Spalten in dieser Reihenfolge enthalten: Artikelnummer, Verkaufspreis, Streichpreis, empfohlener Verkaufspreis, **Währungscode**, Grundcode, Kommentar.
+
+> Hinweis: Es werden keine Artikelvarianten mehr unterstützt – ein Preis gilt immer für den gesamten Artikel. Die frühere Variantencode-Spalte entfällt.
 
 > Hinweis: Der Import ist nur möglich, wenn die Liste leer ist. Falls bereits Preiszeilen vorhanden sind, löschen Sie diese zunächst über einen neuen Aufruf der Seite (die Liste leert sich beim Öffnen automatisch).
 

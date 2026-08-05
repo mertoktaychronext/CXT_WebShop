@@ -12,13 +12,6 @@ table 51002 "SL Sales Price Archive"
             NotBlank = true;
             TableRelation = Item;
         }
-        field(2; "Variant Code"; Code[20])
-        {
-            Caption = 'Variant Code';
-            DataClassification = ToBeClassified;
-            NotBlank = true;
-            TableRelation = "Item Variant".Code where("Item No." = field("Item No."));
-        }
         field(3; "Stock Price"; Decimal)
         {
             Caption = 'Stock Price';
@@ -143,7 +136,7 @@ table 51002 "SL Sales Price Archive"
 
     keys
     {
-        key(PK; "Item No.", "Variant Code", "Currency Code", "Country Code", "Version No.")
+        key(PK; "Item No.", "Currency Code", "Country Code", "Version No.")
         {
             Clustered = true;
         }

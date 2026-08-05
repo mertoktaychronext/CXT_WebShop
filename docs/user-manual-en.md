@@ -25,7 +25,9 @@ The navigation buttons at the top of the page also give you direct access to:
 
 ### 1. Import a CSV file
 
-Click **"Import CSV"** and select your prepared file. The first line of the file (column headers) is skipped automatically. The file must contain the following columns in this order: item no., variant code, stock price, strike price, recommended retail price, **currency code**, reason code, comment.
+Click **"Import CSV"** and select your prepared file. The first line of the file (column headers) is skipped automatically. The file must contain the following columns in this order: item no., stock price, strike price, recommended retail price, **currency code**, reason code, comment.
+
+> Note: Item variants are no longer supported — a price always applies to the whole item. The former variant code column is gone.
 
 > Note: Import is only possible while the list is empty. If there are already price lines present, reopen the page (the list clears itself automatically on open) before importing again.
 
