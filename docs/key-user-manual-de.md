@@ -1,8 +1,8 @@
-# Key-User-Handbuch – SL Chronext Webshop (Verkaufspreisverwaltung)
+# Key-User-Handbuch – CHX.Webshop
 
 ## Über dieses Dokument
 
-Dieses Handbuch richtet sich an Key User, die die Grundeinstellungen der Verkaufspreisverwaltung pflegen, Länder und Währungen für die Preiserzeugung freischalten und bei Problemen die erste Anlaufstelle für die Fachabteilung sind.
+Dieses Handbuch richtet sich an Key User, die die Grundeinstellungen der Verkaufspreisverwaltung pflegen, Länder und Währungen für die Preiserzeugung freischalten, die SellWatch-Schnittstelle konfigurieren und bei Problemen die erste Anlaufstelle für die Fachabteilung sind.
 
 ## Grundeinstellungen (General Sales Price Setup)
 
@@ -57,6 +57,21 @@ In den Stammdaten von **Land/Region** (Seite "Countries/Regions") wurden folgend
 
 > **Wichtig:** Die Freischaltung für "Add all Currencies" erfolgt seit der letzten Überarbeitung direkt auf der **Währung**, nicht mehr auf dem Land. Ein Land ohne "Verkaufspreis-Währungscode" kann trotzdem Preise erhalten, solange die zugehörige Währung aktiviert ist.
 
+## SellWatch-Schnittstelle einrichten
+
+Die Freigabeprüfung, ob eine angekaufte Uhr online gehen darf ("Watch Online Approval"), nutzt **dieselbe** Schnittstellen-Verwaltung wie der Preisexport (Seite **"API Interface Setup"**, siehe oben). Legen Sie dort einen eigenen Eintrag mit **Code = `WOA`** an:
+
+| Feld | Wert für SellWatch |
+|---|---|
+| Code | `WOA` (fest vorgegeben – wird so im Code gesucht) |
+| Endpoint URL | Basis-URL der SellWatch-Prüf-API (der Pfad `/<Artikelnr.>/<Variantencode>/check` wird automatisch angehängt). |
+| API Key | Der von SellWatch bereitgestellte API-Schlüssel. |
+| Active | Muss gesetzt sein, sonst wird die Online-Freigabeprüfung stillschweigend übersprungen. |
+
+> **Wichtig:** Anders als beim Preisexport wird das Feld **"Auth Type"** für diesen Eintrag nicht ausgewertet – der API-Schlüssel wird für SellWatch immer als Header `X-API-KEY` gesendet, unabhängig von der gewählten Authentifizierungsart. Es genügt, "Code", "Endpoint URL", "API Key" und "Active" zu pflegen.
+
+Ohne diesen Eintrag (oder wenn er inaktiv ist bzw. kein API-Schlüssel hinterlegt ist) bricht die Freigabeprüfung ohne Fehlermeldung ab – die betroffene Uhr bleibt einfach unverändert.
+
 ## Grundcode (Reason Code)
 
 Jeder Preisänderung kann ein Grund zugeordnet werden: **CatMan**, **Einkauf** oder **Marketing**. Dies dient der Nachvollziehbarkeit, warum ein Preis geändert wurde, wird aber aktuell nicht weiter ausgewertet. Ohne explizite Auswahl wird "CatMan" als Standardwert verwendet.
@@ -72,7 +87,12 @@ Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Appro
 
 ## Berechtigungen
 
-Der Zugriff auf alle Objekte dieser Erweiterung ist über das Permission Set **"SLChronWSAll"** geregelt. Dieses muss den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor sie die Seiten der Erweiterung nutzen können.
+Der Zugriff ist über zwei getrennte Permission Sets geregelt, die den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden müssen:
+
+| Permission Set | Deckt ab |
+|---|---|
+| `SLChronWSAll` | Alle Objekte der Verkaufspreisverwaltung |
+| `SWChronWSAll` | Alle Objekte der SellWatch-Ankaufsintegration (SellWatch Vendor Info, Watch Online Approval, SellWatch-Overview, SellWatch info) |
 
 ## Troubleshooting
 
@@ -80,10 +100,12 @@ Der Zugriff auf alle Objekte dieser Erweiterung ist über das Permission Set **"
 |---|---|
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
 | "Add all Currencies" erzeugt keine Zeile für eine bestimmte Währung | Prüfen Sie, ob für die Währung (Seite "Currencies") "Verkaufspreis aktiviert" gesetzt ist. |
-| Ein Benutzer kann die Seiten der Erweiterung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "SLChronWSAll" zugewiesen ist. |
+| Ein Benutzer kann die Seiten der Erweiterung nicht öffnen | Prüfen Sie, ob dem Benutzer das passende Permission Set zugewiesen ist ("SLChronWSAll" für die Preisverwaltung, "SWChronWSAll" für SellWatch). |
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
 | "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. |
 | Einzelne Preiszeilen bleiben nach "Upload Sales Price" mit "Export Status" = "Error" stehen | Andere Zeilen im selben Lauf werden trotzdem weiterverarbeitet. Prüfen Sie die betroffene Zeile auf ungültige Werte (z. B. nicht existierender Währungscode) und lösen Sie den Upload für diese Zeile erneut aus. |
+| Eine Uhr wird nie für den Online-Verkauf freigegeben, obwohl sie es sein sollte | Prüfen Sie den API-Interface-Eintrag mit Code "WOA" (siehe oben): vorhanden, aktiv, API-Schlüssel und Endpoint URL gesetzt? Da die Prüfung bei fehlender/inaktiver Schnittstelle ohne Fehlermeldung abbricht, ist dies die häufigste Ursache. |
+| Neue SellWatch-Anfragen erscheinen nicht in "SellWatch-Overview" bzw. es wird nie automatisch ein Lieferant/eine Bestellung angelegt | Die Verarbeitung (Lieferanten-/Bestellanlage) muss aktuell separat angestoßen werden – es ist kein automatischer Job-Queue-Eintrag hinterlegt. Bitte an das Entwicklungsteam eskalieren (siehe Entwicklerhandbuch, "Bekannte Einschränkungen"). |
 
 ## Eskalationswege
 

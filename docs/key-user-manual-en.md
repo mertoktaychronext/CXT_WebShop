@@ -1,8 +1,8 @@
-# Key User Manual – SL Chronext Webshop (Sales Price Management)
+# Key User Manual – CHX.Webshop
 
 ## About this document
 
-This manual is for key users who maintain the base settings of the sales price management module, activate countries and currencies for price generation, and act as the first point of contact for the business department.
+This manual is for key users who maintain the base settings of the sales price management module, activate countries and currencies for price generation, configure the SellWatch interface, and act as the first point of contact for the business department.
 
 ## Base settings (General Sales Price Setup)
 
@@ -57,6 +57,21 @@ The following fields were added to the **Country/Region** master data (the "Coun
 
 > **Important:** Activation for "Add all Currencies" now happens directly on the **currency**, not on the country. A country without a "Sales Price Currency Code" can still receive prices as long as the relevant currency itself is activated.
 
+## Setting up the SellWatch interface
+
+The check that decides whether a purchased watch may go live online ("Watch Online Approval") uses the **same** interface management as the price export (the "API Interface Setup" page, see above). Create a dedicated entry there with **Code = `WOA`**:
+
+| Field | Value for SellWatch |
+|---|---|
+| Code | `WOA` (fixed value — this is the exact code the code looks up) |
+| Endpoint URL | Base URL of the SellWatch check API (the path `/<item no.>/<variant code>/check` is appended automatically). |
+| API Key | The API key provided by SellWatch. |
+| Active | Must be enabled, otherwise the online-approval check is silently skipped. |
+
+> **Important:** Unlike the price export, the **"Auth Type"** field is not evaluated for this entry — for SellWatch the API key is always sent as an `X-API-KEY` header, regardless of the selected authentication type. It's enough to maintain "Code", "Endpoint URL", "API Key", and "Active".
+
+Without this entry (or if it's inactive or has no API key), the online-approval check aborts silently — the watch in question is simply left unchanged.
+
 ## Reason Code
 
 Every price change can be tagged with a reason: **CatMan**, **Purchasing**, or **Marketing**. This supports traceability of why a price changed but is not currently evaluated further by any automated logic. "CatMan" is used as the default value when none is explicitly selected.
@@ -72,7 +87,12 @@ The standard flow for the business department is: **Import → Validate → Appr
 
 ## Permissions
 
-Access to all objects in this extension is controlled through the **"SLChronWSAll"** permission set. It still needs to be assigned to the relevant users or user groups before they can use the extension's pages.
+Access is controlled through two separate permission sets, which still need to be assigned to the relevant users or user groups:
+
+| Permission Set | Covers |
+|---|---|
+| `SLChronWSAll` | All sales price management objects |
+| `SWChronWSAll` | All SellWatch purchase integration objects (SellWatch Vendor Info, Watch Online Approval, SellWatch-Overview, SellWatch info) |
 
 ## Troubleshooting
 
@@ -80,10 +100,12 @@ Access to all objects in this extension is controlled through the **"SLChronWSAl
 |---|---|
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
 | "Add all Currencies" produces no line for a specific currency | Check that "Sales Price Activated" is enabled for that currency on the "Currencies" page. |
-| A user cannot open the extension's pages | Check whether the user has been assigned the "SLChronWSAll" permission set. |
+| A user cannot open the extension's pages | Check whether the user has been assigned the right permission set ("SLChronWSAll" for price management, "SWChronWSAll" for SellWatch). |
 | A price isn't calculated with margin X% despite correct input | The category-based non-stock price calculation is not currently wired into the live flow — escalate to the development team if this feature is needed. |
 | "Upload Sales Price" reports that no API interface is configured, or aborts | Check on the base settings that "Price Export Active" is enabled and an "API Interface Code" is selected, and that the corresponding interface under "API Interface Setup" is active and fully configured (Endpoint URL, API Key if required). |
 | Individual price lines are left with "Export Status" = "Error" after "Upload Sales Price" | Other lines in the same run are still processed. Check the affected line for invalid values (e.g. a currency code that doesn't exist) and trigger the upload for that line again. |
+| A watch never gets approved for online sale even though it should be | Check the API interface entry with Code "WOA" (see above): does it exist, is it active, and are the API key and Endpoint URL set? Since the check aborts silently when the interface is missing/inactive, this is the most common cause. |
+| New SellWatch requests never show up in "SellWatch-Overview", or a vendor/order is never created automatically | Processing (vendor/order creation) currently has to be triggered separately — no automatic job queue entry exists for it. Escalate to the development team (see Developer Manual, "Known Limitations"). |
 
 ## Escalation path
 

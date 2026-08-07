@@ -1,8 +1,12 @@
-# Developer Manual – SL Chronext Webshop
+# Developer Manual – CHX.Webshop
 
 ## Overview
 
-This Business Central (AL) extension covers webshop sales price management: CSV import into a staging table, business validation (margin, price swings), approval by a staff member, optionally expanding an approved price to all activated foreign currencies, and uploading approved prices to an external system. The "Upload Sales Price" action writes each approved price into the standard "Sales Price" table and a versioned "SL Sales Price Archive" entry before sending it to a configurable API interface. A second, independent component for file-based price import (not yet live) rounds out the project. The project is a migration from a legacy, long-grown Dynamics NAV system into modern, SaaS-capable AL.
+This Business Central (AL) extension bundles two functionally separate areas, migrated from a legacy, long-grown Dynamics NAV system into modern, SaaS-capable AL:
+
+**Sales price management** ("SL" objects): CSV import into a staging table, business validation (margin, price swings), approval by a staff member, optionally expanding an approved price to all activated foreign currencies, and uploading approved prices to an external system. The "Upload Sales Price" action writes each approved price into the standard "Sales Price" table and a versioned "SL Sales Price Archive" entry before sending it to a configurable API interface. A second, independent component for file-based price import (not yet live) rounds out this area.
+
+**SellWatch purchase integration** ("SW" objects, added 2026-08-07): Processes incoming used-watch purchase requests from the SellWatch partner into vendors and purchase orders, reports processing status back to SellWatch as JSON, and checks via an external interface whether a purchased watch may go live online. Reuses the same generic external-interface infrastructure (Table 51007 "SL API Interface Setup") as the sales price management area.
 
 ## Technical Stack
 
@@ -20,13 +24,13 @@ This Business Central (AL) extension covers webshop sales price management: CSV 
 ```
 app.json                          # Extension manifest, idRanges 51000-51049
 src/
-  Tables/                         # 7 tables (51000-51002, 51004-51007)
-  TableExtensions/                # 3 extensions (Country/Region, Sales Price, Currency)
+  Tables/                         # 9 tables (51000-51002, 51004-51009)
+  TableExtensions/                # 5 extensions (Country/Region, Sales Price, Currency, Purchase Line, Purchase Header)
   PageExtensions/                 # 3 extensions (Countries/Regions, Sales Prices, Currencies)
-  Pages/                          # 4 pages + 1 xmlport
-  Codeunits/                      # 2 codeunits (Export Gateway Sales Price, Import Sales Prices)
-  Enums/                          # 5 enums
-  PermissionSets/                 # 1 permission set (SLChronWSAll)
+  Pages/                          # 6 pages + 1 xmlport
+  Codeunits/                      # 3 codeunits (Export Gateway Sales Price, Import Sales Prices, SellWatch Mgt)
+  Enums/                          # 6 enums
+  PermissionSets/                 # 2 permission sets (SLChronWSAll, SWChronWSAll)
 Translations/                     # .g.xlf (generated) + de-DE.xlf (maintained)
 openspec/
   specs/                          # durable capability specs (e.g. sales-price-currency-copy)
@@ -104,6 +108,46 @@ File (CSV) → Table 51005 "SL Sales Price Inbound File"
            → errors logged in Table 51006 "SL Sales Price Import Protocol"
 ```
 
+### SellWatch purchase integration
+
+```
+External system (SellWatch, via a technical web service user holding the
+"SWChronWSAll" permission set) inserts records directly into
+   ▼
+Table 51008 "SellWatch Vendor Info" (Created = false)
+   │
+   │  Codeunit 51002 "SellWatch Mgt" (OnRun) — invocation/scheduling is
+   │  outside this extension, see "Known Limitations"
+   ▼
+ValidateAndCreateVendor
+   ├─► creates a standard Vendor + Vendor Bank Account if none matches yet
+   └─► CreatePurchaseOrder
+          ├─► creates standard Purchase Header/Purchase Line, Line field
+          │      "Used good" (TableExtension 51003 "SW Purchase Line") set
+          ├─► ReleasePurchDoc.PerformManualRelease
+          └─► writes "PO Number"/"Created"/"VendorNo" back onto Table 51008
+
+Page 51004 "SellWatch-Overview" (read-only) ◄── Table 51008
+   │  Action "Show Document" → opens the Purchase Order
+   │  FlowField "Tracking Number" reads TableExtension 51004
+   │  "SW Purchase Header" (field "Tracking Number")
+
+CreateSourceFilePurchaseRequest / CreateSourceFileOrderStatusSE (both public)
+   → build the JSON payload for reporting back to SellWatch (the actual
+      transmission mechanism — analogous to Table 51004/Codeunit 51000 in
+      the price area — was removed as part of this migration, see
+      "Known Limitations")
+
+Table 51009 "Watch Online Approval"
+   │  Field "Check Online" – OnValidate sets "First Online Date"
+   ▼
+CreateEntryInexternalFile
+   → reads Endpoint URL + API key from Table 51007 "SL API Interface Setup"
+      (Code "WOA", the same infrastructure as the price export)
+   → HttpClient GET with header "X-API-KEY" to <Endpoint URL>/<Item No>/<Variant Code>/check
+   → sets "Check Online"/"Remark" based on the response
+```
+
 ## Object Interfaces (Public Procedures & Events)
 
 Full list of all procedures, triggers, and events: see `docs/funktionsregister/funktionsregister-sl-chronext-webshop.md`. Key public interfaces:
@@ -115,6 +159,9 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 | Page 51001 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Calculates the non-stock price for lines within a price range. Currently not called from any active code path. |
 | Codeunit 51001 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Raised when the automated file import changes an existing sales price. Currently has no subscriber. |
 | Table 51007 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Stores/reads the API key for an interface in Isolated Storage (module scope) rather than in a plain table field. |
+| Codeunit 51002 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON document for the SellWatch report-back on a new order. |
+| Codeunit 51002 | `CreateSourceFileOrderStatusSE(SellWatchInfo: Record "SellWatch Vendor Info"; Status: Enum "SW Order Status"): Text` | Builds the JSON document for the SellWatch status report-back (watch arrived/online/sold, etc.). |
+| Table 51009 | `CreateEntryInexternalFile(var WOA: Record "Watch Online Approval")` | Calls the external SellWatch check API and sets "Check Online" based on the response. Aborts silently, with no error or logging, if the "WOA" API interface entry is missing/inactive or the HTTP call fails. |
 
 Full list of all objects and their function counts: see `docs/funktionsregister/gesamtuebersicht.md`.
 
@@ -129,10 +176,17 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 51005 SL Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Error log for the automated import |
 | 51007 SL API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface |
+| 51008 SellWatch Vendor Info | Entry No | Incoming SellWatch purchase requests (seller, watch, offer data); based on the naming of the `SWChronWSAll` permission set ("ChronWS" = Chronext Web Service), this is presumably populated directly by an external system via web service — the exact origin isn't documented in the code. |
+| 51009 Watch Online Approval | Entry No | Whether a purchased watch is approved for online sale, per item/variant |
 
-## Permission Set
+## Permission Sets
 
-The **`SLChronWSAll`** permission set (ID 51000, `src/PermissionSets/SLChronWSAll.permissionset.al`) covers read/write access to all seven tables plus execute rights for both codeunits, Xmlport 51000, and the extension's four pages. Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"/"Country/Region"); the standard "Sales Price" table that Codeunit 51000 writes to is likewise covered by base app permissions, not by this set. The set still needs to be actively assigned to a user group.
+| Permission Set | ID | Covers |
+|---|---|---|
+| `SLChronWSAll` (`src/PermissionSets/SLChronWSAll.permissionset.al`) | 51000 | Read/write access to all seven sales price tables plus execute rights for both sales price codeunits, Xmlport 51000, and the four sales price pages. |
+| `SWChronWSAll` (`src/PermissionSets/SWChronWSAll.permissionset.al`) | 51001 | Read/write access to Table 51008/51009 plus execute rights for Codeunit 51002 and the two SellWatch pages. |
+
+Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"/"Country/Region"/"Purchase Line"/"Purchase Header"); the same base-table-access logic applies to the standard tables ("Sales Price", "Vendor", "Purchase Header/Line", etc.) the codeunits write to. Both sets still need to be actively assigned to a user group.
 
 ## Running Tests
 
@@ -147,7 +201,7 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 - All new objects get IDs in the **51000–51049** range (see `app.json`, `idRanges`), counted independently per object type.
 - The code deliberately contains **no comments** (removed at the customer's explicit request) — business context and design decisions are documented here and in the function register instead. Please keep this style when making changes, and add context here rather than in the code.
 - Completed, functional changes are documented as an OpenSpec change (`openspec/changes/`, archived under `openspec/changes/archive/` once finished) and captured as a durable spec under `openspec/specs/`.
-- Translations: `.g.xlf` is generated by the compiler and must **not** be edited manually; maintain translations only in `Translations/SL Chronext Webshop.de-DE.xlf`.
+- Translations: `.g.xlf` is generated by the compiler and must **not** be edited manually; maintain translations only in `Translations/CHX.Webshop.de-DE.xlf`.
 
 ## Known Limitations
 
@@ -156,3 +210,8 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 - **`Reason Code` as an enum with no true blank value**: the enum always has a default value (`CatMan`) — there is no "no reason given" state.
 - **The file-based import component (Codeunit 51001, Tables 51005–51006)** is fully implemented but not wired into any live process or scheduled anywhere (no job queue entry). `WriteSalesPrices`'s `SalesPrice.Get(...)` call now passes exactly the standard "Sales Price" table's 8 real primary-key segments (verified against the symbols in `.alpackages/Microsoft_Base Application_*.app`), with `''` for "Variant Code" — the previously-documented key mismatch here is resolved.
 - **No automated tests** exist.
+- **Codeunit 51002 "SellWatch Mgt" is not scheduled or wired in anywhere.** There's neither a job queue entry nor a page action that triggers `OnRun`/`ValidateAndCreateVendor`. Invocation currently has to happen manually (e.g. via the object designer) or through a job queue entry that still needs to be set up.
+- **The origin of records in Table 51008 "SellWatch Vendor Info" is undocumented.** This extension provides neither a page to create them manually nor an XMLport/API page. Presumably an external system writes to this table directly via standard BC web services (covered by the `SWChronWSAll` permission set).
+- **Deliberately not ported from the NAV source system** (see the `// TODO` comments in `Codeunit51002.SellWatchMgt.al`): the `Street` field and the `SetPostingGroups()` / `GetnewNoSeries()` procedures on the standard Vendor. The corresponding NAV source was never delivered; vendor numbering instead relies on the standard `Insert(true)` trigger and "Purchases & Payables Setup".
+- **Former external file output removed**: the original NAV procedures `CreateExternalInterfaceFileOnPurchaseRequest`/`CreateExternalInterfaceFileOnOrderStatusSE` (which wrote the JSON built by `CreateSourceFilePurchaseRequest`/`CreateSourceFileOrderStatusSE` to an outbound-file object, analogous to Table 51004 in the price area) were removed outright, since the underlying legacy objects are no longer needed. Both JSON-builder functions themselves still exist (public) but currently have no caller.
+- **`CreateEntryInexternalFile` (Table 51009) does not log HTTP call failures.** If the request fails, or the "WOA" interface isn't configured, the check is skipped silently (see Key User Manual, Troubleshooting). A follow-up requirement for logging/telemetry here has been announced but not yet implemented.
