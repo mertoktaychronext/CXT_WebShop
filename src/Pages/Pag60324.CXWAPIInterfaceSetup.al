@@ -1,8 +1,8 @@
-page 51003 "SL API Interface Setup"
+page 60324 "CXW API Interface Setup"
 {
     Caption = 'API Interface Setup';
     PageType = List;
-    SourceTable = "SL API Interface Setup";
+    SourceTable = "CXW API Interface Setup";
     ApplicationArea = All;
     UsageCategory = Administration;
 
@@ -12,22 +12,22 @@ page 51003 "SL API Interface Setup"
         {
             repeater(Group)
             {
-                field(Code; Rec.Code)
+                field("CXW Code"; Rec."CXW Code")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the unique code of this API interface.';
                 }
-                field(Description; Rec.Description)
+                field("CXW Description"; Rec."CXW Description")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies a description of this API interface.';
                 }
-                field("Endpoint URL"; Rec."Endpoint URL")
+                field("CXW Endpoint URL"; Rec."CXW Endpoint URL")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the endpoint URL that data is sent to.';
                 }
-                field("Auth Type"; Rec."Auth Type")
+                field("CXW Auth Type"; Rec."CXW Auth Type")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies how requests to this endpoint are authenticated.';
@@ -45,12 +45,12 @@ page 51003 "SL API Interface Setup"
                         g_txtApiKey := '';
                     end;
                 }
-                field("Source Table No."; Rec."Source Table No.")
+                field("CXW Source Table No."; Rec."CXW Source Table No.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies which table this interface transmits data for.';
                 }
-                field(Active; Rec.Active)
+                field("CXW Active"; Rec."CXW Active")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether this interface can be selected and used for sending data.';

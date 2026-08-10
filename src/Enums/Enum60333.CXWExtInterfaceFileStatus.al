@@ -1,4 +1,4 @@
-enum 51002 "SL Ext Interface File Status"
+enum 60333 "CXW Ext Interface File Status"
 {
     Extensible = true;
 

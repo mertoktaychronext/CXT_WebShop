@@ -1,18 +1,18 @@
-codeunit 51000 "SL Export Gateway Sales Price"
+codeunit 60329 "CXW Export Gateway Sales Price"
 {
     [TryFunction]
-    procedure WriteBackAndArchive(SalesPriceChecking: Record "SL Sales Price Checking"; var SalesPrice: Record "Sales Price")
+    procedure WriteBackAndArchive(SalesPriceChecking: Record "CXW Sales Price Checking"; var SalesPrice: Record "Sales Price")
     begin
         if not SalesPrice.Get(
-             SalesPriceChecking."Item No.", SalesPrice."Sales Type"::"All Customers", '',
-             SalesPriceChecking."Starting Date", SalesPriceChecking."Currency Code",
+             SalesPriceChecking."CXW Item No.", SalesPrice."Sales Type"::"All Customers", '',
+             SalesPriceChecking."CXW Starting Date", SalesPriceChecking."CXW Currency Code",
              '', '', 0)
         then begin
             SalesPrice.Init();
-            SalesPrice."Item No." := SalesPriceChecking."Item No.";
+            SalesPrice."Item No." := SalesPriceChecking."CXW Item No.";
             SalesPrice.Validate("Sales Type", SalesPrice."Sales Type"::"All Customers");
             SalesPrice."Sales Code" := '';
-            SalesPrice."Starting Date" := SalesPriceChecking."Starting Date";
+            SalesPrice."Starting Date" := SalesPriceChecking."CXW Starting Date";
             SalesPrice."Variant Code" := '';
             SalesPrice."Unit of Measure Code" := '';
             SalesPrice."Minimum Quantity" := 0;
@@ -26,40 +26,40 @@ codeunit 51000 "SL Export Gateway Sales Price"
         ArchiveCheckingLine(SalesPriceChecking);
     end;
 
-    local procedure UpdateSalesPriceFields(var vSalesPrice: Record "Sales Price"; pSalesPriceChecking: Record "SL Sales Price Checking")
+    local procedure UpdateSalesPriceFields(var vSalesPrice: Record "Sales Price"; pSalesPriceChecking: Record "CXW Sales Price Checking")
     begin
-        vSalesPrice.Validate("Currency Code", pSalesPriceChecking."Currency Code");
-        vSalesPrice.Validate("Unit Price", pSalesPriceChecking."Stock Price");
-        vSalesPrice."Strike-Price incl. VAT" := pSalesPriceChecking."Strike Price";
-        vSalesPrice."Recom. Retail Price incl. VAT" := pSalesPriceChecking."Recom. Retail Price";
-        vSalesPrice."Reason Code" := pSalesPriceChecking."Reason Code";
-        vSalesPrice.Comment := pSalesPriceChecking.Comment;
-        vSalesPrice.Remark := pSalesPriceChecking.Remark;
+        vSalesPrice.Validate("Currency Code", pSalesPriceChecking."CXW Currency Code");
+        vSalesPrice.Validate("Unit Price", pSalesPriceChecking."CXW Stock Price");
+        vSalesPrice."CXW Strike-Price incl. VAT" := pSalesPriceChecking."CXW Strike Price";
+        vSalesPrice."CXW Rec. Retail Price incl VAT" := pSalesPriceChecking."CXW Recom. Retail Price";
+        vSalesPrice."CXW Reason Code" := pSalesPriceChecking."CXW Reason Code";
+        vSalesPrice."CXW Comment" := pSalesPriceChecking."CXW Comment";
+        vSalesPrice."CXW Remark" := pSalesPriceChecking."CXW Remark";
     end;
 
-    local procedure ArchiveCheckingLine(pSalesPriceChecking: Record "SL Sales Price Checking")
+    local procedure ArchiveCheckingLine(pSalesPriceChecking: Record "CXW Sales Price Checking")
     var
-        l_recSalesPriceArchive: Record "SL Sales Price Archive";
+        l_recSalesPriceArchive: Record "CXW Sales Price Archive";
         l_intNextVersionNo: Integer;
     begin
         l_recSalesPriceArchive.Reset();
         l_recSalesPriceArchive.LockTable();
-        l_recSalesPriceArchive.SetRange("Item No.", pSalesPriceChecking."Item No.");
-        l_recSalesPriceArchive.SetRange("Currency Code", pSalesPriceChecking."Currency Code");
+        l_recSalesPriceArchive.SetRange("CXW Item No.", pSalesPriceChecking."CXW Item No.");
+        l_recSalesPriceArchive.SetRange("CXW Currency Code", pSalesPriceChecking."CXW Currency Code");
         if l_recSalesPriceArchive.FindLast() then
-            l_intNextVersionNo := l_recSalesPriceArchive."Version No." + 1
+            l_intNextVersionNo := l_recSalesPriceArchive."CXW Version No." + 1
         else
             l_intNextVersionNo := 1;
 
         l_recSalesPriceArchive.Init();
         l_recSalesPriceArchive.TransferFields(pSalesPriceChecking, false);
-        l_recSalesPriceArchive."Version No." := l_intNextVersionNo;
+        l_recSalesPriceArchive."CXW Version No." := l_intNextVersionNo;
         l_recSalesPriceArchive.Insert(true);
     end;
 
     procedure CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean
     var
-        OutboundFile: Record "SL Sales Price Outbound File";
+        OutboundFile: Record "CXW Sales Price Outbound File";
         RecRef: RecordRef;
         FldRef: FieldRef;
         JsonObj: JsonObject;
@@ -75,22 +75,22 @@ codeunit 51000 "SL Export Gateway Sales Price"
         JsonObj.WriteTo(JsonText);
 
         OutboundFile.Init();
-        OutboundFile.Status := OutboundFile.Status::New;
-        OutboundFile.Filename :=
+        OutboundFile."CXW Status" := OutboundFile."CXW Status"::New;
+        OutboundFile."CXW Filename" :=
             CopyStr(
                 StrSubstNo('SalesPrice_%1_%2.json', SalesPrice."Item No.", SalesPrice."Currency Code"),
-                1, MaxStrLen(OutboundFile.Filename));
-        OutboundFile.TargetFile.CreateOutStream(OutStr, TextEncoding::UTF8);
+                1, MaxStrLen(OutboundFile."CXW Filename"));
+        OutboundFile."CXW TargetFile".CreateOutStream(OutStr, TextEncoding::UTF8);
         OutStr.WriteText(JsonText);
         OutboundFile.Insert(true);
 
         exit(SendToApiInterface(OutboundFile, JsonText));
     end;
 
-    local procedure SendToApiInterface(var vOutboundFile: Record "SL Sales Price Outbound File"; pJsonText: Text): Boolean
+    local procedure SendToApiInterface(var vOutboundFile: Record "CXW Sales Price Outbound File"; pJsonText: Text): Boolean
     var
-        GenSPSetup: Record "SL General Sales Price Setup";
-        ApiInterfaceSetup: Record "SL API Interface Setup";
+        GenSPSetup: Record "CXW General Sales Price Setup";
+        ApiInterfaceSetup: Record "CXW API Interface Setup";
         Base64Convert: Codeunit "Base64 Convert";
         HttpClientObj: HttpClient;
         HttpRequest: HttpRequestMessage;
@@ -102,16 +102,16 @@ codeunit 51000 "SL Export Gateway Sales Price"
     begin
         if not GenSPSetup.Get() then
             exit(false);
-        if not GenSPSetup."Price Export Active" then
+        if not GenSPSetup."CXW Price Export Active" then
             exit(false);
-        if GenSPSetup."API Interface Code" = '' then
+        if GenSPSetup."CXW API Interface Code" = '' then
             exit(false);
 
-        if not ApiInterfaceSetup.Get(GenSPSetup."API Interface Code") then
-            Error(ApiInterfaceNotFoundErr, GenSPSetup."API Interface Code");
-        ApiInterfaceSetup.TestField(Active, true);
-        ApiInterfaceSetup.TestField("Source Table No.", Database::"Sales Price");
-        ApiInterfaceSetup.TestField("Endpoint URL");
+        if not ApiInterfaceSetup.Get(GenSPSetup."CXW API Interface Code") then
+            Error(ApiInterfaceNotFoundErr, GenSPSetup."CXW API Interface Code");
+        ApiInterfaceSetup.TestField("CXW Active", true);
+        ApiInterfaceSetup.TestField("CXW Source Table No.", Database::"Sales Price");
+        ApiInterfaceSetup.TestField("CXW Endpoint URL");
 
         HttpContentObj.WriteFrom(pJsonText);
         HttpContentObj.GetHeaders(HttpHeadersObj);
@@ -119,16 +119,16 @@ codeunit 51000 "SL Export Gateway Sales Price"
         HttpHeadersObj.Add('Content-Type', 'application/json');
 
         HttpRequest.Method := 'POST';
-        HttpRequest.SetRequestUri(ApiInterfaceSetup."Endpoint URL");
+        HttpRequest.SetRequestUri(ApiInterfaceSetup."CXW Endpoint URL");
         HttpRequest.Content := HttpContentObj;
 
-        case ApiInterfaceSetup."Auth Type" of
-            ApiInterfaceSetup."Auth Type"::ApiKeyHeader:
+        case ApiInterfaceSetup."CXW Auth Type" of
+            ApiInterfaceSetup."CXW Auth Type"::ApiKeyHeader:
                 begin
                     HttpRequest.GetHeaders(HttpHeadersObj);
                     HttpHeadersObj.Add('Authorization', ApiInterfaceSetup.GetApiKey());
                 end;
-            ApiInterfaceSetup."Auth Type"::BasicAuth:
+            ApiInterfaceSetup."CXW Auth Type"::BasicAuth:
                 begin
                     HttpRequest.GetHeaders(HttpHeadersObj);
                     HttpHeadersObj.Add('Authorization', 'Basic ' + Base64Convert.ToBase64(ApiInterfaceSetup.GetApiKey()));
@@ -139,8 +139,8 @@ codeunit 51000 "SL Export Gateway Sales Price"
         SendOk := HttpClientObj.Send(HttpRequest, HttpResponse);
 
         if SendOk and HttpResponse.IsSuccessStatusCode() then begin
-            vOutboundFile.Status := vOutboundFile.Status::Processed;
-            vOutboundFile."Response Message" := '';
+            vOutboundFile."CXW Status" := vOutboundFile."CXW Status"::Processed;
+            vOutboundFile."CXW Response Message" := '';
             vOutboundFile.Modify();
             exit(true);
         end;
@@ -151,8 +151,8 @@ codeunit 51000 "SL Export Gateway Sales Price"
         end else
             ResponseText := 'The request could not be sent (network error).';
 
-        vOutboundFile.Status := vOutboundFile.Status::Error;
-        vOutboundFile."Response Message" := CopyStr(ResponseText, 1, MaxStrLen(vOutboundFile."Response Message"));
+        vOutboundFile."CXW Status" := vOutboundFile."CXW Status"::Error;
+        vOutboundFile."CXW Response Message" := CopyStr(ResponseText, 1, MaxStrLen(vOutboundFile."CXW Response Message"));
         vOutboundFile.Modify();
         exit(false);
     end;

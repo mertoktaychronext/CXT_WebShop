@@ -72,7 +72,7 @@ Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Appro
 
 ## Berechtigungen
 
-Der Zugriff auf alle Objekte dieser Erweiterung ist über das Permission Set **"SLChronWSAll"** geregelt. Dieses muss den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor sie die Seiten der Erweiterung nutzen können.
+Der Zugriff auf alle Objekte dieser Erweiterung ist über das Permission Set **"CXWChronWSAll"** geregelt. Dieses muss den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor sie die Seiten der Erweiterung nutzen können.
 
 ## Troubleshooting
 
@@ -80,7 +80,7 @@ Der Zugriff auf alle Objekte dieser Erweiterung ist über das Permission Set **"
 |---|---|
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
 | "Add all Currencies" erzeugt keine Zeile für eine bestimmte Währung | Prüfen Sie, ob für die Währung (Seite "Currencies") "Verkaufspreis aktiviert" gesetzt ist. |
-| Ein Benutzer kann die Seiten der Erweiterung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "SLChronWSAll" zugewiesen ist. |
+| Ein Benutzer kann die Seiten der Erweiterung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXWChronWSAll" zugewiesen ist. |
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
 | "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. |
 | Einzelne Preiszeilen bleiben nach "Upload Sales Price" mit "Export Status" = "Error" stehen | Andere Zeilen im selben Lauf werden trotzdem weiterverarbeitet. Prüfen Sie die betroffene Zeile auf ungültige Werte (z. B. nicht existierender Währungscode) und lösen Sie den Upload für diese Zeile erneut aus. |

@@ -1,8 +1,8 @@
-page 51001 "SL Sales Price Checking List"
+page 60322 "CXW Sales Price Checking List"
 {
     Caption = 'Sales Price Checking List';
     PageType = Worksheet;
-    SourceTable = "SL Sales Price Checking";
+    SourceTable = "CXW Sales Price Checking";
     ApplicationArea = All;
     UsageCategory = Lists;
 
@@ -12,95 +12,95 @@ page 51001 "SL Sales Price Checking List"
         {
             repeater(Group)
             {
-                field(Validated; Rec.Validated)
+                field("CXW Validated"; Rec."CXW Validated")
                 {
                     ApplicationArea = All;
                     Enabled = false;
                 }
-                field("Item No."; Rec."Item No.")
+                field("CXW Item No."; Rec."CXW Item No.")
                 {
                     ApplicationArea = All;
                 }
-                field(FinalPrice; Rec."Stock Price")
+                field(FinalPrice; Rec."CXW Stock Price")
                 {
                     ApplicationArea = All;
                     Caption = 'FinalPrice';
 
                     trigger OnValidate()
                     begin
-                        if Rec."Stock Price" <> xRec."Stock Price" then
-                            Rec.Validated := false;
+                        if Rec."CXW Stock Price" <> xRec."CXW Stock Price" then
+                            Rec."CXW Validated" := false;
                     end;
                 }
-                field("Strike Price"; Rec."Strike Price")
+                field("CXW Strike Price"; Rec."CXW Strike Price")
                 {
                     ApplicationArea = All;
                 }
-                field("Recom. Retail Price"; Rec."Recom. Retail Price")
+                field("CXW Recom. Retail Price"; Rec."CXW Recom. Retail Price")
                 {
                     ApplicationArea = All;
                 }
-                field("Currency Code"; Rec."Currency Code")
+                field("CXW Currency Code"; Rec."CXW Currency Code")
                 {
                     ApplicationArea = All;
                     Enabled = false;
                 }
-                field("Starting Date"; Rec."Starting Date")
+                field("CXW Starting Date"; Rec."CXW Starting Date")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("Starting Time"; Rec."Starting Time")
+                field("CXW Starting Time"; Rec."CXW Starting Time")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("Ending Date"; Rec."Ending Date")
+                field("CXW Ending Date"; Rec."CXW Ending Date")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("Ending Time"; Rec."Ending Time")
+                field("CXW Ending Time"; Rec."CXW Ending Time")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("Non Stock Price"; Rec."Non Stock Price")
+                field("CXW Non Stock Price"; Rec."CXW Non Stock Price")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("Exchange Rate Amount"; Rec."Exchange Rate Amount")
+                field("CXW Exchange Rate Amount"; Rec."CXW Exchange Rate Amount")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field("Exchange Rate Date"; Rec."Exchange Rate Date")
+                field("CXW Exchange Rate Date"; Rec."CXW Exchange Rate Date")
                 {
                     ApplicationArea = All;
                     Visible = false;
                 }
-                field(Remark; Rec.Remark)
+                field("CXW Remark"; Rec."CXW Remark")
                 {
                     ApplicationArea = All;
                     Enabled = false;
                     Editable = true;
                     Style = StandardAccent;
                 }
-                field("Reason Code"; Rec."Reason Code")
+                field("CXW Reason Code"; Rec."CXW Reason Code")
                 {
                     ApplicationArea = All;
                 }
-                field(Comment; Rec.Comment)
+                field("CXW Comment"; Rec."CXW Comment")
                 {
                     ApplicationArea = All;
                 }
-                field(Approved; Rec."Accept New Setup")
+                field(Approved; Rec."CXW Accept New Setup")
                 {
                     ApplicationArea = All;
                     Caption = 'Approved';
                 }
-                field(Approver; Rec."Approved By")
+                field(Approver; Rec."CXW Approved By")
                 {
                     ApplicationArea = All;
                     Caption = 'Approver';
@@ -120,7 +120,7 @@ page 51001 "SL Sales Price Checking List"
                 Caption = 'General Sales Price Setup';
                 ToolTip = 'Open the general sales price setup (minimum margin, thresholds).';
                 Image = Setup;
-                RunObject = page "SL General Sales Price Setup";
+                RunObject = page "CXW General Sales Price Setup";
             }
             action(SalesPriceArchiveNav)
             {
@@ -128,7 +128,7 @@ page 51001 "SL Sales Price Checking List"
                 Caption = 'Sales Price Archive';
                 ToolTip = 'Open the archive of previously processed sales prices.';
                 Image = History;
-                RunObject = page "SL Sales Price Archive";
+                RunObject = page "CXW Sales Price Archive";
             }
         }
         area(Processing)
@@ -151,13 +151,13 @@ page 51001 "SL Sales Price Checking List"
                     trigger OnAction()
                     begin
                         g_recGenSPSetup.Get();
-                        g_recGenSPSetup.TestField("Minimum Margin %");
-                        g_recGenSPSetup.TestField("Stock Price Threshold %");
+                        g_recGenSPSetup.TestField("CXW Minimum Margin %");
+                        g_recGenSPSetup.TestField("CXW Stock Price Threshold %");
 
                         if Rec.FindFirst() then
                             Error(TXT009);
 
-                        Xmlport.Run(Xmlport::"SL Import Sales Price", false, true);
+                        Xmlport.Run(Xmlport::"CXW Import Sales Price", false, true);
                     end;
                 }
                 action(Validate)
@@ -172,11 +172,11 @@ page 51001 "SL Sales Price Checking List"
                     trigger OnAction()
                     begin
                         g_recGenSPSetup.Get();
-                        g_recGenSPSetup.TestField("Minimum Margin %");
-                        g_recGenSPSetup.TestField("Stock Price Threshold %");
+                        g_recGenSPSetup.TestField("CXW Minimum Margin %");
+                        g_recGenSPSetup.TestField("CXW Stock Price Threshold %");
 
                         g_recSalesPriceCheck.Reset();
-                        g_recSalesPriceCheck.SetRange(Validated, true);
+                        g_recSalesPriceCheck.SetRange("CXW Validated", true);
                         if g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
@@ -185,14 +185,14 @@ page 51001 "SL Sales Price Checking List"
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
-                        g_recSalesPriceCheck.SetFilter("Stock Price", '>%1', 0);
+                        g_recSalesPriceCheck.SetFilter("CXW Stock Price", '>%1', 0);
                         if g_recSalesPriceCheck.FindSet() then
                             repeat
-                                g_recSalesPriceCheck."Stock Price" := Round(g_recSalesPriceCheck."Stock Price", 10, '>');
-                                if g_recSalesPriceCheck."Recom. Retail Price" > 0 then
-                                    g_recSalesPriceCheck."Recom. Retail Price" := Round(g_recSalesPriceCheck."Recom. Retail Price", 10, '>');
-                                if g_recSalesPriceCheck."Strike Price" > 0 then
-                                    g_recSalesPriceCheck."Strike Price" := Round(g_recSalesPriceCheck."Strike Price", 10, '>');
+                                g_recSalesPriceCheck."CXW Stock Price" := Round(g_recSalesPriceCheck."CXW Stock Price", 10, '>');
+                                if g_recSalesPriceCheck."CXW Recom. Retail Price" > 0 then
+                                    g_recSalesPriceCheck."CXW Recom. Retail Price" := Round(g_recSalesPriceCheck."CXW Recom. Retail Price", 10, '>');
+                                if g_recSalesPriceCheck."CXW Strike Price" > 0 then
+                                    g_recSalesPriceCheck."CXW Strike Price" := Round(g_recSalesPriceCheck."CXW Strike Price", 10, '>');
 
                                 g_recSalesPriceCheck.Modify();
                             until g_recSalesPriceCheck.Next() = 0;
@@ -213,23 +213,23 @@ page 51001 "SL Sales Price Checking List"
 
                     trigger OnAction()
                     var
-                        l_recSalesPriceCheck: Record "SL Sales Price Checking";
+                        l_recSalesPriceCheck: Record "CXW Sales Price Checking";
                     begin
                         g_recGenSPSetup.Get();
-                        g_recGenSPSetup.TestField("Minimum Margin %");
-                        g_recGenSPSetup.TestField("Stock Price Threshold %");
+                        g_recGenSPSetup.TestField("CXW Minimum Margin %");
+                        g_recGenSPSetup.TestField("CXW Stock Price Threshold %");
 
                         g_recSalesPriceCheck.Reset();
                         if not g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
-                        g_recSalesPriceCheck.SetRange(Validated, false);
+                        g_recSalesPriceCheck.SetRange("CXW Validated", false);
                         if g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
-                        g_recSalesPriceCheck.SetRange("Accept New Setup", true);
+                        g_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
                         if g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
@@ -237,10 +237,10 @@ page 51001 "SL Sales Price Checking List"
                             l_recSalesPriceCheck.Reset();
                             if l_recSalesPriceCheck.FindSet() then begin
                                 repeat
-                                    l_recSalesPriceCheck."Accept New Setup" := true;
-                                    l_recSalesPriceCheck."Remark Backup" := Rec.Remark;
-                                    l_recSalesPriceCheck.Remark := '';
-                                    l_recSalesPriceCheck."Approved By" := UserId;
+                                    l_recSalesPriceCheck."CXW Accept New Setup" := true;
+                                    l_recSalesPriceCheck."CXW Remark Backup" := Rec."CXW Remark";
+                                    l_recSalesPriceCheck."CXW Remark" := '';
+                                    l_recSalesPriceCheck."CXW Approved By" := UserId;
                                     l_recSalesPriceCheck.Modify();
                                 until l_recSalesPriceCheck.Next() = 0;
                                 Message(DoneMsg);
@@ -260,8 +260,8 @@ page 51001 "SL Sales Price Checking List"
                     trigger OnAction()
                     begin
                         g_recGenSPSetup.Get();
-                        g_recGenSPSetup.TestField("Minimum Margin %");
-                        g_recGenSPSetup.TestField("Stock Price Threshold %");
+                        g_recGenSPSetup.TestField("CXW Minimum Margin %");
+                        g_recGenSPSetup.TestField("CXW Stock Price Threshold %");
 
                         g_recSalesPriceCheck.Reset();
                         if not g_recSalesPriceCheck.FindFirst() then
@@ -269,62 +269,62 @@ page 51001 "SL Sales Price Checking List"
 
                         g_recSalesPriceCheck.Reset();
 
-                        g_recSalesPriceCheck.SetRange("Currencies Processed", false);
+                        g_recSalesPriceCheck.SetRange("CXW Currencies Processed", false);
                         if not g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
-                        g_recSalesPriceCheck.SetRange(Validated, false);
+                        g_recSalesPriceCheck.SetRange("CXW Validated", false);
                         if g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
-                        g_recSalesPriceCheck.SetRange("Accept New Setup", false);
+                        g_recSalesPriceCheck.SetRange("CXW Accept New Setup", false);
                         if g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
 
-                        g_recSalesPriceCheck.SetRange("Currencies Processed", false);
+                        g_recSalesPriceCheck.SetRange("CXW Currencies Processed", false);
                         if g_recSalesPriceCheck.FindSet() then
                             repeat
                                 g_recCurrencies.Reset();
                                 g_recCurrencies.SetFilter(Code, '<>%1', 'DE');
-                                g_recCurrencies.SetRange("Sales Price Activated", true);
+                                g_recCurrencies.SetRange("CXW Sales Price Activated", true);
                                 if g_recCurrencies.FindSet() then
                                     repeat
                                         if (g_recCurrencies."Code" <> '') and
-                                           (g_recCurrencies."Code" <> g_recSalesPriceCheck."Currency Code") and
-                                           (not g_recSalesPriceCheck2.Get(g_recSalesPriceCheck."Item No.", g_recCurrencies."Code"))
+                                           (g_recCurrencies."Code" <> g_recSalesPriceCheck."CXW Currency Code") and
+                                           (not g_recSalesPriceCheck2.Get(g_recSalesPriceCheck."CXW Item No.", g_recCurrencies."Code"))
                                         then begin
                                             g_recSalesPriceCheck2.Init();
-                                            g_recSalesPriceCheck2."Item No." := g_recSalesPriceCheck."Item No.";
+                                            g_recSalesPriceCheck2."CXW Item No." := g_recSalesPriceCheck."CXW Item No.";
 
-                                            g_recSalesPriceCheck2."Currency Code" := g_recCurrencies."Code";
+                                            g_recSalesPriceCheck2."CXW Currency Code" := g_recCurrencies."Code";
                                             g_recCurrExcRate.Reset();
-                                            g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."Currency Code");
+                                            g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."CXW Currency Code");
                                             if g_recCurrExcRate.FindLast() then begin
-                                                g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."Stock Price" := g_recSalesPriceCheck."Stock Price" * (1 / g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."Recom. Retail Price" := g_recSalesPriceCheck."Recom. Retail Price" * (1 / g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."Strike Price" := g_recSalesPriceCheck."Strike Price" * (1 / g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."Exchange Rate Amount" := 1 / g_decExchangeRateAmt;
-                                                g_recSalesPriceCheck2."Exchange Rate Date" := g_dateExchangeRateDate;
+                                                g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."CXW Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
+                                                g_recSalesPriceCheck2."CXW Stock Price" := g_recSalesPriceCheck."CXW Stock Price" * (1 / g_decExchangeRateAmt);
+                                                g_recSalesPriceCheck2."CXW Recom. Retail Price" := g_recSalesPriceCheck."CXW Recom. Retail Price" * (1 / g_decExchangeRateAmt);
+                                                g_recSalesPriceCheck2."CXW Strike Price" := g_recSalesPriceCheck."CXW Strike Price" * (1 / g_decExchangeRateAmt);
+                                                g_recSalesPriceCheck2."CXW Exchange Rate Amount" := 1 / g_decExchangeRateAmt;
+                                                g_recSalesPriceCheck2."CXW Exchange Rate Date" := g_dateExchangeRateDate;
                                             end;
-                                            g_recSalesPriceCheck2."Starting Date" := g_recSalesPriceCheck."Starting Date";
-                                            g_recSalesPriceCheck2."Starting Time" := g_recSalesPriceCheck."Starting Time";
-                                            g_recSalesPriceCheck2."Ending Date" := g_recSalesPriceCheck."Ending Date";
-                                            g_recSalesPriceCheck2."Ending Time" := g_recSalesPriceCheck."Ending Time";
-                                            g_recSalesPriceCheck2."Reason Code" := g_recSalesPriceCheck."Reason Code";
-                                            g_recSalesPriceCheck2.Comment := g_recSalesPriceCheck.Comment;
-                                            g_recSalesPriceCheck2.Validated := true;
-                                            g_recSalesPriceCheck2."Approved By" := g_recSalesPriceCheck."Approved By";
-                                            g_recSalesPriceCheck2."Accept New Setup" := g_recSalesPriceCheck."Accept New Setup";
+                                            g_recSalesPriceCheck2."CXW Starting Date" := g_recSalesPriceCheck."CXW Starting Date";
+                                            g_recSalesPriceCheck2."CXW Starting Time" := g_recSalesPriceCheck."CXW Starting Time";
+                                            g_recSalesPriceCheck2."CXW Ending Date" := g_recSalesPriceCheck."CXW Ending Date";
+                                            g_recSalesPriceCheck2."CXW Ending Time" := g_recSalesPriceCheck."CXW Ending Time";
+                                            g_recSalesPriceCheck2."CXW Reason Code" := g_recSalesPriceCheck."CXW Reason Code";
+                                            g_recSalesPriceCheck2."CXW Comment" := g_recSalesPriceCheck."CXW Comment";
+                                            g_recSalesPriceCheck2."CXW Validated" := true;
+                                            g_recSalesPriceCheck2."CXW Approved By" := g_recSalesPriceCheck."CXW Approved By";
+                                            g_recSalesPriceCheck2."CXW Accept New Setup" := g_recSalesPriceCheck."CXW Accept New Setup";
                                             g_recSalesPriceCheck2.Insert(true);
                                         end;
                                     until g_recCurrencies.Next() = 0;
-                                UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."Item No.", g_recSalesPriceCheck."Currency Code");
-                                UpdateSalesPriceCheck."Currencies Processed" := true;
+                                UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."CXW Item No.", g_recSalesPriceCheck."CXW Currency Code");
+                                UpdateSalesPriceCheck."CXW Currencies Processed" := true;
                                 UpdateSalesPriceCheck.Modify();
                             until g_recSalesPriceCheck.Next() = 0;
 
@@ -349,7 +349,7 @@ page 51001 "SL Sales Price Checking List"
 
                     trigger OnAction()
                     var
-                        l_recSalesPriceCheck: Record "SL Sales Price Checking";
+                        l_recSalesPriceCheck: Record "CXW Sales Price Checking";
                         l_recSP: Record "Sales Price";
                         l_intTotal: Integer;
                         l_intExported: Integer;
@@ -357,34 +357,34 @@ page 51001 "SL Sales Price Checking List"
                         l_boolResendAlreadySent: Boolean;
                     begin
                         g_recGenSPSetup.Get();
-                        g_recGenSPSetup.TestField("Price Export Active", true);
-                        g_recGenSPSetup.TestField("API Interface Code");
+                        g_recGenSPSetup.TestField("CXW Price Export Active", true);
+                        g_recGenSPSetup.TestField("CXW API Interface Code");
 
                         l_recSalesPriceCheck.Reset();
-                        l_recSalesPriceCheck.SetRange("Accept New Setup", true);
+                        l_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
                         if not l_recSalesPriceCheck.FindSet() then
                             Error(NothingToProcessErr);
 
                         l_recSalesPriceCheck.Reset();
-                        l_recSalesPriceCheck.SetRange("Accept New Setup", true);
-                        l_recSalesPriceCheck.SetRange("Export Status", l_recSalesPriceCheck."Export Status"::Sent);
+                        l_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
+                        l_recSalesPriceCheck.SetRange("CXW Export Status", l_recSalesPriceCheck."CXW Export Status"::Sent);
                         l_intAlreadySent := l_recSalesPriceCheck.Count();
                         if l_intAlreadySent > 0 then
                             l_boolResendAlreadySent := Confirm(StrSubstNo(ResendAlreadySentQst, l_intAlreadySent), false);
 
                         l_recSalesPriceCheck.Reset();
-                        l_recSalesPriceCheck.SetRange("Accept New Setup", true);
+                        l_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
                         if l_recSalesPriceCheck.FindSet() then
                             repeat
-                                if (l_recSalesPriceCheck."Export Status" <> l_recSalesPriceCheck."Export Status"::Sent) or l_boolResendAlreadySent then begin
+                                if (l_recSalesPriceCheck."CXW Export Status" <> l_recSalesPriceCheck."CXW Export Status"::Sent) or l_boolResendAlreadySent then begin
                                     l_intTotal += 1;
                                     if g_cuExportGatewaySalesPrice.WriteBackAndArchive(l_recSalesPriceCheck, l_recSP) and
                                        g_cuExportGatewaySalesPrice.CreateExternalInterfaceFile(l_recSP)
                                     then begin
-                                        l_recSalesPriceCheck."Export Status" := l_recSalesPriceCheck."Export Status"::Sent;
+                                        l_recSalesPriceCheck."CXW Export Status" := l_recSalesPriceCheck."CXW Export Status"::Sent;
                                         l_intExported += 1;
                                     end else
-                                        l_recSalesPriceCheck."Export Status" := l_recSalesPriceCheck."Export Status"::Error;
+                                        l_recSalesPriceCheck."CXW Export Status" := l_recSalesPriceCheck."CXW Export Status"::Error;
                                     l_recSalesPriceCheck.Modify();
                                 end;
                             until l_recSalesPriceCheck.Next() = 0;
@@ -403,15 +403,15 @@ page 51001 "SL Sales Price Checking List"
 
     trigger OnModifyRecord(): Boolean
     begin
-        if Rec."Accept New Setup" then
+        if Rec."CXW Accept New Setup" then
             Error(ModifyNotAllowedErr);
 
     end;
 
     var
         g_recSP: Record "Sales Price";
-        g_recSalesPriceCheck: Record "SL Sales Price Checking";
-        g_recSalesPriceCheck2: Record "SL Sales Price Checking";
+        g_recSalesPriceCheck: Record "CXW Sales Price Checking";
+        g_recSalesPriceCheck2: Record "CXW Sales Price Checking";
         TXT001: Label 'New Final Price %1% less than existing Final Price %2', Comment = '%1 = percent, %2 = old price';
         g_recILE: Record "Item Ledger Entry";
         g_decSPExclVAT: Decimal;
@@ -431,10 +431,10 @@ page 51001 "SL Sales Price Checking List"
         TXT007: Label 'New Final Price %1% greater than existing Final Price %2';
         g_decStockPricePercentFromPrev: Decimal;
         g_decNonStockPricePercentFromPrev: Decimal;
-        g_recGenSPSetup: Record "SL General Sales Price Setup";
+        g_recGenSPSetup: Record "CXW General Sales Price Setup";
         TXT009: Label 'Please delete existing entries to import new price';
-        UpdateSalesPriceCheck: Record "SL Sales Price Checking";
-        g_cuExportGatewaySalesPrice: Codeunit "SL Export Gateway Sales Price";
+        UpdateSalesPriceCheck: Record "CXW Sales Price Checking";
+        g_cuExportGatewaySalesPrice: Codeunit "CXW Export Gateway Sales Price";
         ExportResultMsg: Label '%1 of %2 approved lines exported. Lines already exported were skipped.', Comment = '%1 = number of lines actually exported, %2 = number of approved lines considered';
         ResendAlreadySentQst: Label '%1 line(s) were already sent previously. Do you want to send them again?', Comment = '%1 = number of previously sent lines';
         NothingToProcessErr: Label 'Nothing to process';
@@ -447,34 +447,34 @@ page 51001 "SL Sales Price Checking List"
     local procedure fnValidate()
     begin
         g_recSalesPriceCheck.Reset();
-        g_recSalesPriceCheck.SetRange(Validated, false);
+        g_recSalesPriceCheck.SetRange("CXW Validated", false);
         if g_recSalesPriceCheck.FindSet() then begin
             ProgressWindow.Open(ValidatingProgressMsg);
             TotalCount := g_recSalesPriceCheck.Count();
             repeat
-                Clear(g_recSalesPriceCheck.Remark);
+                Clear(g_recSalesPriceCheck."CXW Remark");
                 Clear(g_decStockPricePercentFromPrev);
                 Clear(g_decNonStockPricePercentFromPrev);
 
                 g_recSP.Reset();
-                g_recSP.SetRange("Item No.", g_recSalesPriceCheck."Item No.");
-                g_recSP.SetRange("Currency Code", g_recSalesPriceCheck."Currency Code");
-                g_recSP.SetRange("Starting Date", g_recSalesPriceCheck."Starting Date");
+                g_recSP.SetRange("Item No.", g_recSalesPriceCheck."CXW Item No.");
+                g_recSP.SetRange("Currency Code", g_recSalesPriceCheck."CXW Currency Code");
+                g_recSP.SetRange("Starting Date", g_recSalesPriceCheck."CXW Starting Date");
                 if g_recSP.FindFirst() then begin
-                    g_recSalesPriceCheck."Old Stock Price" := g_recSP."Unit Price (LCY)";
-                    if g_recSalesPriceCheck."Stock Price" < g_recSP."Unit Price (LCY)" then
-                        g_recSalesPriceCheck.Remark :=
+                    g_recSalesPriceCheck."CXW Old Stock Price" := g_recSP."CXW Unit Price (LCY)";
+                    if g_recSalesPriceCheck."CXW Stock Price" < g_recSP."CXW Unit Price (LCY)" then
+                        g_recSalesPriceCheck."CXW Remark" :=
                             StrSubstNo(
                                 TXT001,
-                                Round(((g_recSP."Unit Price (LCY)" - g_recSalesPriceCheck."Stock Price") / g_recSP."Unit Price (LCY)") * 100, 0.01, '='),
-                                g_recSP."Unit Price (LCY)");
+                                Round(((g_recSP."CXW Unit Price (LCY)" - g_recSalesPriceCheck."CXW Stock Price") / g_recSP."CXW Unit Price (LCY)") * 100, 0.01, '='),
+                                g_recSP."CXW Unit Price (LCY)");
 
                     g_decStockPricePercentFromPrev :=
-                        Round(((g_recSalesPriceCheck."Stock Price" - g_recSP."Unit Price (LCY)") / g_recSP."Unit Price (LCY)") * 100, 0.01, '=');
-                    if (g_recSalesPriceCheck."Stock Price" > g_recSP."Unit Price (LCY)") and
-                       (g_decStockPricePercentFromPrev > g_recGenSPSetup."Stock Price Threshold %")
+                        Round(((g_recSalesPriceCheck."CXW Stock Price" - g_recSP."CXW Unit Price (LCY)") / g_recSP."CXW Unit Price (LCY)") * 100, 0.01, '=');
+                    if (g_recSalesPriceCheck."CXW Stock Price" > g_recSP."CXW Unit Price (LCY)") and
+                       (g_decStockPricePercentFromPrev > g_recGenSPSetup."CXW Stock Price Threshold %")
                     then
-                        g_recSalesPriceCheck.Remark := StrSubstNo(TXT007, g_decStockPricePercentFromPrev, g_recSP."Unit Price (LCY)");
+                        g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT007, g_decStockPricePercentFromPrev, g_recSP."CXW Unit Price (LCY)");
                 end;
 
                 g_decSPExclVAT := 0;
@@ -482,25 +482,25 @@ page 51001 "SL Sales Price Checking List"
                 g_decProfitPercent := 0;
 
                 g_recILE.Reset();
-                g_recILE.SetRange("Item No.", g_recSalesPriceCheck."Item No.");
+                g_recILE.SetRange("Item No.", g_recSalesPriceCheck."CXW Item No.");
                 g_recILE.SetRange("Invoiced Quantity", 1);
                 g_recILE.SetRange("Location Code", 'HL');
                 if g_recILE.FindLast() then begin
                     g_recILE.CalcFields("Cost Amount (Actual)");
-                    g_decSPExclVAT := (g_recSalesPriceCheck."Stock Price" * 100) / 119;
+                    g_decSPExclVAT := (g_recSalesPriceCheck."CXW Stock Price" * 100) / 119;
                     g_decProfit := g_decSPExclVAT - g_recILE."Cost Amount (Actual)";
                     g_decProfitPercent := Round((g_decProfit / g_decSPExclVAT) * 100, 0.01, '=');
-                    if g_decProfitPercent < g_recGenSPSetup."Minimum Margin %" then
-                        g_recSalesPriceCheck.Remark := StrSubstNo(TXT003, g_decProfitPercent, g_recGenSPSetup."Minimum Margin %");
+                    if g_decProfitPercent < g_recGenSPSetup."CXW Minimum Margin %" then
+                        g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT003, g_decProfitPercent, g_recGenSPSetup."CXW Minimum Margin %");
                 end;
 
-                if (g_recSalesPriceCheck."Starting Date" > g_recSalesPriceCheck."Ending Date") and (g_recSalesPriceCheck."Ending Date" <> 0D) then
-                    g_recSalesPriceCheck.Remark := StrSubstNo(TXT006, g_recSalesPriceCheck."Starting Date", g_recSalesPriceCheck."Ending Date");
+                if (g_recSalesPriceCheck."CXW Starting Date" > g_recSalesPriceCheck."CXW Ending Date") and (g_recSalesPriceCheck."CXW Ending Date" <> 0D) then
+                    g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT006, g_recSalesPriceCheck."CXW Starting Date", g_recSalesPriceCheck."CXW Ending Date");
 
-                if g_recSalesPriceCheck."Accept New Setup" then
-                    g_recSalesPriceCheck.Remark := '';
+                if g_recSalesPriceCheck."CXW Accept New Setup" then
+                    g_recSalesPriceCheck."CXW Remark" := '';
 
-                g_recSalesPriceCheck.Validated := true;
+                g_recSalesPriceCheck."CXW Validated" := true;
 
                 g_recSalesPriceCheck.Modify();
                 CountToValidate += 1;
@@ -513,22 +513,22 @@ page 51001 "SL Sales Price Checking List"
     procedure fnCalcNonStockPrice(p_decStockPriceFrom: Decimal; p_decStockPriceTo: Decimal; p_decNonStockPercent: Decimal)
     begin
         g_recSalesPriceCheck2.Reset();
-        g_recSalesPriceCheck2.SetRange("Non Stock Price", 0);
-        g_recSalesPriceCheck2.SetFilter("Stock Price", '%1..%2', p_decStockPriceFrom, p_decStockPriceTo);
+        g_recSalesPriceCheck2.SetRange("CXW Non Stock Price", 0);
+        g_recSalesPriceCheck2.SetFilter("CXW Stock Price", '%1..%2', p_decStockPriceFrom, p_decStockPriceTo);
         if g_recSalesPriceCheck2.FindSet() then
             repeat
-                if g_recSalesPriceCheck2."Currency Code" <> '' then begin
+                if g_recSalesPriceCheck2."CXW Currency Code" <> '' then begin
                     g_recCurrExcRate.Reset();
-                    g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."Currency Code");
+                    g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."CXW Currency Code");
                     if g_recCurrExcRate.FindLast() then begin
-                        g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
-                        g_recSalesPriceCheck2."Non Stock Price" :=
-                            ((g_recSalesPriceCheck2."Stock Price" / (1 / g_decExchangeRateAmt)) +
-                             ((g_recSalesPriceCheck2."Stock Price" / (1 / g_decExchangeRateAmt)) * p_decNonStockPercent / 100)) * (1 / g_decExchangeRateAmt);
+                        g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."CXW Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
+                        g_recSalesPriceCheck2."CXW Non Stock Price" :=
+                            ((g_recSalesPriceCheck2."CXW Stock Price" / (1 / g_decExchangeRateAmt)) +
+                             ((g_recSalesPriceCheck2."CXW Stock Price" / (1 / g_decExchangeRateAmt)) * p_decNonStockPercent / 100)) * (1 / g_decExchangeRateAmt);
                     end;
                 end else
-                    g_recSalesPriceCheck2."Non Stock Price" :=
-                        g_recSalesPriceCheck2."Stock Price" + (g_recSalesPriceCheck2."Stock Price" * p_decNonStockPercent / 100);
+                    g_recSalesPriceCheck2."CXW Non Stock Price" :=
+                        g_recSalesPriceCheck2."CXW Stock Price" + (g_recSalesPriceCheck2."CXW Stock Price" * p_decNonStockPercent / 100);
                 g_recSalesPriceCheck2.Modify();
             until g_recSalesPriceCheck2.Next() = 0;
     end;

@@ -1,46 +1,46 @@
-table 51007 "SL API Interface Setup"
+table 60317 "CXW API Interface Setup"
 {
     Caption = 'API Interface Setup';
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(1; Code; Code[20])
+        field(1; "CXW Code"; Code[20])
         {
             Caption = 'Code';
             DataClassification = ToBeClassified;
             NotBlank = true;
         }
-        field(2; Description; Text[100])
+        field(2; "CXW Description"; Text[100])
         {
             Caption = 'Description';
             DataClassification = ToBeClassified;
         }
-        field(3; "Endpoint URL"; Text[250])
+        field(3; "CXW Endpoint URL"; Text[250])
         {
             Caption = 'Endpoint URL';
             DataClassification = ToBeClassified;
         }
-        field(4; "Auth Type"; Enum "SL API Auth Type")
+        field(4; "CXW Auth Type"; Enum "CXW API Auth Type")
         {
             Caption = 'Auth Type';
             DataClassification = ToBeClassified;
         }
-        field(5; Active; Boolean)
+        field(5; "CXW Active"; Boolean)
         {
             Caption = 'Active';
             DataClassification = ToBeClassified;
 
             trigger OnValidate()
             begin
-                if Active then begin
-                    TestField("Endpoint URL");
-                    if ("Auth Type" <> "Auth Type"::None) and (GetApiKey() = '') then
-                        Error(MissingApiKeyErr, "Auth Type");
+                if "CXW Active" then begin
+                    TestField("CXW Endpoint URL");
+                    if ("CXW Auth Type" <> "CXW Auth Type"::None) and (GetApiKey() = '') then
+                        Error(MissingApiKeyErr, "CXW Auth Type");
                 end;
             end;
         }
-        field(6; "Source Table No."; Integer)
+        field(6; "CXW Source Table No."; Integer)
         {
             Caption = 'Source Table No.';
             DataClassification = ToBeClassified;
@@ -50,7 +50,7 @@ table 51007 "SL API Interface Setup"
 
     keys
     {
-        key(PK; Code)
+        key(PK; "CXW Code")
         {
             Clustered = true;
         }
@@ -80,7 +80,7 @@ table 51007 "SL API Interface Setup"
 
     local procedure GetApiKeyIsolatedStorageKey(): Text
     begin
-        exit(StrSubstNo('SLAPIInterfaceSetup_ApiKey_%1', Code));
+        exit(StrSubstNo('SLAPIInterfaceSetup_ApiKey_%1', "CXW Code"));
     end;
 
     var

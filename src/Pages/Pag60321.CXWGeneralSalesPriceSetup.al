@@ -1,8 +1,8 @@
-page 51000 "SL General Sales Price Setup"
+page 60321 "CXW General Sales Price Setup"
 {
     Caption = 'General Sales Price Setup';
     PageType = Card;
-    SourceTable = "SL General Sales Price Setup";
+    SourceTable = "CXW General Sales Price Setup";
     ApplicationArea = All;
     UsageCategory = Administration;
     InsertAllowed = false;
@@ -16,7 +16,7 @@ page 51000 "SL General Sales Price Setup"
             {
                 Caption = 'Stock Price';
 
-                field("Minimum Margin %"; Rec."Minimum Margin %")
+                field("CXW Minimum Margin %"; Rec."CXW Minimum Margin %")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Watch will be deactivated on WebShop if the sales price is below min. margin';
@@ -35,19 +35,19 @@ page 51000 "SL General Sales Price Setup"
                     {
                         ShowCaption = false;
 
-                        field("Cat 1 Stock Price From"; Rec."If Stock Price From Cat 1")
+                        field("Cat 1 Stock Price From"; Rec."CXW If Stock Price From Cat 1")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 1 Stock Price From';
                             ToolTip = 'Category 1 Stock Price From';
                         }
-                        field("Cat 1 Stock Price To"; Rec."If Stock Price To Cat 1")
+                        field("Cat 1 Stock Price To"; Rec."CXW If Stock Price To Cat 1")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 1 Stock Price To';
                             ToolTip = 'Category 1 Stock Price To';
                         }
-                        field("Cat 1 Non Stock %"; Rec."Cat 1 Non Stock %")
+                        field("CXW Cat 1 Non Stock %"; Rec."CXW Cat 1 Non Stock %")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 1 Non Stock %';
@@ -58,19 +58,19 @@ page 51000 "SL General Sales Price Setup"
                     {
                         ShowCaption = false;
 
-                        field("Cat 2 Stock Price From"; Rec."If Stock Price From Cat 2")
+                        field("Cat 2 Stock Price From"; Rec."CXW If Stock Price From Cat 2")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 2 Stock Price From';
                             ToolTip = 'Category 2 Stock Price From';
                         }
-                        field("Cat 2 Stock Price To"; Rec."If Stock Price To Cat 2")
+                        field("Cat 2 Stock Price To"; Rec."CXW If Stock Price To Cat 2")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 2 Stock Price To';
                             ToolTip = 'Category 2 Stock Price To';
                         }
-                        field("Cat 2 Non Stock %"; Rec."Cat 2 Non Stock %")
+                        field("CXW Cat 2 Non Stock %"; Rec."CXW Cat 2 Non Stock %")
                         {
                             ApplicationArea = All;
                             ToolTip = 'Category 2 Non Stock %';
@@ -80,19 +80,19 @@ page 51000 "SL General Sales Price Setup"
                     {
                         ShowCaption = false;
 
-                        field("Cat 3 Stock Price From"; Rec."If Stock Price From Cat 3")
+                        field("Cat 3 Stock Price From"; Rec."CXW If Stock Price From Cat 3")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 3 Stock Price From';
                             ToolTip = 'Category 3 Stock Price From';
                         }
-                        field("Cat 3 Stock Price To"; Rec."If Stock Price To Cat 3")
+                        field("Cat 3 Stock Price To"; Rec."CXW If Stock Price To Cat 3")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 3 Stock Price To';
                             ToolTip = 'Category 3 Stock Price To';
                         }
-                        field("Cat 3 Non Stock %"; Rec."Cat 3 Non Stock %")
+                        field("CXW Cat 3 Non Stock %"; Rec."CXW Cat 3 Non Stock %")
                         {
                             ApplicationArea = All;
                             Caption = 'Cat 3 Non Stock %';
@@ -105,11 +105,11 @@ page 51000 "SL General Sales Price Setup"
             {
                 Caption = 'Threshold';
 
-                field("Stock Price Threshold %"; Rec."Stock Price Threshold %")
+                field("CXW Stock Price Threshold %"; Rec."CXW Stock Price Threshold %")
                 {
                     ApplicationArea = All;
                 }
-                field("Non Stock Price Threshold %"; Rec."Non Stock Price Threshold %")
+                field("CXW Non Stock Price Thresh %"; Rec."CXW Non Stock Price Thresh %")
                 {
                     ApplicationArea = All;
                     Visible = false;
@@ -119,12 +119,12 @@ page 51000 "SL General Sales Price Setup"
             {
                 Caption = 'Export';
 
-                field("Price Export Active"; Rec."Price Export Active")
+                field("CXW Price Export Active"; Rec."CXW Price Export Active")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether approved sales prices are sent to an external system via the selected API interface.';
                 }
-                field("API Interface Code"; Rec."API Interface Code")
+                field("CXW API Interface Code"; Rec."CXW API Interface Code")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies which API interface is used to send approved sales prices to an external system.';
@@ -143,7 +143,7 @@ page 51000 "SL General Sales Price Setup"
                 Caption = 'API Interface Setup';
                 ToolTip = 'Open the setup for outbound API interfaces.';
                 Image = Setup;
-                RunObject = page "SL API Interface Setup";
+                RunObject = page "CXW API Interface Setup";
             }
         }
     }

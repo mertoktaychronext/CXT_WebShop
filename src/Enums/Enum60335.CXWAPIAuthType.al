@@ -1,4 +1,4 @@
-enum 51004 "SL API Auth Type"
+enum 60335 "CXW API Auth Type"
 {
     Extensible = true;
 
