@@ -4,7 +4,7 @@ pageextension 60326 "CXW Sales Prices" extends "Sales Prices"
     {
         addlast(Content)
         {
-            group("SL Sales Price Details")
+            group("CXW Sales Price Details")
             {
                 Caption = 'Webshop Details';
 
