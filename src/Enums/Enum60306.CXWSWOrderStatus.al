@@ -1,4 +1,4 @@
-enum 51006 "SW Order Status"
+enum 60306 "CXW SW Order Status"
 {
     Extensible = true;
 

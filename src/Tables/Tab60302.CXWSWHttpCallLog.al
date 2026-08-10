@@ -1,53 +1,53 @@
-table 51010 "SW Http Call Log"
+table 60302 "CXW SW Http Call Log"
 {
     Caption = 'SW Http Call Log';
     DataClassification = SystemMetadata;
 
     fields
     {
-        field(1; "Entry No"; Integer)
+        field(1; "CXW Entry No"; Integer)
         {
             Caption = 'Entry No';
             AutoIncrement = true;
             DataClassification = SystemMetadata;
         }
-        field(2; "Call DateTime"; DateTime)
+        field(2; "CXW Call DateTime"; DateTime)
         {
             Caption = 'Call Date/Time';
             DataClassification = SystemMetadata;
         }
-        field(3; "Source Entry No"; Integer)
+        field(3; "CXW Source Entry No"; Integer)
         {
             Caption = 'Source Entry No';
-            TableRelation = "Watch Online Approval"."Entry No";
+            TableRelation = "CXW Watch Online Approval"."CXW Entry No";
             DataClassification = SystemMetadata;
         }
-        field(4; "Endpoint URL"; Text[250])
+        field(4; "CXW Endpoint URL"; Text[250])
         {
             Caption = 'Endpoint URL';
             DataClassification = SystemMetadata;
         }
-        field(5; Success; Boolean)
+        field(5; "CXW Success"; Boolean)
         {
             Caption = 'Success';
             DataClassification = SystemMetadata;
         }
-        field(6; "HTTP Status Code"; Integer)
+        field(6; "CXW HTTP Status Code"; Integer)
         {
             Caption = 'HTTP Status Code';
             DataClassification = SystemMetadata;
         }
-        field(7; "Error Message"; Text[250])
+        field(7; "CXW Error Message"; Text[250])
         {
             Caption = 'Error Message';
             DataClassification = SystemMetadata;
         }
-        field(8; Request; Blob)
+        field(8; "CXW Request"; Blob)
         {
             Caption = 'Request';
             DataClassification = CustomerContent;
         }
-        field(9; Response; Blob)
+        field(9; "CXW Response"; Blob)
         {
             Caption = 'Response';
             DataClassification = CustomerContent;
@@ -56,15 +56,15 @@ table 51010 "SW Http Call Log"
 
     keys
     {
-        key(PK; "Entry No")
+        key(PK; "CXW Entry No")
         {
             Clustered = true;
         }
-        key(Source; "Source Entry No") { }
+        key(Source; "CXW Source Entry No") { }
     }
 
     trigger OnInsert()
     begin
-        "Call DateTime" := CurrentDateTime;
+        "CXW Call DateTime" := CurrentDateTime;
     end;
 }

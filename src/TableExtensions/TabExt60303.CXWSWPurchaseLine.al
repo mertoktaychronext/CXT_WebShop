@@ -1,8 +1,8 @@
-tableextension 51003 "SW Purchase Line" extends "Purchase Line"
+tableextension 60303 "CXW SW Purchase Line" extends "Purchase Line"
 {
     fields
     {
-        field(51000; "Used good"; Boolean)
+        field(60300; "CXW Used good"; Boolean)
         {
             Caption = 'Used Good';
             DataClassification = ToBeClassified;

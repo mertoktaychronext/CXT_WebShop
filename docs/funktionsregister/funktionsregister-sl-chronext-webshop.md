@@ -3,7 +3,7 @@
 **Version:** 1.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-05 (aktualisiert 2026-08-09 – HTTP-Call-Logging und Telemetry für den SellWatch-Online-Check ergänzt)
+**Erstellt am:** 2026-08-05 (aktualisiert 2026-08-10 – SellWatch-Objekte und -Felder auf ID-Bereich 60300-60349 umnummeriert und mit dem Kürzel "CXW" versehen)
 **Abhängigkeiten:** keine
 
 ---
@@ -12,7 +12,7 @@
 
 Dieses Projekt bündelt mittlerweile zwei fachlich getrennte Prozesse. Zum einen die Verwaltung und Freigabe von Verkaufspreisen für den Webshop (migriert aus einem gewachsenen NAV-Altsystem, "SL"-Objekte): Neue Preise werden per CSV-Import eingelesen, inhaltlich geprüft (Mindestmarge, Preisschwankungen, Zeiträume) und von einem Sachbearbeiter freigegeben. Für jede Fremdwährung, die für den Webshop aktiviert ist, kann mit einem Klick automatisch ein umgerechneter Preis erzeugt werden ("Add all Currencies"). Mit der Aktion "Upload Sales Price" werden freigegebene Preiszeilen jetzt zuerst automatisch in die produktive Verkaufspreis-Tabelle sowie in ein versioniertes Preisarchiv übernommen und anschließend über eine konfigurierbare API-Schnittstelle an ein externes System (z. B. den Webshop selbst) übertragen. Ergänzend existiert ein automatisierter, dateibasierter CSV-Import-Baustein, der unabhängig vom manuellen Import läuft, aber aktuell noch nicht an eine Job-Queue angebunden ist.
 
-Zum anderen, seit 2026-08-07, die Abwicklung von Ankaufsanfragen für gebrauchte Uhren über den Partner SellWatch ("SW"-Objekte): Aus eingehenden Anfragen werden automatisch Lieferanten und Einkaufsbestellungen erzeugt, der Bearbeitungsstatus wird per JSON an SellWatch zurückgemeldet, und Uhren können über eine externe Schnittstelle für den Online-Verkauf freigegeben werden. Beide Prozesse nutzen dieselbe generische Infrastruktur zur Verwaltung externer API-Schnittstellen (Table 51007 "SL API Interface Setup"). Zwei Permission Sets decken den Zugriff auf die jeweils eigenen Objekte ab (eines je Prozess). Seit 2026-08-09 wird zusätzlich jeder HTTP-Aufruf der SellWatch-Online-Freigabeprüfung protokolliert (Request/Response als .txt herunterladbar, API-Key redigiert) und jeder Fehlschlag per Telemetry gemeldet.
+Zum anderen, seit 2026-08-07, die Abwicklung von Ankaufsanfragen für gebrauchte Uhren über den Partner SellWatch ("CXW"-Objekte, bis 2026-08-10 "SW"/"SellWatch"-Objekte): Aus eingehenden Anfragen werden automatisch Lieferanten und Einkaufsbestellungen erzeugt, der Bearbeitungsstatus wird per JSON an SellWatch zurückgemeldet, und Uhren können über eine externe Schnittstelle für den Online-Verkauf freigegeben werden. Beide Prozesse nutzen dieselbe generische Infrastruktur zur Verwaltung externer API-Schnittstellen (Table 51007 "SL API Interface Setup"). Zwei Permission Sets decken den Zugriff auf die jeweils eigenen Objekte ab (eines je Prozess). Seit 2026-08-09 wird zusätzlich jeder HTTP-Aufruf der SellWatch-Online-Freigabeprüfung protokolliert (Request/Response als .txt herunterladbar, API-Key redigiert) und jeder Fehlschlag per Telemetry gemeldet.
 
 ---
 
@@ -100,7 +100,7 @@ Verwaltet die Zugangsdaten und Konfiguration externer Schnittstellen (Endpunkt-U
 | 3 | `GetApiKey` | Prozedur | Public | Liest den gespeicherten API-Schlüssel für den Versand an die externe Schnittstelle aus. |
 | 4 | `GetApiKeyIsolatedStorageKey` | Prozedur | Internal | Bildet den eindeutigen internen Speicherschlüssel für den API-Schlüssel dieser Schnittstelle. |
 
-### Tabelle: SellWatch Vendor Info (ID: 51008)
+### Tabelle: CXW SellWatch Vendor Info (ID: 60300)
 
 Speichert eingehende Ankaufsanfragen von SellWatch (Verkäufer-, Uhren- und Angebotsdaten) inkl. eines berechneten Felds für die Tracking-Nummer der zugehörigen Bestellung.
 
@@ -108,7 +108,7 @@ Speichert eingehende Ankaufsanfragen von SellWatch (Verkäufer-, Uhren- und Ange
 |---|---|---|---|---|
 | – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Datentabelle. |
 
-### Tabelle: Watch Online Approval (ID: 51009)
+### Tabelle: CXW Watch Online Approval (ID: 60301)
 
 Verwaltet je Artikel/Variante, ob eine angekaufte Uhr für den Online-Verkauf im Webshop freigegeben ist.
 
@@ -117,14 +117,14 @@ Verwaltet je Artikel/Variante, ob eine angekaufte Uhr für den Online-Verkauf im
 | 1 | `"Check Online" – OnValidate` | Trigger | – | Trägt automatisch das Datum der Erstfreigabe ein, sobald eine Uhr für den Online-Verkauf freigegeben wird. |
 | 2 | `ReadJSONFile` | Prozedur | Internal | Nicht implementierte Altfunktion ohne Logik. |
 | 3 | `CreateJsonObjectCheckOnline` | Prozedur | Public | Baut ein einfaches JSON-Dokument mit der laufenden Nummer eines Freigabe-Datensatzes. |
-| 4 | `CreateEntryInexternalFile` | Prozedur | Public | Fragt bei der (in `SL API Interface Setup`, Code "WOA") konfigurierten externen Schnittstelle ab, ob eine Uhr online gehen darf, und setzt je nach Antwort die Online-Freigabe oder eine Bemerkung, dass die Uhr offline bleibt. Protokolliert seit 2026-08-09 jeden Aufruf in `SW Http Call Log` und meldet Fehlschläge zusätzlich per Telemetry (siehe unten). |
+| 4 | `CreateEntryInexternalFile` | Prozedur | Public | Fragt bei der (in `SL API Interface Setup`, Code "WOA") konfigurierten externen Schnittstelle ab, ob eine Uhr online gehen darf, und setzt je nach Antwort die Online-Freigabe oder eine Bemerkung, dass die Uhr offline bleibt. Protokolliert seit 2026-08-09 jeden Aufruf in `CXW SW Http Call Log` und meldet Fehlschläge zusätzlich per Telemetry (siehe unten). |
 | 5 | `BuildRedactedRequestText` | Prozedur | Internal | Baut den zu protokollierenden Request-Text auf und ersetzt dabei den `X-API-KEY`-Header-Wert durch einen festen Platzhalter, damit der echte Schlüssel nie im Protokoll landet. |
-| 6 | `LogHttpCall` | Prozedur | Internal | Legt einen Protokolleintrag in `SW Http Call Log` an (Erfolg oder Fehlschlag, HTTP-Statuscode, Fehlermeldung, redigierter Request-Text, Response-Text). |
-| 7 | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Aufruf per `Session.LogMessage` (Event-ID `SW-0101`) mit Endpoint, HTTP-Statuscode und der auslösenden `Watch Online Approval`-Lfd.-Nr. als Custom Dimensions. |
+| 6 | `LogHttpCall` | Prozedur | Internal | Legt einen Protokolleintrag in `CXW SW Http Call Log` an (Erfolg oder Fehlschlag, HTTP-Statuscode, Fehlermeldung, redigierter Request-Text, Response-Text). |
+| 7 | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Aufruf per `Session.LogMessage` (Event-ID `SW-0101`) mit Endpoint, HTTP-Statuscode und der auslösenden `CXW Watch Online Approval`-Lfd.-Nr. als Custom Dimensions. |
 
 > **Hinweis:** `CreateEntryInexternalFile` bricht weiterhin kommentarlos ab (ohne Protokolleintrag oder Telemetry), wenn die Schnittstelle "WOA" gar nicht konfiguriert/aktiv ist oder kein API-Key hinterlegt ist — das ist eine bewusste Konfigurationsprüfung vor dem eigentlichen HTTP-Aufruf, kein HTTP-Fehler. Jeder tatsächliche HTTP-Aufruf (erfolgreich oder fehlgeschlagen) wird seit 2026-08-09 vollständig protokolliert.
 
-### Tabelle: SW Http Call Log (ID: 51010)
+### Tabelle: CXW SW Http Call Log (ID: 60302)
 
 Protokolliert jeden HTTP-Aufruf der SellWatch-Online-Freigabeprüfung (`CreateEntryInexternalFile`) mit Request und Response als herunterladbarer Text; der `X-API-KEY`-Header wird dabei redigiert.
 
@@ -156,21 +156,21 @@ Ergänzt die Standard-Währung um die Markierung, ob diese Währung für die aut
 |---|---|---|---|---|
 | – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Felddefinition ("Sales Price Activated"). |
 
-### Tabellenerweiterung: SW Purchase Line (ID: 51003, erweitert Einkaufsbestellzeile)
+### Tabellenerweiterung: CXW SW Purchase Line (ID: 60303, erweitert Einkaufsbestellzeile)
 
 Ergänzt die Einkaufsbestellzeile um ein Kennzeichen "Gebrauchtware" für SellWatch-Bestellungen. Enthält keine eigene Logik.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Felddefinition ("Used good"). |
+| – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Felddefinition ("CXW Used good"). |
 
-### Tabellenerweiterung: SW Purchase Header (ID: 51004, erweitert Einkaufsbestellkopf)
+### Tabellenerweiterung: CXW SW Purchase Header (ID: 60304, erweitert Einkaufsbestellkopf)
 
 Ergänzt den Bestellkopf um eine Tracking-Nummer für SellWatch-Bestellungen. Enthält keine eigene Logik.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Felddefinition ("Tracking Number"). |
+| – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Felddefinition ("CXW Tracking Number"). |
 
 ### Seite: SL General Sales Price Setup (ID: 51000)
 
@@ -216,7 +216,7 @@ Verwaltungsliste für externe API-Schnittstellen (Endpunkt, Authentifizierung, A
 |---|---|---|---|---|
 | 1 | `ApiKey – OnValidate` | Trigger | – | Speichert einen eingegebenen API-Schlüssel sicher ab und entfernt ihn danach aus dem sichtbaren Eingabefeld. |
 
-### Seite: SellWatch-Overview (ID: 51004)
+### Seite: CXW SellWatch-Overview (ID: 60307)
 
 Schreibgeschützte Übersicht aller SellWatch-Ankaufsanfragen mit Sprung zur zugehörigen Einkaufsbestellung.
 
@@ -225,7 +225,7 @@ Schreibgeschützte Übersicht aller SellWatch-Ankaufsanfragen mit Sprung zur zug
 | 1 | `OnOpenPage` | Trigger | – | Zeigt beim Öffnen nur SellWatch-Anfragen mit einer echten Anfrage-ID an. |
 | 2 | `Show Document` | Action | Public | Öffnet die zu einer SellWatch-Anfrage gehörende Einkaufsbestellung zur Ansicht. |
 
-### Seite: SellWatch info (ID: 51005)
+### Seite: CXW SellWatch info (ID: 60308)
 
 Infobox-Ausschnitt (CardPart) mit den Uhren-Detailinformationen einer SellWatch-Anfrage, gedacht zum Einbetten auf einer übergeordneten Karte/Rollencenter.
 
@@ -233,7 +233,7 @@ Infobox-Ausschnitt (CardPart) mit den Uhren-Detailinformationen einer SellWatch-
 |---|---|---|---|---|
 | – | – | – | – | Keine Prozeduren/Trigger vorhanden. |
 
-### Seite: SW Http Call Log (ID: 51006)
+### Seite: CXW SW Http Call Log (ID: 60309)
 
 Schreibgeschützte Liste aller protokollierten SellWatch-Online-Check-HTTP-Aufrufe, mit Aktionen zum Herunterladen von Request und Response als .txt-Datei.
 
@@ -283,7 +283,7 @@ Automatisierter, dateibasierter CSV-Import (unabhängig vom manuellen Import üb
 
 > **Hinweis:** `WriteSalesPrices` ruft `SalesPrice.Get(...)` inzwischen mit genau den 8 echten Primärschlüsselfeldern der Standardtabelle "Sales Price" auf (mit `''` für "Variant Code"); die frühere Schlüssel-Abweichung an dieser Stelle ist behoben. Dieser Baustein ist weiterhin an keiner Stelle produktiv verdrahtet.
 
-### Codeunit: SellWatch Mgt (ID: 51002)
+### Codeunit: CXW SellWatch Mgt (ID: 60305)
 
 Verarbeitet eingehende SellWatch-Ankaufsanfragen: legt Lieferanten und Einkaufsbestellungen an und baut die Statusmeldungen für die Rückmeldung an SellWatch. Migriert aus einem NAV-Altsystem.
 
@@ -319,7 +319,7 @@ Werte: Not Sent, Sent, Error. Bildet auf der Preiszeile ab, ob und wie erfolgrei
 
 Werte: None, API Key (Header), Basic Authentication. Steuert, wie sich die Export-Anbindung gegenüber der externen Schnittstelle authentifiziert. Keine Prozeduren.
 
-### Enum: SW Order Status (ID: 51006)
+### Enum: CXW SW Order Status (ID: 60306)
 
 Werte: " " (leer), Watch Arrived, Watch is Online, Watch is Reserved, Watch is Sold, c2c payment confirmation, CPST WE2 Posted. Bildet den Bearbeitungsstatus einer SellWatch-Anfrage ab, der per JSON an SellWatch zurückgemeldet wird. Keine Prozeduren.
 
@@ -327,9 +327,9 @@ Werte: " " (leer), Watch Arrived, Watch is Online, Watch is Reserved, Watch is S
 
 Deckt den Lese-/Schreibzugriff auf alle sieben Sales-Price-Tabellen sowie die Ausführung beider Sales-Price-Codeunits, der XMLport und aller vier Sales-Price-Seiten ab. Muss noch einer Benutzergruppe zugewiesen werden. Keine Prozeduren.
 
-### Permission Set: SWChronWSAll (ID: 51001)
+### Permission Set: CXW SWChronWSAll (ID: 60310)
 
-Deckt den Lese-/Schreibzugriff auf die beiden SellWatch-Tabellen, die Ausführung der Codeunit `SellWatch Mgt` sowie beide SellWatch-Seiten ab. Muss noch einer Benutzergruppe zugewiesen werden. Keine Prozeduren.
+Deckt den Lese-/Schreibzugriff auf die beiden SellWatch-Tabellen, die Ausführung der Codeunit `CXW SellWatch Mgt` sowie beide SellWatch-Seiten ab. Muss noch einer Benutzergruppe zugewiesen werden. Keine Prozeduren.
 
 ---
 
@@ -337,8 +337,8 @@ Deckt den Lese-/Schreibzugriff auf die beiden SellWatch-Tabellen, die Ausführun
 
 | Kandidat | Objekte | Begründung |
 |---|---|---|
-| SellWatch-Ankaufsintegration | Table 51008/51009/51010, Codeunit 51002, Page 51004/51005/51006, Enum 51006, TableExt 51003/51004, Permission Set SWChronWSAll | Fachlich vollständig eigenständiger Prozess (Ankauf gebrauchter Uhren) ohne inhaltliche Berührung zur Preisprüfung/-freigabe; einzige Kopplung ist die gemeinsam genutzte API-Schnittstellen-Verwaltung (siehe unten). Klarer Kandidat für eine eigene Extension, falls SellWatch getrennt vom Preis-Webshop weiterentwickelt oder ausgerollt werden soll. |
-| Export-Anbindung an externe Systeme | Codeunit 51000, Table 51004, Table 51007, Page 51003, Enum 51004 | Generischer, wiederverwendbarer Baustein (konfigurierbare Endpunkte, Authentifizierung, JSON-Versand per Reflection) – nicht spezifisch auf Verkaufspreise beschränkt und inzwischen bereits von zwei unabhängigen Prozessen genutzt (Sales-Price-Export **und** seit 2026-08-07 auch `Watch Online Approval` aus der SellWatch-Integration). Damit ein noch stärkerer Kandidat als zuvor für eine eigene, gemeinsame Basis-Extension, von der beide Fach-Extensions abhängen. |
+| SellWatch-Ankaufsintegration | Table 60300/60301/60302, Codeunit 60305, Page 60307/60308/60309, Enum 60306, TableExt 60303/60304, Permission Set CXW SWChronWSAll | Fachlich vollständig eigenständiger Prozess (Ankauf gebrauchter Uhren) ohne inhaltliche Berührung zur Preisprüfung/-freigabe; einzige Kopplung ist die gemeinsam genutzte API-Schnittstellen-Verwaltung (siehe unten). Klarer Kandidat für eine eigene Extension, falls SellWatch getrennt vom Preis-Webshop weiterentwickelt oder ausgerollt werden soll. |
+| Export-Anbindung an externe Systeme | Codeunit 51000, Table 51004, Table 51007, Page 51003, Enum 51004 | Generischer, wiederverwendbarer Baustein (konfigurierbare Endpunkte, Authentifizierung, JSON-Versand per Reflection) – nicht spezifisch auf Verkaufspreise beschränkt und inzwischen bereits von zwei unabhängigen Prozessen genutzt (Sales-Price-Export **und** seit 2026-08-07 auch `CXW Watch Online Approval` aus der SellWatch-Integration). Damit ein noch stärkerer Kandidat als zuvor für eine eigene, gemeinsame Basis-Extension, von der beide Fach-Extensions abhängen. |
 | Dateibasierter Import/Protokoll | Table 51005, Table 51006, Codeunit 51001 | Klar abgegrenzter, von der manuellen Arbeitsliste unabhängiger Baustein (eigene Tabellen, ein Event Publisher für lose Kopplung). Könnte als eigenständige "Import-Pipeline"-Erweiterung herausgelöst werden, sobald eine Job-Queue-Anbindung erfolgt. |
 | Währungs-/Länder-Stammdaten | TableExtension 51000, TableExtension 51002, PageExtension 51000, PageExtension 51002 | Reine Stammdatenerweiterung von Land/Region und Währung; wird von den Preisfunktionen nur gelesen, aber nirgends selbst verändert – wiederverwendbar für zukünftige, über den Webshop hinausgehende Länder-/Währungsfreigaben. |
 
@@ -349,3 +349,5 @@ Deckt den Lese-/Schreibzugriff auf die beiden SellWatch-Tabellen, die Ausführun
 **Hinweis zum Update vom 2026-08-07:** Aus einer NAV→AL-Migration wurde die komplette SellWatch-Ankaufsintegration neu hinzugefügt: Table 51008 "SellWatch Vendor Info", Table 51009 "Watch Online Approval", Codeunit 51002 "SellWatch Mgt", Page 51004 "SellWatch-Overview", Page 51005 "SellWatch info", Enum 51006 "SW Order Status", TableExtension 51003 "SW Purchase Line", TableExtension 51004 "SW Purchase Header" sowie Permission Set 51001 "SWChronWSAll". Dabei wurde ein zunächst hartcodierter API-Key in `Watch Online Approval` entfernt und stattdessen über die bereits vorhandene, generische Infrastruktur in Table 51007 "SL API Interface Setup" bezogen (Isolated Storage) — dadurch entstand eine neue, bewusste Abhängigkeit der SellWatch-Integration auf diese gemeinsame Basis. Ergebnis damals: 35 Objekte, 60 Funktionen (+9 Objekte / +13 Funktionen gegenüber der Vorversion).
 
 **Hinweis zum Update vom 2026-08-09:** Table 51010 "SW Http Call Log" und Page 51006 "SW Http Call Log" neu hinzugefügt, dazu drei neue interne Prozeduren auf Table 51009 (`BuildRedactedRequestText`, `LogHttpCall`, `LogHttpCallFailureTelemetry`). `CreateEntryInexternalFile` protokolliert jetzt jeden HTTP-Aufruf der SellWatch-Online-Freigabeprüfung (Request/Response als .txt herunterladbar, `X-API-KEY`-Header redigiert) und meldet jeden Fehlschlag zusätzlich per `Session.LogMessage`-Telemetry (Event-ID `SW-0101`) — schließt den zuvor dokumentierten "stille Fehlschläge"-Lücke. Ergebnis: 37 Objekte, 66 Funktionen (+2 Objekte / +6 Funktionen gegenüber der Vorversion).
+
+**Hinweis zum Update vom 2026-08-10:** Alle 11 SellWatch-Objekte aus den Updates vom 2026-08-07/2026-08-09 wurden von ihren ursprünglichen IDs im Bereich 51001-51010 in den dafür vorgesehenen App-ID-Bereich 60300-60349 verschoben und einheitlich mit dem Kürzel "CXW" versehen (vorher uneinheitlich "SW", "SellWatch" oder ganz ohne Präfix): Table 60300 "CXW SellWatch Vendor Info" (vorher 51008), Table 60301 "CXW Watch Online Approval" (vorher 51009), Table 60302 "CXW SW Http Call Log" (vorher 51010), TableExtension 60303 "CXW SW Purchase Line" (vorher 51003), TableExtension 60304 "CXW SW Purchase Header" (vorher 51004), Codeunit 60305 "CXW SellWatch Mgt" (vorher 51002), Enum 60306 "CXW SW Order Status" (vorher 51006), Page 60307 "CXW SellWatch-Overview" (vorher 51004), Page 60308 "CXW SellWatch info" (vorher 51005), Page 60309 "CXW SW Http Call Log" (vorher 51006), Permission Set 60310 "CXW SWChronWSAll" (vorher 51001). Zusätzlich wurden alle Felder dieser Objekte (auch die fachlichen Felder der drei neuen Tabellen, nicht nur die beiden über Table Extension ergänzten Standardfelder) mit dem Kürzel "CXW" versehen. `app.json` deklariert seither zwei ID-Bereiche (`51000-51049` für die unveränderten "SL"-Objekte, `60300-60349` für die "CXW"-Objekte), da der Compiler pro Objekt einen registrierten Bereich verlangt. Reine Umbenennung/Umnummerierung ohne fachliche Änderung: Objekt- und Funktionsanzahl unverändert (37 Objekte, 66 Funktionen).

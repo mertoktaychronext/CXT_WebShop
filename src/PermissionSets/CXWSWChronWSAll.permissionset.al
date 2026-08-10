@@ -1,14 +1,14 @@
-permissionset 51001 SWChronWSAll
+permissionset 60310 "CXW SWChronWSAll"
 {
     Assignable = true;
-    Permissions = tabledata "SellWatch Vendor Info" = RIMD,
-        tabledata "Watch Online Approval" = RIMD,
-        tabledata "SW Http Call Log" = RIMD,
-        table "SellWatch Vendor Info" = X,
-        table "Watch Online Approval" = X,
-        table "SW Http Call Log" = X,
-        codeunit "SellWatch Mgt" = X,
-        page "SellWatch-Overview" = X,
-        page "SellWatch info" = X,
-        page "SW Http Call Log" = X;
+    Permissions = tabledata "CXW SellWatch Vendor Info" = RIMD,
+        tabledata "CXW Watch Online Approval" = RIMD,
+        tabledata "CXW SW Http Call Log" = RIMD,
+        table "CXW SellWatch Vendor Info" = X,
+        table "CXW Watch Online Approval" = X,
+        table "CXW SW Http Call Log" = X,
+        codeunit "CXW SellWatch Mgt" = X,
+        page "CXW SellWatch-Overview" = X,
+        page "CXW SellWatch info" = X,
+        page "CXW SW Http Call Log" = X;
 }

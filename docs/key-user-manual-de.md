@@ -94,7 +94,7 @@ Der Zugriff ist über zwei getrennte Permission Sets geregelt, die den entsprech
 | Permission Set | Deckt ab |
 |---|---|
 | `SLChronWSAll` | Alle Objekte der Verkaufspreisverwaltung |
-| `SWChronWSAll` | Alle Objekte der SellWatch-Ankaufsintegration (SellWatch Vendor Info, Watch Online Approval, SW Http Call Log, SellWatch-Overview, SellWatch info) |
+| `CXW SWChronWSAll` | Alle Objekte der SellWatch-Ankaufsintegration (SellWatch Vendor Info, Watch Online Approval, SW Http Call Log, SellWatch-Overview, SellWatch info) |
 
 ## Troubleshooting
 
@@ -102,7 +102,7 @@ Der Zugriff ist über zwei getrennte Permission Sets geregelt, die den entsprech
 |---|---|
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
 | "Add all Currencies" erzeugt keine Zeile für eine bestimmte Währung | Prüfen Sie, ob für die Währung (Seite "Currencies") "Verkaufspreis aktiviert" gesetzt ist. |
-| Ein Benutzer kann die Seiten der Erweiterung nicht öffnen | Prüfen Sie, ob dem Benutzer das passende Permission Set zugewiesen ist ("SLChronWSAll" für die Preisverwaltung, "SWChronWSAll" für SellWatch). |
+| Ein Benutzer kann die Seiten der Erweiterung nicht öffnen | Prüfen Sie, ob dem Benutzer das passende Permission Set zugewiesen ist ("SLChronWSAll" für die Preisverwaltung, "CXW SWChronWSAll" für SellWatch). |
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
 | "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. |
 | Einzelne Preiszeilen bleiben nach "Upload Sales Price" mit "Export Status" = "Error" stehen | Andere Zeilen im selben Lauf werden trotzdem weiterverarbeitet. Prüfen Sie die betroffene Zeile auf ungültige Werte (z. B. nicht existierender Währungscode) und lösen Sie den Upload für diese Zeile erneut aus. |

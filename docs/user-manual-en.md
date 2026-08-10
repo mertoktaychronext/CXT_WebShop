@@ -9,7 +9,7 @@ This extension for Microsoft Dynamics 365 Business Central covers two independen
 
 ## Prerequisites
 
-- Access to Business Central with a role that includes the "Sales Price Checking List" page (permission set `SLChronWSAll`) or the "SellWatch-Overview" page (permission set `SWChronWSAll`).
+- Access to Business Central with a role that includes the "Sales Price Checking List" page (permission set `SLChronWSAll`) or the "SellWatch-Overview" page (permission set `CXW SWChronWSAll`).
 - The base settings (minimum margin, thresholds) must already be configured by a key user (see the Key User Manual).
 - For "Upload Sales Price", a key user must have enabled the price export and configured an API interface (see the Key User Manual).
 - A prepared CSV file with the new prices.
@@ -95,7 +95,3 @@ The price export has not been set up or is disabled. Contact a key user (see the
 
 **A SellWatch request shows no order number.**
 The order hasn't been created for this request automatically yet.
-
-## Help & Support
-
-[TODO: add internal support / key user contact details]

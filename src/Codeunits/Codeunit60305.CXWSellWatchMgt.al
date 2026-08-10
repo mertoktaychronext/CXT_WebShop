@@ -1,4 +1,4 @@
-codeunit 51002 "SellWatch Mgt"
+codeunit 60305 "CXW SellWatch Mgt"
 {
     trigger OnRun()
     begin
@@ -8,31 +8,31 @@ codeunit 51002 "SellWatch Mgt"
 
     local procedure ValidateAndCreateVendor()
     begin
-        SellWatchVendorInfo.SetRange(Created, false);
+        SellWatchVendorInfo.SetRange("CXW Created", false);
         if SellWatchVendorInfo.FindSet() then
             repeat
                 VendorRec.Reset();
-                VendorRec.SetRange(Name, SellWatchVendorInfo."Vendor Name");
-                VendorRec.SetRange(Address, SellWatchVendorInfo.Address);
-                VendorRec.SetRange("Phone No.", SellWatchVendorInfo.PhoneNo);
-                VendorRec.SetRange("E-Mail", SellWatchVendorInfo.Email);
+                VendorRec.SetRange(Name, SellWatchVendorInfo."CXW Vendor Name");
+                VendorRec.SetRange(Address, SellWatchVendorInfo."CXW Address");
+                VendorRec.SetRange("Phone No.", SellWatchVendorInfo."CXW PhoneNo");
+                VendorRec.SetRange("E-Mail", SellWatchVendorInfo."CXW Email");
                 if not VendorRec.FindFirst() then begin
                     VendorRec.Init();
                     VendorRec."No." := '';
-                    VendorRec.Name := SellWatchVendorInfo."Vendor Name";
-                    VendorRec.Address := SellWatchVendorInfo.Address;
-                    VendorRec."Address 2" := SellWatchVendorInfo."Address 2";
-                    VendorRec.City := SellWatchVendorInfo.City;
-                    VendorRec.County := SellWatchVendorInfo.County;
-                    VendorRec."Country/Region Code" := CopyStr(SellWatchVendorInfo.CountryCode, 1, 2);
-                    VendorRec."Post Code" := SellWatchVendorInfo."Post Code";
-                    VendorRec."Phone No." := SellWatchVendorInfo.PhoneNo;
-                    VendorRec."E-Mail" := SellWatchVendorInfo.Email;
+                    VendorRec.Name := SellWatchVendorInfo."CXW Vendor Name";
+                    VendorRec.Address := SellWatchVendorInfo."CXW Address";
+                    VendorRec."Address 2" := SellWatchVendorInfo."CXW Address 2";
+                    VendorRec.City := SellWatchVendorInfo."CXW City";
+                    VendorRec.County := SellWatchVendorInfo."CXW County";
+                    VendorRec."Country/Region Code" := CopyStr(SellWatchVendorInfo."CXW CountryCode", 1, 2);
+                    VendorRec."Post Code" := SellWatchVendorInfo."CXW Post Code";
+                    VendorRec."Phone No." := SellWatchVendorInfo."CXW PhoneNo";
+                    VendorRec."E-Mail" := SellWatchVendorInfo."CXW Email";
                     // TODO: Objekt Prozedur "SetPostingGroups" nicht geliefert (keine Standardprozedur auf Vendor, vermutlich eigene Table-Extension/Codeunit). Manuell pruefen und Aufruf ggf. wiederherstellen.
                     // VendorRec.SetPostingGroups();
-                    if SellWatchVendorInfo.CurrencyCode <> 'EUR' then
-                        VendorRec."Currency Code" := SellWatchVendorInfo.CurrencyCode;
-                    if SellWatchVendorInfo."Offer Type" = 'commission' then
+                    if SellWatchVendorInfo."CXW CurrencyCode" <> 'EUR' then
+                        VendorRec."Currency Code" := SellWatchVendorInfo."CXW CurrencyCode";
+                    if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
                         VendorRec."Payment Method Code" := 'C2C'
                     else
                         VendorRec."Payment Method Code" := 'RG';
@@ -42,10 +42,8 @@ codeunit 51002 "SellWatch Mgt"
 
                     VendorBank.Init();
                     VendorBank."Vendor No." := VendorRec."No.";
-                    VendorBank.Code := CopyStr(SellWatchVendorInfo.IBAN, StrLen(SellWatchVendorInfo.IBAN) - 3, 4) + ' ' + SellWatchVendorInfo.CurrencyCode;
-                    VendorBank.IBAN := SellWatchVendorInfo.IBAN;
-                    // TODO: Objekt Feld "akq IBAN / SWIFT approved" nicht Teil des Standard-Vendor-Bank-Account. Herkunft der Erweiterung nicht mitgeliefert - manuell pruefen.
-                    // VendorBank."akq IBAN / SWIFT approved" := true;
+                    VendorBank.Code := CopyStr(SellWatchVendorInfo."CXW IBAN", StrLen(SellWatchVendorInfo."CXW IBAN") - 3, 4) + ' ' + SellWatchVendorInfo."CXW CurrencyCode";
+                    VendorBank.IBAN := SellWatchVendorInfo."CXW IBAN";
                     VendorBank.Insert(true);
                 end;
                 CreatePurchaseOrder();
@@ -54,22 +52,22 @@ codeunit 51002 "SellWatch Mgt"
 
     local procedure CreatePurchaseOrder()
     begin
-        if (SellWatchVendorInfo."PO Number" = '') or (SellWatchVendorInfo."PO Number" = '0') then begin
+        if (SellWatchVendorInfo."CXW PO Number" = '') or (SellWatchVendorInfo."CXW PO Number" = '0') then begin
             PHRec.Init();
             PHRec."No." := '';
             PHRec."Document Type" := PHRec."Document Type"::Order;
             PHRec.Insert(true);
             PHRec.Validate("Buy-from Vendor No.", VendorRec."No.");
-            PHRec."Vendor Order No." := SellWatchVendorInfo.SRid;
-            if SellWatchVendorInfo.BillToName <> '' then begin
-                PHRec."Pay-to Name" := SellWatchVendorInfo.BillToName;
-                PHRec."Pay-to Address" := SellWatchVendorInfo.BillToAddress;
-                PHRec."Pay-to City" := SellWatchVendorInfo.BillToCity;
-                PHRec."Pay-to Post Code" := SellWatchVendorInfo.BillToPostCode;
-                PHRec."Pay-to Country/Region Code" := SellWatchVendorInfo.BillToCountryCode;
-                PHRec."Pay-to County" := SellWatchVendorInfo.BillToCounty;
+            PHRec."Vendor Order No." := SellWatchVendorInfo."CXW SRid";
+            if SellWatchVendorInfo."CXW BillToName" <> '' then begin
+                PHRec."Pay-to Name" := SellWatchVendorInfo."CXW BillToName";
+                PHRec."Pay-to Address" := SellWatchVendorInfo."CXW BillToAddress";
+                PHRec."Pay-to City" := SellWatchVendorInfo."CXW BillToCity";
+                PHRec."Pay-to Post Code" := SellWatchVendorInfo."CXW BillToPostCode";
+                PHRec."Pay-to Country/Region Code" := SellWatchVendorInfo."CXW BillToCountryCode";
+                PHRec."Pay-to County" := SellWatchVendorInfo."CXW BillToCounty";
             end;
-            if SellWatchVendorInfo."Offer Type" = 'commission' then
+            if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
                 PHRec."Payment Method Code" := 'C2C'
             else
                 PHRec."Payment Method Code" := 'RG';
@@ -80,30 +78,30 @@ codeunit 51002 "SellWatch Mgt"
             PLRec."Document Type" := PHRec."Document Type";
             PLRec."Line No." := 10000;
             PLRec.Validate(Type, PLRec.Type::Item);
-            if SellWatchVendorInfo."Offer Type" = 'commission' then begin
+            if SellWatchVendorInfo."CXW Offer Type" = 'commission' then begin
                 PLRec.Validate("No.", 'C2C-SW');
                 PLRec."Variant Code" := 'C2C-SW';
             end;
-            if SellWatchVendorInfo."Offer Type" = 'direct' then begin
+            if SellWatchVendorInfo."CXW Offer Type" = 'direct' then begin
                 PLRec.Validate("No.", 'CPST-SW');
                 PLRec."Variant Code" := 'CPST-SW';
             end;
-            if SellWatchVendorInfo."Offer Type" = 'exchange' then begin
+            if SellWatchVendorInfo."CXW Offer Type" = 'exchange' then begin
                 PLRec.Validate("No.", 'TI-SW');
                 PLRec."Variant Code" := 'TI-SW';
             end;
 
             PLRec.Validate(Quantity, 1);
-            PLRec."Used good" := true;
-            PLRec.Amount := SellWatchVendorInfo."Final Offer Price";
-            PLRec.Validate("Direct Unit Cost", SellWatchVendorInfo."Final Offer Price");
+            PLRec."CXW Used good" := true;
+            PLRec.Amount := SellWatchVendorInfo."CXW Final Offer Price";
+            PLRec.Validate("Direct Unit Cost", SellWatchVendorInfo."CXW Final Offer Price");
             PLRec.Insert();
 
             ReleasePurchDoc.PerformManualRelease(PHRec);
 
-            SellWatchVendorInfo."PO Number" := PHRec."No.";
-            SellWatchVendorInfo.Created := true;
-            SellWatchVendorInfo.VendorNo := VendorRec."No.";
+            SellWatchVendorInfo."CXW PO Number" := PHRec."No.";
+            SellWatchVendorInfo."CXW Created" := true;
+            SellWatchVendorInfo."CXW VendorNo" := VendorRec."No.";
             SellWatchVendorInfo.Modify();
 
             if GuiAllowed() then
@@ -114,23 +112,23 @@ codeunit 51002 "SellWatch Mgt"
     local procedure CreatePurchaseOrderinBV()
     begin
         SellWatchVendorInfo.Reset();
-        SellWatchVendorInfo.SetRange(CreatePOinBV, true);
-        SellWatchVendorInfo.SetRange("PO Number", '');
+        SellWatchVendorInfo.SetRange("CXW CreatePOinBV", true);
+        SellWatchVendorInfo.SetRange("CXW PO Number", '');
         if SellWatchVendorInfo.FindSet() then
             repeat
-                if SellWatchVendorInfo.VendorNo <> '' then
-                    VendorRec.Get(SellWatchVendorInfo.VendorNo);
+                if SellWatchVendorInfo."CXW VendorNo" <> '' then
+                    VendorRec.Get(SellWatchVendorInfo."CXW VendorNo");
                 CreatePurchaseOrder();
             until SellWatchVendorInfo.Next() = 0;
     end;
 
     local procedure CreatePurchaseOrderinGmBH()
     begin
-        if (SellWatchVendorInfo."Offer Type" = 'commission') or (SellWatchVendorInfo."Offer Type" = 'exchange') then
+        if (SellWatchVendorInfo."CXW Offer Type" = 'commission') or (SellWatchVendorInfo."CXW Offer Type" = 'exchange') then
             CreatePurchaseOrder()
         else begin
-            SellWatchVendorInfo.CreatePOinBV := true;
-            SellWatchVendorInfo.VendorNo := VendorRec."No.";
+            SellWatchVendorInfo."CXW CreatePOinBV" := true;
+            SellWatchVendorInfo."CXW VendorNo" := VendorRec."No.";
             SellWatchVendorInfo.Modify();
         end;
     end;
@@ -146,13 +144,13 @@ codeunit 51002 "SellWatch Mgt"
     begin
         OrderJObject.Add('SRid', PurchaseHeader."Vendor Order No.");
         OrderJObject.Add('purchase_order', PurchaseHeader."No.");
-        if PurchaseHeader."Tracking Number" <> '' then
-            OrderJObject.Add('tracking_number', PurchaseHeader."Tracking Number");
+        if PurchaseHeader."CXW Tracking Number" <> '' then
+            OrderJObject.Add('tracking_number', PurchaseHeader."CXW Tracking Number");
         OrderJObject.WriteTo(JsonText);
         exit(JsonText);
     end;
 
-    procedure CreateSourceFileOrderStatusSE(SellWatchInfo: Record "SellWatch Vendor Info"; Status: Enum "SW Order Status"): Text
+    procedure CreateSourceFileOrderStatusSE(SellWatchInfo: Record "CXW SellWatch Vendor Info"; Status: Enum "CXW SW Order Status"): Text
     var
         PurLineArchive: Record "Purchase Line Archive";
         OrderJObject: JsonObject;
@@ -161,29 +159,29 @@ codeunit 51002 "SellWatch Mgt"
         FirstName: Text;
         LastName: Text;
     begin
-        OrderJObject.Add('SRid', SellWatchInfo.SRid);
+        OrderJObject.Add('SRid', SellWatchInfo."CXW SRid");
         OrderJObject.Add('status', Format(Status));
-        OrderJObject.Add('email', SellWatchInfo.Email);
+        OrderJObject.Add('email', SellWatchInfo."CXW Email");
 
-        Position := StrPos(SellWatchInfo."Vendor Name", ' ');
+        Position := StrPos(SellWatchInfo."CXW Vendor Name", ' ');
         if Position > 0 then begin
-            FirstName := DelStr(SellWatchInfo."Vendor Name", Position, StrLen(SellWatchInfo."Vendor Name") - Position);
-            LastName := DelStr(SellWatchInfo."Vendor Name", 1, Position - 1);
+            FirstName := DelStr(SellWatchInfo."CXW Vendor Name", Position, StrLen(SellWatchInfo."CXW Vendor Name") - Position);
+            LastName := DelStr(SellWatchInfo."CXW Vendor Name", 1, Position - 1);
         end;
         OrderJObject.Add('firstName', FirstName);
         OrderJObject.Add('lastName', LastName);
-        OrderJObject.Add('gender', SellWatchInfo.Gender);
-        OrderJObject.Add('language', SellWatchInfo.LanguageCode);
-        OrderJObject.Add('watchBrand', SellWatchInfo.Brand);
-        OrderJObject.Add('watchModel', SellWatchInfo.Model);
-        OrderJObject.Add('watchReference', SellWatchInfo.Reference);
+        OrderJObject.Add('gender', SellWatchInfo."CXW Gender");
+        OrderJObject.Add('language', SellWatchInfo."CXW LanguageCode");
+        OrderJObject.Add('watchBrand', SellWatchInfo."CXW Brand");
+        OrderJObject.Add('watchModel', SellWatchInfo."CXW Model");
+        OrderJObject.Add('watchReference', SellWatchInfo."CXW Reference");
 
-        WOA.SetRange("PO number", SellWatchInfo."PO Number");
+        WOA.SetRange("CXW PO number", SellWatchInfo."CXW PO Number");
         if WOA.FindFirst() then;
-        OrderJObject.Add('link', WOA.URL);
+        OrderJObject.Add('link', WOA."CXW URL");
 
         PurLineArchive.SetRange("Document Type", PurLineArchive."Document Type"::Order);
-        PurLineArchive.SetRange("Document No.", SellWatchInfo."PO Number");
+        PurLineArchive.SetRange("Document No.", SellWatchInfo."CXW PO Number");
         PurLineArchive.SetRange("Line No.", 10000);
         if PurLineArchive.FindLast() then;
 
@@ -200,11 +198,11 @@ codeunit 51002 "SellWatch Mgt"
 
     var
         VendorRec: Record Vendor;
-        SellWatchVendorInfo: Record "SellWatch Vendor Info";
+        SellWatchVendorInfo: Record "CXW SellWatch Vendor Info";
         PHRec: Record "Purchase Header";
         PLRec: Record "Purchase Line";
         VendorBank: Record "Vendor Bank Account";
         ReleasePurchDoc: Codeunit "Release Purchase Document";
-        WOA: Record "Watch Online Approval";
+        WOA: Record "CXW Watch Online Approval";
         VendorAndPOCreatedMsg: Label 'Vendor and PO created';
 }

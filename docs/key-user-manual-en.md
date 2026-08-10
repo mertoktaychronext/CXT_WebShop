@@ -94,7 +94,7 @@ Access is controlled through two separate permission sets, which still need to b
 | Permission Set | Covers |
 |---|---|
 | `SLChronWSAll` | All sales price management objects |
-| `SWChronWSAll` | All SellWatch purchase integration objects (SellWatch Vendor Info, Watch Online Approval, SW Http Call Log, SellWatch-Overview, SellWatch info) |
+| `CXW SWChronWSAll` | All SellWatch purchase integration objects (SellWatch Vendor Info, Watch Online Approval, SW Http Call Log, SellWatch-Overview, SellWatch info) |
 
 ## Troubleshooting
 
@@ -102,7 +102,7 @@ Access is controlled through two separate permission sets, which still need to b
 |---|---|
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
 | "Add all Currencies" produces no line for a specific currency | Check that "Sales Price Activated" is enabled for that currency on the "Currencies" page. |
-| A user cannot open the extension's pages | Check whether the user has been assigned the right permission set ("SLChronWSAll" for price management, "SWChronWSAll" for SellWatch). |
+| A user cannot open the extension's pages | Check whether the user has been assigned the right permission set ("SLChronWSAll" for price management, "CXW SWChronWSAll" for SellWatch). |
 | A price isn't calculated with margin X% despite correct input | The category-based non-stock price calculation is not currently wired into the live flow — escalate to the development team if this feature is needed. |
 | "Upload Sales Price" reports that no API interface is configured, or aborts | Check on the base settings that "Price Export Active" is enabled and an "API Interface Code" is selected, and that the corresponding interface under "API Interface Setup" is active and fully configured (Endpoint URL, API Key if required). |
 | Individual price lines are left with "Export Status" = "Error" after "Upload Sales Price" | Other lines in the same run are still processed. Check the affected line for invalid values (e.g. a currency code that doesn't exist) and trigger the upload for that line again. |

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en-US" target-language="de-DE" original="CHX.Webshop.g.xlf">
     <body>
@@ -15,275 +15,443 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension SLCurrency - Field Sales Price Activated - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SellWatch Vendor Info</source>
           <target>SellWatch-Lieferanteninfo</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3168444338 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 2133315502 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Address</source>
           <target>Adresse</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Address - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Address - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2306852000 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3995098652 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Address 2</source>
           <target>Adresse 2</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Address 2 - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Address 2 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2685439803 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3559131503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bank Name</source>
           <target>Bankname</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Bank Name - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Bank Name - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1621335372 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1512468464 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>BIC</source>
           <target>BIC</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BIC - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BIC - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3816729986 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 2985667390 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bill-to Address</source>
           <target>Rechnungsadresse</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BillToAddress - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BillToAddress - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 666555521 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3146358237 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bill-to City</source>
           <target>Rechnungsort</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BillToCity - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BillToCity - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2753059631 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 658770059 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bill-to Country/Region Code</source>
           <target>Land-/Regionscode (Rechnungsadresse)</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BillToCountryCode - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BillToCountryCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3110091774 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 907229282 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bill-to County</source>
           <target>Region (Rechnungsadresse)</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BillToCounty - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BillToCounty - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1020621009 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3800310701 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bill-to Name</source>
           <target>Rechnungsname</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BillToName - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BillToName - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2301961287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1515904387 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Bill-to Post Code</source>
           <target>PLZ (Rechnungsadresse)</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field BillToPostCode - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW BillToPostCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3661565656 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1054792580 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Box Available</source>
           <target>Box vorhanden</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Box Available - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Box Available - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3011597373 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3254682113 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Brand</source>
           <target>Marke</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Brand - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Brand - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 714791889 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1310207469 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>City</source>
           <target>Ort</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field City - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW City - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2515948110 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1078783778 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Construction Year</source>
           <target>Baujahr</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Construction Year - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Construction Year - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3993128796 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3129954640 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Contact</source>
           <target>Kontakt</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Contact - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Contact - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3643848063 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1253146267 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Country/Region Code</source>
           <target>Land-/Regionscode</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field CountryCode - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW CountryCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 499448942 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 2186907794 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>County</source>
           <target>Region</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field County - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW County - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1249475212 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3831312256 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Created</source>
           <target>Erstellt</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Created - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Created - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1540491876 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 624763752 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create PO in BV</source>
           <target>Bestellung in BV erstellen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field CreatePOinBV - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW CreatePOinBV - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 567887726 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4038998898 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Currency Code</source>
           <target>Währungscode</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field CurrencyCode - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW CurrencyCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 469576046 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3198014738 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>CXT Sales Price</source>
           <target>CXT-Verkaufspreis</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field CXTSalesPrice - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW CXTSalesPrice - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1285973296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3093201436 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Email</source>
           <target>E-Mail</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Email - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Email - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 329134311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4158875555 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Entry No</source>
           <target>Lfd. Nr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Entry No - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Entry No - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3672612651 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3662098927 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Final Offer Price</source>
           <target>Endgültiger Angebotspreis</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Final Offer Price - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Final Offer Price - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2303302321 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3353708157 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Gender</source>
           <target>Geschlecht</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Gender - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Gender - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1176583840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 652904188 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>IBAN</source>
           <target>IBAN</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field IBAN - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW IBAN - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1859002777 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4086195717 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Language Code</source>
           <target>Sprachcode</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field LanguageCode - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW LanguageCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1695122201 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 244065445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Model</source>
           <target>Modell</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Model - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Model - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 966287263 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 2147136795 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Name 2</source>
           <target>Name 2</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Name 2 - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Name 2 - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3103129455 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1455299867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Nuvei Account Code</source>
           <target>Nuvei-Kontocode</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field NuveiAccountCode - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW NuveiAccountCode - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3915920124 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4180890352 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Offer Type</source>
           <target>Angebotsart</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Offer Type - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Offer Type - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 851511385 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3131156965 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Paper Available</source>
           <target>Papiere vorhanden</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Paper Available - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Paper Available - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3080177079 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 914734563 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Phone No.</source>
           <target>Telefonnr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field PhoneNo - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW PhoneNo - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2192984212 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3051431784 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Pickup Date</source>
           <target>Abholdatum</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field PickupDate - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW PickupDate - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1183315192 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1673360740 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>PO Number</source>
           <target>Bestellnummer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field PO Number - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW PO Number - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3660300303 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 1633062859 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Zip</source>
           <target>PLZ</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Post Code - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Post Code - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1221660829 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 749414337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reference</source>
           <target>Referenz</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Reference - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Reference - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1247743551 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3427931627 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SKU</source>
           <target>SKU</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field SKU - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW SKU - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3241232488 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 2330596756 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SRid</source>
           <target>SRid</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field SRid - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW SRid - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3720347548 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4269508272 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Taxation</source>
           <target>Besteuerung</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Taxation - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Taxation - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 4246736440 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4256603076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Tracking Number</source>
           <target>Sendungsnummer</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Tracking Number - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Tracking Number - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 3119688693 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3635351337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Vendor Name</source>
           <target>Kreditorenname</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Vendor Name - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Vendor Name - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 1607295407 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 4217729867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Vendor No.</source>
           <target>Kreditorennr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field VendorNo - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW VendorNo - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2466416759 - Field 2357759718 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 350045171 - Field 3073936970 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Watch Condition</source>
           <target>Zustand der Uhr</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SellWatch Vendor Info - Field Watch Condition - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Watch Condition - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SW Http Call Log</source>
+          <target>SW HTTP-Aufrufprotokoll</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 1772626617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Call Date/Time</source>
+          <target>Datum/Uhrzeit des Aufrufs</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Call DateTime - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 3494290448 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Endpoint URL</source>
+          <target>Endpunkt-URL</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Endpoint URL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 4158875555 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No</source>
+          <target>Lfd. Nr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Entry No - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 2037051097 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error Message</source>
+          <target>Fehlermeldung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Error Message - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 2251784959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP Status Code</source>
+          <target>HTTP-Statuscode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW HTTP Status Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 3973888655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Request</source>
+          <target>Anfrage</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Request - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 2152685833 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Response</source>
+          <target>Antwort</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Response - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 3345377320 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Entry No</source>
+          <target>Quell-Lfd.-Nr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Source Entry No - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 688757706 - Field 2740588193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Success</source>
+          <target>Erfolgreich</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Success - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Watch Online Approval</source>
+          <target>Uhr-Online-Freigabe</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - NamedType 271667351" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non-success HTTP status: %1</source>
+          <target>Kein erfolgreicher HTTP-Status: %1</target>
+          <note from="Developer" annotates="general" priority="2">%1 = HTTP status code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - NamedType NonSuccessStatusErr</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - NamedType 2164495004" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No response received (network error).</source>
+          <target>Keine Antwort erhalten (Netzwerkfehler).</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - NamedType NoResponseReceivedErr</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 562575602 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>C2C</source>
+          <target>C2C</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW C2C - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 2098149991 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Check Online</source>
+          <target>Online prüfen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Check Online - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 4158875555 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No</source>
+          <target>Lfd. Nr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Entry No - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 4207994327 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>First Online Date</source>
+          <target>Erstes Online-Datum</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW First Online Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 2821549592 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inbound Posted Date</source>
+          <target>Buchungsdatum Wareneingang</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Inbound Posted date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 3975106972 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No</source>
+          <target>Artikelnr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Item No - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 1491721100 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Online Check Time</source>
+          <target>Uhrzeit Online-Prüfung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Online Check Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 2199991876 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>PO Number</source>
+          <target>Bestellnummer</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW PO number - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 29110826 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posted By</source>
+          <target>Gebucht von</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Posted By - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 927414971 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posting Time</source>
+          <target>Buchungszeit</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Posting Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 1371762194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remark</source>
+          <target>Bemerkung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Remark - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 2773132357 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Serial No.</source>
+          <target>Seriennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Serial No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 2330596756 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SRid</source>
+          <target>SRid</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW SRid - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 1625840529 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>URL</source>
+          <target>URL</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW URL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 655364415 - Field 329903938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Variantencode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Watch Online Approval - Field CXW Variant Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 4133394143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Interface Setup</source>
@@ -843,179 +1011,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table SL Sales Price Outbound File - Field TargetFile - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 1711783366 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>SW Http Call Log</source>
-          <target>SW HTTP-Aufrufprotokoll</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 3002122725 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Call Date/Time</source>
-          <target>Datum/Uhrzeit des Aufrufs</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Call DateTime - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 1259723980 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Endpoint URL</source>
-          <target>Endpunkt-URL</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Endpoint URL - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 329134311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Entry No</source>
-          <target>Lfd. Nr.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Entry No - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 2852966117 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Error Message</source>
-          <target>Fehlermeldung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Error Message - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 2750077739 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>HTTP Status Code</source>
-          <target>HTTP-Statuscode</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field HTTP Status Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 3351914939 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Request</source>
-          <target>Anfrage</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Request - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 2278520725 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Response</source>
-          <target>Antwort</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Response - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 2311926628 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Source Entry No</source>
-          <target>Quell-Lfd.-Nr.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Source Entry No - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1711783366 - Field 3878926381 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Success</source>
-          <target>Erfolgreich</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table SW Http Call Log - Field Success - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Watch Online Approval</source>
-          <target>Uhr-Online-Freigabe</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - NamedType 271667351" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Non-success HTTP status: %1</source>
-          <target>Kein erfolgreicher HTTP-Status: %1</target>
-          <note from="Developer" annotates="general" priority="2">%1 = HTTP status code</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - NamedType NonSuccessStatusErr</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - NamedType 2164495004" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No response received (network error).</source>
-          <target>Keine Antwort erhalten (Netzwerkfehler).</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - NamedType NoResponseReceivedErr</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 789841150 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>C2C</source>
-          <target>C2C</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field C2C - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 1474975907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Check Online</source>
-          <target>Online prüfen</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Check Online - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 329134311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Entry No</source>
-          <target>Lfd. Nr.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Entry No - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 1628131427 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>First Online Date</source>
-          <target>Erstes Online-Datum</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field First Online Date - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 652344820 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Inbound Posted Date</source>
-          <target>Buchungsdatum Wareneingang</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Inbound Posted date - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 3669815872 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Item No</source>
-          <target>Artikelnr.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Item No - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 2620933760 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Online Check Time</source>
-          <target>Uhrzeit Online-Prüfung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Online Check Time - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 3245026776 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>PO Number</source>
-          <target>Bestellnummer</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field PO number - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 1964822230 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Posted By</source>
-          <target>Gebucht von</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Posted By - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 1152644207 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Posting Time</source>
-          <target>Buchungszeit</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Posting Time - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 2969163710 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Remark</source>
-          <target>Bemerkung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Remark - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 47037625 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Serial No.</source>
-          <target>Seriennr.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Serial No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 3241232488 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>SRid</source>
-          <target>SRid</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field SRid - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 3003898253 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>URL</source>
-          <target>URL</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field URL - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 1118146123 - Field 3450651614 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Variant Code</source>
-          <target>Variantencode</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table Watch Online Approval - Field Variant Code - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Codeunit 3424505731 - NamedType 2564218875" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Codeunit 3674014615 - NamedType 2564218875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Vendor and PO created</source>
           <target>Kreditor und Bestellung erstellt</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit SellWatch Mgt - NamedType VendorAndPOCreatedMsg</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType VendorAndPOCreatedMsg</note>
         </trans-unit>
         <trans-unit id="Codeunit 1368247394 - NamedType 738529365" size-unit="char" translate="yes" xml:space="preserve">
           <source>API interface %1 (selected on the general sales price setup) no longer exists.</source>
@@ -1047,251 +1047,323 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit SL Import Sales Prices - NamedType UnexpectedColumnErr</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SellWatch info</source>
           <target>SellWatch-Info</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 3661565656 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 1054792580 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the original box for the watch is available.</source>
           <target>Gibt an, ob die Originalbox der Uhr vorhanden ist.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Box Available - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Box Available - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 3011597373 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 3254682113 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the brand of the offered watch.</source>
           <target>Gibt die Marke der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Brand - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Brand - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 2515948110 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 1078783778 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the construction year of the offered watch.</source>
           <target>Gibt das Baujahr der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Construction Year - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Construction Year - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 1695122201 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 244065445 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the model of the offered watch.</source>
           <target>Gibt das Modell der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Model - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Model - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 3915920124 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 4180890352 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the type of offer (for example commission, direct, or exchange).</source>
           <target>Gibt die Angebotsart an (z. B. Kommission, Direktankauf oder Tausch).</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Offer Type - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Offer Type - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 851511385 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 3131156965 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the papers for the watch are available.</source>
           <target>Gibt an, ob die Papiere der Uhr vorhanden sind.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Paper Available - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Paper Available - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 2192984212 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 3051431784 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the date the watch is scheduled to be picked up from the vendor.</source>
           <target>Gibt das geplante Abholdatum der Uhr beim Verkäufer an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control PickupDate - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW PickupDate - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 1221660829 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 749414337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the reference number of the offered watch.</source>
           <target>Gibt die Referenznummer der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Reference - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Reference - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 1247743551 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 3427931627 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the SKU of the offered watch.</source>
           <target>Gibt die SKU der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control SKU - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW SKU - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3544973939 - Control 2357759718 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 17306311 - Control 3073936970 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the condition of the offered watch.</source>
           <target>Gibt den Zustand der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch info - Control Watch Condition - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch info - Control CXW Watch Condition - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SellWatch-Overview</source>
           <target>SellWatch-Übersicht</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3168444338 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 2133315502 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the vendor's address.</source>
           <target>Gibt die Adresse des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Address - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Address - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 2306852000 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3995098652 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the second line of the vendor's address.</source>
           <target>Gibt die zweite Adresszeile des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Address 2 - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Address 2 - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3661565656 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 1054792580 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the original box for the watch is available.</source>
           <target>Gibt an, ob die Originalbox der Uhr vorhanden ist.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Box Available - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Box Available - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3011597373 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3254682113 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the brand of the offered watch.</source>
           <target>Gibt die Marke der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Brand - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Brand - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 714791889 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 1310207469 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the vendor's city.</source>
           <target>Gibt den Ort des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control City - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW City - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 2515948110 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 1078783778 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the construction year of the offered watch.</source>
           <target>Gibt das Baujahr der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Construction Year - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Construction Year - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3643848063 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 1253146267 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the vendor's country/region code.</source>
           <target>Gibt den Land-/Regionscode des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control CountryCode - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW CountryCode - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 567887726 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 4038998898 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the currency of the final offer price.</source>
           <target>Gibt die Währung des endgültigen Angebotspreises an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control CurrencyCode - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW CurrencyCode - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 469576046 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3198014738 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the sales price the watch is planned to be sold for.</source>
           <target>Gibt den geplanten Verkaufspreis der Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control CXTSalesPrice - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW CXTSalesPrice - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 1285973296 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3093201436 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the vendor's email address.</source>
           <target>Gibt die E-Mail-Adresse des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Email - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Email - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 329134311 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 4158875555 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the unique entry number of this SellWatch vendor info record.</source>
           <target>Gibt die eindeutige laufende Nummer dieses SellWatch-Datensatzes an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Entry No - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Entry No - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3672612651 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3662098927 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the final price agreed with the vendor.</source>
           <target>Gibt den mit dem Verkäufer vereinbarten Endpreis an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Final Offer Price - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Final Offer Price - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 1695122201 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 244065445 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the model of the offered watch.</source>
           <target>Gibt das Modell der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Model - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Model - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3915920124 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 4180890352 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the type of offer (for example commission, direct, or exchange).</source>
           <target>Gibt die Angebotsart an (z. B. Kommission, Direktankauf oder Tausch).</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Offer Type - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Offer Type - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 851511385 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3131156965 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the papers for the watch are available.</source>
           <target>Gibt an, ob die Papiere der Uhr vorhanden sind.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Paper Available - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Paper Available - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3080177079 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 914734563 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the vendor's phone number.</source>
           <target>Gibt die Telefonnummer des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control PhoneNo - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW PhoneNo - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 2192984212 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3051431784 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the date the watch is scheduled to be picked up from the vendor.</source>
           <target>Gibt das geplante Abholdatum der Uhr beim Verkäufer an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control PickupDate - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW PickupDate - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 1183315192 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 1673360740 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the number of the purchase order created for this offer.</source>
           <target>Gibt die Nummer der für dieses Angebot erstellten Bestellung an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control PO Number - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW PO Number - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3660300303 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 1633062859 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the vendor's postal code.</source>
           <target>Gibt die Postleitzahl des Verkäufers an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Post Code - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Post Code - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 1221660829 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 749414337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the reference number of the offered watch.</source>
           <target>Gibt die Referenznummer der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Reference - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Reference - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 1247743551 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3427931627 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the SKU of the offered watch.</source>
           <target>Gibt die SKU der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control SKU - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW SKU - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3241232488 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 2330596756 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the SellWatch request ID this entry originated from.</source>
           <target>Gibt die SellWatch-Anfrage-ID an, aus der dieser Eintrag stammt.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control SRid - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW SRid - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3720347548 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 4269508272 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the taxation scheme applied to this offer.</source>
           <target>Gibt die für dieses Angebot verwendete Besteuerungsart an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Taxation - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Taxation - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 4246736440 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 4256603076 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the shipment tracking number of the related purchase order.</source>
           <target>Gibt die Sendungsnummer der zugehörigen Bestellung an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Tracking Number - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Tracking Number - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 3119688693 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3635351337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the name of the vendor selling the watch.</source>
           <target>Gibt den Namen des Verkäufers der Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Vendor Name - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Vendor Name - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 1607295407 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 4217729867 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the number of the vendor created for this offer.</source>
           <target>Gibt die Nummer des für dieses Angebot erstellten Kreditors an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control VendorNo - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW VendorNo - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Control 2357759718 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Control 3073936970 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the condition of the offered watch.</source>
           <target>Gibt den Zustand der angebotenen Uhr an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Control Watch Condition - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Watch Condition - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Action 127686680 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Action 127686680 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Open the purchase order created for this offer.</source>
           <target>Öffnet die für dieses Angebot erstellte Bestellung.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Action ShowDocument - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Action ShowDocument - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3359531587 - Action 127686680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 280635287 - Action 127686680 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Show Document</source>
           <target>Beleg anzeigen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SellWatch-Overview - Action ShowDocument - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Action ShowDocument - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SW Http Call Log</source>
+          <target>SW HTTP-Aufrufprotokoll</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 1772626617 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the HTTP call was made.</source>
+          <target>Gibt an, wann der HTTP-Aufruf erfolgte.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Call DateTime - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 3494290448 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the endpoint the request was sent to.</source>
+          <target>Gibt den Endpunkt an, an den die Anfrage gesendet wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Endpoint URL - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 4158875555 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the unique entry number of this log entry.</source>
+          <target>Gibt die eindeutige laufende Nummer dieses Protokolleintrags an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Entry No - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 2037051097 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the error message recorded for a failed call.</source>
+          <target>Gibt die für einen fehlgeschlagenen Aufruf erfasste Fehlermeldung an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Error Message - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 2251784959 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the HTTP status code returned by the endpoint, if a response was received.</source>
+          <target>Gibt den vom Endpunkt zurückgegebenen HTTP-Statuscode an, sofern eine Antwort empfangen wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW HTTP Status Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 3345377320 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the Watch Online Approval entry that triggered this call.</source>
+          <target>Gibt den Eintrag der Uhr-Online-Freigabe an, der diesen Aufruf ausgelöst hat.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Source Entry No - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Control 2740588193 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether the call completed successfully.</source>
+          <target>Gibt an, ob der Aufruf erfolgreich abgeschlossen wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Success - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Action 3219083399 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download the logged request as a .txt file.</source>
+          <target>Lädt die protokollierte Anfrage als .txt-Datei herunter.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadRequest - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Action 3219083399 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download Request</source>
+          <target>Anfrage herunterladen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadRequest - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Action 1029354209 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download the logged response as a .txt file.</source>
+          <target>Lädt die protokollierte Antwort als .txt-Datei herunter.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadResponse - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 688757706 - Action 1029354209 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Download Response</source>
+          <target>Antwort herunterladen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadResponse - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 4133394143 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Interface Setup</source>
@@ -1695,78 +1767,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page SL Sales Price Checking List - Action Validate - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 1711783366 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>SW Http Call Log</source>
-          <target>SW HTTP-Aufrufprotokoll</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 3002122725 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies when the HTTP call was made.</source>
-          <target>Gibt an, wann der HTTP-Aufruf erfolgte.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control Call DateTime - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 1259723980 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the endpoint the request was sent to.</source>
-          <target>Gibt den Endpunkt an, an den die Anfrage gesendet wurde.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control Endpoint URL - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 329134311 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the unique entry number of this log entry.</source>
-          <target>Gibt die eindeutige laufende Nummer dieses Protokolleintrags an.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control Entry No - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 2852966117 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the error message recorded for a failed call.</source>
-          <target>Gibt die für einen fehlgeschlagenen Aufruf erfasste Fehlermeldung an.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control Error Message - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 2750077739 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the HTTP status code returned by the endpoint, if a response was received.</source>
-          <target>Gibt den vom Endpunkt zurückgegebenen HTTP-Statuscode an, sofern eine Antwort empfangen wurde.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control HTTP Status Code - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 2311926628 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the Watch Online Approval entry that triggered this call.</source>
-          <target>Gibt den Eintrag der Uhr-Online-Freigabe an, der diesen Aufruf ausgelöst hat.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control Source Entry No - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Control 3878926381 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies whether the call completed successfully.</source>
-          <target>Gibt an, ob der Aufruf erfolgreich abgeschlossen wurde.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Control Success - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Action 3219083399 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Download the logged request as a .txt file.</source>
-          <target>Lädt die protokollierte Anfrage als .txt-Datei herunter.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Action DownloadRequest - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Action 3219083399 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Download Request</source>
-          <target>Anfrage herunterladen</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Action DownloadRequest - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Action 1029354209 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Download the logged response as a .txt file.</source>
-          <target>Lädt die protokollierte Antwort als .txt-Datei herunter.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Action DownloadResponse - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1711783366 - Action 1029354209 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Download Response</source>
-          <target>Antwort herunterladen</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page SW Http Call Log - Action DownloadResponse - Property Caption</note>
-        </trans-unit>
         <trans-unit id="XmlPort 1708629873 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Sales Price</source>
           <target>Verkaufspreis importieren</target>
@@ -1863,6 +1863,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension SL Sales Prices - Control Unit Price (LCY) incl. VAT - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="TableExtension 2401756272 - Field 4256603076 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2072992664">
+          <source>Tracking Number</source>
+          <target>Sendungsnummer</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchase Header - Field CXW Tracking Number - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 1191816759 - Field 2204279532 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1519909599">
+          <source>Used Good</source>
+          <target>Gebraucht</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchase Line - Field CXW Used good - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 277553233 - Field 1819850387 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Delivery Time (Days)</source>
           <target>Lieferzeit (Tage)</target>
@@ -1923,17 +1935,47 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension SL Sales Price - Field Unit Price (LCY) incl. VAT - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 2060998460 - Field 4246736440 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2072992664">
-          <source>Tracking Number</source>
-          <target>Sendungsnummer</target>
+        <trans-unit id="Enum 4148423094 - EnumValue 1371923692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source> </source>
+          <target> </target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SW Purchase Header - Field Tracking Number - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue   - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 2707039939 - Field 2065421840 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1519909599">
-          <source>Used Good</source>
-          <target>Gebraucht</target>
+        <trans-unit id="Enum 4148423094 - EnumValue 2554327257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>c2c payment confirmation</source>
+          <target>C2C-Zahlungsbestätigung</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension SW Purchase Line - Field Used good - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue c2c payment confirmation - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4148423094 - EnumValue 4028601071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CPST WE2 Posted</source>
+          <target>CPST WE2 gebucht</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue CPST WE2 Posted - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4148423094 - EnumValue 3648578858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Watch Arrived</source>
+          <target>Uhr angekommen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue Watch Arrived - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4148423094 - EnumValue 4181237776 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Watch is Online</source>
+          <target>Uhr ist online</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue Watch is Online - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4148423094 - EnumValue 3533887433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Watch is Reserved</source>
+          <target>Uhr ist reserviert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue Watch is Reserved - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 4148423094 - EnumValue 2250886113 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Watch is Sold</source>
+          <target>Uhr ist verkauft</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue Watch is Sold - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 2962880249 - EnumValue 811240172 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Key (Header)</source>
@@ -2035,7 +2077,6 @@
           <source> </source>
           <target>[NAB: REVIEW] </target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue   - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3144645257 - EnumValue 1562294763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -2055,48 +2096,6 @@
           <target>Vollbesteuerung</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum SL Taxation Type - EnumValue Full - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 1371923692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source> </source>
-          <target> </target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue   - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 2554327257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>c2c payment confirmation</source>
-          <target>C2C-Zahlungsbestätigung</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue c2c payment confirmation - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 4028601071 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>CPST WE2 Posted</source>
-          <target>CPST WE2 gebucht</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue CPST WE2 Posted - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 3648578858 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Watch Arrived</source>
-          <target>Uhr angekommen</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue Watch Arrived - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 4181237776 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Watch is Online</source>
-          <target>Uhr ist online</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue Watch is Online - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 3533887433 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Watch is Reserved</source>
-          <target>Uhr ist reserviert</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue Watch is Reserved - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Enum 3730402282 - EnumValue 2250886113 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Watch is Sold</source>
-          <target>Uhr ist verkauft</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum SW Order Status - EnumValue Watch is Sold - Property Caption</note>
         </trans-unit>
       </group>
     </body>

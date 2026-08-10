@@ -9,7 +9,7 @@ Diese Erweiterung f체r Microsoft Dynamics 365 Business Central deckt zwei unabh�
 
 ## Voraussetzungen
 
-- Zugang zu Business Central mit einer Rolle, die die Seite "Sales Price Checking List" bzw. "Verkaufspreispr체fungsliste" enth채lt (Berechtigungssatz `SLChronWSAll`) bzw. die Seite "SellWatch-Overview" (Berechtigungssatz `SWChronWSAll`).
+- Zugang zu Business Central mit einer Rolle, die die Seite "Sales Price Checking List" bzw. "Verkaufspreispr체fungsliste" enth채lt (Berechtigungssatz `SLChronWSAll`) bzw. die Seite "SellWatch-Overview" (Berechtigungssatz `CXW SWChronWSAll`).
 - Die Grundeinstellungen (Mindestmarge, Schwellenwerte) m체ssen von einem Key User bereits hinterlegt sein (siehe Key-User-Handbuch).
 - F체r "Upload Sales Price" muss der Preisexport von einem Key User aktiviert und eine API-Schnittstelle hinterlegt sein (siehe Key-User-Handbuch).
 - Eine vorbereitete CSV-Datei mit den neuen Preisen.
@@ -95,7 +95,3 @@ Der Preisexport ist nicht eingerichtet oder deaktiviert. Wenden Sie sich an eine
 
 **Eine SellWatch-Anfrage zeigt keine Bestellnummer.**
 Die Bestellung wurde f체r diese Anfrage noch nicht automatisiert angelegt.
-
-## Hilfe & Support
-
-[TODO: Kontaktdaten des internen Supports / Key Users erg채nzen]

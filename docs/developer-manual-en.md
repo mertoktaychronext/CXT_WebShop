@@ -6,7 +6,7 @@ This Business Central (AL) extension bundles two functionally separate areas, mi
 
 **Sales price management** ("SL" objects): CSV import into a staging table, business validation (margin, price swings), approval by a staff member, optionally expanding an approved price to all activated foreign currencies, and uploading approved prices to an external system. The "Upload Sales Price" action writes each approved price into the standard "Sales Price" table and a versioned "SL Sales Price Archive" entry before sending it to a configurable API interface. A second, independent component for file-based price import (not yet live) rounds out this area.
 
-**SellWatch purchase integration** ("SW" objects, added 2026-08-07): Processes incoming used-watch purchase requests from the SellWatch partner into vendors and purchase orders, reports processing status back to SellWatch as JSON, and checks via an external interface whether a purchased watch may go live online. Reuses the same generic external-interface infrastructure (Table 51007 "SL API Interface Setup") as the sales price management area.
+**SellWatch purchase integration** ("CXW" objects, added 2026-08-07, tracked as "SW"/"SellWatch" objects in the 51001-51010 ID range until 2026-08-10): Processes incoming used-watch purchase requests from the SellWatch partner into vendors and purchase orders, reports processing status back to SellWatch as JSON, and checks via an external interface whether a purchased watch may go live online. Reuses the same generic external-interface infrastructure (Table 51007 "SL API Interface Setup") as the sales price management area.
 
 ## Technical Stack
 
@@ -14,7 +14,7 @@ This Business Central (AL) extension bundles two functionally separate areas, mi
 |---|---|---|
 | Extension type | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 26.0.0.0 |
 | Runtime | AL Runtime | 17.0 |
-| Object ID range | Customer range | 51000–51049 |
+| Object ID range | Customer range | 51000–51049 ("SL" objects), 60300–60349 ("CXW" objects) |
 | Dependencies | – | none (`dependencies: []` in `app.json`) |
 | Publisher | Salini Life | – |
 | Extension ID | `5df32934-5708-418c-ba16-44b30feb51f4` | – |
@@ -22,15 +22,15 @@ This Business Central (AL) extension bundles two functionally separate areas, mi
 ## Project Structure
 
 ```
-app.json                          # Extension manifest, idRanges 51000-51049
+app.json                          # Extension manifest, idRanges 51000-51049, 60300-60349
 src/
-  Tables/                         # 10 tables (51000-51002, 51004-51010)
+  Tables/                         # 10 tables (51000-51002, 51004-51007, 60300-60302)
   TableExtensions/                # 5 extensions (Country/Region, Sales Price, Currency, Purchase Line, Purchase Header)
   PageExtensions/                 # 3 extensions (Countries/Regions, Sales Prices, Currencies)
   Pages/                          # 7 pages + 1 xmlport
-  Codeunits/                      # 3 codeunits (Export Gateway Sales Price, Import Sales Prices, SellWatch Mgt)
+  Codeunits/                      # 3 codeunits (Export Gateway Sales Price, Import Sales Prices, CXW SellWatch Mgt)
   Enums/                          # 6 enums
-  PermissionSets/                 # 2 permission sets (SLChronWSAll, SWChronWSAll)
+  PermissionSets/                 # 2 permission sets (SLChronWSAll, CXW SWChronWSAll)
 Translations/                     # .g.xlf (generated) + de-DE.xlf (maintained)
 openspec/
   specs/                          # durable capability specs (e.g. sales-price-currency-copy)
@@ -112,25 +112,25 @@ File (CSV) → Table 51005 "SL Sales Price Inbound File"
 
 ```
 External system (SellWatch, via a technical web service user holding the
-"SWChronWSAll" permission set) inserts records directly into
+"CXW SWChronWSAll" permission set) inserts records directly into
    ▼
-Table 51008 "SellWatch Vendor Info" (Created = false)
+Table 60300 "CXW SellWatch Vendor Info" (Created = false)
    │
-   │  Codeunit 51002 "SellWatch Mgt" (OnRun) — invocation/scheduling is
+   │  Codeunit 60305 "CXW SellWatch Mgt" (OnRun) — invocation/scheduling is
    │  outside this extension, see "Known Limitations"
    ▼
 ValidateAndCreateVendor
    ├─► creates a standard Vendor + Vendor Bank Account if none matches yet
    └─► CreatePurchaseOrder
           ├─► creates standard Purchase Header/Purchase Line, Line field
-          │      "Used good" (TableExtension 51003 "SW Purchase Line") set
+          │      "CXW Used good" (TableExtension 60303 "CXW SW Purchase Line") set
           ├─► ReleasePurchDoc.PerformManualRelease
-          └─► writes "PO Number"/"Created"/"VendorNo" back onto Table 51008
+          └─► writes "PO Number"/"Created"/"VendorNo" back onto Table 60300
 
-Page 51004 "SellWatch-Overview" (read-only) ◄── Table 51008
+Page 60307 "CXW SellWatch-Overview" (read-only) ◄── Table 60300
    │  Action "Show Document" → opens the Purchase Order
-   │  FlowField "Tracking Number" reads TableExtension 51004
-   │  "SW Purchase Header" (field "Tracking Number")
+   │  FlowField "CXW Tracking Number" reads TableExtension 60304
+   │  "CXW SW Purchase Header" (field "CXW Tracking Number")
 
 CreateSourceFilePurchaseRequest / CreateSourceFileOrderStatusSE (both public)
    → build the JSON payload for reporting back to SellWatch (the actual
@@ -138,7 +138,7 @@ CreateSourceFilePurchaseRequest / CreateSourceFileOrderStatusSE (both public)
       the price area — was removed as part of this migration, see
       "Known Limitations")
 
-Table 51009 "Watch Online Approval"
+Table 60301 "CXW Watch Online Approval"
    │  Field "Check Online" – OnValidate sets "First Online Date"
    ▼
 CreateEntryInexternalFile
@@ -159,9 +159,9 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 | Page 51001 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Calculates the non-stock price for lines within a price range. Currently not called from any active code path. |
 | Codeunit 51001 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Raised when the automated file import changes an existing sales price. Currently has no subscriber. |
 | Table 51007 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Stores/reads the API key for an interface in Isolated Storage (module scope) rather than in a plain table field. |
-| Codeunit 51002 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON document for the SellWatch report-back on a new order. |
-| Codeunit 51002 | `CreateSourceFileOrderStatusSE(SellWatchInfo: Record "SellWatch Vendor Info"; Status: Enum "SW Order Status"): Text` | Builds the JSON document for the SellWatch status report-back (watch arrived/online/sold, etc.). |
-| Table 51009 | `CreateEntryInexternalFile(var WOA: Record "Watch Online Approval")` | Calls the external SellWatch check API and sets "Check Online" based on the response. Aborts silently, with no error or logging, if the "WOA" API interface entry is missing/inactive or the HTTP call fails. |
+| Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON document for the SellWatch report-back on a new order. |
+| Codeunit 60305 | `CreateSourceFileOrderStatusSE(SellWatchInfo: Record "CXW SellWatch Vendor Info"; Status: Enum "CXW SW Order Status"): Text` | Builds the JSON document for the SellWatch status report-back (watch arrived/online/sold, etc.). |
+| Table 60301 | `CreateEntryInexternalFile(var WOA: Record "CXW Watch Online Approval")` | Calls the external SellWatch check API and sets "Check Online" based on the response. Aborts silently, with no error or logging, if the "WOA" API interface entry is missing/inactive or the HTTP call fails. |
 
 Full list of all objects and their function counts: see `docs/funktionsregister/gesamtuebersicht.md`.
 
@@ -176,16 +176,16 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 51005 SL Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 51006 SL Sales Price Import Protocol | Entry No. | Error log for the automated import |
 | 51007 SL API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface |
-| 51008 SellWatch Vendor Info | Entry No | Incoming SellWatch purchase requests (seller, watch, offer data); based on the naming of the `SWChronWSAll` permission set ("ChronWS" = Chronext Web Service), this is presumably populated directly by an external system via web service — the exact origin isn't documented in the code. |
-| 51009 Watch Online Approval | Entry No | Whether a purchased watch is approved for online sale, per item/variant |
-| 51010 SW Http Call Log | Entry No | Log of every SellWatch online-check HTTP call (request/response as Blobs, `X-API-KEY` redacted), viewable via Page 51006 |
+| 60300 CXW SellWatch Vendor Info | Entry No | Incoming SellWatch purchase requests (seller, watch, offer data); based on the naming of the `CXW SWChronWSAll` permission set ("ChronWS" = Chronext Web Service), this is presumably populated directly by an external system via web service — the exact origin isn't documented in the code. |
+| 60301 CXW Watch Online Approval | Entry No | Whether a purchased watch is approved for online sale, per item/variant |
+| 60302 CXW SW Http Call Log | Entry No | Log of every SellWatch online-check HTTP call (request/response as Blobs, `X-API-KEY` redacted), viewable via Page 60309 |
 
 ## Permission Sets
 
 | Permission Set | ID | Covers |
 |---|---|---|
 | `SLChronWSAll` (`src/PermissionSets/SLChronWSAll.permissionset.al`) | 51000 | Read/write access to all seven sales price tables plus execute rights for both sales price codeunits, Xmlport 51000, and the four sales price pages. |
-| `SWChronWSAll` (`src/PermissionSets/SWChronWSAll.permissionset.al`) | 51001 | Read/write access to Table 51008/51009/51010 plus execute rights for Codeunit 51002 and the three SellWatch pages (incl. Page 51006 SW Http Call Log). |
+| `CXW SWChronWSAll` (`src/PermissionSets/CXWSWChronWSAll.permissionset.al`) | 60310 | Read/write access to Table 60300/60301/60302 plus execute rights for Codeunit 60305 and the three SellWatch pages (incl. Page 60309 CXW SW Http Call Log). |
 
 Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"/"Country/Region"/"Purchase Line"/"Purchase Header"); the same base-table-access logic applies to the standard tables ("Sales Price", "Vendor", "Purchase Header/Line", etc.) the codeunits write to. Both sets still need to be actively assigned to a user group.
 
@@ -199,7 +199,7 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 
 ## Contributing / Conventions
 
-- All new objects get IDs in the **51000–51049** range (see `app.json`, `idRanges`), counted independently per object type.
+- All new objects get IDs in the **51000–51049** range ("SL" objects) or the **60300–60349** range ("CXW" objects) (see `app.json`, `idRanges`), counted independently per object type.
 - The code deliberately contains **no comments** (removed at the customer's explicit request) — business context and design decisions are documented here and in the function register instead. Please keep this style when making changes, and add context here rather than in the code.
 - Completed, functional changes are documented as an OpenSpec change (`openspec/changes/`, archived under `openspec/changes/archive/` once finished) and captured as a durable spec under `openspec/specs/`.
 - Translations: `.g.xlf` is generated by the compiler and must **not** be edited manually; maintain translations only in `Translations/CHX.Webshop.de-DE.xlf`.
@@ -211,8 +211,8 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 - **`Reason Code` as an enum with no true blank value**: the enum always has a default value (`CatMan`) — there is no "no reason given" state.
 - **The file-based import component (Codeunit 51001, Tables 51005–51006)** is fully implemented but not wired into any live process or scheduled anywhere (no job queue entry). `WriteSalesPrices`'s `SalesPrice.Get(...)` call now passes exactly the standard "Sales Price" table's 8 real primary-key segments (verified against the symbols in `.alpackages/Microsoft_Base Application_*.app`), with `''` for "Variant Code" — the previously-documented key mismatch here is resolved.
 - **No automated tests** exist.
-- **Codeunit 51002 "SellWatch Mgt" is not scheduled or wired in anywhere.** There's neither a job queue entry nor a page action that triggers `OnRun`/`ValidateAndCreateVendor`. Invocation currently has to happen manually (e.g. via the object designer) or through a job queue entry that still needs to be set up.
-- **The origin of records in Table 51008 "SellWatch Vendor Info" is undocumented.** This extension provides neither a page to create them manually nor an XMLport/API page. Presumably an external system writes to this table directly via standard BC web services (covered by the `SWChronWSAll` permission set).
-- **Deliberately not ported from the NAV source system** (see the `// TODO` comments in `Codeunit51002.SellWatchMgt.al`): the `Street` field and the `SetPostingGroups()` / `GetnewNoSeries()` procedures on the standard Vendor. The corresponding NAV source was never delivered; vendor numbering instead relies on the standard `Insert(true)` trigger and "Purchases & Payables Setup".
+- **Codeunit 60305 "CXW SellWatch Mgt" is not scheduled or wired in anywhere.** There's neither a job queue entry nor a page action that triggers `OnRun`/`ValidateAndCreateVendor`. Invocation currently has to happen manually (e.g. via the object designer) or through a job queue entry that still needs to be set up.
+- **The origin of records in Table 60300 "CXW SellWatch Vendor Info" is undocumented.** This extension provides neither a page to create them manually nor an XMLport/API page. Presumably an external system writes to this table directly via standard BC web services (covered by the `CXW SWChronWSAll` permission set).
+- **Deliberately not ported from the NAV source system** (see the `// TODO` comments in `Codeunit60305.CXWSellWatchMgt.al`): the `Street` field and the `SetPostingGroups()` / `GetnewNoSeries()` procedures on the standard Vendor. The corresponding NAV source was never delivered; vendor numbering instead relies on the standard `Insert(true)` trigger and "Purchases & Payables Setup".
 - **Former external file output removed**: the original NAV procedures `CreateExternalInterfaceFileOnPurchaseRequest`/`CreateExternalInterfaceFileOnOrderStatusSE` (which wrote the JSON built by `CreateSourceFilePurchaseRequest`/`CreateSourceFileOrderStatusSE` to an outbound-file object, analogous to Table 51004 in the price area) were removed outright, since the underlying legacy objects are no longer needed. Both JSON-builder functions themselves still exist (public) but currently have no caller.
-- **`CreateEntryInexternalFile` (Table 51009) now logs every call** (successful and failed) since the `sellwatch-http-error-logging` change, into `Table 51010 "SW Http Call Log"` (viewable via Page 51006, request/response each downloadable as .txt; the `X-API-KEY` header is redacted before being stored, never persisted in plain text) and additionally raises telemetry (`Session.LogMessage`, event ID `SW-0101`) for every failure. If the "WOA" interface itself isn't configured/active or has no API key, the check still aborts before the HTTP call is made, with no log entry or telemetry (see Key User Manual, Troubleshooting) — that's a deliberate configuration guard, not an HTTP failure.
+- **`CreateEntryInexternalFile` (Table 60301) now logs every call** (successful and failed) since the `sellwatch-http-error-logging` change, into `Table 60302 "CXW SW Http Call Log"` (viewable via Page 60309, request/response each downloadable as .txt; the `X-API-KEY` header is redacted before being stored, never persisted in plain text) and additionally raises telemetry (`Session.LogMessage`, event ID `SW-0101`) for every failure. If the "WOA" interface itself isn't configured/active or has no API key, the check still aborts before the HTTP call is made, with no log entry or telemetry (see Key User Manual, Troubleshooting) — that's a deliberate configuration guard, not an HTTP failure.

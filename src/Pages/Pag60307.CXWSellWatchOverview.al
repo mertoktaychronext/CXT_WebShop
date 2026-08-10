@@ -1,8 +1,8 @@
-page 51004 "SellWatch-Overview"
+page 60307 "CXW SellWatch-Overview"
 {
     Caption = 'SellWatch-Overview';
     PageType = List;
-    SourceTable = "SellWatch Vendor Info";
+    SourceTable = "CXW SellWatch Vendor Info";
     Editable = false;
     InsertAllowed = false;
     DeleteAllowed = false;
@@ -16,138 +16,138 @@ page 51004 "SellWatch-Overview"
         {
             repeater(Group)
             {
-                field("Entry No"; Rec."Entry No")
+                field("CXW Entry No"; Rec."CXW Entry No")
                 {
                     ApplicationArea = All;
                     Visible = false;
                     ToolTip = 'Specifies the unique entry number of this SellWatch vendor info record.';
                 }
-                field(SRid; Rec.SRid)
+                field("CXW SRid"; Rec."CXW SRid")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the SellWatch request ID this entry originated from.';
                 }
-                field("Vendor Name"; Rec."Vendor Name")
+                field("CXW Vendor Name"; Rec."CXW Vendor Name")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the name of the vendor selling the watch.';
                 }
-                field(Email; Rec.Email)
+                field("CXW Email"; Rec."CXW Email")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor''s email address.';
                 }
-                field(PhoneNo; Rec.PhoneNo)
+                field("CXW PhoneNo"; Rec."CXW PhoneNo")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor''s phone number.';
                 }
-                field(Address; Rec.Address)
+                field("CXW Address"; Rec."CXW Address")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor''s address.';
                 }
-                field("Address 2"; Rec."Address 2")
+                field("CXW Address 2"; Rec."CXW Address 2")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the second line of the vendor''s address.';
                 }
-                field(City; Rec.City)
+                field("CXW City"; Rec."CXW City")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor''s city.';
                 }
-                field("Post Code"; Rec."Post Code")
+                field("CXW Post Code"; Rec."CXW Post Code")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor''s postal code.';
                 }
-                field(CountryCode; Rec.CountryCode)
+                field("CXW CountryCode"; Rec."CXW CountryCode")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor''s country/region code.';
                 }
-                field(Brand; Rec.Brand)
+                field("CXW Brand"; Rec."CXW Brand")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the brand of the offered watch.';
                 }
-                field(PickupDate; Rec.PickupDate)
+                field("CXW PickupDate"; Rec."CXW PickupDate")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the date the watch is scheduled to be picked up from the vendor.';
                 }
-                field(Model; Rec.Model)
+                field("CXW Model"; Rec."CXW Model")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the model of the offered watch.';
                 }
-                field(Reference; Rec.Reference)
+                field("CXW Reference"; Rec."CXW Reference")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the reference number of the offered watch.';
                 }
-                field(SKU; Rec.SKU)
+                field("CXW SKU"; Rec."CXW SKU")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the SKU of the offered watch.';
                 }
-                field("Construction Year"; Rec."Construction Year")
+                field("CXW Construction Year"; Rec."CXW Construction Year")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the construction year of the offered watch.';
                 }
-                field("Watch Condition"; Rec."Watch Condition")
+                field("CXW Watch Condition"; Rec."CXW Watch Condition")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the condition of the offered watch.';
                 }
-                field("Paper Available"; Rec."Paper Available")
+                field("CXW Paper Available"; Rec."CXW Paper Available")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether the papers for the watch are available.';
                 }
-                field("Box Available"; Rec."Box Available")
+                field("CXW Box Available"; Rec."CXW Box Available")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether the original box for the watch is available.';
                 }
-                field("Offer Type"; Rec."Offer Type")
+                field("CXW Offer Type"; Rec."CXW Offer Type")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the type of offer (for example commission, direct, or exchange).';
                 }
-                field(Taxation; Rec.Taxation)
+                field("CXW Taxation"; Rec."CXW Taxation")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the taxation scheme applied to this offer.';
                 }
-                field("PO Number"; Rec."PO Number")
+                field("CXW PO Number"; Rec."CXW PO Number")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the number of the purchase order created for this offer.';
                 }
-                field(VendorNo; Rec.VendorNo)
+                field("CXW VendorNo"; Rec."CXW VendorNo")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the number of the vendor created for this offer.';
                 }
-                field("Tracking Number"; Rec."Tracking Number")
+                field("CXW Tracking Number"; Rec."CXW Tracking Number")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the shipment tracking number of the related purchase order.';
                 }
-                field("Final Offer Price"; Rec."Final Offer Price")
+                field("CXW Final Offer Price"; Rec."CXW Final Offer Price")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the final price agreed with the vendor.';
                 }
-                field(CurrencyCode; Rec.CurrencyCode)
+                field("CXW CurrencyCode"; Rec."CXW CurrencyCode")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the currency of the final offer price.';
                 }
-                field(CXTSalesPrice; Rec.CXTSalesPrice)
+                field("CXW CXTSalesPrice"; Rec."CXW CXTSalesPrice")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the sales price the watch is planned to be sold for.';
@@ -174,8 +174,8 @@ page 51004 "SellWatch-Overview"
                 var
                     PurchaseHeader: Record "Purchase Header";
                 begin
-                    if Rec."PO Number" <> '' then begin
-                        PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, Rec."PO Number");
+                    if Rec."CXW PO Number" <> '' then begin
+                        PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, Rec."CXW PO Number");
                         Page.RunModal(Page::"Purchase Order", PurchaseHeader);
                     end;
                 end;
@@ -185,6 +185,6 @@ page 51004 "SellWatch-Overview"
 
     trigger OnOpenPage()
     begin
-        Rec.SetFilter(SRid, '<>%1', '');
+        Rec.SetFilter("CXW SRid", '<>%1', '');
     end;
 }
