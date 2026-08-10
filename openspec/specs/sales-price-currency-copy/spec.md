@@ -1,53 +1,55 @@
 # sales-price-currency-copy
 
-Copying a validated "SL Sales Price Checking" line to all currencies used by Sales-Price-activated countries, with currency-converted prices (Page 51001 "SL Sales Price Checking List", action "Add all Currencies").
+Copying a validated "CXW Sales Price Checking" line to all currencies used by Sales-Price-activated countries, with currency-converted prices (Page 60322 "CXW Sales Price Checking List", action "Add all Currencies").
 
 ## Requirements
 
 ### Requirement: Currency-based line generation
-When the "Add all Currencies" action is executed on a source "SL Sales Price Checking" line, the system SHALL create exactly one new "SL Sales Price Checking" line per distinct currency used by `Country/Region` records with `"Sales Price Activated" = true`, excluding the source line's own currency. Each generated line SHALL have `"Country Code" = ''` (blank), signalling that the line applies to all countries sharing that currency rather than to one specific country. The system SHALL NOT create more than one line per distinct currency, even if multiple activated countries share that currency.
+When the "Add all Currencies" action is executed on a source "CXW Sales Price Checking" line, the system SHALL create exactly one new "CXW Sales Price Checking" line per distinct currency used by `Country/Region` records with `"CXW Sales Price Activated" = true`, excluding the source line's own currency. Each generated line SHALL have `"Country Code" = ''` (blank), signalling that the line applies to all countries sharing that currency rather than to one specific country. The system SHALL NOT create more than one line per distinct currency, even if multiple activated countries share that currency.
+
+> Note: `"Country Code"` here does not currently correspond to a field on "CXW Sales Price Checking" in the code — stale text left over from the (still open, not yet archived) `remove-country-code` change on this branch, unrelated to this rename.
 
 #### Scenario: Multiple countries share one currency
-- **WHEN** "Add all Currencies" runs and two or more Sales-Price-activated countries share the same `"Sales Price Currency Code"`
-- **THEN** the system creates exactly one new "SL Sales Price Checking" line for that currency, not one per country
+- **WHEN** "Add all Currencies" runs and two or more Sales-Price-activated countries share the same `"CXW Sales Price Currency Code"`
+- **THEN** the system creates exactly one new "CXW Sales Price Checking" line for that currency, not one per country
 
 #### Scenario: Country using the source line's own currency is excluded
-- **WHEN** an activated country's `"Sales Price Currency Code"` equals the source line's `"Currency Code"`
+- **WHEN** an activated country's `"CXW Sales Price Currency Code"` equals the source line's `"CXW Currency Code"`
 - **THEN** the system does not generate a duplicate line for that currency
 
 #### Scenario: Country with no assigned Sales Price Currency Code is skipped
-- **WHEN** an activated country has a blank `"Sales Price Currency Code"`
+- **WHEN** an activated country has a blank `"CXW Sales Price Currency Code"`
 - **THEN** the system does not generate a line for that country
 
 #### Scenario: Generated line price is currency-converted
 - **WHEN** the system creates a new line for a distinct currency and a `Currency Exchange Rate` entry exists for that currency
-- **THEN** "Stock Price", "Recom. Retail Price", and "Strike Price" on the new line are converted using the latest exchange rate, and "Exchange Rate Amount" / "Exchange Rate Date" are populated accordingly
+- **THEN** "CXW Stock Price", "CXW Recom. Retail Price", and "CXW Strike Price" on the new line are converted using the latest exchange rate, and "CXW Exchange Rate Amount" / "CXW Exchange Rate Date" are populated accordingly
 
 ### Requirement: Idempotency of currency expansion
-The system SHALL prevent "Add all Currencies" from generating duplicate lines when run more than once for the same source line. A source line SHALL be marked as processed once its currency expansion completes successfully, via a `"Currencies Processed"` indicator, and SHALL be excluded from further processing while that indicator is set.
+The system SHALL prevent "Add all Currencies" from generating duplicate lines when run more than once for the same source line. A source line SHALL be marked as processed once its currency expansion completes successfully, via a `"CXW Currencies Processed"` indicator, and SHALL be excluded from further processing while that indicator is set.
 
 #### Scenario: Re-running the action after a successful run
-- **WHEN** "Add all Currencies" has already completed successfully for a source line (`"Currencies Processed" = true`)
+- **WHEN** "Add all Currencies" has already completed successfully for a source line (`"CXW Currencies Processed" = true`)
 - **THEN** running the action again does not find that source line eligible for processing and raises "Nothing to process" if no other eligible source line exists
 
 #### Scenario: Source line marked processed after a successful run
 - **WHEN** "Add all Currencies" completes successfully for a source line
-- **THEN** the system sets `"Currencies Processed" = true` on that source line
+- **THEN** the system sets `"CXW Currencies Processed" = true` on that source line
 
 ### Requirement: Pre-condition guards preserved
-Before creating any lines, the system SHALL enforce the same pre-conditions previously enforced by "Add All Countries": the general sales price setup's `"Minimum Margin %"` and `"Stock Price Threshold %"` must be set; at least one "SL Sales Price Checking" line must exist; all "SL Sales Price Checking" lines must be `Validated = true` and `"Accept New Setup" = true`; and at least one unprocessed DE-based source line (`"Country Code" = 'DE'`, `"Currencies Processed" = false`) must exist.
+Before creating any lines, the system SHALL enforce the same pre-conditions previously enforced by "Add All Countries": the general sales price setup's `"Minimum Margin %"` and `"Stock Price Threshold %"` must be set; at least one "CXW Sales Price Checking" line must exist; all "CXW Sales Price Checking" lines must be `CXW Validated = true` and `"CXW Accept New Setup" = true`; and at least one unprocessed DE-based source line (`"Country Code" = 'DE'` — see stale-field note above, `"CXW Currencies Processed" = false`) must exist.
 
 #### Scenario: Missing setup fields
 - **WHEN** `"Minimum Margin %"` or `"Stock Price Threshold %"` is not set on the general sales price setup
 - **THEN** the action raises an error and creates no lines
 
 #### Scenario: Unvalidated or unaccepted lines present
-- **WHEN** any existing "SL Sales Price Checking" line has `Validated = false` or `"Accept New Setup" = false`
+- **WHEN** any existing "CXW Sales Price Checking" line has `CXW Validated = false` or `"CXW Accept New Setup" = false`
 - **THEN** the action raises "Nothing to process" and creates no lines
 
 ### Requirement: Field copy semantics preserved
-Each currency-based line generated by "Add all Currencies" SHALL copy `"Reason Code"`, `Comment`, `"Starting Date"`, `"Starting Time"`, `"Ending Date"`, `"Ending Time"`, `"Approved By"`, and `"Accept New Setup"` from the source line, and SHALL be inserted with `Validated = true`.
+Each currency-based line generated by "Add all Currencies" SHALL copy `"CXW Reason Code"`, `CXW Comment`, `"CXW Starting Date"`, `"CXW Starting Time"`, `"CXW Ending Date"`, `"CXW Ending Time"`, `"CXW Approved By"`, and `"CXW Accept New Setup"` from the source line, and SHALL be inserted with `CXW Validated = true`.
 
 #### Scenario: Copied fields match the source line
 - **WHEN** a new currency-based line is generated from a source line
-- **THEN** the new line's `"Reason Code"`, `Comment`, `"Starting Date"`, `"Starting Time"`, `"Ending Date"`, `"Ending Time"`, `"Approved By"`, and `"Accept New Setup"` equal the source line's values, and `Validated = true`
+- **THEN** the new line's `"CXW Reason Code"`, `CXW Comment`, `"CXW Starting Date"`, `"CXW Starting Time"`, `"CXW Ending Date"`, `"CXW Ending Time"`, `"CXW Approved By"`, and `"CXW Accept New Setup"` equal the source line's values, and `CXW Validated = true`

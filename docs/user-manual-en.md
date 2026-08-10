@@ -1,12 +1,15 @@
-# User Manual – SL Chronext Webshop (Sales Price Management)
+# User Manual – CHX.Webshop
 
 ## Introduction
 
-This extension for Microsoft Dynamics 365 Business Central helps you import, check, and approve new webshop sales prices before they go live. You import a price list (CSV file), the system automatically checks the minimum margin and unusual price swings, and a staff member then approves the prices.
+This extension for Microsoft Dynamics 365 Business Central covers two independent workflows:
+
+1. **Sales price management** (this chapter): You import a price list (CSV file), the system automatically checks the minimum margin and unusual price swings, and a staff member then approves the prices before they are transmitted to the webshop.
+2. **SellWatch purchase requests** (see the [dedicated chapter](#viewing-sellwatch-purchase-requests) below): A read-only overview of used-watch purchase requests coming in from the SellWatch partner.
 
 ## Prerequisites
 
-- Access to Business Central with a role that includes the "Sales Price Checking List" page.
+- Access to Business Central with a role that includes the "Sales Price Checking List" page (permission set `SLChronWSAll`) or the "SellWatch-Overview" page (permission set `CXW SWChronWSAll`).
 - The base settings (minimum margin, thresholds) must already be configured by a key user (see the Key User Manual).
 - For "Upload Sales Price", a key user must have enabled the price export and configured an API interface (see the Key User Manual).
 - A prepared CSV file with the new prices.
@@ -65,6 +68,14 @@ At the end you get a message showing how many of the approved lines were transmi
 
 Use the **"Sales Price Archive"** page to look up previously uploaded prices (read-only, no changes possible). Every version of an uploaded price line appears here as its own, sequentially numbered entry.
 
+## Viewing SellWatch purchase requests
+
+The **"SellWatch-Overview"** page lists all used-watch purchase requests received from the SellWatch partner — read-only, with seller, watch, and offer details, plus, once available, the related purchase order number and shipment tracking number.
+
+Use the **"Show Document"** action to open the purchase order created for a request.
+
+> New purchase requests, and the creation of the vendor and purchase order, happen automatically in the background; this page is view-only. If a request shows no order number, the order hasn't been created for it automatically yet.
+
 ## Frequently Asked Questions (FAQ)
 
 **"Nothing to process" when clicking Validate/Approve/Add all Currencies**
@@ -82,6 +93,5 @@ There are no approved (accepted) price lines. Run "Approve" first.
 **Message that the interface is not active or no API interface is configured**
 The price export has not been set up or is disabled. Contact a key user (see the Key User Manual).
 
-## Help & Support
-
-[TODO: add internal support / key user contact details]
+**A SellWatch request shows no order number.**
+The order hasn't been created for this request automatically yet.
