@@ -10,7 +10,7 @@
 
 ## Zusammenfassung
 
-Diese Extension bündelt zwei unabhängige Geschäftsprozesse für den Chronext-Webshop, die beide aus einem gewachsenen NAV-Altsystem migriert wurden und sich denselben registrierten ID-Bereich (60300–60349) teilen. **SellWatch** wickelt den Ankauf gebrauchter Uhren von Privatpersonen über eine externe Ankaufsplattform ab: eingehende Angebote werden automatisiert zu Lieferanten und Einkaufsaufträgen, der Freigabestatus für den Online-Verkauf einer Uhr wird über eine externe Schnittstelle abgefragt, und der Bestellstatus wird an die Plattform zurückgemeldet – jeder externe Aufruf wird protokolliert. **SalesPrice** bildet die Verwaltung und Freigabe von Verkaufspreisen für den Webshop ab: Preise werden per CSV importiert, fachlich geprüft (Mindestmarge, Preisschwankungen, Zeiträume), von einem Sachbearbeiter freigegeben, bei Bedarf automatisch auf weitere Fremdwährungen ausgeweitet und über eine konfigurierbare API-Schnittstelle an ein externes System übertragen; ein automatisierter, dateibasierter Import-Baustein existiert zusätzlich, ist aber noch nicht an eine Job-Queue angebunden. Beide Bereiche haben eigene Tabellen, eigene Permission Sets und keinerlei fachliche Berührungspunkte zueinander – sie teilen sich lediglich die Extension und den ID-Bereich.
+Diese Extension bündelt zwei unabhängige Geschäftsprozesse für den Chronext-Webshop, die beide aus einem gewachsenen NAV-Altsystem migriert wurden und sich denselben registrierten ID-Bereich (60300–60349) teilen. **SellWatch** wickelt den Ankauf gebrauchter Uhren von Privatpersonen über eine externe Ankaufsplattform ab: eingehende Angebote werden automatisiert zu Lieferanten und Einkaufsaufträgen, der Freigabestatus für den Online-Verkauf einer Uhr wird über eine externe Schnittstelle abgefragt, und der Bestellstatus wird an die Plattform zurückgemeldet – jeder externe Aufruf wird protokolliert. **SalesPrice** bildet die Verwaltung und Freigabe von Verkaufspreisen für den Webshop ab: Preise werden per CSV importiert, fachlich geprüft (Mindestmarge, Preisschwankungen, Zeiträume), von einem Sachbearbeiter freigegeben, bei Bedarf automatisch auf weitere Fremdwährungen ausgeweitet und über eine konfigurierbare API-Schnittstelle an ein externes System übertragen; ein automatisierter, dateibasierter Import-Baustein existiert zusätzlich, ist aber noch nicht an eine Job-Queue angebunden. Beide Bereiche haben eigene Tabellen und eigene Permission Sets und haben ansonsten keine fachlichen Berührungspunkte zueinander – sie teilen sich die Extension, den ID-Bereich sowie seit dem HTTP-Logging-Update vom 2026-08-10 das gemeinsame technische Protokoll „CXW Http Call Log" (Table 60302 / Page 60309) für sämtliche externen HTTP-Aufrufe.
 
 ---
 
@@ -27,7 +27,7 @@ Diese Extension bündelt zwei unabhängige Geschäftsprozesse für den Chronext-
 | Enums | 1 | 5 | 6 |
 | Permission Sets | 1 | 1 | 2 |
 | **Gesamt Objekte** | **11** | **26** | **37** |
-| **Gesamt Prozeduren/Trigger/Events/Actions** | **19** | **47** | **66** |
+| **Gesamt Prozeduren/Trigger/Events/Actions** | **19** | **49** | **68** |
 
 ---
 
@@ -57,9 +57,9 @@ Steuert und protokolliert, ob eine bereits eingegangene Uhr online zum Verkauf f
 
 > **Hinweis:** Der API-Schlüssel wird verschlüsselt im Isolated Storage abgelegt (kein Klartext-Secret mehr im Code); auch das Protokoll speichert den Schlüssel nur redigiert (`***redacted***`).
 
-### Tabelle: CXW SW Http Call Log (ID: 60302)
+### Tabelle: CXW Http Call Log (ID: 60302)
 
-Technisches Protokoll aller HTTP-Aufrufe an die externe SellWatch-Online-Freigabe-Schnittstelle inklusive Anfrage- und Antwortinhalt – dient der Fehlersuche bei gescheiterten Übertragungen.
+Technisches Protokoll aller HTTP-Aufrufe externer Schnittstellen inklusive Anfrage- und Antwortinhalt – dient der Fehlersuche bei gescheiterten Übertragungen. Seit dem HTTP-Logging-Update (2026-08-10) ein gemeinsames Protokoll für sowohl die SellWatch-Online-Freigabe-Schnittstelle als auch den Verkaufspreis-Export (Codeunit 60329); das Feld „CXW Source Table No." unterscheidet die auslösende Quelltabelle (60301 SellWatch bzw. 60314 SalesPrice).
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -118,9 +118,9 @@ Infokachel (Kartenteil) mit den wichtigsten Uhrendaten eines SellWatch-Angebots 
 |---|---|---|---|---|
 | – | – | – | – | Keine Prozeduren/Trigger vorhanden – reine Anzeige. |
 
-### Seite: CXW SW Http Call Log (ID: 60309)
+### Seite: CXW Http Call Log (ID: 60309)
 
-Technische Protokollliste aller HTTP-Aufrufe der SellWatch-Online-Freigabe-Schnittstelle; ermöglicht IT/Key User das Herunterladen von Anfrage und Antwort eines einzelnen Aufrufs zur Fehleranalyse. Über „Tell Me"/Listen auffindbar.
+Technische Protokollliste aller HTTP-Aufrufe – seit dem HTTP-Logging-Update sowohl der SellWatch-Online-Freigabe-Schnittstelle als auch des Verkaufspreis-Exports; ermöglicht IT/Key User das Herunterladen von Anfrage und Antwort eines einzelnen Aufrufs zur Fehleranalyse. Über „Tell Me"/Listen auffindbar.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -310,8 +310,10 @@ Manueller CSV-Import direkt in die Arbeitsliste (Page 60322, Action „Import CS
 | 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Verkaufspreis, Vergleichspreise, Grund und Anmerkung von der Preiszeile auf den Verkaufspreis-Datensatz. |
 | 3 | `ArchiveCheckingLine` | Prozedur | Internal | Ermittelt die nächste freie Versionsnummer für eine Preiszeile im Archiv und legt dort eine neue, vollständige Kopie der Preiszeile ab. |
 | 4 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis-Datensatz vollständig in eine JSON-Datei um, legt sie in der Ausgangsdatei-Tabelle ab und stößt den Versand an die externe Schnittstelle an. |
-| 5 | `SendToApiInterface` | Prozedur | Internal | Sendet die erzeugte JSON-Datei per HTTP an die in der Einrichtung hinterlegte externe Schnittstelle und vermerkt Erfolg oder Fehlermeldung am Dateieintrag. |
-| 6 | `AddFieldToJson` | Prozedur | Internal | Wandelt ein einzelnes Datenfeld eines Verkaufspreis-Datensatzes typgerecht (Zahl, Text, Ja/Nein …) in ein JSON-Element um. |
+| 5 | `SendToApiInterface` | Prozedur | Internal | Sendet die erzeugte JSON-Datei per HTTP an die in der Einrichtung hinterlegte externe Schnittstelle, vermerkt Erfolg oder Fehlermeldung am Dateieintrag und protokolliert jeden Aufruf (Erfolg wie Fehler) im gemeinsamen HTTP-Aufrufprotokoll (Table 60302). |
+| 6 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt eine für das Protokoll geeignete Textform der Anfrage, in der der geheime Authorization-Header durch einen Platzhalter ersetzt ist, damit er nicht im Klartext gespeichert wird. |
+| 7 | `LogHttpCall` | Prozedur | Internal | Legt zu jedem Aufruf der externen Schnittstelle einen Eintrag im gemeinsamen HTTP-Aufrufprotokoll (Table 60302) mit Anfrage, Antwort, Erfolg/Fehler und HTTP-Status an. |
+| 8 | `AddFieldToJson` | Prozedur | Internal | Wandelt ein einzelnes Datenfeld eines Verkaufspreis-Datensatzes typgerecht (Zahl, Text, Ja/Nein …) in ein JSON-Element um. |
 
 ### Codeunit: CXW Import Sales Prices (ID: 60330)
 

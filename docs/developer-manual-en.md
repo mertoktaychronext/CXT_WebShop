@@ -6,7 +6,9 @@ This Business Central (AL) extension covers webshop sales price management: CSV 
 
 > **Update 2026-08-10:** All 26 objects in this extension (previously IDs 51000–51007, "SL" prefix) were moved, as a pure rename/renumber, into the registered idRange block 60311–60336 ("CXW" prefix), as were all fields they define ("CXW "/"CXW" prefix). Business logic, behavior, and field captions are unchanged. Two identifiers additionally had to be shortened due to AL's 30-character limit: Table 60316 "CXW Price Import Protocol" (no "Sales" in the identifier) and the field "CXW Non Stock Price Thresh %" on Table 60311 (caption still "Non Stock Price Threshold %"). This manual has been updated accordingly.
 
-As a second, functionally independent component, the extension includes **SellWatch**: purchase requests for used watches coming in from the SellWatch partner are automatically turned into a vendor and a purchase order (Codeunit 60305 "CXW SellWatch Mgt"); a read-only overview page (Page 60307 "CXW SellWatch-Overview") shows seller, watch, and order data. A separate mechanism checks over HTTP whether a watch is visible in the SellWatch online shop (Table 60301 "CXW Watch Online Approval"), and logs every call including failure telemetry (Table 60302 "CXW SW Http Call Log", Page 60309). SellWatch and sales price management are functionally separate but share the same interface master data table "CXW API Interface Setup" (Table 60317): the online check uses the hard-coded code `'WOA'` there.
+As a second, functionally independent component, the extension includes **SellWatch**: purchase requests for used watches coming in from the SellWatch partner are automatically turned into a vendor and a purchase order (Codeunit 60305 "CXW SellWatch Mgt"); a read-only overview page (Page 60307 "CXW SellWatch-Overview") shows seller, watch, and order data. A separate mechanism checks over HTTP whether a watch is visible in the SellWatch online shop (Table 60301 "CXW Watch Online Approval"), and logs every call including failure telemetry (Table 60302 "CXW Http Call Log", Page 60309). SellWatch and sales price management are functionally separate but share the same interface master data table "CXW API Interface Setup" (Table 60317), and since the HTTP-logging update also the shared "CXW Http Call Log": the online check uses the hard-coded code `'WOA'` there.
+
+> **Update 2026-08-10 (unified HTTP call logging):** Table 60302/Page 60309 were previously named `"CXW SW Http Call Log"` and hard-wired to `"CXW Watch Online Approval"`. Renamed to `"CXW Http Call Log"` (Caption `'Http Call Log'`) and given a new `"CXW Source Table No."` field (same pattern as `"CXW API Interface Setup"."CXW Source Table No."`), so `"CXW Source Entry No"` now points at either `"CXW Watch Online Approval"` (60301) or `"CXW Sales Price Outbound File"` (60314) depending on `"CXW Source Table No."`. `Codeunit "CXW Export Gateway Sales Price"`'s `SendToApiInterface` now logs every call (success, non-success HTTP status, network failure) into the same log SellWatch uses, redacting the `Authorization` header (mirroring the existing `X-API-KEY` redaction for SellWatch). Both permission sets (`CXWChronWSAll`, `CXW SWChronWSAll`) were updated accordingly.
 
 > **Update 2026-08-10:** Also on 2026-08-10, the 11 SellWatch objects (previously IDs 51001–51010, inconsistent "SW"/"SellWatch"/no-prefix naming) were moved, as a pure rename/renumber, into the registered idRange block 60300–60310 and given a consistent "CXW " prefix, as were the roughly 70 fields they define. Field captions, enum values, and business logic are unchanged (see `openspec/changes/archive/2026-08-10-sellwatch-cxw-renumbering/`). IDs 60311–60349 were already reserved for/occupied by sales price management at that point; SellWatch has used 60300–60310 since, and the rest of 60300–60349 remains free for future objects.
 
@@ -94,6 +96,11 @@ Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Ch
           and POSTs it via HttpClient to the endpoint configured on
           Table 60317 "CXW API Interface Setup" (Page 60324), using the
           interface selected on Table 60311's "CXW API Interface Code" field.
+          Since the HTTP-logging update, SendToApiInterface logs every call
+          (success, non-success status, network failure) into Table 60302
+          "CXW Http Call Log" ("CXW Source Table No." = 60314), with the
+          Authorization header redacted — the same log SellWatch uses for
+          its online check (see below).
 
 Control data for "Add all Currencies":
 Table Extension "CXWCurrency" (on standard table "Currency", field "CXW Sales Price Activated")
@@ -158,8 +165,10 @@ Page 60307 "CXW SellWatch-Overview" (list, SourceTable Table 60300,
    filtered to "CXW SRid" <> '', "Show Document" action opens the
    purchase order)
 Page 60308 "CXW SellWatch info" (CardPart on Table 60300 — watch detail data)
-Page 60309 "CXW SW Http Call Log" (list, SourceTable Table 60302,
-   "Download Request"/"Download Response" actions download the blob as .txt)
+Page 60309 "CXW Http Call Log" (list, SourceTable Table 60302 – now a
+   shared log for both SellWatch AND sales price management, "CXW Source
+   Table No." column distinguishes the source; "Download Request"/"Download
+   Response" actions download the blob as .txt)
 
 JSON builders with no current caller in the project (presumably intended
 for outbound status updates to SellWatch, see Known Limitations):
@@ -175,14 +184,14 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 | Object | Element | Purpose |
 |---|---|---|
 | Codeunit 60329 | `WriteBackAndArchive(SalesPriceChecking: Record "CXW Sales Price Checking"; var SalesPrice: Record "Sales Price")` | Writes/updates a "Sales Price" record from an approved checking line (Sales Type = All Customers) and archives a new version. `[TryFunction]` — a failure is caught and reported as `false` instead of aborting the caller's whole batch. |
-| Codeunit 60329 | `CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean` | Reflects a "Sales Price" record into JSON, stores it in Table 60314, and sends it to the configured API interface. |
+| Codeunit 60329 | `CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean` | Reflects a "Sales Price" record into JSON, stores it in Table 60314, sends it to the configured API interface, and logs the call in Table 60302 "CXW Http Call Log". |
 | Page 60322 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Calculates the non-stock price for lines within a price range. Currently not called from any active code path. |
 | Codeunit 60330 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Raised when the automated file import changes an existing sales price. Currently has no subscriber. |
 | Table 60317 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Stores/reads the API key for an interface in Isolated Storage (module scope) rather than in a plain table field. |
 | Codeunit 60305 | `OnRun` / `ValidateAndCreateVendor` (local) | Processes every Table 60300 row with "CXW Created" = false: finds or creates a vendor plus bank account, then creates and releases a purchase order. No caller of this `OnRun` found anywhere in the project (see Known Limitations). |
 | Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON for a purchase-order acknowledgment (SRid, purchase_order, optional tracking_number). Currently not called from anywhere else in the code. |
 | Codeunit 60305 | `CreateSourceFileOrderStatusSE(SellWatchInfo: Record "CXW SellWatch Vendor Info"; Status: Enum "CXW SW Order Status"): Text` | Builds the JSON for a status update to SellWatch (name, e-mail, watch data, link to the online approval, payout currency/amount from the archived purchase line). Currently not called from anywhere else in the code. |
-| Table 60301 | `CreateEntryInexternalFile(var WOA: Record "CXW Watch Online Approval")` | Sends an HTTP GET to the SellWatch endpoint to check whether a watch should be online, updates the row accordingly, and logs the call in Table 60302. Currently not called from anywhere else in the code. |
+| Table 60301 | `CreateEntryInexternalFile(var WOA: Record "CXW Watch Online Approval")` | Sends an HTTP GET to the SellWatch endpoint to check whether a watch should be online, updates the row accordingly, and logs the call in Table 60302 ("CXW Source Table No." = 60301). Currently not called from anywhere else in the code. |
 
 Full list of all objects and their function counts: see `docs/funktionsregister/gesamtuebersicht.md`.
 
@@ -192,7 +201,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 |---|---|---|
 | 60300 CXW SellWatch Vendor Info | Entry No | Incoming SellWatch purchase request: seller, bank, watch, and offer data; "CXW Created" flags whether the vendor/order have already been created automatically; FlowField "CXW Tracking Number" reads from table extension 60304 on "Purchase Header" |
 | 60301 CXW Watch Online Approval | Entry No | Result of the online-visibility check per item/variant ("CXW Check Online", "CXW First Online Date", "CXW Remark"); FlowField "CXW SRid" reads the "Vendor Order No." of the related purchase order |
-| 60302 CXW SW Http Call Log | Entry No | Log of every HTTP call made by `CreateEntryInexternalFile` (success/failure, status code, redacted request, response as a blob) |
+| 60302 CXW Http Call Log | Entry No | Shared log of every HTTP call made by `CreateEntryInexternalFile` (SellWatch) AND `SendToApiInterface` (sales price export) – success/failure, status code, redacted request, response as a blob; "CXW Source Table No." (60301 or 60314) + "CXW Source Entry No" identify the triggering record |
 | 60311 CXW General Sales Price Setup | Primary Key (singleton) | Base settings, incl. export toggle and selected API interface |
 | 60312 CXW Sales Price Checking | Item No., Currency Code | Staging area for import/validation/approval |
 | 60313 CXW Sales Price Archive | + Version No. | History; populated automatically by "Upload Sales Price" (Page 60322) via Codeunit 60329, "Version No." incremented per Item No./Currency Code |
@@ -203,9 +212,9 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 
 ## Permission Set
 
-The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven tables plus execute rights for both codeunits, Xmlport 60328, and the extension's four pages. Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"/"Country/Region"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. The set still needs to be actively assigned to a user group.
+The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"/"Country/Region"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. The set still needs to be actively assigned to a user group.
 
-For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the three SellWatch tables (60300–60302) plus execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
+For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the two SellWatch-only tables (60300–60301) plus the shared Table 60302 "CXW Http Call Log", along with execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309, where Page 60309 "CXW Http Call Log" is likewise shared). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
 
 ## Running Tests
 

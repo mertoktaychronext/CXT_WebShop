@@ -1,8 +1,8 @@
-page 60309 "CXW SW Http Call Log"
+page 60309 "CXW Http Call Log"
 {
-    Caption = 'SW Http Call Log';
+    Caption = 'Http Call Log';
     PageType = List;
-    SourceTable = "CXW SW Http Call Log";
+    SourceTable = "CXW Http Call Log";
     Editable = false;
     InsertAllowed = false;
     DeleteAllowed = false;
@@ -26,10 +26,15 @@ page 60309 "CXW SW Http Call Log"
                     ApplicationArea = All;
                     ToolTip = 'Specifies when the HTTP call was made.';
                 }
+                field("CXW Source Table No."; Rec."CXW Source Table No.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies which source table (and therefore which feature) triggered this call.';
+                }
                 field("CXW Source Entry No"; Rec."CXW Source Entry No")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the Watch Online Approval entry that triggered this call.';
+                    ToolTip = 'Specifies the entry in the source table that triggered this call.';
                 }
                 field("CXW Endpoint URL"; Rec."CXW Endpoint URL")
                 {
@@ -73,7 +78,7 @@ page 60309 "CXW SW Http Call Log"
                 begin
                     Rec.CalcFields("CXW Request");
                     Rec."CXW Request".CreateInStream(InStr, TextEncoding::UTF8);
-                    FileName := StrSubstNo('SWHttpCallLog_%1_Request.txt', Rec."CXW Entry No");
+                    FileName := StrSubstNo('HttpCallLog_%1_Request.txt', Rec."CXW Entry No");
                     DownloadFromStream(InStr, '', '', '', FileName);
                 end;
             }
@@ -91,7 +96,7 @@ page 60309 "CXW SW Http Call Log"
                 begin
                     Rec.CalcFields("CXW Response");
                     Rec."CXW Response".CreateInStream(InStr, TextEncoding::UTF8);
-                    FileName := StrSubstNo('SWHttpCallLog_%1_Response.txt', Rec."CXW Entry No");
+                    FileName := StrSubstNo('HttpCallLog_%1_Response.txt', Rec."CXW Entry No");
                     DownloadFromStream(InStr, '', '', '', FileName);
                 end;
             }

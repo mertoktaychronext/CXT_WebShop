@@ -2,7 +2,7 @@
 
 **Erstellt am:** 2026-08-10 (vollständige Neuerstellung nach Zusammenführung der Feature-Branches „SellWatch" (PR 862) und „SalesPrice" (PR 861) im Integrationsbranch `02-DEV/development`; ersetzt die Vorversion, die ausschließlich den SalesPrice-Teil abbildete)
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 66
+**Gesamtanzahl Funktionen:** 68
 
 ---
 
@@ -10,10 +10,10 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Navigation/Actions | Gesamt |
 |---|---|---|---|---|---|---|---|
-| SL Chronext Webshop | 1.0.0.1 | 37 | 28 | 26 | 1 | 11 | 66 |
-| **Gesamt** | – | **37** | **28** | **26** | **1** | **11** | **66** |
+| SL Chronext Webshop | 1.0.0.1 | 37 | 30 | 26 | 1 | 11 | 68 |
+| **Gesamt** | – | **37** | **30** | **26** | **1** | **11** | **68** |
 
-> Nur ein AL-Projekt vorhanden. Es bündelt zwei fachlich unabhängige Bereiche: **SellWatch** (11 Objekte, 19 Funktionen – Ankauf gebrauchter Uhren) und **SalesPrice** (26 Objekte, 47 Funktionen – Verkaufspreisverwaltung).
+> Nur ein AL-Projekt vorhanden. Es bündelt zwei fachlich unabhängige Bereiche: **SellWatch** (11 Objekte, 19 Funktionen – Ankauf gebrauchter Uhren) und **SalesPrice** (26 Objekte, 49 Funktionen – Verkaufspreisverwaltung). Seit dem HTTP-Logging-Update vom 2026-08-10 teilen sich beide Bereiche zusätzlich ein gemeinsames technisches Protokoll (Table 60302/Page 60309 „CXW Http Call Log").
 
 ---
 
@@ -28,7 +28,7 @@
 | SL Chronext Webshop | CXW Watch Online Approval | Tabelle | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt eine Protokoll-Textform der Anfrage mit redigiertem API-Schlüssel. |
 | SL Chronext Webshop | CXW Watch Online Approval | Tabelle | `LogHttpCall` | Prozedur | Internal | Legt zu jedem Aufruf der externen Schnittstelle einen Protokolleintrag an. |
 | SL Chronext Webshop | CXW Watch Online Approval | Tabelle | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Schnittstellenaufruf zusätzlich an die technische Überwachung. |
-| SL Chronext Webshop | CXW SW Http Call Log | Tabelle | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Protokolleintrags automatisch den Zeitpunkt des Aufrufs ein. |
+| SL Chronext Webshop | CXW Http Call Log | Tabelle | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Protokolleintrags automatisch den Zeitpunkt des Aufrufs ein. |
 | SL Chronext Webshop | CXW SellWatch Mgt | Codeunit | `OnRun` | Trigger | – | Startet die automatische Prüfung und Anlage von Lieferanten samt Einkaufsauftrag für neue SellWatch-Angebote. |
 | SL Chronext Webshop | CXW SellWatch Mgt | Codeunit | `ValidateAndCreateVendor` | Prozedur | Internal | Sucht oder legt für ein SellWatch-Angebot den passenden Lieferanten samt Bankverbindung an. |
 | SL Chronext Webshop | CXW SellWatch Mgt | Codeunit | `CreatePurchaseOrder` | Prozedur | Internal | Legt für ein SellWatch-Angebot automatisch einen Einkaufsauftrag mit Artikelzeile an und gibt ihn frei. |
@@ -38,8 +38,8 @@
 | SL Chronext Webshop | CXW SellWatch Mgt | Codeunit | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut die vollständige Status-Rückmeldung (Ankunft, Online, Verkauf …) inkl. Provision für SellWatch auf. |
 | SL Chronext Webshop | CXW SellWatch-Overview | Seite | Action `ShowDocument` | Action | Public | Öffnet den zu einem SellWatch-Angebot angelegten Einkaufsauftrag. |
 | SL Chronext Webshop | CXW SellWatch-Overview | Seite | `OnOpenPage` | Trigger | – | Zeigt nur Angebote mit vorhandener SellWatch-Anfragenummer an. |
-| SL Chronext Webshop | CXW SW Http Call Log | Seite | Action `DownloadRequest` | Action | Public | Lädt den protokollierten Anfrage-Inhalt eines Aufrufs als Textdatei herunter. |
-| SL Chronext Webshop | CXW SW Http Call Log | Seite | Action `DownloadResponse` | Action | Public | Lädt den protokollierten Antwort-Inhalt eines Aufrufs als Textdatei herunter. |
+| SL Chronext Webshop | CXW Http Call Log | Seite | Action `DownloadRequest` | Action | Public | Lädt den protokollierten Anfrage-Inhalt eines Aufrufs als Textdatei herunter. |
+| SL Chronext Webshop | CXW Http Call Log | Seite | Action `DownloadResponse` | Action | Public | Lädt den protokollierten Antwort-Inhalt eines Aufrufs als Textdatei herunter. |
 | SL Chronext Webshop | CXW General Sales Price Setup | Tabelle | `CXW API Interface Code – OnValidate` | Trigger | – | Prüft beim Auswählen einer API-Schnittstelle, dass diese für Verkaufspreise vorgesehen ist. |
 | SL Chronext Webshop | CXW Sales Price Checking | Tabelle | `CXW Accept New Setup – OnValidate` | Trigger | – | Verhindert Freigabe eines Preises vor der Prüfung und sichert die Bemerkung. |
 | SL Chronext Webshop | CXW Sales Price Checking | Tabelle | `OnInsert` | Trigger | – | Trägt Datum/Benutzer der letzten Änderung beim Anlegen ein. |
@@ -78,7 +78,9 @@
 | SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Preis, Vergleichspreise, Grund und Anmerkung auf den Verkaufspreis-Datensatz. |
 | SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `ArchiveCheckingLine` | Prozedur | Internal | Ermittelt die nächste Versionsnummer und legt eine neue Archivkopie der Preiszeile an. |
 | SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis in eine JSON-Datei um und stößt den Versand an. |
-| SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `SendToApiInterface` | Prozedur | Internal | Sendet die JSON-Datei per HTTP an die externe Schnittstelle und vermerkt das Ergebnis. |
+| SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `SendToApiInterface` | Prozedur | Internal | Sendet die JSON-Datei per HTTP an die externe Schnittstelle, vermerkt das Ergebnis und protokolliert jeden Aufruf im gemeinsamen HTTP-Aufrufprotokoll (Table 60302). |
+| SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt eine Protokoll-Textform der Anfrage mit redigiertem Authorization-Header. |
+| SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `LogHttpCall` | Prozedur | Internal | Legt zu jedem Aufruf der externen Schnittstelle einen Eintrag im gemeinsamen HTTP-Aufrufprotokoll (Table 60302) an. |
 | SL Chronext Webshop | CXW Export Gateway Sales Price | Codeunit | `AddFieldToJson` | Prozedur | Internal | Wandelt ein einzelnes Datenfeld typgerecht in ein JSON-Element um. |
 | SL Chronext Webshop | CXW Import Sales Prices | Codeunit | `OnRun` | Trigger | – | Startet Verarbeitung einer eingegangenen Preisdatei. |
 | SL Chronext Webshop | CXW Import Sales Prices | Codeunit | `ProcessFile` | Prozedur | Internal | Liest Datei zeilenweise ein und übergibt Daten zur Preisübernahme. |
@@ -99,9 +101,9 @@ Nur ein Projekt vorhanden – keine projektübergreifenden Überschneidungen. In
 | Funktionsbereich | Objekte | Anzahl Funktionen | Hinweis |
 |---|---|---|---|
 | SellWatch – Ankauf & Lieferantenanlage | Table 60300/60301, TableExtension 60303/60304, Codeunit 60305, Enum 60306, Page 60307/60308, Permission Set 60310 | 9 | Vollständig eigenständiger Ankaufsprozess (Lieferant + Einkaufsauftrag) ohne Berührung zu SalesPrice. |
-| SellWatch – externe Online-Freigabe & Protokollierung | Table 60301 (HTTP-Prozeduren), Table 60302, Page 60309 | 10 | Eigenständiges HTTP-Anbindungsmuster mit Fehlerprotokoll und Telemetrie, strukturell ähnlich zum SalesPrice-Export-Gateway, aber unabhängig implementiert. |
+| SellWatch – externe Online-Freigabe & Protokollierung | Table 60301 (HTTP-Prozeduren), Table 60302, Page 60309 | 10 | HTTP-Anbindung mit Fehlerprotokoll und Telemetrie; das Protokoll (Table 60302/Page 60309) wird seit dem HTTP-Logging-Update vom 2026-08-10 gemeinsam mit dem SalesPrice-Export-Gateway genutzt (siehe unten). |
 | Preisprüfung & -freigabe (manueller Workflow) | Tabellen 60312–60313, Seiten 60322–60323, Seitenerweiterungen 60325–60327, Tabellenerweiterungen 60318/60320 | 15 | Aktiv genutzter, vollständig über die UI erreichbarer Kernprozess |
-| Export-Anbindung an externe Systeme (SalesPrice) | Table 60311 (Feld), 60314, 60317, Page 60321, 60324, Codeunit 60329, Enum 60335 | 16 | Übernimmt freigegebene Preise automatisch in „Sales Price"/Archiv und überträgt sie an ein externes System. |
+| Export-Anbindung an externe Systeme (SalesPrice) | Table 60311 (Feld), 60314, 60317, Page 60321, 60324, Codeunit 60329, Enum 60335 | 18 | Übernimmt freigegebene Preise automatisch in „Sales Price"/Archiv, überträgt sie an ein externes System und protokolliert seit dem 2026-08-10-Update jeden Aufruf im mit SellWatch gemeinsam genutzten Protokoll (Table 60302). |
 | Dateibasierter Import (Integrationsbaustein, SalesPrice) | Codeunit 60330, Tabellen 60315/60316, Enum 60333 | 9 | Fachlich vollständig, aber noch nicht an eine Job-Queue angebunden. |
 | Reine Datenmodell-Ergänzungen | Tabellenerweiterung 60319, Enums 60331/60332/60334, beide Permission Sets, Table 60300 | 0 | Keine eigene Logik |
 
@@ -118,7 +120,7 @@ Nur ein Projekt vorhanden – keine projektübergreifenden Überschneidungen. In
 ### Mittlere Priorität
 | Funktionsbereich | Betroffene Projekte | Empfehlung |
 |---|---|---|
-| Externe HTTP-Anbindung mit Protokollierung (SellWatch) und Export-Gateway (SalesPrice) konsolidieren | SL Chronext Webshop | Beide Bereiche implementieren unabhängig voneinander das gleiche Muster (HTTP-Aufruf, Protokoll-Tabelle, Fehlerbehandlung/Telemetrie) – bei einer künftigen Auslagerung lohnt sich die Prüfung eines gemeinsamen, generischen Bausteins. |
+| Externe HTTP-Anbindung mit Protokollierung (SellWatch) und Export-Gateway (SalesPrice) konsolidieren | SL Chronext Webshop | Seit dem HTTP-Logging-Update vom 2026-08-10 bereits umgesetzt: beide Bereiche protokollieren ihre HTTP-Aufrufe im gemeinsamen Table 60302 „CXW Http Call Log" (Feld „CXW Source Table No." unterscheidet die Quelle). Bei einer künftigen Auslagerung als eigene Extension lässt sich dieses gemeinsame Protokoll als eigenständiger, wiederverwendbarer Baustein herauslösen. |
 | Dateibasierter Preisimport (SalesPrice) | SL Chronext Webshop | Sobald eine Job-Queue-Anbindung erfolgt, als eigene, wiederverwendbare Extension anlegen – vermeidet späteres, aufwändigeres Herauslösen aus dem Kernmodul. |
 | Preisprüfung & -freigabe (SalesPrice) | SL Chronext Webshop | Als Kernmodul belassen; keine weitere Aufteilung sinnvoll, da Import/Prüfung/Freigabe eng zusammenhängen. |
 
@@ -126,8 +128,10 @@ Nur ein Projekt vorhanden – keine projektübergreifenden Überschneidungen. In
 
 ## Projektabhängigkeiten
 
-Nur ein Projekt vorhanden, `dependencies` in `app.json` ist leer – keine Abhängigkeiten zu dokumentieren. Innerhalb des Projekts bestehen keine Aufrufe zwischen SellWatch- und SalesPrice-Objekten; beide Bereiche sind vollständig entkoppelt und teilen sich lediglich Extension und ID-Bereich (60300–60349).
+Nur ein Projekt vorhanden, `dependencies` in `app.json` ist leer – keine externen Abhängigkeiten zu dokumentieren. Innerhalb des Projekts bestehen weiterhin keine Aufrufe zwischen SellWatch- und SalesPrice-Fachlogik; beide Bereiche teilen sich Extension und ID-Bereich (60300–60349) sowie seit dem HTTP-Logging-Update vom 2026-08-10 zusätzlich die technische Protokoll-Tabelle „CXW Http Call Log" (Table 60302) – eine rein infrastrukturelle, keine fachliche Kopplung.
 
 ---
 
 **Hinweis zu diesem Update:** Diese Version ersetzt vollständig die Vorversion (26 Objekte/47 Funktionen), die nach dem Merge der Feature-Branches „SellWatch" (PR 862) und „SalesPrice" (PR 861) in den Integrationsbranch `02-DEV/development` ausschließlich den SalesPrice-Teil abbildete, obwohl die 11 SellWatch-Objekte im Quellcode vollständig vorhanden sind und mitkompilieren. Alle 37 Objekte wurden direkt aus dem aktuellen Quellcode neu erfasst. Ergebnis: 37 Objekte (11 SellWatch + 26 SalesPrice), 66 Funktionen/Trigger/Events/Actions (19 SellWatch + 47 SalesPrice). Details siehe `funktionsregister-sl-chronext-webshop.md`.
+
+**Update 2026-08-10 (HTTP-Call-Logging vereinheitlicht):** Table 60302/Page 60309 (bisher „CXW SW Http Call Log", ausschließlich SellWatch) wurden in „CXW Http Call Log" umbenannt und um das Feld „CXW Source Table No." erweitert, damit sie Aufrufe aus beliebigen Quelltabellen aufnehmen können. `Codeunit 60329 "CXW Export Gateway Sales Price"` protokolliert seither jeden HTTP-Aufruf von `SendToApiInterface` dort ebenfalls (2 neue Prozeduren: `BuildRedactedRequestText`, `LogHttpCall`). Ergebnis dieses Updates: 68 statt 66 Funktionen/Trigger/Events/Actions (19 SellWatch + 49 SalesPrice).

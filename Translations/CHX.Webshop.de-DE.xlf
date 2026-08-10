@@ -843,65 +843,71 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Watch Condition - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>SW Http Call Log</source>
-          <target>SW HTTP-Aufrufprotokoll</target>
+        <trans-unit id="Table 3926759886 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Http Call Log</source>
+          <target>HTTP-Aufrufprotokoll</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 1772626617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 1772626617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Call Date/Time</source>
           <target>Datum/Uhrzeit des Aufrufs</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Call DateTime - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Call DateTime - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 3494290448 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 3494290448 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Endpoint URL</source>
           <target>Endpunkt-URL</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Endpoint URL - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Endpoint URL - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 4158875555 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 4158875555 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Entry No</source>
           <target>Lfd. Nr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Entry No - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Entry No - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 2037051097 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 2037051097 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Error Message</source>
           <target>Fehlermeldung</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Error Message - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Error Message - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 2251784959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 2251784959 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>HTTP Status Code</source>
           <target>HTTP-Statuscode</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW HTTP Status Code - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW HTTP Status Code - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 3973888655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 3973888655 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Request</source>
           <target>Anfrage</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Request - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Request - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 2152685833 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 2152685833 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Response</source>
           <target>Antwort</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Response - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Response - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 3345377320 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 3345377320 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Entry No</source>
           <target>Quell-Lfd.-Nr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Source Entry No - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Source Entry No - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 688757706 - Field 2740588193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Table 3926759886 - Field 3703371196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Source Table No.</source>
+          <target>Quelltabellennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Source Table No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3926759886 - Field 2740588193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Success</source>
           <target>Erfolgreich</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SW Http Call Log - Field CXW Success - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Http Call Log - Field CXW Success - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 655364415 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Watch Online Approval</source>
@@ -1016,6 +1022,12 @@
           <target>Die API-Schnittstelle %1 (ausgewählt in der allgemeinen Verkaufspreiseinrichtung) existiert nicht mehr.</target>
           <note from="Developer" annotates="general" priority="2">%1 = API interface code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType ApiInterfaceNotFoundErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1695587631 - NamedType 2404273434" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The request could not be sent (network error).</source>
+          <target>Die Anfrage konnte nicht gesendet werden (Netzwerkfehler).</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType NetworkErrorTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 621582641 - NamedType 234181524" size-unit="char" translate="yes" xml:space="preserve">
           <source>Expected %1 columns in the header row, but found %2.</source>
@@ -1695,77 +1707,83 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Action ShowDocument - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>SW Http Call Log</source>
-          <target>SW HTTP-Aufrufprotokoll</target>
+        <trans-unit id="Page 3926759886 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Http Call Log</source>
+          <target>HTTP-Aufrufprotokoll</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 1772626617 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Control 1772626617 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies when the HTTP call was made.</source>
           <target>Gibt an, wann der HTTP-Aufruf erfolgte.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Call DateTime - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Call DateTime - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 3494290448 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Control 3494290448 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the endpoint the request was sent to.</source>
           <target>Gibt den Endpunkt an, an den die Anfrage gesendet wurde.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Endpoint URL - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Endpoint URL - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 4158875555 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Control 4158875555 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the unique entry number of this log entry.</source>
           <target>Gibt die eindeutige laufende Nummer dieses Protokolleintrags an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Entry No - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Entry No - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 2037051097 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Control 2037051097 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the error message recorded for a failed call.</source>
           <target>Gibt die für einen fehlgeschlagenen Aufruf erfasste Fehlermeldung an.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Error Message - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Error Message - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 2251784959 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Control 2251784959 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the HTTP status code returned by the endpoint, if a response was received.</source>
           <target>Gibt den vom Endpunkt zurückgegebenen HTTP-Statuscode an, sofern eine Antwort empfangen wurde.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW HTTP Status Code - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW HTTP Status Code - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 3345377320 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the Watch Online Approval entry that triggered this call.</source>
-          <target>Gibt den Eintrag der Uhr-Online-Freigabe an, der diesen Aufruf ausgelöst hat.</target>
+        <trans-unit id="Page 3926759886 - Control 3345377320 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the entry in the source table that triggered this call.</source>
+          <target>Gibt den Eintrag in der Quelltabelle an, der diesen Aufruf ausgelöst hat.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Source Entry No - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Source Entry No - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Control 2740588193 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Control 3703371196 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies which source table (and therefore which feature) triggered this call.</source>
+          <target>Gibt an, welche Quelltabelle (und damit welcher Funktionsbereich) diesen Aufruf ausgelöst hat.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Source Table No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3926759886 - Control 2740588193 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the call completed successfully.</source>
           <target>Gibt an, ob der Aufruf erfolgreich abgeschlossen wurde.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Control CXW Success - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Control CXW Success - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Action 3219083399 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Action 3219083399 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download the logged request as a .txt file.</source>
           <target>Lädt die protokollierte Anfrage als .txt-Datei herunter.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadRequest - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Action DownloadRequest - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Action 3219083399 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Action 3219083399 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download Request</source>
           <target>Anfrage herunterladen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadRequest - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Action DownloadRequest - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Action 1029354209 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Action 1029354209 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download the logged response as a .txt file.</source>
           <target>Lädt die protokollierte Antwort als .txt-Datei herunter.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadResponse - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Action DownloadResponse - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 688757706 - Action 1029354209 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3926759886 - Action 1029354209 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Download Response</source>
           <target>Antwort herunterladen</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SW Http Call Log - Action DownloadResponse - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Http Call Log - Action DownloadResponse - Property Caption</note>
         </trans-unit>
         <trans-unit id="XmlPort 3262264592 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Sales Price</source>

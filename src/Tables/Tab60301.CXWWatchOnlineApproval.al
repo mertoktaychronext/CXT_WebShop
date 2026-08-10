@@ -202,10 +202,11 @@ table 60301 "CXW Watch Online Approval"
 
     local procedure LogHttpCall(pWOA: Record "CXW Watch Online Approval"; pEndpointUrl: Text; pSuccess: Boolean; pHttpStatusCode: Integer; pErrorMessage: Text; pRequestText: Text; pResponseText: Text)
     var
-        HttpCallLog: Record "CXW SW Http Call Log";
+        HttpCallLog: Record "CXW Http Call Log";
         OutStr: OutStream;
     begin
         HttpCallLog.Init();
+        HttpCallLog."CXW Source Table No." := Database::"CXW Watch Online Approval";
         HttpCallLog."CXW Source Entry No" := pWOA."CXW Entry No";
         HttpCallLog."CXW Endpoint URL" := CopyStr(pEndpointUrl, 1, MaxStrLen(HttpCallLog."CXW Endpoint URL"));
         HttpCallLog."CXW Success" := pSuccess;

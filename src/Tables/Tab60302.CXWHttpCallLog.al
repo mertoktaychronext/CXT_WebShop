@@ -1,6 +1,6 @@
-table 60302 "CXW SW Http Call Log"
+table 60302 "CXW Http Call Log"
 {
-    Caption = 'SW Http Call Log';
+    Caption = 'Http Call Log';
     DataClassification = SystemMetadata;
 
     fields
@@ -19,7 +19,9 @@ table 60302 "CXW SW Http Call Log"
         field(3; "CXW Source Entry No"; Integer)
         {
             Caption = 'Source Entry No';
-            TableRelation = "CXW Watch Online Approval"."CXW Entry No";
+            TableRelation = if ("CXW Source Table No." = const(60301)) "CXW Watch Online Approval"."CXW Entry No"
+                             else
+                             if ("CXW Source Table No." = const(60314)) "CXW Sales Price Outbound File"."CXW Entry No.";
             DataClassification = SystemMetadata;
         }
         field(4; "CXW Endpoint URL"; Text[250])
@@ -51,6 +53,12 @@ table 60302 "CXW SW Http Call Log"
         {
             Caption = 'Response';
             DataClassification = CustomerContent;
+        }
+        field(10; "CXW Source Table No."; Integer)
+        {
+            Caption = 'Source Table No.';
+            DataClassification = SystemMetadata;
+            TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
         }
     }
 
