@@ -53,5 +53,3 @@ Dieser Bericht dokumentiert alle im Review gefundenen Probleme. Wo eine Behebung
 - `src/Pages/Pag51002.SLSalesPriceArchive.al` — UsageCategory/ApplicationArea ergänzt
 - `src/Tables/Tab51001.SLSalesPriceChecking.al` — toter Trigger entfernt, Error-Antipattern bereinigt
 - `src/Codeunits/Codeunit51001.SLImportSalesPrices.al` — CSV-Spaltenreihenfolge-Bugfix
-
-**Wichtiger Hinweis:** Die beiden neuen Page Extensions enthalten Annahmen über Standard-Seitennamen (`"Countries/Regions"`, `"Sales Prices"`), die in dieser Umgebung nicht gegen ein vollständiges BC-Symbolpaket verifiziert werden konnten. Bitte vor dem ersten Compile in VS Code prüfen (siehe TODO-Kommentare in den jeweiligen Dateien).

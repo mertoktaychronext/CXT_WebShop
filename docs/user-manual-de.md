@@ -1,12 +1,15 @@
-# Benutzerhandbuch – SL Chronext Webshop (Verkaufspreisverwaltung)
+# Benutzerhandbuch – CHX.Webshop
 
 ## Einleitung
 
-Diese Erweiterung für Microsoft Dynamics 365 Business Central hilft dabei, neue Verkaufspreise für den Webshop einzulesen, zu prüfen und freizugeben, bevor sie verwendet werden. Sie importieren eine Preisliste (CSV-Datei), das System prüft automatisch Mindestmarge und ungewöhnliche Preisschwankungen, und ein Sachbearbeiter gibt die Preise anschließend frei.
+Diese Erweiterung für Microsoft Dynamics 365 Business Central deckt zwei unabhängige Abläufe ab:
+
+1. **Verkaufspreisverwaltung** (dieses Kapitel): Sie importieren eine Preisliste (CSV-Datei), das System prüft automatisch Mindestmarge und ungewöhnliche Preisschwankungen, und ein Sachbearbeiter gibt die Preise anschließend frei, bevor sie an den Webshop übertragen werden.
+2. **SellWatch-Ankaufsanfragen** (siehe [entsprechendes Kapitel](#sellwatch-ankaufsanfragen-einsehen) unten): Eine schreibgeschützte Übersicht über Ankaufsanfragen für gebrauchte Uhren, die über den Partner SellWatch eingehen.
 
 ## Voraussetzungen
 
-- Zugang zu Business Central mit einer Rolle, die die Seite "Sales Price Checking List" bzw. "Verkaufspreisprüfungsliste" enthält.
+- Zugang zu Business Central mit einer Rolle, die die Seite "Sales Price Checking List" bzw. "Verkaufspreisprüfungsliste" enthält (Berechtigungssatz `SLChronWSAll`) bzw. die Seite "SellWatch-Overview" (Berechtigungssatz `CXW SWChronWSAll`).
 - Die Grundeinstellungen (Mindestmarge, Schwellenwerte) müssen von einem Key User bereits hinterlegt sein (siehe Key-User-Handbuch).
 - Für "Upload Sales Price" muss der Preisexport von einem Key User aktiviert und eine API-Schnittstelle hinterlegt sein (siehe Key-User-Handbuch).
 - Eine vorbereitete CSV-Datei mit den neuen Preisen.
@@ -65,6 +68,14 @@ Am Ende erhalten Sie eine Meldung, wie viele der freigegebenen Zeilen erfolgreic
 
 Über die Seite **"Sales Price Archive"** können Sie bereits hochgeladene Preise nachträglich einsehen (nur lesend, keine Änderungen möglich). Jede Version einer hochgeladenen Preiszeile ist hier als eigener, fortlaufend nummerierter Eintrag zu finden.
 
+## SellWatch-Ankaufsanfragen einsehen
+
+Die Seite **"SellWatch-Overview"** zeigt alle über den Partner SellWatch eingegangenen Ankaufsanfragen für gebrauchte Uhren – schreibgeschützt, mit Verkäufer-, Uhren- und Angebotsdaten sowie, sobald vorhanden, der zugehörigen Bestellnummer und Sendungsnummer (Tracking-Nummer).
+
+Über die Aktion **"Show Document"** öffnen Sie die zur Anfrage gehörende Einkaufsbestellung.
+
+> Neue Ankaufsanfragen sowie die Anlage von Lieferant und Bestellung erfolgen automatisiert im Hintergrund; diese Seite dient ausschließlich der Ansicht. Fehlt zu einer Anfrage die Bestellnummer, wurde die Bestellung für diese Anfrage noch nicht automatisiert angelegt.
+
 ## Häufige Fragen (FAQ)
 
 **"Nothing to process" beim Klick auf Validate/Approve/Add all Currencies**
@@ -82,6 +93,5 @@ Es gibt keine freigegebenen (akzeptierten) Preiszeilen. Führen Sie zuerst "Appr
 **Meldung, dass die Schnittstelle nicht aktiv ist oder keine API-Schnittstelle hinterlegt ist**
 Der Preisexport ist nicht eingerichtet oder deaktiviert. Wenden Sie sich an einen Key User (siehe Key-User-Handbuch).
 
-## Hilfe & Support
-
-[TODO: Kontaktdaten des internen Supports / Key Users ergänzen]
+**Eine SellWatch-Anfrage zeigt keine Bestellnummer.**
+Die Bestellung wurde für diese Anfrage noch nicht automatisiert angelegt.
