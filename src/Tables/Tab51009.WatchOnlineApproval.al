@@ -139,9 +139,11 @@ table 51009 "Watch Online Approval"
         ResponseJObject: JsonObject;
         JToken: JsonToken;
         RequestUrl: Text;
+        RequestLogText: Text;
         ResponseText: Text;
         EntryNoValue: Text;
         OnlineStatuscode: Code[10];
+        HttpStatusCode: Integer;
     begin
         // API-Key und Endpoint liegen in "SL API Interface Setup" (Code 'WOA'), Key in Isolated Storage -
         // kein Klartext-Secret mehr im Quellcode (vorher hartcodierter X-API-KEY, siehe Dev-Abschluss-Finding).
@@ -153,18 +155,30 @@ table 51009 "Watch Online Approval"
             exit;
 
         RequestUrl := ApiInterfaceSetup."Endpoint URL" + '/' + WOA."Item No" + '/' + WOA."Variant Code" + '/check';
+        RequestLogText := BuildRedactedRequestText('GET', RequestUrl);
 
         HttpRequestMsg.Method := 'GET';
         HttpRequestMsg.SetRequestUri(RequestUrl);
         HttpRequestMsg.GetHeaders(HttpHeadersObj);
         HttpHeadersObj.Add('X-API-KEY', ApiInterfaceSetup.GetApiKey());
 
-        if not HttpClientObj.Send(HttpRequestMsg, HttpResponseMsg) then
+        if not HttpClientObj.Send(HttpRequestMsg, HttpResponseMsg) then begin
+            LogHttpCall(WOA, RequestUrl, false, 0, NoResponseReceivedErr, RequestLogText, '');
+            LogHttpCallFailureTelemetry(WOA, RequestUrl, 0);
             exit;
-        if not HttpResponseMsg.IsSuccessStatusCode() then
-            exit;
+        end;
 
+        HttpStatusCode := HttpResponseMsg.HttpStatusCode();
         HttpResponseMsg.Content().ReadAs(ResponseText);
+
+        if not HttpResponseMsg.IsSuccessStatusCode() then begin
+            LogHttpCall(WOA, RequestUrl, false, HttpStatusCode, StrSubstNo(NonSuccessStatusErr, HttpStatusCode), RequestLogText, ResponseText);
+            LogHttpCallFailureTelemetry(WOA, RequestUrl, HttpStatusCode);
+            exit;
+        end;
+
+        LogHttpCall(WOA, RequestUrl, true, HttpStatusCode, '', RequestLogText, ResponseText);
+
         ResponseJObject.ReadFrom(ResponseText);
 
         if ResponseJObject.Get('EntryNo', JToken) then
@@ -181,4 +195,45 @@ table 51009 "Watch Online Approval"
             WOA.Remark := 'Watch is offline';
         WOA.Modify();
     end;
+
+    local procedure BuildRedactedRequestText(pMethod: Text; pUrl: Text): Text
+    var
+        TypeHelper: Codeunit "Type Helper";
+    begin
+        exit(pMethod + ' ' + pUrl + TypeHelper.LFSeparator() + 'X-API-KEY: ' + ApiKeyRedactedTxt);
+    end;
+
+    local procedure LogHttpCall(pWOA: Record "Watch Online Approval"; pEndpointUrl: Text; pSuccess: Boolean; pHttpStatusCode: Integer; pErrorMessage: Text; pRequestText: Text; pResponseText: Text)
+    var
+        HttpCallLog: Record "SW Http Call Log";
+        OutStr: OutStream;
+    begin
+        HttpCallLog.Init();
+        HttpCallLog."Source Entry No" := pWOA."Entry No";
+        HttpCallLog."Endpoint URL" := CopyStr(pEndpointUrl, 1, MaxStrLen(HttpCallLog."Endpoint URL"));
+        HttpCallLog.Success := pSuccess;
+        HttpCallLog."HTTP Status Code" := pHttpStatusCode;
+        HttpCallLog."Error Message" := CopyStr(pErrorMessage, 1, MaxStrLen(HttpCallLog."Error Message"));
+        HttpCallLog.Request.CreateOutStream(OutStr, TextEncoding::UTF8);
+        OutStr.WriteText(pRequestText);
+        HttpCallLog.Response.CreateOutStream(OutStr, TextEncoding::UTF8);
+        OutStr.WriteText(pResponseText);
+        HttpCallLog.Insert(true);
+    end;
+
+    local procedure LogHttpCallFailureTelemetry(pWOA: Record "Watch Online Approval"; pEndpointUrl: Text; pHttpStatusCode: Integer)
+    var
+        CustomDimensions: Dictionary of [Text, Text];
+    begin
+        CustomDimensions.Add('Endpoint', pEndpointUrl);
+        CustomDimensions.Add('HttpStatusCode', Format(pHttpStatusCode));
+        CustomDimensions.Add('WatchOnlineApprovalEntryNo', Format(pWOA."Entry No"));
+        Session.LogMessage('SW-0101', HttpCallFailedTelemetryTxt, Verbosity::Error, DataClassification::SystemMetadata, TelemetryScope::ExtensionPublisher, CustomDimensions);
+    end;
+
+    var
+        ApiKeyRedactedTxt: Label '***redacted***', Locked = true;
+        NoResponseReceivedErr: Label 'No response received (network error).';
+        NonSuccessStatusErr: Label 'Non-success HTTP status: %1', Comment = '%1 = HTTP status code';
+        HttpCallFailedTelemetryTxt: Label 'SellWatch online-check HTTP call failed', Locked = true;
 }

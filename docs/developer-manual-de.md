@@ -24,10 +24,10 @@ Diese Business-Central-Erweiterung (AL) bündelt zwei fachlich getrennte Bereich
 ```
 app.json                          # Extension-Manifest, idRanges 51000-51049
 src/
-  Tables/                         # 9 Tabellen (51000-51002, 51004-51009)
+  Tables/                         # 10 Tabellen (51000-51002, 51004-51010)
   TableExtensions/                # 5 Erweiterungen (Country/Region, Sales Price, Currency, Purchase Line, Purchase Header)
   PageExtensions/                 # 3 Erweiterungen (Countries/Regions, Sales Prices, Currencies)
-  Pages/                          # 6 Seiten + 1 Xmlport
+  Pages/                          # 7 Seiten + 1 Xmlport
   Codeunits/                      # 3 Codeunits (Export Gateway Sales Price, Import Sales Prices, SellWatch Mgt)
   Enums/                          # 6 Enums
   PermissionSets/                 # 2 Permission Sets (SLChronWSAll, SWChronWSAll)
@@ -177,13 +177,14 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | 51007 SL API Interface Setup | Code | Endpunkt-URL, Authentifizierungsart und (im Isolated Storage abgelegter) API-Schlüssel je externer Schnittstelle |
 | 51008 SellWatch Vendor Info | Entry No | Eingehende SellWatch-Ankaufsanfragen (Verkäufer-, Uhren-, Angebotsdaten); wird laut Namenskonvention des Permission Sets `SWChronWSAll` ("ChronWS" = Chronext Web Service) vermutlich direkt von einem externen System per Web Service befüllt – die genaue Herkunft ist im Code nicht dokumentiert. |
 | 51009 Watch Online Approval | Entry No | Ob eine angekaufte Uhr je Artikel/Variante für den Online-Verkauf freigegeben ist |
+| 51010 SW Http Call Log | Entry No | Protokoll jedes SellWatch-Online-Check-HTTP-Aufrufs (Request/Response als Blob, `X-API-KEY` redigiert), einsehbar über Page 51006 |
 
 ## Permission Sets
 
 | Permission Set | ID | Deckt ab |
 |---|---|---|
 | `SLChronWSAll` (`src/PermissionSets/SLChronWSAll.permissionset.al`) | 51000 | Lese-/Schreibzugriff auf alle sieben Sales-Price-Tabellen sowie Ausführungsrechte für beide Sales-Price-Codeunits, Xmlport 51000 und die vier Sales-Price-Seiten. |
-| `SWChronWSAll` (`src/PermissionSets/SWChronWSAll.permissionset.al`) | 51001 | Lese-/Schreibzugriff auf Table 51008/51009 sowie Ausführungsrechte für Codeunit 51002 und die beiden SellWatch-Seiten. |
+| `SWChronWSAll` (`src/PermissionSets/SWChronWSAll.permissionset.al`) | 51001 | Lese-/Schreibzugriff auf Table 51008/51009/51010 sowie Ausführungsrechte für Codeunit 51002 und die drei SellWatch-Seiten (inkl. Page 51006 SW Http Call Log). |
 
 Tabellenerweiterungen und Seitenerweiterungen benötigen keine eigenen Einträge, da sie über die Berechtigung des jeweiligen Basisobjekts (z. B. Standard-Zugriff auf "Currency"/"Country/Region"/"Purchase Line"/"Purchase Header") mit abgedeckt sind; dieselbe Standard-Tabellenzugriffslogik gilt für die Standardtabellen ("Sales Price", "Vendor", "Purchase Header/Line" usw.), in die die Codeunits schreiben. Beide Sets müssen noch aktiv einer Benutzergruppe zugewiesen werden.
 
@@ -213,4 +214,4 @@ Kein CI/CD-Setup (z. B. AL-Go-Workflow) im Projekt gefunden. Deployment erfolgt 
 - **Herkunft der Datensätze in Table 51008 "SellWatch Vendor Info" ist nicht dokumentiert.** Es existiert weder eine Page zum manuellen Anlegen noch ein XMLport/API-Page in dieser Extension. Vermutlich schreibt ein externes System direkt über die Standard-BC-Web-Services (gedeckt durch Permission Set `SWChronWSAll`) in diese Tabelle.
 - **Aus dem NAV-Quellsystem bewusst nicht übernommen** (siehe `// TODO`-Kommentare in `Codeunit51002.SellWatchMgt.al`): das Feld `Street` sowie die Prozeduren `SetPostingGroups()` und `GetnewNoSeries()` auf dem Standard-Lieferanten. Die zugehörige NAV-Quelle wurde nie geliefert; Vendor-Nummernvergabe erfolgt stattdessen über den Standard-`Insert(true)`-Trigger und "Purchases & Payables Setup".
 - **Ehemalige externe Dateiausgabe entfernt**: Die ursprünglichen NAV-Prozeduren `CreateExternalInterfaceFileOnPurchaseRequest`/`CreateExternalInterfaceFileOnOrderStatusSE` (Ausgabe der von `CreateSourceFilePurchaseRequest`/`CreateSourceFileOrderStatusSE` gebauten JSON-Dokumente über ein Outbound-File-Objekt, analog zu Table 51004 im Preisbereich) wurden ersatzlos entfernt, da die zugehörigen Alt-Objekte nicht mehr benötigt werden. Die beiden JSON-Builder-Funktionen selbst existieren weiterhin (public), haben aber aktuell keinen Aufrufer.
-- **`CreateEntryInexternalFile` (Table 51009) protokolliert Fehlschläge des HTTP-Aufrufs nicht.** Schlägt der Request fehl oder ist die Schnittstelle "WOA" nicht konfiguriert, wird die Prüfung ohne jede Meldung übersprungen (siehe Key-User-Handbuch, Troubleshooting). Eine Anforderung für Logging/Telemetrie an dieser Stelle wurde bereits angekündigt, ist aber noch nicht umgesetzt.
+- **`CreateEntryInexternalFile` (Table 51009) protokolliert seit dem Change `sellwatch-http-error-logging` jeden Aufruf** (erfolgreich wie fehlgeschlagen) in `Table 51010 "SW Http Call Log"` (einsehbar über Page 51006, Request/Response je als .txt herunterladbar; der `X-API-KEY`-Header wird dabei redigiert, nie im Klartext gespeichert) und meldet jeden Fehlschlag zusätzlich per `Session.LogMessage`-Telemetrie (Event-ID `SW-0101`). Ist die Schnittstelle "WOA" jedoch gar nicht konfiguriert/aktiv oder ohne API-Key, bricht die Prüfung weiterhin vor dem eigentlichen HTTP-Aufruf ab, ohne Log-Eintrag oder Telemetrie (siehe Key-User-Handbuch, Troubleshooting) – das ist eine bewusste Konfigurationsprüfung, kein HTTP-Fehler.

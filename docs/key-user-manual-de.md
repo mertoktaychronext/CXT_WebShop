@@ -72,6 +72,8 @@ Die Freigabeprüfung, ob eine angekaufte Uhr online gehen darf ("Watch Online Ap
 
 Ohne diesen Eintrag (oder wenn er inaktiv ist bzw. kein API-Schlüssel hinterlegt ist) bricht die Freigabeprüfung ohne Fehlermeldung ab – die betroffene Uhr bleibt einfach unverändert.
 
+**Jeder tatsächlich durchgeführte Aufruf** (erfolgreich oder fehlgeschlagen) wird auf der Seite **"SW Http Call Log"** protokolliert – dort lassen sich Request und Response je Eintrag als .txt-Datei herunterladen. Der API-Schlüssel erscheint darin nie im Klartext (nur als Platzhalter). Fehlgeschlagene Aufrufe werden zusätzlich per Telemetry gemeldet (für das Entwicklungsteam, siehe Entwicklerhandbuch).
+
 ## Grundcode (Reason Code)
 
 Jeder Preisänderung kann ein Grund zugeordnet werden: **CatMan**, **Einkauf** oder **Marketing**. Dies dient der Nachvollziehbarkeit, warum ein Preis geändert wurde, wird aber aktuell nicht weiter ausgewertet. Ohne explizite Auswahl wird "CatMan" als Standardwert verwendet.
@@ -92,7 +94,7 @@ Der Zugriff ist über zwei getrennte Permission Sets geregelt, die den entsprech
 | Permission Set | Deckt ab |
 |---|---|
 | `SLChronWSAll` | Alle Objekte der Verkaufspreisverwaltung |
-| `SWChronWSAll` | Alle Objekte der SellWatch-Ankaufsintegration (SellWatch Vendor Info, Watch Online Approval, SellWatch-Overview, SellWatch info) |
+| `SWChronWSAll` | Alle Objekte der SellWatch-Ankaufsintegration (SellWatch Vendor Info, Watch Online Approval, SW Http Call Log, SellWatch-Overview, SellWatch info) |
 
 ## Troubleshooting
 
@@ -104,7 +106,7 @@ Der Zugriff ist über zwei getrennte Permission Sets geregelt, die den entsprech
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
 | "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. |
 | Einzelne Preiszeilen bleiben nach "Upload Sales Price" mit "Export Status" = "Error" stehen | Andere Zeilen im selben Lauf werden trotzdem weiterverarbeitet. Prüfen Sie die betroffene Zeile auf ungültige Werte (z. B. nicht existierender Währungscode) und lösen Sie den Upload für diese Zeile erneut aus. |
-| Eine Uhr wird nie für den Online-Verkauf freigegeben, obwohl sie es sein sollte | Prüfen Sie den API-Interface-Eintrag mit Code "WOA" (siehe oben): vorhanden, aktiv, API-Schlüssel und Endpoint URL gesetzt? Da die Prüfung bei fehlender/inaktiver Schnittstelle ohne Fehlermeldung abbricht, ist dies die häufigste Ursache. |
+| Eine Uhr wird nie für den Online-Verkauf freigegeben, obwohl sie es sein sollte | Zuerst die Seite **"SW Http Call Log"** öffnen und nach Einträgen zur betroffenen Uhr filtern (Spalte "Source Entry No" = Lfd. Nr. der Uhr auf "Watch Online Approval"): Gibt es dort einen Eintrag mit "Success" = Nein, zeigt "Error Message" bzw. der herunterladbare Request/Response die genaue Ursache (z. B. Netzwerkfehler, falscher HTTP-Status). Gibt es dort **gar keinen** Eintrag zur betroffenen Uhr, wurde der Aufruf nie ausgeführt — dann den API-Interface-Eintrag mit Code "WOA" prüfen (siehe oben): vorhanden, aktiv, API-Schlüssel und Endpoint URL gesetzt? Diese Konfigurationsprüfung bricht weiterhin ohne Log-Eintrag ab, wenn die Schnittstelle fehlt/inaktiv ist. |
 | Neue SellWatch-Anfragen erscheinen nicht in "SellWatch-Overview" bzw. es wird nie automatisch ein Lieferant/eine Bestellung angelegt | Die Verarbeitung (Lieferanten-/Bestellanlage) muss aktuell separat angestoßen werden – es ist kein automatischer Job-Queue-Eintrag hinterlegt. Bitte an das Entwicklungsteam eskalieren (siehe Entwicklerhandbuch, "Bekannte Einschränkungen"). |
 
 ## Eskalationswege

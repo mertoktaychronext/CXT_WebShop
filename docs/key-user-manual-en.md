@@ -72,6 +72,8 @@ The check that decides whether a purchased watch may go live online ("Watch Onli
 
 Without this entry (or if it's inactive or has no API key), the online-approval check aborts silently — the watch in question is simply left unchanged.
 
+**Every call that is actually made** (successful or failed) is logged on the **"SW Http Call Log"** page — request and response can be downloaded as .txt files per entry there. The API key never appears in plain text (only as a placeholder). Failed calls are additionally reported via telemetry (for the development team, see the Developer Manual).
+
 ## Reason Code
 
 Every price change can be tagged with a reason: **CatMan**, **Purchasing**, or **Marketing**. This supports traceability of why a price changed but is not currently evaluated further by any automated logic. "CatMan" is used as the default value when none is explicitly selected.
@@ -92,7 +94,7 @@ Access is controlled through two separate permission sets, which still need to b
 | Permission Set | Covers |
 |---|---|
 | `SLChronWSAll` | All sales price management objects |
-| `SWChronWSAll` | All SellWatch purchase integration objects (SellWatch Vendor Info, Watch Online Approval, SellWatch-Overview, SellWatch info) |
+| `SWChronWSAll` | All SellWatch purchase integration objects (SellWatch Vendor Info, Watch Online Approval, SW Http Call Log, SellWatch-Overview, SellWatch info) |
 
 ## Troubleshooting
 
@@ -104,7 +106,7 @@ Access is controlled through two separate permission sets, which still need to b
 | A price isn't calculated with margin X% despite correct input | The category-based non-stock price calculation is not currently wired into the live flow — escalate to the development team if this feature is needed. |
 | "Upload Sales Price" reports that no API interface is configured, or aborts | Check on the base settings that "Price Export Active" is enabled and an "API Interface Code" is selected, and that the corresponding interface under "API Interface Setup" is active and fully configured (Endpoint URL, API Key if required). |
 | Individual price lines are left with "Export Status" = "Error" after "Upload Sales Price" | Other lines in the same run are still processed. Check the affected line for invalid values (e.g. a currency code that doesn't exist) and trigger the upload for that line again. |
-| A watch never gets approved for online sale even though it should be | Check the API interface entry with Code "WOA" (see above): does it exist, is it active, and are the API key and Endpoint URL set? Since the check aborts silently when the interface is missing/inactive, this is the most common cause. |
+| A watch never gets approved for online sale even though it should be | First open the **"SW Http Call Log"** page and filter for entries related to the affected watch ("Source Entry No" column = the watch's entry number on "Watch Online Approval"): if there's an entry with "Success" = No, the "Error Message" and the downloadable request/response show the exact cause (e.g. network error, wrong HTTP status). If there's **no** entry at all for the affected watch, the call was never made — then check the API interface entry with Code "WOA" (see above): does it exist, is it active, and are the API key and Endpoint URL set? This configuration check still aborts without a log entry if the interface is missing/inactive. |
 | New SellWatch requests never show up in "SellWatch-Overview", or a vendor/order is never created automatically | Processing (vendor/order creation) currently has to be triggered separately — no automatic job queue entry exists for it. Escalate to the development team (see Developer Manual, "Known Limitations"). |
 
 ## Escalation path

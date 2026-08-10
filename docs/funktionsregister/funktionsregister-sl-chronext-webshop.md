@@ -3,7 +3,7 @@
 **Version:** 1.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-05 (aktualisiert 2026-08-07 – SellWatch-Ankaufsintegration ergänzt)
+**Erstellt am:** 2026-08-05 (aktualisiert 2026-08-09 – HTTP-Call-Logging und Telemetry für den SellWatch-Online-Check ergänzt)
 **Abhängigkeiten:** keine
 
 ---
@@ -12,7 +12,7 @@
 
 Dieses Projekt bündelt mittlerweile zwei fachlich getrennte Prozesse. Zum einen die Verwaltung und Freigabe von Verkaufspreisen für den Webshop (migriert aus einem gewachsenen NAV-Altsystem, "SL"-Objekte): Neue Preise werden per CSV-Import eingelesen, inhaltlich geprüft (Mindestmarge, Preisschwankungen, Zeiträume) und von einem Sachbearbeiter freigegeben. Für jede Fremdwährung, die für den Webshop aktiviert ist, kann mit einem Klick automatisch ein umgerechneter Preis erzeugt werden ("Add all Currencies"). Mit der Aktion "Upload Sales Price" werden freigegebene Preiszeilen jetzt zuerst automatisch in die produktive Verkaufspreis-Tabelle sowie in ein versioniertes Preisarchiv übernommen und anschließend über eine konfigurierbare API-Schnittstelle an ein externes System (z. B. den Webshop selbst) übertragen. Ergänzend existiert ein automatisierter, dateibasierter CSV-Import-Baustein, der unabhängig vom manuellen Import läuft, aber aktuell noch nicht an eine Job-Queue angebunden ist.
 
-Zum anderen, neu seit 2026-08-07, die Abwicklung von Ankaufsanfragen für gebrauchte Uhren über den Partner SellWatch ("SW"-Objekte): Aus eingehenden Anfragen werden automatisch Lieferanten und Einkaufsbestellungen erzeugt, der Bearbeitungsstatus wird per JSON an SellWatch zurückgemeldet, und Uhren können über eine externe Schnittstelle für den Online-Verkauf freigegeben werden. Beide Prozesse nutzen dieselbe generische Infrastruktur zur Verwaltung externer API-Schnittstellen (Table 51007 "SL API Interface Setup"). Zwei Permission Sets decken den Zugriff auf die jeweils eigenen Objekte ab (eines je Prozess).
+Zum anderen, seit 2026-08-07, die Abwicklung von Ankaufsanfragen für gebrauchte Uhren über den Partner SellWatch ("SW"-Objekte): Aus eingehenden Anfragen werden automatisch Lieferanten und Einkaufsbestellungen erzeugt, der Bearbeitungsstatus wird per JSON an SellWatch zurückgemeldet, und Uhren können über eine externe Schnittstelle für den Online-Verkauf freigegeben werden. Beide Prozesse nutzen dieselbe generische Infrastruktur zur Verwaltung externer API-Schnittstellen (Table 51007 "SL API Interface Setup"). Zwei Permission Sets decken den Zugriff auf die jeweils eigenen Objekte ab (eines je Prozess). Seit 2026-08-09 wird zusätzlich jeder HTTP-Aufruf der SellWatch-Online-Freigabeprüfung protokolliert (Request/Response als .txt herunterladbar, API-Key redigiert) und jeder Fehlschlag per Telemetry gemeldet.
 
 ---
 
@@ -20,16 +20,16 @@ Zum anderen, neu seit 2026-08-07, die Abwicklung von Ankaufsanfragen für gebrau
 
 | Objekttyp | Anzahl |
 |---|---|
-| Tabellen | 9 |
+| Tabellen | 10 |
 | Tabellenerweiterungen | 5 |
-| Seiten | 6 |
+| Seiten | 7 |
 | Seitenerweiterungen | 3 |
 | XMLports | 1 |
 | Codeunits | 3 |
 | Enums | 6 |
 | Permission Sets | 2 |
-| **Gesamt Objekte** | **35** |
-| **Gesamt Prozeduren/Trigger/Events** | **60** |
+| **Gesamt Objekte** | **37** |
+| **Gesamt Prozeduren/Trigger/Events** | **66** |
 
 ---
 
@@ -117,9 +117,20 @@ Verwaltet je Artikel/Variante, ob eine angekaufte Uhr für den Online-Verkauf im
 | 1 | `"Check Online" – OnValidate` | Trigger | – | Trägt automatisch das Datum der Erstfreigabe ein, sobald eine Uhr für den Online-Verkauf freigegeben wird. |
 | 2 | `ReadJSONFile` | Prozedur | Internal | Nicht implementierte Altfunktion ohne Logik. |
 | 3 | `CreateJsonObjectCheckOnline` | Prozedur | Public | Baut ein einfaches JSON-Dokument mit der laufenden Nummer eines Freigabe-Datensatzes. |
-| 4 | `CreateEntryInexternalFile` | Prozedur | Public | Fragt bei der (in `SL API Interface Setup`, Code "WOA") konfigurierten externen Schnittstelle ab, ob eine Uhr online gehen darf, und setzt je nach Antwort die Online-Freigabe oder eine Bemerkung, dass die Uhr offline bleibt. |
+| 4 | `CreateEntryInexternalFile` | Prozedur | Public | Fragt bei der (in `SL API Interface Setup`, Code "WOA") konfigurierten externen Schnittstelle ab, ob eine Uhr online gehen darf, und setzt je nach Antwort die Online-Freigabe oder eine Bemerkung, dass die Uhr offline bleibt. Protokolliert seit 2026-08-09 jeden Aufruf in `SW Http Call Log` und meldet Fehlschläge zusätzlich per Telemetry (siehe unten). |
+| 5 | `BuildRedactedRequestText` | Prozedur | Internal | Baut den zu protokollierenden Request-Text auf und ersetzt dabei den `X-API-KEY`-Header-Wert durch einen festen Platzhalter, damit der echte Schlüssel nie im Protokoll landet. |
+| 6 | `LogHttpCall` | Prozedur | Internal | Legt einen Protokolleintrag in `SW Http Call Log` an (Erfolg oder Fehlschlag, HTTP-Statuscode, Fehlermeldung, redigierter Request-Text, Response-Text). |
+| 7 | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Aufruf per `Session.LogMessage` (Event-ID `SW-0101`) mit Endpoint, HTTP-Statuscode und der auslösenden `Watch Online Approval`-Lfd.-Nr. als Custom Dimensions. |
 
-> **Hinweis:** `CreateEntryInexternalFile` bricht bewusst kommentarlos ab, wenn die Schnittstelle nicht konfiguriert/aktiv ist oder kein API-Key hinterlegt ist — ebenso, wenn der HTTP-Aufruf fehlschlägt. Es gibt aktuell keine Protokollierung eines Fehlschlags (Follow-up-Anforderung angekündigt).
+> **Hinweis:** `CreateEntryInexternalFile` bricht weiterhin kommentarlos ab (ohne Protokolleintrag oder Telemetry), wenn die Schnittstelle "WOA" gar nicht konfiguriert/aktiv ist oder kein API-Key hinterlegt ist — das ist eine bewusste Konfigurationsprüfung vor dem eigentlichen HTTP-Aufruf, kein HTTP-Fehler. Jeder tatsächliche HTTP-Aufruf (erfolgreich oder fehlgeschlagen) wird seit 2026-08-09 vollständig protokolliert.
+
+### Tabelle: SW Http Call Log (ID: 51010)
+
+Protokolliert jeden HTTP-Aufruf der SellWatch-Online-Freigabeprüfung (`CreateEntryInexternalFile`) mit Request und Response als herunterladbarer Text; der `X-API-KEY`-Header wird dabei redigiert.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Protokolleintrags automatisch Datum/Uhrzeit des Aufrufs ein. |
 
 ### Tabellenerweiterung: SL Country Region (ID: 51000, erweitert Land/Region)
 
@@ -222,6 +233,15 @@ Infobox-Ausschnitt (CardPart) mit den Uhren-Detailinformationen einer SellWatch-
 |---|---|---|---|---|
 | – | – | – | – | Keine Prozeduren/Trigger vorhanden. |
 
+### Seite: SW Http Call Log (ID: 51006)
+
+Schreibgeschützte Liste aller protokollierten SellWatch-Online-Check-HTTP-Aufrufe, mit Aktionen zum Herunterladen von Request und Response als .txt-Datei.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `Download Request` | Action | Public | Lädt den protokollierten Request eines Eintrags als .txt-Datei herunter. |
+| 2 | `Download Response` | Action | Public | Lädt die protokollierte Response eines Eintrags als .txt-Datei herunter. |
+
 ### XMLport: SL Import Sales Price (ID: 51000)
 
 Manueller CSV-Import direkt in die Arbeitsliste (Page 51001, Action "Import CSV").
@@ -317,7 +337,7 @@ Deckt den Lese-/Schreibzugriff auf die beiden SellWatch-Tabellen, die Ausführun
 
 | Kandidat | Objekte | Begründung |
 |---|---|---|
-| SellWatch-Ankaufsintegration | Table 51008/51009, Codeunit 51002, Page 51004/51005, Enum 51006, TableExt 51003/51004, Permission Set SWChronWSAll | Fachlich vollständig eigenständiger Prozess (Ankauf gebrauchter Uhren) ohne inhaltliche Berührung zur Preisprüfung/-freigabe; einzige Kopplung ist die gemeinsam genutzte API-Schnittstellen-Verwaltung (siehe unten). Klarer Kandidat für eine eigene Extension, falls SellWatch getrennt vom Preis-Webshop weiterentwickelt oder ausgerollt werden soll. |
+| SellWatch-Ankaufsintegration | Table 51008/51009/51010, Codeunit 51002, Page 51004/51005/51006, Enum 51006, TableExt 51003/51004, Permission Set SWChronWSAll | Fachlich vollständig eigenständiger Prozess (Ankauf gebrauchter Uhren) ohne inhaltliche Berührung zur Preisprüfung/-freigabe; einzige Kopplung ist die gemeinsam genutzte API-Schnittstellen-Verwaltung (siehe unten). Klarer Kandidat für eine eigene Extension, falls SellWatch getrennt vom Preis-Webshop weiterentwickelt oder ausgerollt werden soll. |
 | Export-Anbindung an externe Systeme | Codeunit 51000, Table 51004, Table 51007, Page 51003, Enum 51004 | Generischer, wiederverwendbarer Baustein (konfigurierbare Endpunkte, Authentifizierung, JSON-Versand per Reflection) – nicht spezifisch auf Verkaufspreise beschränkt und inzwischen bereits von zwei unabhängigen Prozessen genutzt (Sales-Price-Export **und** seit 2026-08-07 auch `Watch Online Approval` aus der SellWatch-Integration). Damit ein noch stärkerer Kandidat als zuvor für eine eigene, gemeinsame Basis-Extension, von der beide Fach-Extensions abhängen. |
 | Dateibasierter Import/Protokoll | Table 51005, Table 51006, Codeunit 51001 | Klar abgegrenzter, von der manuellen Arbeitsliste unabhängiger Baustein (eigene Tabellen, ein Event Publisher für lose Kopplung). Könnte als eigenständige "Import-Pipeline"-Erweiterung herausgelöst werden, sobald eine Job-Queue-Anbindung erfolgt. |
 | Währungs-/Länder-Stammdaten | TableExtension 51000, TableExtension 51002, PageExtension 51000, PageExtension 51002 | Reine Stammdatenerweiterung von Land/Region und Währung; wird von den Preisfunktionen nur gelesen, aber nirgends selbst verändert – wiederverwendbar für zukünftige, über den Webshop hinausgehende Länder-/Währungsfreigaben. |
@@ -326,4 +346,6 @@ Deckt den Lese-/Schreibzugriff auf die beiden SellWatch-Tabellen, die Ausführun
 
 **Hinweis zum Update vom 2026-08-05:** Gegenüber der Vorversion hatte sich die Objekt- und Funktionsanzahl nicht verändert – zwei Changes (`remove-item-variants`, `remove-country-code`) hatten ausschließlich Felder (`"Variant Code"` auf Table 51001/51002, `"Country Code"` auf Table 51002, `"Country/Region Code"` auf TableExtension 51001) sowie zugehörige Spalten und Codezeilen innerhalb bestehender Prozeduren entfernt, ohne neue Prozeduren/Trigger/Events einzuführen oder bestehende zu löschen. Ergebnis damals: 26 Objekte, 47 Funktionen.
 
-**Hinweis zum Update vom 2026-08-07:** Aus einer NAV→AL-Migration wurde die komplette SellWatch-Ankaufsintegration neu hinzugefügt: Table 51008 "SellWatch Vendor Info", Table 51009 "Watch Online Approval", Codeunit 51002 "SellWatch Mgt", Page 51004 "SellWatch-Overview", Page 51005 "SellWatch info", Enum 51006 "SW Order Status", TableExtension 51003 "SW Purchase Line", TableExtension 51004 "SW Purchase Header" sowie Permission Set 51001 "SWChronWSAll". Dabei wurde ein zunächst hartcodierter API-Key in `Watch Online Approval` entfernt und stattdessen über die bereits vorhandene, generische Infrastruktur in Table 51007 "SL API Interface Setup" bezogen (Isolated Storage) — dadurch entstand eine neue, bewusste Abhängigkeit der SellWatch-Integration auf diese gemeinsame Basis. Ergebnis: 35 Objekte, 60 Funktionen (+9 Objekte / +13 Funktionen gegenüber der Vorversion).
+**Hinweis zum Update vom 2026-08-07:** Aus einer NAV→AL-Migration wurde die komplette SellWatch-Ankaufsintegration neu hinzugefügt: Table 51008 "SellWatch Vendor Info", Table 51009 "Watch Online Approval", Codeunit 51002 "SellWatch Mgt", Page 51004 "SellWatch-Overview", Page 51005 "SellWatch info", Enum 51006 "SW Order Status", TableExtension 51003 "SW Purchase Line", TableExtension 51004 "SW Purchase Header" sowie Permission Set 51001 "SWChronWSAll". Dabei wurde ein zunächst hartcodierter API-Key in `Watch Online Approval` entfernt und stattdessen über die bereits vorhandene, generische Infrastruktur in Table 51007 "SL API Interface Setup" bezogen (Isolated Storage) — dadurch entstand eine neue, bewusste Abhängigkeit der SellWatch-Integration auf diese gemeinsame Basis. Ergebnis damals: 35 Objekte, 60 Funktionen (+9 Objekte / +13 Funktionen gegenüber der Vorversion).
+
+**Hinweis zum Update vom 2026-08-09:** Table 51010 "SW Http Call Log" und Page 51006 "SW Http Call Log" neu hinzugefügt, dazu drei neue interne Prozeduren auf Table 51009 (`BuildRedactedRequestText`, `LogHttpCall`, `LogHttpCallFailureTelemetry`). `CreateEntryInexternalFile` protokolliert jetzt jeden HTTP-Aufruf der SellWatch-Online-Freigabeprüfung (Request/Response als .txt herunterladbar, `X-API-KEY`-Header redigiert) und meldet jeden Fehlschlag zusätzlich per `Session.LogMessage`-Telemetry (Event-ID `SW-0101`) — schließt den zuvor dokumentierten "stille Fehlschläge"-Lücke. Ergebnis: 37 Objekte, 66 Funktionen (+2 Objekte / +6 Funktionen gegenüber der Vorversion).
