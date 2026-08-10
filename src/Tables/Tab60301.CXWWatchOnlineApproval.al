@@ -128,7 +128,7 @@ table 60301 "CXW Watch Online Approval"
 
     procedure CreateEntryInexternalFile(var WOA: Record "CXW Watch Online Approval")
     var
-        ApiInterfaceSetup: Record "SL API Interface Setup";
+        ApiInterfaceSetup: Record "CXW API Interface Setup";
         HttpClientObj: HttpClient;
         HttpRequestMsg: HttpRequestMessage;
         HttpResponseMsg: HttpResponseMessage;
@@ -146,12 +146,12 @@ table 60301 "CXW Watch Online Approval"
         // kein Klartext-Secret mehr im Quellcode (vorher hartcodierter X-API-KEY, siehe Dev-Abschluss-Finding).
         if not ApiInterfaceSetup.Get('WOA') then
             exit;
-        if not ApiInterfaceSetup.Active then
+        if not ApiInterfaceSetup."CXW Active" then
             exit;
         if ApiInterfaceSetup.GetApiKey() = '' then
             exit;
 
-        RequestUrl := ApiInterfaceSetup."Endpoint URL" + '/' + WOA."CXW Item No" + '/' + WOA."CXW Variant Code" + '/check';
+        RequestUrl := ApiInterfaceSetup."CXW Endpoint URL" + '/' + WOA."CXW Item No" + '/' + WOA."CXW Variant Code" + '/check';
         RequestLogText := BuildRedactedRequestText('GET', RequestUrl);
 
         HttpRequestMsg.Method := 'GET';
@@ -202,10 +202,11 @@ table 60301 "CXW Watch Online Approval"
 
     local procedure LogHttpCall(pWOA: Record "CXW Watch Online Approval"; pEndpointUrl: Text; pSuccess: Boolean; pHttpStatusCode: Integer; pErrorMessage: Text; pRequestText: Text; pResponseText: Text)
     var
-        HttpCallLog: Record "CXW SW Http Call Log";
+        HttpCallLog: Record "CXW Http Call Log";
         OutStr: OutStream;
     begin
         HttpCallLog.Init();
+        HttpCallLog."CXW Source Table No." := Database::"CXW Watch Online Approval";
         HttpCallLog."CXW Source Entry No" := pWOA."CXW Entry No";
         HttpCallLog."CXW Endpoint URL" := CopyStr(pEndpointUrl, 1, MaxStrLen(HttpCallLog."CXW Endpoint URL"));
         HttpCallLog."CXW Success" := pSuccess;

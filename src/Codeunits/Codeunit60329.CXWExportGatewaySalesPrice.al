@@ -30,11 +30,34 @@ codeunit 60329 "CXW Export Gateway Sales Price"
     begin
         vSalesPrice.Validate("Currency Code", pSalesPriceChecking."CXW Currency Code");
         vSalesPrice.Validate("Unit Price", pSalesPriceChecking."CXW Stock Price");
+        vSalesPrice."CXW Unit Price (LCY)" := ResolveUnitPriceLCY(pSalesPriceChecking, vSalesPrice."Unit Price");
         vSalesPrice."CXW Strike-Price incl. VAT" := pSalesPriceChecking."CXW Strike Price";
         vSalesPrice."CXW Rec. Retail Price incl VAT" := pSalesPriceChecking."CXW Recom. Retail Price";
         vSalesPrice."CXW Reason Code" := pSalesPriceChecking."CXW Reason Code";
         vSalesPrice."CXW Comment" := pSalesPriceChecking."CXW Comment";
         vSalesPrice."CXW Remark" := pSalesPriceChecking."CXW Remark";
+    end;
+
+    local procedure ResolveUnitPriceLCY(pSalesPriceChecking: Record "CXW Sales Price Checking"; pUnitPrice: Decimal): Decimal
+    var
+        CurrExchRate: Record "Currency Exchange Rate";
+        ExchangeRateDate: Date;
+        ExchangeRateAmt: Decimal;
+    begin
+        if pSalesPriceChecking."CXW Currency Code" = '' then
+            exit(pUnitPrice);
+
+        if pSalesPriceChecking."CXW Exchange Rate Amount" <> 0 then
+            exit(pUnitPrice / pSalesPriceChecking."CXW Exchange Rate Amount");
+
+        CurrExchRate.SetRange("Currency Code", pSalesPriceChecking."CXW Currency Code");
+        if not CurrExchRate.FindLast() then
+            exit(0);
+
+        CurrExchRate.GetLastestExchangeRate(pSalesPriceChecking."CXW Currency Code", ExchangeRateDate, ExchangeRateAmt);
+        if ExchangeRateAmt = 0 then
+            exit(0);
+        exit(pUnitPrice * ExchangeRateAmt);
     end;
 
     local procedure ArchiveCheckingLine(pSalesPriceChecking: Record "CXW Sales Price Checking")
@@ -52,7 +75,7 @@ codeunit 60329 "CXW Export Gateway Sales Price"
             l_intNextVersionNo := 1;
 
         l_recSalesPriceArchive.Init();
-        l_recSalesPriceArchive.TransferFields(pSalesPriceChecking, false);
+        l_recSalesPriceArchive.TransferFields(pSalesPriceChecking, true);
         l_recSalesPriceArchive."CXW Version No." := l_intNextVersionNo;
         l_recSalesPriceArchive.Insert(true);
     end;
@@ -97,7 +120,9 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         HttpResponse: HttpResponseMessage;
         HttpContentObj: HttpContent;
         HttpHeadersObj: HttpHeaders;
+        RequestLogText: Text;
         ResponseText: Text;
+        FormattedErrorTxt: Text;
         SendOk: Boolean;
     begin
         if not GenSPSetup.Get() then
@@ -135,10 +160,14 @@ codeunit 60329 "CXW Export Gateway Sales Price"
                 end;
         end;
 
+        RequestLogText := BuildRedactedRequestText('POST', ApiInterfaceSetup."CXW Endpoint URL", ApiInterfaceSetup."CXW Auth Type", pJsonText);
+
         HttpClientObj.Timeout := 30000;
         SendOk := HttpClientObj.Send(HttpRequest, HttpResponse);
 
         if SendOk and HttpResponse.IsSuccessStatusCode() then begin
+            HttpResponse.Content().ReadAs(ResponseText);
+            LogHttpCall(vOutboundFile, ApiInterfaceSetup."CXW Endpoint URL", true, HttpResponse.HttpStatusCode(), '', RequestLogText, ResponseText);
             vOutboundFile."CXW Status" := vOutboundFile."CXW Status"::Processed;
             vOutboundFile."CXW Response Message" := '';
             vOutboundFile.Modify();
@@ -147,14 +176,49 @@ codeunit 60329 "CXW Export Gateway Sales Price"
 
         if SendOk then begin
             HttpResponse.Content().ReadAs(ResponseText);
-            ResponseText := StrSubstNo('HTTP %1: %2', HttpResponse.HttpStatusCode(), ResponseText);
-        end else
-            ResponseText := 'The request could not be sent (network error).';
+            FormattedErrorTxt := StrSubstNo('HTTP %1: %2', HttpResponse.HttpStatusCode(), ResponseText);
+            LogHttpCall(vOutboundFile, ApiInterfaceSetup."CXW Endpoint URL", false, HttpResponse.HttpStatusCode(), FormattedErrorTxt, RequestLogText, ResponseText);
+            ResponseText := FormattedErrorTxt;
+        end else begin
+            LogHttpCall(vOutboundFile, ApiInterfaceSetup."CXW Endpoint URL", false, 0, NetworkErrorTxt, RequestLogText, '');
+            ResponseText := NetworkErrorTxt;
+        end;
 
         vOutboundFile."CXW Status" := vOutboundFile."CXW Status"::Error;
         vOutboundFile."CXW Response Message" := CopyStr(ResponseText, 1, MaxStrLen(vOutboundFile."CXW Response Message"));
         vOutboundFile.Modify();
         exit(false);
+    end;
+
+    local procedure BuildRedactedRequestText(pMethod: Text; pUrl: Text; pAuthType: Enum "CXW API Auth Type"; pJsonBody: Text): Text
+    var
+        TypeHelper: Codeunit "Type Helper";
+        RequestText: Text;
+    begin
+        RequestText := pMethod + ' ' + pUrl + TypeHelper.LFSeparator() + 'Content-Type: application/json';
+        if pAuthType <> pAuthType::None then
+            RequestText += TypeHelper.LFSeparator() + 'Authorization: ' + AuthRedactedTxt;
+        RequestText += TypeHelper.LFSeparator() + TypeHelper.LFSeparator() + pJsonBody;
+        exit(RequestText);
+    end;
+
+    local procedure LogHttpCall(pOutboundFile: Record "CXW Sales Price Outbound File"; pEndpointUrl: Text; pSuccess: Boolean; pHttpStatusCode: Integer; pErrorMessage: Text; pRequestText: Text; pResponseText: Text)
+    var
+        HttpCallLog: Record "CXW Http Call Log";
+        OutStr: OutStream;
+    begin
+        HttpCallLog.Init();
+        HttpCallLog."CXW Source Table No." := Database::"CXW Sales Price Outbound File";
+        HttpCallLog."CXW Source Entry No" := pOutboundFile."CXW Entry No.";
+        HttpCallLog."CXW Endpoint URL" := CopyStr(pEndpointUrl, 1, MaxStrLen(HttpCallLog."CXW Endpoint URL"));
+        HttpCallLog."CXW Success" := pSuccess;
+        HttpCallLog."CXW HTTP Status Code" := pHttpStatusCode;
+        HttpCallLog."CXW Error Message" := CopyStr(pErrorMessage, 1, MaxStrLen(HttpCallLog."CXW Error Message"));
+        HttpCallLog."CXW Request".CreateOutStream(OutStr, TextEncoding::UTF8);
+        OutStr.WriteText(pRequestText);
+        HttpCallLog."CXW Response".CreateOutStream(OutStr, TextEncoding::UTF8);
+        OutStr.WriteText(pResponseText);
+        HttpCallLog.Insert(true);
     end;
 
     local procedure AddFieldToJson(var vJsonObj: JsonObject; pFieldName: Text; pFieldValue: Variant)
@@ -192,4 +256,6 @@ codeunit 60329 "CXW Export Gateway Sales Price"
 
     var
         ApiInterfaceNotFoundErr: Label 'API interface %1 (selected on the general sales price setup) no longer exists.', Comment = '%1 = API interface code';
+        AuthRedactedTxt: Label '***redacted***', Locked = true;
+        NetworkErrorTxt: Label 'The request could not be sent (network error).';
 }
