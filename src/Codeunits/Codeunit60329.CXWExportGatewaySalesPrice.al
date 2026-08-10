@@ -30,11 +30,34 @@ codeunit 60329 "CXW Export Gateway Sales Price"
     begin
         vSalesPrice.Validate("Currency Code", pSalesPriceChecking."CXW Currency Code");
         vSalesPrice.Validate("Unit Price", pSalesPriceChecking."CXW Stock Price");
+        vSalesPrice."CXW Unit Price (LCY)" := ResolveUnitPriceLCY(pSalesPriceChecking, vSalesPrice."Unit Price");
         vSalesPrice."CXW Strike-Price incl. VAT" := pSalesPriceChecking."CXW Strike Price";
         vSalesPrice."CXW Rec. Retail Price incl VAT" := pSalesPriceChecking."CXW Recom. Retail Price";
         vSalesPrice."CXW Reason Code" := pSalesPriceChecking."CXW Reason Code";
         vSalesPrice."CXW Comment" := pSalesPriceChecking."CXW Comment";
         vSalesPrice."CXW Remark" := pSalesPriceChecking."CXW Remark";
+    end;
+
+    local procedure ResolveUnitPriceLCY(pSalesPriceChecking: Record "CXW Sales Price Checking"; pUnitPrice: Decimal): Decimal
+    var
+        CurrExchRate: Record "Currency Exchange Rate";
+        ExchangeRateDate: Date;
+        ExchangeRateAmt: Decimal;
+    begin
+        if pSalesPriceChecking."CXW Currency Code" = '' then
+            exit(pUnitPrice);
+
+        if pSalesPriceChecking."CXW Exchange Rate Amount" <> 0 then
+            exit(pUnitPrice / pSalesPriceChecking."CXW Exchange Rate Amount");
+
+        CurrExchRate.SetRange("Currency Code", pSalesPriceChecking."CXW Currency Code");
+        if not CurrExchRate.FindLast() then
+            exit(0);
+
+        CurrExchRate.GetLastestExchangeRate(pSalesPriceChecking."CXW Currency Code", ExchangeRateDate, ExchangeRateAmt);
+        if ExchangeRateAmt = 0 then
+            exit(0);
+        exit(pUnitPrice * ExchangeRateAmt);
     end;
 
     local procedure ArchiveCheckingLine(pSalesPriceChecking: Record "CXW Sales Price Checking")

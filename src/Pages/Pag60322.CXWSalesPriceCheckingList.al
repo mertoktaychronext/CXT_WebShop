@@ -462,19 +462,21 @@ page 60322 "CXW Sales Price Checking List"
                 g_recSP.SetRange("Starting Date", g_recSalesPriceCheck."CXW Starting Date");
                 if g_recSP.FindFirst() then begin
                     g_recSalesPriceCheck."CXW Old Stock Price" := g_recSP."CXW Unit Price (LCY)";
-                    if g_recSalesPriceCheck."CXW Stock Price" < g_recSP."CXW Unit Price (LCY)" then
-                        g_recSalesPriceCheck."CXW Remark" :=
-                            StrSubstNo(
-                                TXT001,
-                                Round(((g_recSP."CXW Unit Price (LCY)" - g_recSalesPriceCheck."CXW Stock Price") / g_recSP."CXW Unit Price (LCY)") * 100, 0.01, '='),
-                                g_recSP."CXW Unit Price (LCY)");
+                    if g_recSP."CXW Unit Price (LCY)" <> 0 then begin
+                        if g_recSalesPriceCheck."CXW Stock Price" < g_recSP."CXW Unit Price (LCY)" then
+                            g_recSalesPriceCheck."CXW Remark" :=
+                                StrSubstNo(
+                                    TXT001,
+                                    Round(((g_recSP."CXW Unit Price (LCY)" - g_recSalesPriceCheck."CXW Stock Price") / g_recSP."CXW Unit Price (LCY)") * 100, 0.01, '='),
+                                    g_recSP."CXW Unit Price (LCY)");
 
-                    g_decStockPricePercentFromPrev :=
-                        Round(((g_recSalesPriceCheck."CXW Stock Price" - g_recSP."CXW Unit Price (LCY)") / g_recSP."CXW Unit Price (LCY)") * 100, 0.01, '=');
-                    if (g_recSalesPriceCheck."CXW Stock Price" > g_recSP."CXW Unit Price (LCY)") and
-                       (g_decStockPricePercentFromPrev > g_recGenSPSetup."CXW Stock Price Threshold %")
-                    then
-                        g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT007, g_decStockPricePercentFromPrev, g_recSP."CXW Unit Price (LCY)");
+                        g_decStockPricePercentFromPrev :=
+                            Round(((g_recSalesPriceCheck."CXW Stock Price" - g_recSP."CXW Unit Price (LCY)") / g_recSP."CXW Unit Price (LCY)") * 100, 0.01, '=');
+                        if (g_recSalesPriceCheck."CXW Stock Price" > g_recSP."CXW Unit Price (LCY)") and
+                           (g_decStockPricePercentFromPrev > g_recGenSPSetup."CXW Stock Price Threshold %")
+                        then
+                            g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT007, g_decStockPricePercentFromPrev, g_recSP."CXW Unit Price (LCY)");
+                    end;
                 end;
 
                 g_decSPExclVAT := 0;
