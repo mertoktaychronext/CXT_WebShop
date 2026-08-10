@@ -19,10 +19,6 @@ Before generating the outbound interface file for an "SL Sales Price Checking" l
 - **WHEN** the system writes or updates a "Sales Price" record from a checking line
 - **THEN** the "Sales Type" field on that record is set to "All Customers" and "Sales Code" is blank, regardless of any other value
 
-#### Scenario: Country/Region Code is left blank
-- **WHEN** the system writes or updates a "Sales Price" record from a checking line
-- **THEN** the "Country/Region Code" field on that record is set to blank
-
 #### Scenario: Stock Price maps to the standard Unit Price field
 - **WHEN** the system writes or updates a "Sales Price" record from a checking line
 - **THEN** the checking line's "Stock Price" value is written to the standard "Unit Price" field on "Sales Price"
@@ -40,7 +36,7 @@ Before generating the outbound interface file for an "SL Sales Price Checking" l
 
 #### Scenario: Archive row reflects checking line data
 - **WHEN** the system inserts a new "SL Sales Price Archive" row for a checking line
-- **THEN** the archive row's fields (including "Stock Price", "Non Stock Price", "Strike Price", "Recom. Retail Price", "Starting Date", "Starting Time", "Ending Date", "Ending Time", "Old Stock Price", "Exchange Rate Amount", "Exchange Rate Date", "Reason Code", Comment, Remark, Validated, "Accept New Setup") match the corresponding fields on the source checking line, and "Country Code" is blank
+- **THEN** the archive row's fields (including "Stock Price", "Non Stock Price", "Strike Price", "Recom. Retail Price", "Starting Date", "Starting Time", "Ending Date", "Ending Time", "Old Stock Price", "Exchange Rate Amount", "Exchange Rate Date", "Reason Code", Comment, Remark, Validated, "Accept New Setup") match the corresponding fields on the source checking line
 
 ### Requirement: Write-back and archiving occur for every export attempt
 The system SHALL perform the "Sales Price" write-back and "SL Sales Price Archive" snapshot for every "SL Sales Price Checking" line that "Upload Sales Price" attempts to export, including lines being re-sent after a previous successful export.
