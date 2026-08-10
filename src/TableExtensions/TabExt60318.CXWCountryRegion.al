@@ -1,18 +1,18 @@
-tableextension 51000 "SL Country Region" extends "Country/Region"
+tableextension 60318 "CXW Country Region" extends "Country/Region"
 {
     fields
     {
-        field(51000; "Taxation Type"; Enum "SL Taxation Type")
+        field(60300; "CXW Taxation Type"; Enum "CXW Taxation Type")
         {
             Caption = 'Taxation Type';
             DataClassification = ToBeClassified;
         }
-        field(51001; "Delivery Time"; DateFormula)
+        field(60301; "CXW Delivery Time"; DateFormula)
         {
             Caption = 'Delivery Time (Days)';
             DataClassification = ToBeClassified;
         }
-        field(51002; "Sales Price Currency Code"; Code[10])
+        field(60302; "CXW Sales Price Currency Code"; Code[10])
         {
             Caption = 'Sales Price Currency Code';
             DataClassification = ToBeClassified;

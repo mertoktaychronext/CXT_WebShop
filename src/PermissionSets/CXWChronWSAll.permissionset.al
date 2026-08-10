@@ -1,0 +1,27 @@
+namespace SL;
+
+permissionset 60336 CXWChronWSAll
+{
+    Assignable = true;
+    Permissions = tabledata "CXW General Sales Price Setup" = RIMD,
+        tabledata "CXW Sales Price Archive" = RIMD,
+        tabledata "CXW Sales Price Checking" = RIMD,
+        tabledata "CXW Price Import Protocol" = RIMD,
+        tabledata "CXW Sales Price Inbound File" = RIMD,
+        tabledata "CXW Sales Price Outbound File" = RIMD,
+        tabledata "CXW API Interface Setup" = RIMD,
+        table "CXW General Sales Price Setup" = X,
+        table "CXW Sales Price Archive" = X,
+        table "CXW Sales Price Checking" = X,
+        table "CXW Price Import Protocol" = X,
+        table "CXW Sales Price Inbound File" = X,
+        table "CXW Sales Price Outbound File" = X,
+        table "CXW API Interface Setup" = X,
+        codeunit "CXW Import Sales Prices" = X,
+        codeunit "CXW Export Gateway Sales Price" = X,
+        xmlport "CXW Import Sales Price" = X,
+        page "CXW General Sales Price Setup" = X,
+        page "CXW Sales Price Archive" = X,
+        page "CXW Sales Price Checking List" = X,
+        page "CXW API Interface Setup" = X;
+}

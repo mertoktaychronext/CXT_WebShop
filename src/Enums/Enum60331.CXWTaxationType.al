@@ -1,4 +1,4 @@
-enum 51000 "SL Taxation Type"
+enum 60331 "CXW Taxation Type"
 {
     Extensible = true;
 

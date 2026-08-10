@@ -1,27 +1,27 @@
-table 51006 "SL Sales Price Import Protocol"
+table 60316 "CXW Price Import Protocol"
 {
     Caption = 'Sales Price Import Protocol';
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(1; "Entry No."; Integer)
+        field(1; "CXW Entry No."; Integer)
         {
             Caption = 'Entry No.';
             DataClassification = SystemMetadata;
         }
-        field(2; "Source Entry No."; BigInteger)
+        field(2; "CXW Source Entry No."; BigInteger)
         {
             Caption = 'Source Entry No.';
-            TableRelation = "SL Sales Price Inbound File"."Entry No.";
+            TableRelation = "CXW Sales Price Inbound File"."CXW Entry No.";
             DataClassification = SystemMetadata;
         }
-        field(3; Message; Text[250])
+        field(3; "CXW Message"; Text[250])
         {
             Caption = 'Message';
             DataClassification = ToBeClassified;
         }
-        field(4; "Created At"; DateTime)
+        field(4; "CXW Created At"; DateTime)
         {
             Caption = 'Created At';
             DataClassification = SystemMetadata;
@@ -30,15 +30,15 @@ table 51006 "SL Sales Price Import Protocol"
 
     keys
     {
-        key(PK; "Entry No.")
+        key(PK; "CXW Entry No.")
         {
             Clustered = true;
         }
-        key(Source; "Source Entry No.") { }
+        key(Source; "CXW Source Entry No.") { }
     }
 
     trigger OnInsert()
     begin
-        "Created At" := CurrentDateTime;
+        "CXW Created At" := CurrentDateTime;
     end;
 }

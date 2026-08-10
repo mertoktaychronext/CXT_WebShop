@@ -1,6 +1,6 @@
-codeunit 51001 "SL Import Sales Prices"
+codeunit 60330 "CXW Import Sales Prices"
 {
-    TableNo = "SL Sales Price Inbound File";
+    TableNo = "CXW Sales Price Inbound File";
 
     trigger OnRun()
     begin
@@ -15,7 +15,7 @@ codeunit 51001 "SL Import Sales Prices"
         ProcessingErrorErr: Label 'Error while processing sales prices.';
         RunTriggerAndEvents: Boolean;
 
-    local procedure ProcessFile(var vExtInterfaceInboundFile: Record "SL Sales Price Inbound File")
+    local procedure ProcessFile(var vExtInterfaceInboundFile: Record "CXW Sales Price Inbound File")
     var
         GenLedgerSetup: Record "General Ledger Setup";
         SalesPriceTemp: Record "Sales Price" temporary;
@@ -25,8 +25,8 @@ codeunit 51001 "SL Import Sales Prices"
         RowCount: Integer;
         ErrorText: Text[250];
     begin
-        vExtInterfaceInboundFile.CalcFields(SourceFile);
-        vExtInterfaceInboundFile.SourceFile.CreateInStream(InStr);
+        vExtInterfaceInboundFile.CalcFields("CXW SourceFile");
+        vExtInterfaceInboundFile."CXW SourceFile".CreateInStream(InStr);
         RowCount := 0;
         GenLedgerSetup.Get();
 
@@ -38,9 +38,9 @@ codeunit 51001 "SL Import Sales Prices"
                 ProcessLine(LineValues, SalesPriceTemp, GenLedgerSetup)
             else
                 if not EvaluateHeaderRow(LineValues, ErrorText) then begin
-                    vExtInterfaceInboundFile.Status := vExtInterfaceInboundFile.Status::Error;
+                    vExtInterfaceInboundFile."CXW Status" := vExtInterfaceInboundFile."CXW Status"::Error;
                     vExtInterfaceInboundFile.Modify();
-                    WriteProtocol(vExtInterfaceInboundFile."Entry No.", ErrorText);
+                    WriteProtocol(vExtInterfaceInboundFile."CXW Entry No.", ErrorText);
                     exit;
                 end;
 
@@ -48,17 +48,17 @@ codeunit 51001 "SL Import Sales Prices"
         end;
 
         if (RowCount - 1) <> SalesPriceTemp.Count() then begin
-            vExtInterfaceInboundFile.Status := vExtInterfaceInboundFile.Status::Error;
+            vExtInterfaceInboundFile."CXW Status" := vExtInterfaceInboundFile."CXW Status"::Error;
             vExtInterfaceInboundFile.Modify();
-            WriteProtocol(vExtInterfaceInboundFile."Entry No.", StrSubstNo(RowCountDifferingErr, RowCount, SalesPriceTemp.Count()));
+            WriteProtocol(vExtInterfaceInboundFile."CXW Entry No.", StrSubstNo(RowCountDifferingErr, RowCount, SalesPriceTemp.Count()));
             exit;
         end;
 
         if not WriteSalesPrices(SalesPriceTemp) then begin
-            vExtInterfaceInboundFile.Status := vExtInterfaceInboundFile.Status::Error;
-            WriteProtocol(vExtInterfaceInboundFile."Entry No.", ProcessingErrorErr);
+            vExtInterfaceInboundFile."CXW Status" := vExtInterfaceInboundFile."CXW Status"::Error;
+            WriteProtocol(vExtInterfaceInboundFile."CXW Entry No.", ProcessingErrorErr);
         end else
-            vExtInterfaceInboundFile.Status := vExtInterfaceInboundFile.Status::Processed;
+            vExtInterfaceInboundFile."CXW Status" := vExtInterfaceInboundFile."CXW Status"::Processed;
         vExtInterfaceInboundFile.Modify();
     end;
 
@@ -95,10 +95,10 @@ codeunit 51001 "SL Import Sales Prices"
                         vSalesPriceTemp."Price Includes VAT" := BoolValue;
                 7:
                     if Evaluate(DecimalValue, Value) then
-                        vSalesPriceTemp."Strike-Price incl. VAT" := DecimalValue;
+                        vSalesPriceTemp."CXW Strike-Price incl. VAT" := DecimalValue;
                 8:
                     if Evaluate(DecimalValue, Value) then
-                        vSalesPriceTemp."Recom. Retail Price incl. VAT" := DecimalValue;
+                        vSalesPriceTemp."CXW Rec. Retail Price incl VAT" := DecimalValue;
             end;
         end;
 
@@ -138,23 +138,23 @@ codeunit 51001 "SL Import Sales Prices"
 
     local procedure WriteProtocol(pSourceNo: BigInteger; pMessage: Text[250])
     var
-        ImportProtocol: Record "SL Sales Price Import Protocol";
+        ImportProtocol: Record "CXW Price Import Protocol";
         LastEntryNo: Integer;
     begin
         if pMessage = '' then
             exit;
 
         ImportProtocol.Reset();
-        ImportProtocol.SetCurrentKey("Entry No.");
-        ImportProtocol.SetRange("Source Entry No.", pSourceNo);
+        ImportProtocol.SetCurrentKey("CXW Entry No.");
+        ImportProtocol.SetRange("CXW Source Entry No.", pSourceNo);
         if ImportProtocol.FindLast() then
-            LastEntryNo := ImportProtocol."Entry No.";
+            LastEntryNo := ImportProtocol."CXW Entry No.";
         LastEntryNo += 1;
 
         ImportProtocol.Init();
-        ImportProtocol."Entry No." := LastEntryNo;
-        ImportProtocol."Source Entry No." := pSourceNo;
-        ImportProtocol.Message := pMessage;
+        ImportProtocol."CXW Entry No." := LastEntryNo;
+        ImportProtocol."CXW Source Entry No." := pSourceNo;
+        ImportProtocol."CXW Message" := pMessage;
         ImportProtocol.Insert(true);
     end;
 
@@ -182,15 +182,15 @@ codeunit 51001 "SL Import Sales Prices"
                         SalesPrice.Validate("Currency Code", vSalesPriceTemp."Currency Code");
                     SalesPrice.Validate("Unit Price", vSalesPriceTemp."Unit Price");
                     SalesPrice.Validate("Price Includes VAT", vSalesPriceTemp."Price Includes VAT");
-                    SalesPrice."Strike-Price incl. VAT" := vSalesPriceTemp."Strike-Price incl. VAT";
-                    SalesPrice."Recom. Retail Price incl. VAT" := vSalesPriceTemp."Recom. Retail Price incl. VAT";
+                    SalesPrice."CXW Strike-Price incl. VAT" := vSalesPriceTemp."CXW Strike-Price incl. VAT";
+                    SalesPrice."CXW Rec. Retail Price incl VAT" := vSalesPriceTemp."CXW Rec. Retail Price incl VAT";
                     SalesPrice.Insert(RunTriggerAndEvents);
                 end else begin
                     SalesPriceCopy.Copy(SalesPrice);
                     SalesPrice.Validate("Unit Price", vSalesPriceTemp."Unit Price");
                     SalesPrice.Validate("Price Includes VAT", vSalesPriceTemp."Price Includes VAT");
-                    SalesPrice."Strike-Price incl. VAT" := vSalesPriceTemp."Strike-Price incl. VAT";
-                    SalesPrice."Recom. Retail Price incl. VAT" := vSalesPriceTemp."Recom. Retail Price incl. VAT";
+                    SalesPrice."CXW Strike-Price incl. VAT" := vSalesPriceTemp."CXW Strike-Price incl. VAT";
+                    SalesPrice."CXW Rec. Retail Price incl VAT" := vSalesPriceTemp."CXW Rec. Retail Price incl VAT";
                     SalesPrice.Modify();
                     OnAfterSalesPriceModify(SalesPrice, SalesPriceCopy, RunTriggerAndEvents);
                 end;

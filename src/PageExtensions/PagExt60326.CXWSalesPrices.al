@@ -1,4 +1,4 @@
-pageextension 51001 "SL Sales Prices" extends "Sales Prices"
+pageextension 60326 "CXW Sales Prices" extends "Sales Prices"
 {
     layout
     {
@@ -8,37 +8,37 @@ pageextension 51001 "SL Sales Prices" extends "Sales Prices"
             {
                 Caption = 'Webshop Details';
 
-                field("Reason Code"; Rec."Reason Code")
+                field("CXW Reason Code"; Rec."CXW Reason Code")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the reason for this price or price change.';
                 }
-                field("Recom. Retail Price incl. VAT"; Rec."Recom. Retail Price incl. VAT")
+                field("CXW Rec. Retail Price incl VAT"; Rec."CXW Rec. Retail Price incl VAT")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the recommended retail price including VAT for the webshop.';
                 }
-                field("Strike-Price incl. VAT"; Rec."Strike-Price incl. VAT")
+                field("CXW Strike-Price incl. VAT"; Rec."CXW Strike-Price incl. VAT")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the strike-through reference price (including VAT) shown in the webshop.';
                 }
-                field("Unit Price (LCY)"; Rec."Unit Price (LCY)")
+                field("CXW Unit Price (LCY)"; Rec."CXW Unit Price (LCY)")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the unit price in local currency, used to compare against newly imported webshop prices.';
                 }
-                field("Unit Price (LCY) incl. VAT"; Rec."Unit Price (LCY) incl. VAT")
+                field("CXW Unit Price (LCY) incl. VAT"; Rec."CXW Unit Price (LCY) incl. VAT")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the unit price in local currency including VAT.';
                 }
-                field(Remark; Rec.Remark)
+                field("CXW Remark"; Rec."CXW Remark")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies an internal remark for this sales price.';
                 }
-                field(Comment; Rec.Comment)
+                field("CXW Comment"; Rec."CXW Comment")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies a comment for this sales price.';

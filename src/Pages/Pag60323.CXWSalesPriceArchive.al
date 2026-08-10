@@ -1,8 +1,8 @@
-page 51002 "SL Sales Price Archive"
+page 60323 "CXW Sales Price Archive"
 {
     Caption = 'Sales Price Archive';
     PageType = List;
-    SourceTable = "SL Sales Price Archive";
+    SourceTable = "CXW Sales Price Archive";
     Editable = false;
     InsertAllowed = false;
     DeleteAllowed = false;
@@ -16,43 +16,43 @@ page 51002 "SL Sales Price Archive"
         {
             repeater(Group)
             {
-                field("Item No."; Rec."Item No.")
+                field("CXW Item No."; Rec."CXW Item No.")
                 {
                     ApplicationArea = All;
                 }
-                field("Stock Price"; Rec."Stock Price")
+                field("CXW Stock Price"; Rec."CXW Stock Price")
                 {
                     ApplicationArea = All;
                 }
-                field("Old Stock Price"; Rec."Old Stock Price")
+                field("CXW Old Stock Price"; Rec."CXW Old Stock Price")
                 {
                     ApplicationArea = All;
                 }
-                field("Recom. Retail Price"; Rec."Recom. Retail Price")
+                field("CXW Recom. Retail Price"; Rec."CXW Recom. Retail Price")
                 {
                     ApplicationArea = All;
                 }
-                field("Strike Price"; Rec."Strike Price")
+                field("CXW Strike Price"; Rec."CXW Strike Price")
                 {
                     ApplicationArea = All;
                 }
-                field("Reason Code"; Rec."Reason Code")
+                field("CXW Reason Code"; Rec."CXW Reason Code")
                 {
                     ApplicationArea = All;
                 }
-                field(Comment; Rec.Comment)
+                field("CXW Comment"; Rec."CXW Comment")
                 {
                     ApplicationArea = All;
                 }
-                field("Version No."; Rec."Version No.")
+                field("CXW Version No."; Rec."CXW Version No.")
                 {
                     ApplicationArea = All;
                 }
-                field("Last Modified UserID"; Rec."Last Modified UserID")
+                field("CXW Last Modified UserID"; Rec."CXW Last Modified UserID")
                 {
                     ApplicationArea = All;
                 }
-                field("Last Modified Date"; Rec."Last Modified Date")
+                field("CXW Last Modified Date"; Rec."CXW Last Modified Date")
                 {
                     ApplicationArea = All;
                 }

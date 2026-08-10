@@ -1,4 +1,4 @@
-xmlport 51000 "SL Import Sales Price"
+xmlport 60328 "CXW Import Sales Price"
 {
     Caption = 'Import Sales Price';
     Direction = Import;
@@ -9,34 +9,34 @@ xmlport 51000 "SL Import Sales Price"
     {
         textelement(ImportSalesPrice)
         {
-            tableelement(SalesPriceChecking; "SL Sales Price Checking")
+            tableelement(SalesPriceChecking; "CXW Sales Price Checking")
             {
                 XmlName = 'SalesPrice';
-                SourceTableView = sorting("Item No.", "Currency Code");
+                SourceTableView = sorting("CXW Item No.", "CXW Currency Code");
 
-                fieldelement(ItemNo; SalesPriceChecking."Item No.")
+                fieldelement(ItemNo; SalesPriceChecking."CXW Item No.")
                 {
                     MinOccurs = Zero;
                 }
-                fieldelement(StockPrice; SalesPriceChecking."Stock Price")
+                fieldelement(StockPrice; SalesPriceChecking."CXW Stock Price")
                 {
                     MinOccurs = Zero;
                 }
-                fieldelement(StrikePrice; SalesPriceChecking."Strike Price")
+                fieldelement(StrikePrice; SalesPriceChecking."CXW Strike Price")
                 {
                 }
-                fieldelement(RecomRetailPrice; SalesPriceChecking."Recom. Retail Price")
+                fieldelement(RecomRetailPrice; SalesPriceChecking."CXW Recom. Retail Price")
                 {
                 }
-                fieldelement(CurrencyCode; SalesPriceChecking."Currency Code")
+                fieldelement(CurrencyCode; SalesPriceChecking."CXW Currency Code")
                 {
                     MinOccurs = Zero;
                 }
 
-                fieldelement(ReasonCode; SalesPriceChecking."Reason Code")
+                fieldelement(ReasonCode; SalesPriceChecking."CXW Reason Code")
                 {
                 }
-                fieldelement("Comment"; SalesPriceChecking.Comment)
+                fieldelement("Comment"; SalesPriceChecking."CXW Comment")
                 {
                 }
 

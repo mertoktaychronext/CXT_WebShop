@@ -1,4 +1,4 @@
-enum 51003 "SL Sales Price Export Status"
+enum 60334 "CXW Sales Price Export Status"
 {
     Extensible = true;
 

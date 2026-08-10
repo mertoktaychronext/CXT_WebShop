@@ -1,4 +1,4 @@
-enum 51001 "SL Sales Price Reason Code"
+enum 60332 "CXW Sales Price Reason Code"
 {
     Extensible = true;
 

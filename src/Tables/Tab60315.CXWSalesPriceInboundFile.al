@@ -1,54 +1,54 @@
-table 51004 "SL Sales Price Outbound File"
+table 60315 "CXW Sales Price Inbound File"
 {
-    Caption = 'Sales Price Outbound File';
+    Caption = 'Sales Price Inbound File';
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(1; "Entry No."; BigInteger)
+        field(1; "CXW Entry No."; BigInteger)
         {
             Caption = 'Entry No.';
             AutoIncrement = true;
             DataClassification = SystemMetadata;
         }
-        field(2; Status; Enum "SL Ext Interface File Status")
+        field(2; "CXW Status"; Enum "CXW Ext Interface File Status")
         {
             Caption = 'Status';
             DataClassification = ToBeClassified;
         }
-        field(3; Filename; Text[250])
+        field(3; "CXW Filename"; Text[250])
         {
             Caption = 'Filename';
             DataClassification = ToBeClassified;
         }
-        field(4; TargetFile; Blob)
+        field(4; "CXW SourceFile"; Blob)
         {
-            Caption = 'Target File';
+            Caption = 'Source File';
             DataClassification = CustomerContent;
         }
-        field(5; "Created At"; DateTime)
+        field(5; "CXW Inserted At"; DateTime)
         {
-            Caption = 'Created At';
+            Caption = 'Inserted At';
             DataClassification = SystemMetadata;
         }
-        field(6; "Response Message"; Text[250])
+        field(6; "CXW Processed At"; DateTime)
         {
-            Caption = 'Response Message';
+            Caption = 'Processed At';
             DataClassification = SystemMetadata;
         }
     }
 
     keys
     {
-        key(PK; "Entry No.")
+        key(PK; "CXW Entry No.")
         {
             Clustered = true;
         }
-        key(Status; Status) { }
+        key(Status; "CXW Status") { }
     }
 
     trigger OnInsert()
     begin
-        "Created At" := CurrentDateTime;
+        "CXW Inserted At" := CurrentDateTime;
     end;
 }
