@@ -33,7 +33,7 @@ src/
   PageExtensions/                 # 3 extensions (Countries/Regions, Sales Prices, Currencies) – sales price management only
   Pages/                          # 7 pages + 1 xmlport (60307-60309 SellWatch; 60321-60324 + Xmlport 60328 sales price management)
   Codeunits/                      # 3 codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – sales price management)
-  Enums/                          # 6 enums (SW Order Status – SellWatch; 5 more – sales price management)
+  Enums/                          # 7 enums (SW Order Status – SellWatch; 6 more – sales price management)
   PermissionSets/                 # 2 permission sets (CXW SWChronWSAll – SellWatch; CXWChronWSAll – sales price management)
 Translations/                     # .g.xlf (generated) + de-DE.xlf (maintained)
 openspec/
@@ -100,7 +100,14 @@ Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Ch
           (success, non-success status, network failure) into Table 60302
           "CXW Http Call Log" ("CXW Source Table No." = 60314), with the
           Authorization header redacted — the same log SellWatch uses for
-          its online check (see below).
+          its online check (see below). Since the AWS SigV4 update, "CXW Auth
+          Type" (Enum 60335) also supports AWSSigV4 alongside None/ApiKeyHeader/
+          BasicAuth: SendToApiInterface signs the request itself using AWS
+          Signature Version 4 (Authorization and X-Amz-Date headers, plus
+          X-Amz-Security-Token for temporary/STS credentials) — see the
+          table overview below for the extra fields this needs on Table 60317;
+          for signing-algorithm details see
+          `openspec/changes/sales-price-aws-sigv4-auth/design.md`.
 
 Control data for "Add all Currencies":
 Table Extension "CXWCurrency" (on standard table "Currency", field "CXW Sales Price Activated")
@@ -208,7 +215,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 60314 CXW Sales Price Outbound File | Entry No. | Sent JSON payloads with delivery status and response message, for troubleshooting failed transmissions |
 | 60315 CXW Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 60316 CXW Price Import Protocol | Entry No. | Error log for the automated import (still the sales price import protocol table; "Sales" dropped from the identifier due to AL's 30-character limit) |
-| 60317 CXW API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface |
+| 60317 CXW API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface; when "CXW Auth Type" = AWSSigV4, also AWS Access Key ID/Region/Service (plain fields) and AWS Secret Access Key/Session Token (isolated storage) |
 
 ## Permission Set
 
