@@ -20,6 +20,10 @@ page 60323 "CXW Sales Price Archive"
                 {
                     ApplicationArea = All;
                 }
+                field("CXW Currency Code"; Rec."CXW Currency Code")
+                {
+                    ApplicationArea = All;
+                }
                 field("CXW Stock Price"; Rec."CXW Stock Price")
                 {
                     ApplicationArea = All;
