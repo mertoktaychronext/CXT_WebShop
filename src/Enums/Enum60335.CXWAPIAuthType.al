@@ -14,4 +14,8 @@ enum 60335 "CXW API Auth Type"
     {
         Caption = 'Basic Authentication';
     }
+    value(3; AWSSigV4)
+    {
+        Caption = 'AWS Signature V4';
+    }
 }

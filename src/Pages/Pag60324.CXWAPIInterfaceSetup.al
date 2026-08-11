@@ -16,6 +16,11 @@ page 60324 "CXW API Interface Setup"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the unique code of this API interface.';
+
+                    trigger OnDrillDown()
+                    begin
+                        Page.Run(Page::"CXW API Interface Setup Card", Rec);
+                    end;
                 }
                 field("CXW Description"; Rec."CXW Description")
                 {
@@ -32,24 +37,6 @@ page 60324 "CXW API Interface Setup"
                     ApplicationArea = All;
                     ToolTip = 'Specifies how requests to this endpoint are authenticated.';
                 }
-                field(ApiKey; g_txtApiKey)
-                {
-                    ApplicationArea = All;
-                    Caption = 'API Key';
-                    ExtendedDatatype = Masked;
-                    ToolTip = 'Specifies the API key or token used to authenticate against the endpoint. The value is stored securely and is not shown again once saved.';
-
-                    trigger OnValidate()
-                    begin
-                        Rec.SetApiKey(g_txtApiKey);
-                        g_txtApiKey := '';
-                    end;
-                }
-                field("CXW Source Table No."; Rec."CXW Source Table No.")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies which table this interface transmits data for.';
-                }
                 field("CXW Active"; Rec."CXW Active")
                 {
                     ApplicationArea = All;
@@ -59,6 +46,19 @@ page 60324 "CXW API Interface Setup"
         }
     }
 
-    var
-        g_txtApiKey: Text;
+    actions
+    {
+        area(Navigation)
+        {
+            action(EditDetails)
+            {
+                ApplicationArea = All;
+                Caption = 'Edit Details';
+                ToolTip = 'Open the full setup details for this interface, including authentication fields relevant to its auth type.';
+                Image = Setup;
+                RunObject = page "CXW API Interface Setup Card";
+                RunPageOnRec = true;
+            }
+        }
+    }
 }

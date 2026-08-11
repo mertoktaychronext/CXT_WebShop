@@ -115,6 +115,7 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         GenSPSetup: Record "CXW General Sales Price Setup";
         ApiInterfaceSetup: Record "CXW API Interface Setup";
         Base64Convert: Codeunit "Base64 Convert";
+        UriObj: Codeunit Uri;
         HttpClientObj: HttpClient;
         HttpRequest: HttpRequestMessage;
         HttpResponse: HttpResponseMessage;
@@ -123,6 +124,13 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         RequestLogText: Text;
         ResponseText: Text;
         FormattedErrorTxt: Text;
+        AuthorizationHeader: Text;
+        AmzDate: Text;
+        SessionTokenValue: Text;
+        ApiKeyValue: Text;
+        HttpMethodTxt: Text;
+        SoapActionValue: Text;
+        SendBody: Boolean;
         SendOk: Boolean;
     begin
         if not GenSPSetup.Get() then
@@ -138,14 +146,24 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         ApiInterfaceSetup.TestField("CXW Source Table No.", Database::"Sales Price");
         ApiInterfaceSetup.TestField("CXW Endpoint URL");
 
-        HttpContentObj.WriteFrom(pJsonText);
-        HttpContentObj.GetHeaders(HttpHeadersObj);
-        HttpHeadersObj.Remove('Content-Type');
-        HttpHeadersObj.Add('Content-Type', 'application/json');
+        HttpMethodTxt := Format(ApiInterfaceSetup."CXW Http Method");
+        SoapActionValue := SanitizeHeaderText(ApiInterfaceSetup."CXW SOAP Action");
 
-        HttpRequest.Method := 'POST';
+        // GET/DELETE requests carry no request body - many servers reject a body on these methods.
+        SendBody :=
+            (ApiInterfaceSetup."CXW Http Method" <> ApiInterfaceSetup."CXW Http Method"::GET) and
+            (ApiInterfaceSetup."CXW Http Method" <> ApiInterfaceSetup."CXW Http Method"::DELETE);
+
+        if SendBody then begin
+            HttpContentObj.WriteFrom(pJsonText);
+            HttpContentObj.GetHeaders(HttpHeadersObj);
+            HttpHeadersObj.Remove('Content-Type');
+            HttpHeadersObj.Add('Content-Type', 'application/json');
+            HttpRequest.Content := HttpContentObj;
+        end;
+
+        HttpRequest.Method := HttpMethodTxt;
         HttpRequest.SetRequestUri(ApiInterfaceSetup."CXW Endpoint URL");
-        HttpRequest.Content := HttpContentObj;
 
         case ApiInterfaceSetup."CXW Auth Type" of
             ApiInterfaceSetup."CXW Auth Type"::ApiKeyHeader:
@@ -158,9 +176,36 @@ codeunit 60329 "CXW Export Gateway Sales Price"
                     HttpRequest.GetHeaders(HttpHeadersObj);
                     HttpHeadersObj.Add('Authorization', 'Basic ' + Base64Convert.ToBase64(ApiInterfaceSetup.GetApiKey()));
                 end;
+            ApiInterfaceSetup."CXW Auth Type"::AWSSigV4:
+                begin
+                    UriObj.Init(ApiInterfaceSetup."CXW Endpoint URL");
+                    BuildSigV4Headers(
+                        ApiInterfaceSetup, HttpMethodTxt, UriObj.GetAbsolutePath(), UriObj.GetHost(), SendBody, pJsonText,
+                        AuthorizationHeader, AmzDate);
+                    HttpRequest.GetHeaders(HttpHeadersObj);
+                    // AWS SigV4's Authorization value (Credential=.../.../.../aws4_request) contains
+                    // unquoted slashes, which fail .NET's strict Authorization-header format validation
+                    // used by Add() - TryAddWithoutValidation() skips that check.
+                    HttpHeadersObj.TryAddWithoutValidation('Authorization', AuthorizationHeader);
+                    HttpHeadersObj.Add('X-Amz-Date', AmzDate);
+                    SessionTokenValue := SanitizeHeaderText(ApiInterfaceSetup.GetAwsSessionToken());
+                    if SessionTokenValue <> '' then
+                        HttpHeadersObj.Add('X-Amz-Security-Token', SessionTokenValue);
+                    ApiKeyValue := SanitizeHeaderText(ApiInterfaceSetup.GetApiKey());
+                    if ApiKeyValue <> '' then
+                        HttpHeadersObj.Add('X-API-Key', ApiKeyValue);
+                end;
         end;
 
-        RequestLogText := BuildRedactedRequestText('POST', ApiInterfaceSetup."CXW Endpoint URL", ApiInterfaceSetup."CXW Auth Type", pJsonText);
+        if SoapActionValue <> '' then begin
+            HttpRequest.GetHeaders(HttpHeadersObj);
+            HttpHeadersObj.Add('SOAPAction', SoapActionValue);
+        end;
+
+        RequestLogText :=
+            BuildRedactedRequestText(
+                HttpMethodTxt, ApiInterfaceSetup."CXW Endpoint URL", ApiInterfaceSetup."CXW Auth Type", SessionTokenValue <> '',
+                ApiKeyValue <> '', SoapActionValue, SendBody, pJsonText);
 
         HttpClientObj.Timeout := 30000;
         SendOk := HttpClientObj.Send(HttpRequest, HttpResponse);
@@ -190,14 +235,167 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         exit(false);
     end;
 
-    local procedure BuildRedactedRequestText(pMethod: Text; pUrl: Text; pAuthType: Enum "CXW API Auth Type"; pJsonBody: Text): Text
+    local procedure BuildSigV4Headers(pApiInterfaceSetup: Record "CXW API Interface Setup"; pMethod: Text; pUrlPath: Text; pHost: Text; pHasBody: Boolean; pPayload: Text; var vAuthorizationHeader: Text; var vAmzDate: Text)
+    var
+        TypeHelper: Codeunit "Type Helper";
+        LF: Text;
+        UtcDateTime: DateTime;
+        DateStamp: Text;
+        AccessKeyId: Text;
+        Region: Text;
+        Service: Text;
+        SecretAccessKey: Text;
+        SessionToken: Text;
+        CanonicalUri: Text;
+        CanonicalHeaders: Text;
+        SignedHeadersList: Text;
+        PayloadHash: Text;
+        CanonicalRequest: Text;
+        CredentialScope: Text;
+        StringToSign: Text;
+        SigningKey: Text;
+        Signature: Text;
+    begin
+        LF := TypeHelper.LFSeparator();
+        UtcDateTime := TypeHelper.GetCurrUTCDateTime();
+        vAmzDate := Format(UtcDateTime, 0, '<Year4><Month,2><Day,2>T<Hours24,2><Minutes,2><Seconds,2>Z');
+        DateStamp := CopyStr(vAmzDate, 1, 8);
+
+        AccessKeyId := SanitizeHeaderText(pApiInterfaceSetup."CXW AWS Access Key ID");
+        Region := SanitizeHeaderText(pApiInterfaceSetup."CXW AWS Region");
+        Service := SanitizeHeaderText(pApiInterfaceSetup."CXW AWS Service");
+        SecretAccessKey := SanitizeHeaderText(pApiInterfaceSetup.GetAwsSecretAccessKey());
+        SessionToken := SanitizeHeaderText(pApiInterfaceSetup.GetAwsSessionToken());
+
+        if pUrlPath = '' then
+            CanonicalUri := '/'
+        else
+            CanonicalUri := pUrlPath;
+
+        CanonicalHeaders := '';
+        SignedHeadersList := '';
+        if pHasBody then begin
+            CanonicalHeaders += 'content-type:application/json' + LF;
+            SignedHeadersList += 'content-type;';
+        end;
+        CanonicalHeaders += 'host:' + pHost + LF + 'x-amz-date:' + vAmzDate + LF;
+        SignedHeadersList += 'host;x-amz-date';
+        if SessionToken <> '' then begin
+            CanonicalHeaders += 'x-amz-security-token:' + SessionToken + LF;
+            SignedHeadersList += ';x-amz-security-token';
+        end;
+
+        if pHasBody then
+            PayloadHash := Sha256HexLower(pPayload)
+        else
+            PayloadHash := Sha256HexLower('');
+
+        CanonicalRequest := pMethod + LF + CanonicalUri + LF + LF + CanonicalHeaders + LF + SignedHeadersList + LF + PayloadHash;
+
+        CredentialScope := DateStamp + '/' + Region + '/' + Service + '/aws4_request';
+
+        StringToSign := 'AWS4-HMAC-SHA256' + LF + vAmzDate + LF + CredentialScope + LF + Sha256HexLower(CanonicalRequest);
+
+        SigningKey := DeriveSigningKey(SecretAccessKey, DateStamp, Region, Service);
+        Signature := HmacSignatureHexLower(SigningKey, StringToSign);
+
+        vAuthorizationHeader :=
+            'AWS4-HMAC-SHA256 Credential=' + AccessKeyId + '/' + CredentialScope +
+            ', SignedHeaders=' + SignedHeadersList + ', Signature=' + Signature;
+    end;
+
+    local procedure SanitizeHeaderText(pText: Text): Text
+    var
+        TextBuilderObj: TextBuilder;
+        Ch: Char;
+    begin
+        // Strips anything outside printable ASCII (0x20-0x7E) - not just leading/trailing (Trim()),
+        // but also embedded characters such as smart dashes, non-breaking spaces, or stray line
+        // breaks picked up from copy-pasting credentials out of Word/Outlook/PDF. .NET's
+        // HttpHeaders.Add() rejects such characters outright ("Invalid HTTP header").
+        foreach Ch in pText do
+            if (Ch >= ' ') and (Ch <= '~') then
+                TextBuilderObj.Append(Ch);
+        exit(TextBuilderObj.ToText());
+    end;
+
+    local procedure HexEncode(pInStream: InStream): Text
+    var
+        TextBuilderObj: TextBuilder;
+        ByteValue: Byte;
+    begin
+        while not pInStream.EOS do begin
+            pInStream.Read(ByteValue);
+            TextBuilderObj.Append(CopyStr('0123456789abcdef', (ByteValue div 16) + 1, 1));
+            TextBuilderObj.Append(CopyStr('0123456789abcdef', (ByteValue mod 16) + 1, 1));
+        end;
+        exit(TextBuilderObj.ToText());
+    end;
+
+    local procedure Sha256HexLower(pText: Text): Text
+    var
+        CryptographyManagement: Codeunit "Cryptography Management";
+        HashAlgorithmType: Option MD5,SHA1,SHA256,SHA384,SHA512;
+    begin
+        exit(LowerCase(CryptographyManagement.GenerateHash(pText, HashAlgorithmType::SHA256)));
+    end;
+
+    local procedure HmacChainStep(pBase64Key: Text; pMessage: Text): Text
+    var
+        CryptographyManagement: Codeunit "Cryptography Management";
+        HashAlgorithmType: Option HMACMD5,HMACSHA1,HMACSHA256,HMACSHA384,HMACSHA512;
+    begin
+        exit(CryptographyManagement.GenerateBase64KeyedHashAsBase64String(pMessage, pBase64Key, HashAlgorithmType::HMACSHA256));
+    end;
+
+    local procedure DeriveSigningKey(pSecretAccessKey: Text; pDateStamp: Text; pRegion: Text; pService: Text): Text
+    var
+        Base64Convert: Codeunit "Base64 Convert";
+        SeedKey: Text;
+        DateKey: Text;
+        RegionKey: Text;
+        ServiceKey: Text;
+        SigningKey: Text;
+    begin
+        SeedKey := Base64Convert.ToBase64('AWS4' + pSecretAccessKey);
+        DateKey := HmacChainStep(SeedKey, pDateStamp);
+        RegionKey := HmacChainStep(DateKey, pRegion);
+        ServiceKey := HmacChainStep(RegionKey, pService);
+        SigningKey := HmacChainStep(ServiceKey, 'aws4_request');
+        exit(SigningKey);
+    end;
+
+    local procedure HmacSignatureHexLower(pBase64Key: Text; pMessage: Text): Text
+    var
+        Base64Convert: Codeunit "Base64 Convert";
+        TempBlobObj: Codeunit "Temp Blob";
+        SignatureBase64: Text;
+        OutStr: OutStream;
+        InStr: InStream;
+    begin
+        SignatureBase64 := HmacChainStep(pBase64Key, pMessage);
+        TempBlobObj.CreateOutStream(OutStr);
+        Base64Convert.FromBase64(SignatureBase64, OutStr);
+        TempBlobObj.CreateInStream(InStr);
+        exit(HexEncode(InStr));
+    end;
+
+    local procedure BuildRedactedRequestText(pMethod: Text; pUrl: Text; pAuthType: Enum "CXW API Auth Type"; pHasSessionToken: Boolean; pHasApiKey: Boolean; pSoapAction: Text; pHasBody: Boolean; pJsonBody: Text): Text
     var
         TypeHelper: Codeunit "Type Helper";
         RequestText: Text;
     begin
-        RequestText := pMethod + ' ' + pUrl + TypeHelper.LFSeparator() + 'Content-Type: application/json';
+        RequestText := pMethod + ' ' + pUrl;
+        if pHasBody then
+            RequestText += TypeHelper.LFSeparator() + 'Content-Type: application/json';
+        if pSoapAction <> '' then
+            RequestText += TypeHelper.LFSeparator() + 'SOAPAction: ' + pSoapAction;
         if pAuthType <> pAuthType::None then
             RequestText += TypeHelper.LFSeparator() + 'Authorization: ' + AuthRedactedTxt;
+        if pHasSessionToken then
+            RequestText += TypeHelper.LFSeparator() + 'X-Amz-Security-Token: ' + AuthRedactedTxt;
+        if pHasApiKey then
+            RequestText += TypeHelper.LFSeparator() + 'X-API-Key: ' + AuthRedactedTxt;
         RequestText += TypeHelper.LFSeparator() + TypeHelper.LFSeparator() + pJsonBody;
         exit(RequestText);
     end;

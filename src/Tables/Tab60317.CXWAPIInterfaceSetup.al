@@ -35,8 +35,11 @@ table 60317 "CXW API Interface Setup"
             begin
                 if "CXW Active" then begin
                     TestField("CXW Endpoint URL");
-                    if ("CXW Auth Type" <> "CXW Auth Type"::None) and (GetApiKey() = '') then
+                    if IsApiKeyFieldRelevant() and not IsAwsFieldsRelevant() and (GetApiKey() = '') then
                         Error(MissingApiKeyErr, "CXW Auth Type");
+                    if IsAwsFieldsRelevant() then
+                        if ("CXW AWS Access Key ID" = '') or ("CXW AWS Region" = '') or ("CXW AWS Service" = '') or (GetAwsSecretAccessKey() = '') then
+                            Error(MissingAwsCredentialsErr);
                 end;
             end;
         }
@@ -45,6 +48,31 @@ table 60317 "CXW API Interface Setup"
             Caption = 'Source Table No.';
             DataClassification = ToBeClassified;
             TableRelation = AllObjWithCaption."Object ID" where("Object Type" = const(Table));
+        }
+        field(7; "CXW AWS Access Key ID"; Text[128])
+        {
+            Caption = 'AWS Access Key ID';
+            DataClassification = ToBeClassified;
+        }
+        field(8; "CXW AWS Region"; Text[20])
+        {
+            Caption = 'AWS Region';
+            DataClassification = ToBeClassified;
+        }
+        field(9; "CXW AWS Service"; Text[50])
+        {
+            Caption = 'AWS Service';
+            DataClassification = ToBeClassified;
+        }
+        field(10; "CXW Http Method"; Enum "CXW Http Method")
+        {
+            Caption = 'HTTP Method';
+            DataClassification = ToBeClassified;
+        }
+        field(11; "CXW SOAP Action"; Text[250])
+        {
+            Caption = 'SOAP Action';
+            DataClassification = ToBeClassified;
         }
     }
 
@@ -83,6 +111,71 @@ table 60317 "CXW API Interface Setup"
         exit(StrSubstNo('SLAPIInterfaceSetup_ApiKey_%1', "CXW Code"));
     end;
 
+    procedure SetAwsSecretAccessKey(NewKey: Text)
+    var
+        AwsSecretAccessKeyIsolatedStorageKey: Text;
+    begin
+        AwsSecretAccessKeyIsolatedStorageKey := GetAwsSecretAccessKeyIsolatedStorageKey();
+        if NewKey = '' then begin
+            if IsolatedStorage.Contains(AwsSecretAccessKeyIsolatedStorageKey, DataScope::Module) then
+                IsolatedStorage.Delete(AwsSecretAccessKeyIsolatedStorageKey, DataScope::Module);
+            exit;
+        end;
+        IsolatedStorage.Set(AwsSecretAccessKeyIsolatedStorageKey, NewKey, DataScope::Module);
+    end;
+
+    procedure GetAwsSecretAccessKey(): Text
+    var
+        AwsSecretAccessKeyValue: Text;
+    begin
+        if IsolatedStorage.Get(GetAwsSecretAccessKeyIsolatedStorageKey(), DataScope::Module, AwsSecretAccessKeyValue) then
+            exit(AwsSecretAccessKeyValue);
+        exit('');
+    end;
+
+    local procedure GetAwsSecretAccessKeyIsolatedStorageKey(): Text
+    begin
+        exit(StrSubstNo('SLAPIInterfaceSetup_AwsSecretAccessKey_%1', "CXW Code"));
+    end;
+
+    procedure SetAwsSessionToken(NewToken: Text)
+    var
+        AwsSessionTokenIsolatedStorageKey: Text;
+    begin
+        AwsSessionTokenIsolatedStorageKey := GetAwsSessionTokenIsolatedStorageKey();
+        if NewToken = '' then begin
+            if IsolatedStorage.Contains(AwsSessionTokenIsolatedStorageKey, DataScope::Module) then
+                IsolatedStorage.Delete(AwsSessionTokenIsolatedStorageKey, DataScope::Module);
+            exit;
+        end;
+        IsolatedStorage.Set(AwsSessionTokenIsolatedStorageKey, NewToken, DataScope::Module);
+    end;
+
+    procedure GetAwsSessionToken(): Text
+    var
+        AwsSessionTokenValue: Text;
+    begin
+        if IsolatedStorage.Get(GetAwsSessionTokenIsolatedStorageKey(), DataScope::Module, AwsSessionTokenValue) then
+            exit(AwsSessionTokenValue);
+        exit('');
+    end;
+
+    local procedure GetAwsSessionTokenIsolatedStorageKey(): Text
+    begin
+        exit(StrSubstNo('SLAPIInterfaceSetup_AwsSessionToken_%1', "CXW Code"));
+    end;
+
+    procedure IsApiKeyFieldRelevant(): Boolean
+    begin
+        exit("CXW Auth Type" <> "CXW Auth Type"::None);
+    end;
+
+    procedure IsAwsFieldsRelevant(): Boolean
+    begin
+        exit("CXW Auth Type" = "CXW Auth Type"::AWSSigV4);
+    end;
+
     var
         MissingApiKeyErr: Label 'Auth Type is set to %1, but no API key has been entered for this interface.', Comment = '%1 = selected authentication type';
+        MissingAwsCredentialsErr: Label 'Auth Type is set to AWS Signature V4, but the AWS Access Key ID, Region, Service, or Secret Access Key has not been fully entered for this interface.';
 }

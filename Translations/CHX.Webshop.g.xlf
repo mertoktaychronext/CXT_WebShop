@@ -23,6 +23,11 @@
           <note from="Developer" annotates="general" priority="2">%1 = selected authentication type</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - NamedType MissingApiKeyErr</note>
         </trans-unit>
+        <trans-unit id="Table 3927493386 - NamedType 3367367240" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Auth Type is set to AWS Signature V4, but the AWS Access Key ID, Region, Service, or Secret Access Key has not been fully entered for this interface.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - NamedType MissingAwsCredentialsErr</note>
+        </trans-unit>
         <trans-unit id="Table 3927493386 - Field 3927073500 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Active</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -32,6 +37,21 @@
           <source>Auth Type</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW Auth Type - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3927493386 - Field 605607497 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AWS Access Key ID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW AWS Access Key ID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3927493386 - Field 3921594811 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AWS Region</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW AWS Region - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3927493386 - Field 2806050640 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AWS Service</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW AWS Service - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - Field 1516613683 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Code</source>
@@ -47,6 +67,16 @@
           <source>Endpoint URL</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW Endpoint URL - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3927493386 - Field 3217523549 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>HTTP Method</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW Http Method - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3927493386 - Field 3270090641 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>SOAP Action</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW SOAP Action - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - Field 3703371196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Source Table No.</source>
@@ -888,16 +918,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 3927493386 - Control 3332662617 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the API key or token used to authenticate against the endpoint. The value is stored securely and is not shown again once saved.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Control ApiKey - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 3927493386 - Control 3332662617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>API Key</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Control ApiKey - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3927493386 - Control 3927073500 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether this interface can be selected and used for sending data.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -923,10 +943,100 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Control CXW Endpoint URL - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 3927493386 - Control 3703371196 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 3927493386 - Action 3029389490 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the full setup details for this interface, including authentication fields relevant to its auth type.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Action EditDetails - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3927493386 - Action 3029389490 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Edit Details</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Action EditDetails - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Interface Setup Card</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 486669812 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Authentication</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control Authentication - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3332662617 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the API key or token used to authenticate against the endpoint. The value is stored securely and is not shown again once saved.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control ApiKey - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3332662617 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>API Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control ApiKey - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2897115708 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the AWS Secret Access Key used to sign requests with AWS Signature V4. The value is stored securely and is not shown again once saved.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSecretAccessKey - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2897115708 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AWS Secret Access Key</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSecretAccessKey - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 1346322124 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the AWS Session Token used for temporary/STS-issued credentials when signing requests with AWS Signature V4. Leave blank for long-lived credentials. The value is stored securely and is not shown again once saved.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSessionToken - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 1346322124 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AWS Session Token</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSessionToken - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 605607497 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the AWS Access Key ID used to sign requests with AWS Signature V4.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW AWS Access Key ID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3921594811 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the AWS region used when signing requests with AWS Signature V4.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW AWS Region - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2806050640 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the AWS service name used when signing requests with AWS Signature V4, typically execute-api for API Gateway.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW AWS Service - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2445482498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>General</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control General - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3927073500 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether this interface can be selected and used for sending data.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW Active - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3948069000 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies how requests to this endpoint are authenticated.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW Auth Type - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3217523549 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the HTTP method used to send requests to this endpoint.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW Http Method - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3270090641 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the value sent in the SOAPAction header. Leave blank to omit the header.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW SOAP Action - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 3703371196 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies which table this interface transmits data for.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup - Control CXW Source Table No. - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW Source Table No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3250934196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General Sales Price Setup</source>
@@ -1597,6 +1707,11 @@
           <source>API Key (Header)</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW API Auth Type - EnumValue ApiKeyHeader - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 1051909472 - EnumValue 3696304918 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>AWS Signature V4</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW API Auth Type - EnumValue AWSSigV4 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 1051909472 - EnumValue 2810360006 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Basic Authentication</source>

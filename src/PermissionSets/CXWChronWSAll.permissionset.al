@@ -26,5 +26,6 @@ permissionset 60336 CXWChronWSAll
         page "CXW Sales Price Archive" = X,
         page "CXW Sales Price Checking List" = X,
         page "CXW API Interface Setup" = X,
+        page "CXW API Interface Setup Card" = X,
         page "CXW Http Call Log" = X;
 }
