@@ -31,7 +31,7 @@ src/
   Tables/                         # 10 tables (60300-60302 SellWatch; 60311-60313, 60314-60317 sales price management)
   TableExtensions/                # 5 extensions (Purchase Line, Purchase Header – SellWatch; Country/Region, Sales Price, Currency – sales price management)
   PageExtensions/                 # 3 extensions (Countries/Regions, Sales Prices, Currencies) – sales price management only
-  Pages/                          # 7 pages + 1 xmlport (60307-60309 SellWatch; 60321-60324 + Xmlport 60328 sales price management)
+  Pages/                          # 8 pages + 1 xmlport (60307-60309 SellWatch; 60321-60325 + Xmlport 60328 sales price management)
   Codeunits/                      # 3 codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – sales price management)
   Enums/                          # 7 enums (SW Order Status – SellWatch; 6 more – sales price management)
   PermissionSets/                 # 2 permission sets (CXW SWChronWSAll – SellWatch; CXWChronWSAll – sales price management)
@@ -94,7 +94,10 @@ Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Ch
    └─► CreateExternalInterfaceFile: reflects the "Sales Price" record into
           JSON, stores it in Table 60314 "CXW Sales Price Outbound File",
           and POSTs it via HttpClient to the endpoint configured on
-          Table 60317 "CXW API Interface Setup" (Page 60324), using the
+          Table 60317 "CXW API Interface Setup" (overview: Page 60324; per-interface
+          detail setup incl. HTTP method/SOAPAction/authentication: Page 60325
+          "CXW API Interface Setup Card", reachable via drilldown on the code or
+          the "Edit Details" action on Page 60324), using the
           interface selected on Table 60311's "CXW API Interface Code" field.
           Since the HTTP-logging update, SendToApiInterface logs every call
           (success, non-success status, network failure) into Table 60302
@@ -107,7 +110,17 @@ Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Ch
           X-Amz-Security-Token for temporary/STS credentials) — see the
           table overview below for the extra fields this needs on Table 60317;
           for signing-algorithm details see
-          `openspec/changes/sales-price-aws-sigv4-auth/design.md`.
+          `openspec/changes/sales-price-aws-sigv4-auth/design.md`. Since the
+          conditional-fields update, Page 60325 "CXW API Interface Setup Card"
+          shows or hides the authentication-specific fields (API Key, all AWS
+          fields) based on the selected "CXW Auth Type", driven by the new
+          Table 60317 procedures `IsApiKeyFieldRelevant()` /
+          `IsAwsFieldsRelevant()` — the same procedures the `"CXW Active"`
+          activation guard uses, so the two can't drift apart. Page 60324
+          itself now only shows overview columns (Code, Description, Endpoint
+          URL, Auth Type, Active); see
+          `openspec/changes/api-interface-setup-conditional-fields/design.md`
+          for details.
 
 Control data for "Add all Currencies":
 Table Extension "CXWCurrency" (on standard table "Currency", field "CXW Sales Price Activated")

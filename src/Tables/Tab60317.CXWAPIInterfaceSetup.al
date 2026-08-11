@@ -35,9 +35,9 @@ table 60317 "CXW API Interface Setup"
             begin
                 if "CXW Active" then begin
                     TestField("CXW Endpoint URL");
-                    if ("CXW Auth Type" <> "CXW Auth Type"::None) and ("CXW Auth Type" <> "CXW Auth Type"::AWSSigV4) and (GetApiKey() = '') then
+                    if IsApiKeyFieldRelevant() and not IsAwsFieldsRelevant() and (GetApiKey() = '') then
                         Error(MissingApiKeyErr, "CXW Auth Type");
-                    if "CXW Auth Type" = "CXW Auth Type"::AWSSigV4 then
+                    if IsAwsFieldsRelevant() then
                         if ("CXW AWS Access Key ID" = '') or ("CXW AWS Region" = '') or ("CXW AWS Service" = '') or (GetAwsSecretAccessKey() = '') then
                             Error(MissingAwsCredentialsErr);
                 end;
@@ -163,6 +163,16 @@ table 60317 "CXW API Interface Setup"
     local procedure GetAwsSessionTokenIsolatedStorageKey(): Text
     begin
         exit(StrSubstNo('SLAPIInterfaceSetup_AwsSessionToken_%1', "CXW Code"));
+    end;
+
+    procedure IsApiKeyFieldRelevant(): Boolean
+    begin
+        exit("CXW Auth Type" <> "CXW Auth Type"::None);
+    end;
+
+    procedure IsAwsFieldsRelevant(): Boolean
+    begin
+        exit("CXW Auth Type" = "CXW Auth Type"::AWSSigV4);
     end;
 
     var
