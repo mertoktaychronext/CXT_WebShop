@@ -3,14 +3,14 @@
 **Version:** 27.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt)
 **Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
 
 ## Zusammenfassung
 
-CHX.Webshop bündelt zwei weitgehend eigenständige Funktionsbereiche unter einem Dach: **SellWatch** wickelt den automatisierten Ankauf gebrauchter Uhren ab (eingehende Verkaufsanfragen – inzwischen auch per API von außen anlegbar –, automatische Lieferanten- und Bestellanlage, Online-Sichtbarkeitsprüfung beim Partner SellWatch) und die **Verkaufspreisverwaltung** steuert die Pflege, Prüfung, Freigabe und den Export von Webshop-Verkaufspreisen an ein externes System. Beide Bereiche teilen sich ein gemeinsames HTTP-Aufrufprotokoll und eine gemeinsame Schnittstellen-Konfigurationstabelle mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4). Die Verkaufspreisverwaltung bringt zusätzlich einen CSV-Importweg für Preisdaten sowie eine automatische Mehrwährungs-Ableitung mit. Seit der jüngsten Erweiterung besitzt SellWatch außerdem eine eigene, separat berechtigte API-Schreibschnittstelle für externe Systeme.
+CHX.Webshop bündelt drei weitgehend eigenständige Funktionsbereiche unter einem Dach: **SellWatch** wickelt den automatisierten Ankauf gebrauchter Uhren ab (eingehende Verkaufsanfragen – inzwischen auch per API von außen anlegbar –, automatische Lieferanten- und Bestellanlage, Online-Sichtbarkeitsprüfung beim Partner SellWatch), die **Workshop-Ankaufsprüfung** bindet eine externe Werkstatt in den Einkaufsprozess ein (Übergabe angekommener Bestellzeilen inkl. Herstellerseriennummer, externe Echtheits-/Attributprüfung per API, automatisierter Wareneingang bei Echtheit bzw. Stornierung bei Nicht-Echtheit), und die **Verkaufspreisverwaltung** steuert die Pflege, Prüfung, Freigabe und den Export von Webshop-Verkaufspreisen an ein externes System. Alle drei Bereiche teilen sich ein gemeinsames HTTP-Aufrufprotokoll bzw. folgen demselben Zwischentabellen-plus-API-Muster; die Verkaufspreisverwaltung nutzt zusätzlich eine gemeinsame Schnittstellen-Konfigurationstabelle mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4) sowie einen CSV-Importweg für Preisdaten und eine automatische Mehrwährungs-Ableitung. SellWatch besitzt seit der jüngsten Erweiterung eine eigene, separat berechtigte API-Schreibschnittstelle für externe Systeme; die Workshop-Ankaufsprüfung folgt demselben Prinzip mit einer eigenen, bidirektionalen API für die externe Werkstatt.
 
 ---
 
@@ -18,16 +18,16 @@ CHX.Webshop bündelt zwei weitgehend eigenständige Funktionsbereiche unter eine
 
 | Objekttyp | Anzahl |
 |---|---|
-| Codeunits | 3 |
-| Tabellen | 10 |
-| Tabellenerweiterungen | 4 |
-| Seiten | 9 |
-| Seitenerweiterungen | 2 |
+| Codeunits | 4 |
+| Tabellen | 11 |
+| Tabellenerweiterungen | 5 |
+| Seiten | 12 |
+| Seitenerweiterungen | 4 |
 | Xmlports | 1 |
-| Enums | 7 |
-| Permission Sets | 3 |
-| **Gesamt Objekte** | **39** |
-| **Gesamt Prozeduren/Trigger/Events** | **89** |
+| Enums | 8 |
+| Permission Sets | 5 |
+| **Gesamt Objekte** | **50** |
+| **Gesamt Prozeduren/Trigger/Events** | **113** |
 
 ---
 
@@ -75,11 +75,12 @@ Legt aus eingehenden SellWatch-Verkaufsanfragen automatisch Lieferanten und Eink
 |---|---|---|---|---|
 | 1 | `OnRun` | Trigger | – | Startet die Verarbeitung aller noch nicht angelegten SellWatch-Anfragen. |
 | 2 | `ValidateAndCreateVendor` | Prozedur | Internal | Sucht für jede noch offene Anfrage einen passenden Lieferanten anhand von Name/Adresse/Telefon/E-Mail oder legt einen neuen Lieferanten samt Bankverbindung an. |
-| 3 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, ordnet den passenden Artikel je nach Angebotsart zu und gibt die Bestellung sofort frei. |
+| 3 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`) und gibt die Bestellung sofort frei. |
 | 4 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
 | 5 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
-| 6 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
-| 7 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
+| 6 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand einer Artikelvorlage an (Beschreibung aus Marke/Modell/Baujahr, zweite Beschreibungszeile aus der Referenz) inklusive passender Basis-Mengeneinheit; bricht kontrolliert ab, falls keine Artikelvorlage existiert. |
+| 7 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
+| 8 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
 
 ### Enum: CXW SW Order Status (ID: 60306)
 
@@ -116,6 +117,100 @@ Berechtigt zum vollständigen Arbeiten mit den SellWatch-Tabellen, -Seiten und d
 ### Permission Set: CXW Sell Watch API (ID: 60300)
 
 Eigener, schlanker Berechtigungssatz speziell für den externen (Entra-)Benutzer, der über die API-Page 60337 auf die SellWatch-Ankaufsanfragen zugreift – gewährt Lese-, Einfüge- und Änderungsrecht auf die Tabelle "CXW SellWatch Vendor Info", getrennt vom umfassenderen internen Berechtigungssatz 60310.
+
+---
+
+### Workshop-Ankaufsprüfung
+
+Bindet eine externe Werkstatt in den Einkaufsprozess für angekaufte Uhren ein: Der Einkäufer meldet angekommene Bestellzeilen samt Herstellerseriennummer an die Werkstatt, diese prüft Echtheit und Attribute über eine eigene API, und eine Hintergrundverarbeitung bucht bei bestätigter Echtheit automatisch den Wareneingang bzw. storniert die Bestellung bei Nicht-Echtheit. Folgt demselben Zwischentabellen-plus-API-Muster wie SellWatch.
+
+### Enum: CXW Workshop Line Status (ID: 60337)
+
+Definiert die drei Prüfstatus einer Werkstattzeile (Neu, WS geprüft, Verarbeitet). *Reine Werteliste ohne Prozeduren.*
+
+### Tabelle: CXW Workshop Line (ID: 60318)
+
+Ein Datensatz je an die Werkstatt übergebener Bestellzeile: hält die Herstellerseriennummer, den Prüfstatus, das Echtheits-Kennzeichen der Werkstatt, zehn generische Attributfelder (Platzhalter-Bezeichnung, finale Benennung noch offen) sowie den letzten Verarbeitungsfehler.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen einer Werkstattzeile automatisch den Erstellungszeitpunkt ein. |
+| 2 | `OnModify` | Trigger | – | Verhindert einen Rückschritt des Prüfstatus (von "WS geprüft" zurück auf "Neu" oder weg von "Verarbeitet") unabhängig davon, ob die Änderung über die API oder intern erfolgt, und trägt beim Wechsel auf "WS geprüft" automatisch den Prüfzeitpunkt ein. |
+
+### Tabellenerweiterung: CXW Workshop Purchase Line (ID: 60321)
+
+Ergänzt die Standard-Einkaufszeile um Herstellerseriennummer, ein Kennzeichen "Nicht angekommen" sowie ein Kennzeichen "An Werkstatt gesendet".
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnDelete` | Trigger | – | Löscht beim Löschen einer Einkaufszeile die zugehörige Werkstattzeile automatisch mit, sofern diese noch nicht abschließend verarbeitet wurde; bereits verarbeitete Werkstattzeilen bleiben als Prüfnachweis bestehen. |
+
+### Seitenerweiterung: CXW Workshop Purchase Order (ID: 60328)
+
+Ergänzt die Standard-Einkaufsbestellung um die Aktion "An Werkstatt senden".
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `CXW Send to Workshop` | Aktion | – | Fragt für jede offene, noch nicht übertragene Bestellzeile die Ankunft ab, erfasst bei Bestätigung die Herstellerseriennummer über einen Eingabedialog und legt daraus eine Werkstattzeile an; nicht angekommene oder abgebrochene Zeilen werden übersprungen, ohne die übrigen Zeilen zu blockieren. |
+| 2 | `SendLinesToWorkshop` | Prozedur | Internal | Ermittelt alle offenen, noch nicht an die Werkstatt gesendeten Bestellzeilen und verarbeitet sie nacheinander; zeigt am Ende eine Sammelmeldung zu nicht übertragenen Zeilen an. |
+| 3 | `ProcessLine` | Prozedur | Internal | Führt für eine einzelne Bestellzeile die Ankunfts- und Seriennummer-Abfrage aus und legt bei Erfolg die Werkstattzeile an. |
+| 4 | `AddErrorLine` | Prozedur | Internal | Trägt eine nicht übertragene Zeile mit Grund in die Sammelmeldung ein. |
+| 5 | `CreateWorkshopLine` | Prozedur | Internal | Legt zu einer erfolgreich erfassten Bestellzeile die zugehörige Werkstattzeile mit Status "Neu" an. |
+
+### Seitenerweiterung: CXW Workshop Purch Order Subf (ID: 60329)
+
+Zeigt auf der Bestellzeilen-Übersicht zusätzlich Herstellerseriennummer und "An Werkstatt gesendet" an und sperrt die Bearbeitung einer Zeile, sobald sie an die Werkstatt gesendet wurde.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnAfterGetRecord` | Trigger | – | Sperrt die Standardfelder einer Zeile (Artikel, Menge, Preis u. a.) für die Bearbeitung, sobald diese bereits an die Werkstatt gesendet wurde. |
+| 2 | `OnNewRecord` | Trigger | – | Hält eine neu angelegte Zeile bearbeitbar, bis sie an die Werkstatt gesendet wird. |
+
+### Seite: CXW Workshop Lines (ID: 60338)
+
+Nur-Lese-Übersicht aller Werkstattzeilen (inkl. Attribute, Status, Prüfzeitpunkt und Verarbeitungsfehler) für die interne Nachverfolgung. *Keine eigenen Prozeduren oder Trigger.*
+
+### Seite: CXW Workshop Line API (ID: 60339)
+
+API-Schnittstelle (OData v4, `saliniLife/workshop/v1.0`), über die die externe Werkstatt offene Werkstattzeilen liest und ihr Prüfergebnis (Attribute, Echtheit, Status) zurückschreibt. Anlegen und Löschen über die API sind gesperrt.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnModifyRecord` | Trigger | – | Lehnt einen Änderungsversuch über die API ab, wenn die Werkstatt versucht, Schlüssel-, Artikel- oder Seriennummernfelder zu verändern; erlaubt bleiben nur Attribute, Echtheits-Kennzeichen und Status. |
+
+### Seite: CXW Serial No. Input (ID: 60340)
+
+Kleiner Eingabedialog zur Erfassung der Herstellerseriennummer, der von der Aktion "An Werkstatt senden" aufgerufen wird.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `GetSerialNo` | Prozedur | Public | Gibt die im Dialog eingegebene Herstellerseriennummer an den Aufrufer zurück. |
+
+### Codeunit: CXW Process Workshop Lines (ID: 60331)
+
+Als Aufgabenwarteschlangen-Eintrag lauffähige Hintergrundverarbeitung, die alle von der Werkstatt geprüften Zeilen abschließend bearbeitet.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnRun` | Trigger | – | Startet die Verarbeitung aller Werkstattzeilen im Status "WS geprüft". |
+| 2 | `ProcessCheckedLines` | Prozedur | Internal | Ermittelt alle geprüften Werkstattzeilen und übergibt sie einzeln zur Verarbeitung. |
+| 3 | `ProcessLineWithErrorHandling` | Prozedur | Internal | Verarbeitet eine Zeile fehlerisoliert: bei Fehlschlag wird der Fehlertext auf der Zeile vermerkt, ohne die Verarbeitung der übrigen Zeilen zu blockieren. |
+| 4 | `TryProcessLine` | Prozedur | Internal | Entscheidet anhand des Echtheits-Kennzeichens, ob die Zeile als echt oder nicht echt weiterverarbeitet wird. |
+| 5 | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit ausschließlich den Wareneingang der zugehörigen Bestellung (keine Rechnung) und überträgt die gemeldeten Attribute auf den Artikel; setzt danach den Status auf "Verarbeitet". |
+| 6 | `ProcessNonGenuineLine` | Prozedur | Internal | Storniert bei widerlegter Echtheit die zugehörige Bestellung (öffnet sie bei Bedarf zuvor wieder) und setzt den Status auf "Verarbeitet", bevor die Bestellung gelöscht wird, damit die Werkstattzeile als Nachweis erhalten bleibt. |
+| 7 | `GetWorkshopLineAttributeValue` | Prozedur | Internal | Liest den Wert eines der zehn Attributfelder einer Werkstattzeile anhand seiner laufenden Nummer aus. |
+| 8 | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (aktuell Platzhalternamen, finale Benennung offen). |
+| 9 | `SetItemAttributeValue` | Prozedur | Internal | Trägt einen Attributwert als Standard-Artikelattribut auf dem Artikel ein und legt fehlende Attribute/Attributwerte automatisch an. |
+| 10 | `GetOrCreateAttributeId` | Prozedur | Internal | Sucht ein Standard-Artikelattribut anhand des Namens oder legt es neu an (Typ Text). |
+| 11 | `GetOrCreateAttributeValueId` | Prozedur | Internal | Sucht einen Attributwert anhand des Textes oder legt ihn neu an. |
+
+### Permission Set: CXW Workshop All (ID: 60301)
+
+Berechtigt zum vollständigen internen Arbeiten mit den Workshop-Tabellen, -Seiten und der Verarbeitungslogik – inklusive der für Wareneingang, Stornierung und Artikelattribute benötigten Standardtabellen (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping), damit die Job-Queue-Codeunit 60331 eigenständig lauffähig ist.
+
+### Permission Set: CXW Workshop API (ID: 60302)
+
+Eigener, schlanker Berechtigungssatz speziell für den externen Werkstatt-Benutzer – gewährt ausschließlich Lese- und Änderungsrecht auf die Tabelle "CXW Workshop Line" (kein Einfügen/Löschen, kein Zugriff auf Einkaufsbeleg oder Artikel).
 
 ---
 
@@ -365,6 +460,7 @@ Berechtigt zum vollständigen Arbeiten mit den Verkaufspreisverwaltungs-Tabellen
 | Kandidat | Objekte | Begründung |
 |---|---|---|
 | SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305; Page 60307, 60308, 60337; PermissionSet 60300, 60310 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell und jetzt auch eigener API-Schreibschnittstelle. Bereits heute im ID-Bereich 60300–60310 (plus 60337 für die API) sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. |
+| Workshop-Ankaufsprüfung als eigenständige Extension | Enum 60337; Table 60318; TableExtension 60321; PageExtension 60328, 60329; Page 60338, 60339, 60340; Codeunit 60331; PermissionSet 60301, 60302 | Fachlich ebenso klar abgegrenzt wie SellWatch (eigenes Datenmodell, eigene bidirektionale API, eigene Hintergrundverarbeitung) und folgt bewusst demselben Architekturmuster. Einzige Kopplung an den Rest der Extension ist die Erweiterung der Standard-Einkaufszeile/-bestellung. Vor einer Auslagerung klären: der App-ID-Bereich 60300–60349 ist nach dieser Erweiterung weitgehend ausgeschöpft, eine eigenständige Extension bräuchte einen eigenen `idRanges`-Block. |
 | Gemeinsame HTTP-Infrastruktur (Aufrufprotokoll + Schnittstellen-Konfiguration) als Basis-Baustein | Table 60302 „CXW Http Call Log", Table 60317 „CXW API Interface Setup", Page 60309, 60324, 60325 | Wird von SellWatch UND Verkaufspreisverwaltung gleichermaßen genutzt (Authentifizierung, Protokollierung, Signaturberechnung). Sollte bei einer Aufteilung in zwei Extensions als dritter, gemeinsamer Basis-Baustein bestehen bleiben, statt dupliziert zu werden. |
 | CSV-Import-Pfad der Verkaufspreisverwaltung | Codeunit 60330, Table 60315, 60316, Xmlport 60328 | Laut Code-Kommentaren aktuell nicht produktiv angebunden (unabhängiger Baustein). Eigenständig genug, um bei Bedarf separat weiterzuentwickeln oder zu entfernen, ohne den produktiven Preis-Freigabeprozess zu berühren. |
 | SellWatch-JSON-Rückmeldungen ohne aktuellen Aufrufer | Codeunit 60305 (`CreateSourceFilePurchaseRequest`, `CreateSourceFileOrderStatusSE`), Table 60301 (`CreateJsonObjectCheckOnline`) | Fertige Bausteine für eine Rückmeldung an SellWatch (Bestellstatus, Auszahlungsbetrag), aber im aktuellen Code nirgends aufgerufen. Vor einer Auslagerung klären, ob dieser Rückkanal noch gebraucht wird oder toter Code ist. |
