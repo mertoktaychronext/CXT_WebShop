@@ -1,16 +1,16 @@
 # Funktionsregister – CHX.Webshop
 
-**Version:** 1.0.0.1
+**Version:** 27.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11
-**Abhängigkeiten:** keine
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12
+**Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
 
 ## Zusammenfassung
 
-CHX.Webshop bündelt zwei weitgehend eigenständige Funktionsbereiche unter einem Dach: **SellWatch** wickelt den automatisierten Ankauf gebrauchter Uhren ab (eingehende Verkaufsanfragen, automatische Lieferanten- und Bestellanlage, Online-Sichtbarkeitsprüfung beim Partner SellWatch) und die **Verkaufspreisverwaltung** steuert die Pflege, Prüfung, Freigabe und den Export von Webshop-Verkaufspreisen an ein externes System. Beide Bereiche teilen sich ein gemeinsames HTTP-Aufrufprotokoll und eine gemeinsame Schnittstellen-Konfigurationstabelle mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4). Die Verkaufspreisverwaltung bringt zusätzlich einen CSV-Importweg für Preisdaten sowie eine automatische Mehrwährungs-Ableitung mit.
+CHX.Webshop bündelt zwei weitgehend eigenständige Funktionsbereiche unter einem Dach: **SellWatch** wickelt den automatisierten Ankauf gebrauchter Uhren ab (eingehende Verkaufsanfragen – inzwischen auch per API von außen anlegbar –, automatische Lieferanten- und Bestellanlage, Online-Sichtbarkeitsprüfung beim Partner SellWatch) und die **Verkaufspreisverwaltung** steuert die Pflege, Prüfung, Freigabe und den Export von Webshop-Verkaufspreisen an ein externes System. Beide Bereiche teilen sich ein gemeinsames HTTP-Aufrufprotokoll und eine gemeinsame Schnittstellen-Konfigurationstabelle mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4). Die Verkaufspreisverwaltung bringt zusätzlich einen CSV-Importweg für Preisdaten sowie eine automatische Mehrwährungs-Ableitung mit. Seit der jüngsten Erweiterung besitzt SellWatch außerdem eine eigene, separat berechtigte API-Schreibschnittstelle für externe Systeme.
 
 ---
 
@@ -25,12 +25,47 @@ CHX.Webshop bündelt zwei weitgehend eigenständige Funktionsbereiche unter eine
 | Seitenerweiterungen | 2 |
 | Xmlports | 1 |
 | Enums | 7 |
-| Permission Sets | 2 |
-| **Gesamt Prozeduren/Trigger/Events** | **91** |
+| Permission Sets | 3 |
+| **Gesamt Objekte** | **39** |
+| **Gesamt Prozeduren/Trigger/Events** | **89** |
 
 ---
 
 ## Funktionsregister nach Objekt
+
+### SellWatch (Uhren-Ankauf)
+
+### Tabelle: CXW SellWatch Vendor Info (ID: 60300)
+
+Speichert eine eingehende SellWatch-Ankaufsanfrage mit allen Lieferanten-, Uhren- und Angebotsdaten. Wird sowohl manuell als auch – seit der neuen API-Page 60337 – von externen Systemen per HTTP befüllt. Besitzt neben dem Primärschlüssel einen zweiten Schlüssel auf die SellWatch-Referenznummer (SRid) für die Dubletten-Prüfung.
+
+*Keine eigenen Prozeduren oder Trigger – reine Datentabelle.*
+
+### Tabelle: CXW Watch Online Approval (ID: 60301)
+
+Prüft je Artikel/Variante beim Partner SellWatch, ob eine Uhr online sichtbar geschaltet werden darf, und protokolliert das Ergebnis.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `CXW Check Online – OnValidate` | Trigger | – | Trägt beim Aktivieren der Online-Freigabe automatisch das heutige Datum als "Erstes Online-Datum" ein. |
+| 2 | `ReadJSONFile` | Prozedur | Internal | Leere Hilfsfunktion ohne aktuelle Funktion – technischer Rest aus der Migration. |
+| 3 | `CreateJsonObjectCheckOnline` | Prozedur | Public | Baut ein minimales JSON-Objekt mit der Eintragsnummer, aktuell ohne Aufrufer im Code. |
+| 4 | `CreateEntryInexternalFile` | Prozedur | Public | Fragt beim Partner SellWatch per HTTP ab, ob eine Uhr online gehen darf, und setzt je nach Antwort die Online-Freigabe oder einen Hinweistext. |
+| 5 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei der API-Schlüssel durch einen Platzhalter ersetzt wird. |
+| 6 | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Sichtbarkeits-Aufruf (Erfolg wie Fehlschlag) in das gemeinsame HTTP-Aufrufprotokoll. |
+| 7 | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Sichtbarkeits-Aufruf zusätzlich an die technische Telemetrie, damit Ausfälle zentral auffallen. |
+
+### Tabellenerweiterung: CXW SW Purchase Line (ID: 60303)
+
+Ergänzt die Standard-Einkaufszeile um das Kennzeichen "Gebraucht", damit von SellWatch angelegte Bestellzeilen als Gebrauchtware markiert sind.
+
+*Keine eigenen Trigger – reine Felderweiterung.*
+
+### Tabellenerweiterung: CXW SW Purchase Header (ID: 60304)
+
+Ergänzt den Standard-Einkaufskopf um eine Sendungsverfolgungsnummer, die auf eine SellWatch-Bestellung eingetragen und später an SellWatch zurückgemeldet werden kann.
+
+*Keine eigenen Trigger – reine Felderweiterung.*
 
 ### Codeunit: CXW SellWatch Mgt (ID: 60305)
 
@@ -38,329 +73,290 @@ Legt aus eingehenden SellWatch-Verkaufsanfragen automatisch Lieferanten und Eink
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `OnRun` | Trigger | – | Startet den automatisierten Ablauf: prüft neue SellWatch-Verkäuferanfragen und legt daraus Lieferanten und Bestellungen an. |
-| 2 | `ValidateAndCreateVendor` | Prozedur | Internal | Sucht alle noch nicht verarbeiteten SellWatch-Anfragen, legt bei Bedarf einen neuen Lieferanten mit Bankverbindung an (oder verwendet einen passenden bestehenden) und stößt die Bestellerstellung an. |
-| 3 | `CreatePurchaseOrder` | Prozedur | Internal | Legt für eine SellWatch-Anfrage eine Einkaufsbestellung mit einer Position an (Artikel je nach Angebotsart: Kommission, Direktkauf oder Eintausch), gibt sie automatisch frei und markiert die Anfrage als erledigt. |
-| 4 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Legt nachträglich Bestellungen für Anfragen an, die zuvor für die Verarbeitung in einer anderen Gesellschaft vorgemerkt wurden. |
-| 5 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt angelegt wird oder für eine andere Gesellschaft vorgemerkt wird. |
-| 6 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Erstellt aus einer Einkaufsbestellung eine Nachricht mit Bestellnummer und Sendungsverfolgungsnummer. Aktuell von keiner anderen Stelle im Code aufgerufen. |
-| 7 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Erstellt eine Statusmeldung für SellWatch mit Verkäufer-, Uhren- und Auszahlungsdaten sowie Link zur Online-Freigabe. Aktuell von keiner anderen Stelle im Code aufgerufen. |
+| 1 | `OnRun` | Trigger | – | Startet die Verarbeitung aller noch nicht angelegten SellWatch-Anfragen. |
+| 2 | `ValidateAndCreateVendor` | Prozedur | Internal | Sucht für jede noch offene Anfrage einen passenden Lieferanten anhand von Name/Adresse/Telefon/E-Mail oder legt einen neuen Lieferanten samt Bankverbindung an. |
+| 3 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, ordnet den passenden Artikel je nach Angebotsart zu und gibt die Bestellung sofort frei. |
+| 4 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
+| 5 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
+| 6 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
+| 7 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
 
----
+### Enum: CXW SW Order Status (ID: 60306)
 
-### Codeunit: CXW Export Gateway Sales Price (ID: 60329)
-
-Übernimmt freigegebene Verkaufspreise in die Standard-Preistabelle, archiviert sie und sendet sie an eine konfigurierbare externe Schnittstelle.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `WriteBackAndArchive` | Prozedur | Public | Übernimmt einen geprüften und freigegebenen Preis in die Standard-Preistabelle (neu oder aktualisiert) und legt eine Archivversion an. |
-| 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Preis, Streichpreis, empfohlenen Verkaufspreis, Grund und Kommentar aus der Prüfzeile in den Verkaufspreis-Datensatz. |
-| 3 | `ResolveUnitPriceLCY` | Prozedur | Internal | Ermittelt den Verkaufspreis in Landeswährung über den hinterlegten oder den zuletzt gültigen Wechselkurs. |
-| 4 | `ArchiveCheckingLine` | Prozedur | Internal | Legt eine neue, fortlaufend nummerierte Archivversion einer geprüften Preiszeile an, damit die Preishistorie nachvollziehbar bleibt. |
-| 5 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis in eine Nachricht um, speichert sie als Ausgangsdatei und sendet sie an das konfigurierte externe System. |
-| 6 | `SendToApiInterface` | Prozedur | Internal | Baut die Anfrage an die externe Schnittstelle auf (Methode, Authentifizierung, optionale Zusatz-Header), sendet sie und protokolliert Erfolg oder Fehler. |
-| 7 | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die digitale Signatur (AWS Signature V4), die manche besonders abgesicherte externe Endpunkte zusätzlich zum Schlüssel verlangen. |
-| 8 | `SanitizeHeaderText` | Prozedur | Internal | Entfernt unsichtbare oder ungültige Zeichen aus Zugangsdaten (z. B. durch Kopieren aus Word/E-Mail entstanden), damit die Übertragung nicht an einem Formatfehler scheitert. |
-| 9 | `HexEncode` | Prozedur | Internal | Technische Hilfsfunktion für die Signaturberechnung (wandelt Binärdaten in lesbare Zeichen um). |
-| 10 | `Sha256HexLower` | Prozedur | Internal | Technische Hilfsfunktion für die Signaturberechnung (Prüfsumme). |
-| 11 | `HmacChainStep` | Prozedur | Internal | Technische Hilfsfunktion, ein Rechenschritt der AWS-Signaturberechnung. |
-| 12 | `DeriveSigningKey` | Prozedur | Internal | Technische Hilfsfunktion, leitet aus dem AWS-Zugangsschlüssel den Signaturschlüssel ab. |
-| 13 | `HmacSignatureHexLower` | Prozedur | Internal | Technische Hilfsfunktion, berechnet die endgültige AWS-Signatur. |
-| 14 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt eine Protokollversion der gesendeten Anfrage, in der alle Zugangsdaten durch Platzhalter ersetzt sind. |
-| 15 | `LogHttpCall` | Prozedur | Internal | Schreibt Erfolg/Fehlschlag, Statuscode sowie Anfrage- und Antworttext eines Sendevorgangs ins Aufrufprotokoll. |
-| 16 | `AddFieldToJson` | Prozedur | Internal | Technische Hilfsfunktion, wandelt ein einzelnes Datenfeld in das passende Nachrichtenformat um. |
-
----
-
-### Codeunit: CXW Import Sales Prices (ID: 60330)
-
-Importiert Verkaufspreise aus einer hochgeladenen CSV-Datei in die Standard-Preistabelle.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnRun` | Trigger | – | Startet den Import einer hochgeladenen Preisdatei. |
-| 2 | `ProcessFile` | Prozedur | Internal | Liest eine importierte Datei zeilenweise ein, prüft die Kopfzeile auf das erwartete Format und übernimmt die Preisdaten oder meldet einen Fehler. |
-| 3 | `ProcessLine` | Prozedur | Internal | Liest eine einzelne Zeile der Importdatei aus und ordnet die Werte den passenden Preisfeldern zu. |
-| 4 | `EvaluateHeaderRow` | Prozedur | Internal | Prüft, ob die Kopfzeile der Importdatei genau die erwarteten Spalten in der richtigen Reihenfolge enthält. |
-| 5 | `WriteProtocol` | Prozedur | Internal | Schreibt eine Fehlermeldung zu einem Importvorgang ins Importprotokoll. |
-| 6 | `WriteSalesPrices` | Prozedur | Internal | Übernimmt die eingelesenen Preisdaten in die Standard-Preistabelle (neu oder aktualisiert). |
-| 7 | `OnAfterSalesPriceModify` | Event Publisher | Public | Signalisiert anderen Erweiterungen, dass ein Verkaufspreis per Import aktualisiert wurde. |
-
----
-
-### Tabelle: CXW SellWatch Vendor Info (ID: 60300)
-
-Eingehende SellWatch-Ankaufsanfrage (Verkäufer-, Bank-, Uhren- und Angebotsdaten). Keine eigenen Prozeduren oder Trigger.
-
----
-
-### Tabelle: CXW Watch Online Approval (ID: 60301)
-
-Ergebnis der Online-Sichtbarkeitsprüfung je Artikel/Variante beim Partner SellWatch.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `"CXW Check Online" – OnValidate` | Trigger | – | Setzt automatisch das Datum der ersten Online-Schaltung, sobald eine Uhr als „online" markiert wird. |
-| 2 | `ReadJSONFile` | Prozedur | Internal | Leere, ungenutzte Altfunktion ohne Wirkung. |
-| 3 | `CreateJsonObjectCheckOnline` | Prozedur | Public | Erstellt eine einfache Nachricht mit der laufenden Nummer eines Datensatzes. |
-| 4 | `CreateEntryInexternalFile` | Prozedur | Public | Fragt bei SellWatch ab, ob eine Uhr online gestellt werden darf, und aktualisiert den Datensatz entsprechend der Antwort. |
-| 5 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt eine Protokollversion der Anfrage, in der der echte Schlüssel durch einen Platzhalter ersetzt ist. |
-| 6 | `LogHttpCall` | Prozedur | Internal | Schreibt das Ergebnis der Online-Prüfung ins Aufrufprotokoll. |
-| 7 | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Aufruf zusätzlich an die technische Überwachung, damit Störungen auffallen. |
-
----
-
-### Tabelle: CXW Http Call Log (ID: 60302)
-
-Gemeinsames Protokoll jedes HTTP-Aufrufs (SellWatch-Online-Check und Verkaufspreis-Export).
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnInsert` | Trigger | – | Vermerkt automatisch Datum und Uhrzeit beim Anlegen eines neuen Protokolleintrags. |
-
----
-
-### Tabelle: CXW General Sales Price Setup (ID: 60311)
-
-Grundeinstellungen der Verkaufspreisverwaltung (Mindestmarge, Schwellenwerte, Export-Schalter, Schnittstellenauswahl).
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `"CXW API Interface Code" – OnValidate` | Trigger | – | Prüft beim Auswählen einer Schnittstelle, dass diese tatsächlich für den Versand von Verkaufspreisen vorgesehen ist. |
-
----
-
-### Tabelle: CXW Sales Price Checking (ID: 60312)
-
-Zwischenablage für Import, Prüfung und Freigabe von Verkaufspreisen.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnInsert` | Trigger | – | Vermerkt automatisch, wann und von wem eine Prüfzeile angelegt wurde. |
-| 2 | `OnModify` | Trigger | – | Vermerkt automatisch die letzte Änderung; setzt bei Währungswechsel die Freigabe und etwaige Anmerkungen zurück. |
-| 3 | `OnRename` | Trigger | – | Vermerkt automatisch, wann und von wem eine Prüfzeile umbenannt wurde. |
-| 4 | `"CXW Accept New Setup" – OnValidate` | Trigger | – | Verhindert die Freigabe einer noch nicht validierten Preiszeile und sichert eine vorhandene Anmerkung beim Freigeben. |
-
----
-
-### Tabelle: CXW Sales Price Archive (ID: 60313)
-
-Historie freigegebener Verkaufspreise, versioniert je Artikel/Währung.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnInsert` | Trigger | – | Vermerkt automatisch, wann und von wem ein Archiveintrag angelegt wurde. |
-| 2 | `OnModify` | Trigger | – | Vermerkt automatisch, wann und von wem ein Archiveintrag zuletzt geändert wurde. |
-
----
-
-### Tabelle: CXW Sales Price Outbound File (ID: 60314)
-
-Gesendete Nutzdaten mit Versandstatus und Antworttext, zur Fehleranalyse fehlgeschlagener Übertragungen.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnInsert` | Trigger | – | Vermerkt automatisch den Anlagezeitpunkt einer ausgehenden Datei. |
-
----
-
-### Tabelle: CXW Sales Price Inbound File (ID: 60315)
-
-Für den automatisierten CSV-Dateiimport (nicht produktiv angebunden).
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnInsert` | Trigger | – | Vermerkt automatisch den Anlagezeitpunkt einer eingehenden Datei. |
-
----
-
-### Tabelle: CXW Price Import Protocol (ID: 60316)
-
-Fehlerprotokoll zum automatisierten Preisimport.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `OnInsert` | Trigger | – | Vermerkt automatisch den Anlagezeitpunkt eines Protokolleintrags. |
-
----
-
-### Tabelle: CXW API Interface Setup (ID: 60317)
-
-Endpunkt-URL, Authentifizierungsart und sicher gespeicherte Zugangsdaten je externer Schnittstelle (gemeinsam genutzt von SellWatch und Verkaufspreisverwaltung).
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `"CXW Active" – OnValidate` | Trigger | – | Prüft beim Aktivieren einer Schnittstelle, dass Endpunkt-URL und alle für die gewählte Authentifizierungsart nötigen Zugangsdaten vollständig hinterlegt sind. |
-| 2 | `SetApiKey` / `GetApiKey` | Prozedur | Public | Speichert bzw. liest den allgemeinen API-Schlüssel sicher und verschlüsselt. |
-| 3 | `GetApiKeyIsolatedStorageKey` | Prozedur | Internal | Technische Hilfsfunktion (interner Speicherschlüssel). |
-| 4 | `SetAwsSecretAccessKey` / `GetAwsSecretAccessKey` | Prozedur | Public | Speichert bzw. liest den geheimen AWS-Zugriffsschlüssel sicher und verschlüsselt. |
-| 5 | `GetAwsSecretAccessKeyIsolatedStorageKey` | Prozedur | Internal | Technische Hilfsfunktion (interner Speicherschlüssel). |
-| 6 | `SetAwsSessionToken` / `GetAwsSessionToken` | Prozedur | Public | Speichert bzw. liest das temporäre AWS-Sitzungstoken sicher und verschlüsselt. |
-| 7 | `GetAwsSessionTokenIsolatedStorageKey` | Prozedur | Internal | Technische Hilfsfunktion (interner Speicherschlüssel). |
-| 8 | `IsApiKeyFieldRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart ein API-Schlüssel benötigt wird. |
-| 9 | `IsAwsFieldsRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart die AWS-spezifischen Felder benötigt werden. |
-
----
-
-### Tabellenerweiterungen
-
-| Objekt | ID | Erweitert | Zweck | Eigene Prozeduren |
-|---|---|---|---|---|
-| CXW SW Purchase Line | 60303 | Purchase Line | Kennzeichnet eine Einkaufszeile als „gebrauchte Ware" (SellWatch-Ankauf). | keine |
-| CXW SW Purchase Header | 60304 | Purchase Header | Trägt die Sendungsverfolgungsnummer einer SellWatch-Bestellung. | keine |
-| CXW Sales Price | 60319 | Sales Price | Zusätzliche Webshop-Felder am Standard-Verkaufspreis (Grund, Kommentar, Streichpreis, empfohlener Preis, Preis in Landeswährung). | keine |
-| CXWCurrency | 60320 | Currency | Kennzeichnet, ob eine Währung für den Webshop-Preisexport aktiviert ist. | keine |
-
----
+Definiert die Bestellstatus-Werte (Uhr eingetroffen, online, reserviert, verkauft, Zahlungsbestätigung, gebucht), die in der Statusrückmeldung an SellWatch verwendet werden. *Reine Werteliste ohne Prozeduren.*
 
 ### Seite: CXW SellWatch-Overview (ID: 60307)
 
-Nur-Lese-Übersicht aller eingehenden SellWatch-Ankaufsanfragen.
+Nur-Lese-Übersicht aller eingehenden SellWatch-Ankaufsanfragen – die einzige Anzeige-Seite für diese Daten.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `ShowDocument` | Aktion | – | Öffnet die zur Anfrage gehörende Einkaufsbestellung. |
 | 2 | `OnOpenPage` | Trigger | – | Zeigt beim Öffnen nur Anfragen mit einer gültigen SellWatch-Referenznummer. |
 
----
+### Seite: CXW SellWatch info (ID: 60308)
+
+Reine Anzeige-Kachel mit Uhrendetails (Marke, Modell, Referenz, Zustand, Abholdatum) ohne eigenes Verhalten.
 
 ### Seite: CXW SellWatch API (ID: 60337)
 
-API-Schnittstelle (OData v4), über die externe Systeme per HTTP-Aufruf neue SellWatch-Ankaufsanfragen anlegen oder bestehende aktualisieren können. Ergänzt die reine Anzeige-Seite „CXW SellWatch-Overview" (60307) um einen Schreibzugang, ohne diese zu verändern – Verarbeitungsfelder (Erstellt-Kennzeichen, Bestellnummer, Lieferantennummer) bleiben für externe Aufrufer gesperrt.
+API-Schnittstelle (OData v4, `saliniLife/sellWatch/v2.0`), über die externe Systeme per HTTP-Aufruf neue SellWatch-Ankaufsanfragen anlegen oder bestehende aktualisieren können. Ergänzt die reine Anzeige-Seite „CXW SellWatch-Overview" (60307) um einen Schreibzugang, ohne diese zu verändern – Verarbeitungsfelder (Erstellt-Kennzeichen, Bestellnummer, Lieferantennummer) bleiben für externe Aufrufer gesperrt.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `OnInsertRecord` | Trigger | – | Setzt beim Anlegen über die API das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer zurück, prüft Pflichtfelder und lehnt doppelte SellWatch-Referenznummern ab. |
-| 2 | `OnModifyRecord` | Trigger | – | Verhindert bei Änderungen über die API, dass das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer überschrieben werden, prüft weiterhin die Pflichtfelder und lehnt eine Änderung der SellWatch-Referenznummer auf einen bereits vergebenen Wert ab. |
+| 1 | `OnInsertRecord` | Trigger | – | Setzt beim Anlegen über die API das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer zurück, prüft die Pflichtfelder und lehnt doppelte SellWatch-Referenznummern ab. |
+| 2 | `OnModifyRecord` | Trigger | – | Verhindert bei Änderungen über die API, dass das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer überschrieben werden, prüft weiterhin die Pflichtfelder und lehnt eine Änderung der Referenznummer auf einen bereits vergebenen Wert ab. |
 | 3 | `ValidateRequiredFields` | Prozedur | Internal | Stellt sicher, dass Referenznummer, Marke, Modell und Angebotspreis beim Anlegen oder Ändern über die API ausgefüllt sind. |
 | 4 | `CheckDuplicateSRid` | Prozedur | Internal | Lehnt einen Neuanlage- oder Änderungs-Aufruf ab, wenn bereits eine andere Anfrage mit derselben SellWatch-Referenznummer existiert. |
 
+### Permission Set: CXW SWChronWSAll (ID: 60310)
+
+Berechtigt zum vollständigen Arbeiten mit den SellWatch-Tabellen, -Seiten und der Verarbeitungslogik sowie dem gemeinsamen HTTP-Aufrufprotokoll. Deckt seit dieser Version auch die neue API-Page 60337 ab.
+
+### Permission Set: CXW Sell Watch API (ID: 60300)
+
+Eigener, schlanker Berechtigungssatz speziell für den externen (Entra-)Benutzer, der über die API-Page 60337 auf die SellWatch-Ankaufsanfragen zugreift – gewährt Lese-, Einfüge- und Änderungsrecht auf die Tabelle "CXW SellWatch Vendor Info", getrennt vom umfassenderen internen Berechtigungssatz 60310.
+
 ---
 
-### Seite: CXW SellWatch info (ID: 60308)
+### Gemeinsame HTTP-Infrastruktur (von SellWatch und Verkaufspreisverwaltung genutzt)
 
-Reine Anzeige-Kachel mit Uhrendetails (kein eigenes Verhalten).
+### Tabelle: CXW Http Call Log (ID: 60302)
 
----
+Protokolliert jeden ausgehenden HTTP-Aufruf (SellWatch-Sichtbarkeitsprüfung wie Verkaufspreis-Export) mit Zeitpunkt, Ziel-URL, Erfolg, Status-Code sowie Anfrage- und Antworttext.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Protokolleintrags automatisch den aktuellen Zeitpunkt ein. |
 
 ### Seite: CXW Http Call Log (ID: 60309)
 
-Nur-Lese-Übersicht des gemeinsamen HTTP-Aufrufprotokolls.
+Nur-Lese-Übersicht des gemeinsamen HTTP-Aufrufprotokolls für beide Funktionsbereiche.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `DownloadRequest` | Aktion | – | Lädt den protokollierten Anfragetext als Datei herunter. |
 | 2 | `DownloadResponse` | Aktion | – | Lädt den protokollierten Antworttext als Datei herunter. |
 
----
+### Tabelle: CXW API Interface Setup (ID: 60317)
 
-### Seite: CXW General Sales Price Setup (ID: 60321)
-
-Grundeinstellungen der Verkaufspreisverwaltung.
+Zentrale Konfiguration ausgehender API-Schnittstellen: Endpunkt-URL, HTTP-Methode, SOAPAction und austauschbare Authentifizierung (kein Schlüssel, API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4). Geheimnisse werden sicher im Isolated Storage abgelegt statt im Klartext-Feld.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `APIInterfaceSetup` | Aktion | – | Öffnet die Verwaltung der externen Schnittstellen. |
-| 2 | `OnOpenPage` | Trigger | – | Legt beim ersten Öffnen automatisch den (einzigen) Einstellungsdatensatz an. |
-
----
-
-### Seite: CXW Sales Price Checking List (ID: 60322)
-
-Arbeitsliste für Import, Prüfung, Freigabe und Export von Verkaufspreisen.
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `FinalPrice – OnValidate` | Trigger | – | Setzt die Freigabe zurück, sobald der Verkaufspreis geändert wird. |
-| 2 | `GeneralSalesPriceSetup` | Aktion | – | Öffnet die Grundeinstellungen. |
-| 3 | `SalesPriceArchiveNav` | Aktion | – | Öffnet die Preishistorie. |
-| 4 | `Import CSV` | Aktion | – | Startet den Import einer Preisdatei, nachdem geprüft wurde, dass die Grundeinstellungen vollständig sind und keine offene Prüfliste existiert. |
-| 5 | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft jede Zeile automatisch auf Auffälligkeiten (z. B. Preis unter Mindestmarge, große Preisänderung, unplausible Zeiträume). |
-| 6 | `Approve` | Aktion | – | Gibt alle geprüften und validierten Preiszeilen nach Bestätigung durch den Benutzer zur Übernahme frei. |
-| 7 | `Add all Currencies` | Aktion | – | Legt für jede aktivierte Fremdwährung automatisch eine umgerechnete Preiszeile an. |
-| 8 | `Upload Sales Price` | Aktion | – | Übernimmt alle freigegebenen Preiszeilen in die Standard-Preistabelle und sendet sie an die externe Schnittstelle; fragt nach, ob bereits gesendete Zeilen erneut gesendet werden sollen. |
-| 9 | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste (reine Arbeitsansicht ohne dauerhafte Datenspeicherung). |
-| 10 | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
-| 11 | `fnValidate` | Prozedur | Internal | Prüft jede offene Preiszeile automatisch auf Auffälligkeiten und markiert sie als validiert. |
-| 12 | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für Artikel ohne Lagerbestand einen Nichtlagerpreis anhand eines Aufschlags, abhängig vom Lagerpreis-Bereich. |
-
----
-
-### Seite: CXW Sales Price Archive (ID: 60323)
-
-Nur-Lese-Übersicht der Preishistorie. Keine Aktionen oder Trigger mit eigener Logik.
-
----
+| 1 | `CXW Active – OnValidate` | Trigger | – | Prüft beim Aktivieren einer Schnittstelle, dass Endpunkt-URL und die zur gewählten Authentifizierungsart passenden Zugangsdaten vollständig hinterlegt sind. |
+| 2 | `SetApiKey` | Prozedur | Public | Speichert einen API-Schlüssel sicher im Isolated Storage statt im Klartext-Tabellenfeld. |
+| 3 | `GetApiKey` | Prozedur | Public | Liest den gespeicherten API-Schlüssel für den Versand einer Anfrage aus. |
+| 4 | `GetApiKeyIsolatedStorageKey` | Prozedur | Internal | Baut den internen Speicherschlüssel für den API-Schlüssel dieser Schnittstelle. |
+| 5 | `SetAwsSecretAccessKey` | Prozedur | Public | Speichert den AWS Secret Access Key sicher im Isolated Storage. |
+| 6 | `GetAwsSecretAccessKey` | Prozedur | Public | Liest den gespeicherten AWS Secret Access Key für die Signaturberechnung aus. |
+| 7 | `GetAwsSecretAccessKeyIsolatedStorageKey` | Prozedur | Internal | Baut den internen Speicherschlüssel für den AWS Secret Access Key dieser Schnittstelle. |
+| 8 | `SetAwsSessionToken` | Prozedur | Public | Speichert ein temporäres AWS Session Token sicher im Isolated Storage. |
+| 9 | `GetAwsSessionToken` | Prozedur | Public | Liest das gespeicherte AWS Session Token für die Signaturberechnung aus. |
+| 10 | `GetAwsSessionTokenIsolatedStorageKey` | Prozedur | Internal | Baut den internen Speicherschlüssel für das AWS Session Token dieser Schnittstelle. |
+| 11 | `IsApiKeyFieldRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart ein API-Schlüssel-Feld angezeigt werden muss. |
+| 12 | `IsAwsFieldsRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart die AWS-Felder benötigt werden. |
 
 ### Seite: CXW API Interface Setup (ID: 60324)
 
-Übersichtsliste aller externen Schnittstellen (Code, Bezeichnung, Endpunkt, Authentifizierungsart, Aktiv-Status).
+Übersicht aller konfigurierten ausgehenden API-Schnittstellen.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `"CXW Code" – OnDrillDown` | Trigger | – | Öffnet die Detailkarte der ausgewählten Schnittstelle. |
-| 2 | `EditDetails` | Aktion | – | Öffnet die Detailkarte der aktuellen Schnittstelle. |
-
----
+| 1 | `CXW Code – OnDrillDown` | Trigger | – | Öffnet beim Klick auf den Code die Detailkarte der Schnittstelle. |
 
 ### Seite: CXW API Interface Setup Card (ID: 60325)
 
-Detailkarte einer einzelnen Schnittstelle; zeigt nur die zur gewählten Authentifizierungsart passenden Felder.
+Detailkarte einer einzelnen API-Schnittstelle; blendet je nach gewählter Authentifizierungsart nur die dafür relevanten Felder ein.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `"CXW Auth Type" – OnValidate` | Trigger | – | Blendet beim Wechsel der Authentifizierungsart sofort die passenden Felder ein bzw. aus, ohne dass gespeichert werden muss. |
-| 2 | `ApiKey – OnValidate` | Trigger | – | Speichert den eingegebenen API-Schlüssel sicher und verschlüsselt. |
-| 3 | `AwsSecretAccessKey – OnValidate` | Trigger | – | Speichert den eingegebenen geheimen AWS-Zugriffsschlüssel sicher und verschlüsselt. |
-| 4 | `AwsSessionToken – OnValidate` | Trigger | – | Speichert das eingegebene AWS-Sitzungstoken sicher und verschlüsselt. |
-| 5 | `OnAfterGetCurrRecord` | Trigger | – | Blendet beim Öffnen bzw. Wechseln einer Schnittstelle die zur gewählten Authentifizierungsart passenden Felder ein bzw. aus. |
+| 1 | `CXW Auth Type – OnValidate` | Trigger | – | Blendet beim Wechsel der Authentifizierungsart die passenden Eingabefelder (API-Schlüssel bzw. AWS-Felder) ein oder aus. |
+| 2 | `ApiKey – OnValidate` | Trigger | – | Speichert den eingegebenen API-Schlüssel sicher und löscht ihn anschließend aus dem Eingabefeld, damit er nicht erneut angezeigt wird. |
+| 3 | `AwsSecretAccessKey – OnValidate` | Trigger | – | Speichert den eingegebenen AWS Secret Access Key sicher und löscht ihn anschließend aus dem Eingabefeld. |
+| 4 | `AwsSessionToken – OnValidate` | Trigger | – | Speichert das eingegebene AWS Session Token sicher und löscht es anschließend aus dem Eingabefeld. |
+| 5 | `OnAfterGetCurrRecord` | Trigger | – | Legt beim Anzeigen eines Datensatzes fest, welche Authentifizierungsfelder passend zur gewählten Art sichtbar sind. |
+
+### Enum: CXW API Auth Type (ID: 60335)
+
+Definiert die unterstützten Authentifizierungsarten für ausgehende Schnittstellen (kein Schlüssel, API-Schlüssel, Basis-Authentifizierung, AWS Signature V4). *Reine Werteliste ohne Prozeduren.*
+
+### Enum: CXW Http Method (ID: 60336)
+
+Definiert die für eine Schnittstelle wählbaren HTTP-Methoden (POST, PATCH, PUT, GET, DELETE). *Reine Werteliste ohne Prozeduren.*
 
 ---
 
-### Seitenerweiterungen
+### Verkaufspreisverwaltung
 
-| Objekt | ID | Erweitert | Zweck | Eigene Logik |
+### Tabelle: CXW General Sales Price Setup (ID: 60311)
+
+Grundeinstellungen der Verkaufspreisverwaltung: Mindestmarge, Preisstaffeln, Schwellenwerte sowie Export-Schalter und ausgewählte API-Schnittstelle.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| CXW Sales Prices | 60326 | Sales Prices | Zeigt die zusätzlichen Webshop-Felder (Grund, Preise, Kommentar) auf der Standard-Verkaufspreisseite an. | keine |
-| CXWCurrencies | 60327 | Currencies | Zeigt das Aktivierungs-Kennzeichen für den Webshop-Preisexport auf der Standard-Währungsseite an. | keine |
+| 1 | `CXW API Interface Code – OnValidate` | Trigger | – | Prüft beim Auswählen einer API-Schnittstelle, dass diese tatsächlich für Verkaufspreise konfiguriert ist. |
 
----
+### Tabelle: CXW Sales Price Checking (ID: 60312)
+
+Arbeitsbereich für die Prüfung und Freigabe neuer Verkaufspreise, bevor sie in den Standard-Verkaufspreisen übernommen werden.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `CXW Accept New Setup – OnValidate` | Trigger | – | Verlangt vor der Freigabe eine vorherige Validierung, sichert bei Freigabe den bisherigen Hinweistext und setzt bei Rücknahme der Freigabe den Validierungsstatus zurück. |
+| 2 | `OnInsert` | Trigger | – | Trägt beim Anlegen einer Prüfzeile automatisch Bearbeiter und Zeitpunkt ein. |
+| 3 | `OnModify` | Trigger | – | Aktualisiert Bearbeiter und Zeitpunkt bei jeder Änderung und setzt Validierung/Freigabe zurück, sobald sich die Währung ändert. |
+| 4 | `OnRename` | Trigger | – | Aktualisiert Bearbeiter und Zeitpunkt, wenn der Schlüssel einer Prüfzeile geändert wird. |
+
+### Seite: CXW Sales Price Checking List (ID: 60322)
+
+Arbeitsliste zur Prüfung, Validierung und Freigabe neuer Verkaufspreise inklusive CSV-Import und Export an die externe Schnittstelle.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `FinalPrice – OnValidate` | Trigger | – | Setzt den Validierungsstatus einer Zeile zurück, sobald der Endpreis manuell geändert wird. |
+| 2 | `Import CSV` | Aktion | – | Importiert eine CSV-Datei mit neuen Verkaufspreisen, sofern noch keine offenen Prüfzeilen vorhanden sind. |
+| 3 | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft alle offenen Zeilen auf Marge, Preisabweichung und Datumsplausibilität. |
+| 4 | `Approve` | Aktion | – | Gibt nach Bestätigung alle validierten Zeilen zur Übernahme frei und vermerkt den freigebenden Benutzer. |
+| 5 | `Add all Currencies` | Aktion | – | Legt für eine freigegebene Zeile automatisch die Preise in allen weiteren aktivierten Währungen anhand des aktuellen Wechselkurses an. |
+| 6 | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur die zuletzt importierten Zeilen bearbeitet werden. |
+| 7 | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
+| 8 | `fnValidate` | Prozedur | Internal | Führt die eigentliche Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft die Mindestmarge und das Start-/Enddatum und trägt passende Hinweise ein. |
+| 9 | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
+
+### Seite: CXW General Sales Price Setup (ID: 60321)
+
+Einrichtungsseite für die Grundeinstellungen der Verkaufspreisverwaltung.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnOpenPage` | Trigger | – | Legt beim ersten Öffnen automatisch den einzigen Einstellungsdatensatz an, falls er noch fehlt. |
+
+### Tabelle: CXW Sales Price Archive (ID: 60313)
+
+Versionierte Ablage aller bereits verarbeiteten Verkaufspreis-Prüfzeilen zu Nachvollziehbarkeitszwecken.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Archiveintrags automatisch Bearbeiter und Zeitpunkt ein. |
+| 2 | `OnModify` | Trigger | – | Aktualisiert Bearbeiter und Zeitpunkt bei jeder nachträglichen Änderung eines Archiveintrags. |
+
+### Seite: CXW Sales Price Archive (ID: 60323)
+
+Nur-Lese-Übersicht aller archivierten, historischen Verkaufspreis-Versionen.
+
+### Codeunit: CXW Export Gateway Sales Price (ID: 60329)
+
+Übernimmt geprüfte Verkaufspreise in die Standard-Verkaufspreise, archiviert sie und versendet sie an die konfigurierte externe Schnittstelle inklusive AWS-Signaturberechnung.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `WriteBackAndArchive` | Prozedur | Public | Legt einen geprüften Preis als Standard-Verkaufspreis an oder aktualisiert ihn und archiviert die zugrunde liegende Prüfzeile. |
+| 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Preis und die webshop-spezifischen Zusatzfelder von der Prüfzeile auf den Verkaufspreis. |
+| 3 | `ResolveUnitPriceLCY` | Prozedur | Internal | Ermittelt den Preis in Hauswährung anhand des hinterlegten oder des zuletzt bekannten Wechselkurses. |
+| 4 | `ArchiveCheckingLine` | Prozedur | Internal | Legt eine neue, fortlaufend nummerierte Archivversion der Prüfzeile an. |
+| 5 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis per Reflection in JSON um, legt ihn als Ausgangsdatei ab und sendet ihn an die konfigurierte externe Schnittstelle. |
+| 6 | `SendToApiInterface` | Prozedur | Internal | Baut die HTTP-Anfrage inklusive gewählter Authentifizierung auf, sendet sie an die konfigurierte Schnittstelle und protokolliert Erfolg oder Fehler. |
+| 7 | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die AWS-Signatur-Header für eine Anfrage nach dem AWS-Signature-V4-Verfahren. |
+| 8 | `SanitizeHeaderText` | Prozedur | Internal | Entfernt aus Zugangsdaten alle Zeichen, die von .NET als ungültiger HTTP-Header abgelehnt würden (z. B. versehentlich mitkopierte Sonderzeichen). |
+| 9 | `HexEncode` | Prozedur | Internal | Wandelt binäre Daten in eine hexadezimale Textdarstellung um, die für die Signaturberechnung benötigt wird. |
+| 10 | `Sha256HexLower` | Prozedur | Internal | Berechnet einen SHA-256-Hash für die AWS-Signaturberechnung. |
+| 11 | `HmacChainStep` | Prozedur | Internal | Führt einen einzelnen Schritt der AWS-Schlüsselableitung aus (HMAC-Verkettung). |
+| 12 | `DeriveSigningKey` | Prozedur | Internal | Leitet aus dem AWS-Geheimschlüssel den tagesgültigen Signaturschlüssel ab. |
+| 13 | `HmacSignatureHexLower` | Prozedur | Internal | Berechnet die endgültige AWS-Signatur einer Anfrage. |
+| 14 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei alle Zugangsdaten durch einen Platzhalter ersetzt werden. |
+| 15 | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Preis-Export-Aufruf (Erfolg wie Fehlschlag) in das gemeinsame HTTP-Aufrufprotokoll. |
+| 16 | `AddFieldToJson` | Prozedur | Internal | Fügt ein einzelnes Datenfeld typgerecht (Zahl, Kommazahl, Ja/Nein, Text) einem JSON-Objekt hinzu. |
+
+### Enum: CXW Sales Price Reason Code (ID: 60332)
+
+Definiert die Gründe für eine Preisänderung (Kategorie-Management, Einkauf, Marketing). *Reine Werteliste ohne Prozeduren.*
+
+### Enum: CXW Sales Price Export Status (ID: 60334)
+
+Definiert den Versandstatus einer freigegebenen Preiszeile (noch nicht gesendet, gesendet, Fehler). *Reine Werteliste ohne Prozeduren.*
+
+### Tabellenerweiterung: CXW Sales Price (ID: 60319)
+
+Ergänzt den Standard-Verkaufspreis um webshop-spezifische Zusatzfelder: Änderungsgrund, Kommentar, internen Hinweis sowie empfohlenen Verkaufspreis, Streichpreis und Preis in Hauswährung (jeweils inkl. MwSt.).
+
+*Keine eigenen Trigger – reine Felderweiterung.*
+
+### Tabellenerweiterung: CXW Currency (ID: 60320)
+
+Ergänzt die Standard-Währung um ein Kennzeichen, ob diese Währung für Webshop-Verkaufspreise aktiviert ist.
+
+*Keine eigenen Trigger – reine Felderweiterung.*
+
+### Seitenerweiterung: CXW Sales Prices (ID: 60326)
+
+Zeigt auf der Standard-Verkaufspreise-Seite zusätzlich die webshop-spezifischen Felder (Änderungsgrund, empfohlener Preis, Streichpreis, Preis in Hauswährung, Hinweis, Kommentar) an.
+
+### Seitenerweiterung: CXW Currencies (ID: 60327)
+
+Zeigt auf der Standard-Währungsseite zusätzlich das Kennzeichen "Für Webshop-Verkaufspreise aktiviert" an.
 
 ### Xmlport: CXW Import Sales Price (ID: 60328)
 
-Importiert Verkaufspreise aus einer XML-/Textdatei in die Prüfliste.
+Importiert eine CSV-Datei mit neuen Verkaufspreisen in die Prüfliste.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `OnAfterInitRecord` | Trigger | – | Überspringt beim Import automatisch die Kopfzeile der Datei. |
-| 2 | `OnAfterInsertRecord` | Trigger | – | Ungenutzt, ohne zusätzliche Wirkung. |
-| 3 | `OnPreXmlPort` | Trigger | – | Bereitet den Import vor (merkt sich, dass die nächste Zeile die Kopfzeile ist). |
-| 4 | `OnPostXmlPort` | Trigger | – | Zeigt nach Abschluss des Imports eine Bestätigungsmeldung. |
-| 5 | `requestpage – OnOpenPage` | Trigger | – | Setzt beim Öffnen des Importdialogs eine interne Option zurück. |
+| 1 | `OnAfterInitRecord` | Trigger | – | Überspringt beim Import die erste Zeile (Spaltenüberschriften). |
+| 2 | `OnAfterInsertRecord` | Trigger | – | Leerer technischer Trigger ohne zusätzliche Logik. |
+| 3 | `OnOpenPage` (Anfrageseite) | Trigger | – | Setzt beim Öffnen des Importdialogs die Option "Preis für alle Länder setzen" zurück auf Nein. |
+| 4 | `OnPreXmlPort` | Trigger | – | Bereitet den Import vor, indem die Kopfzeilen-Erkennung aktiviert wird. |
+| 5 | `OnPostXmlPort` | Trigger | – | Zeigt nach abgeschlossenem Import eine Bestätigungsmeldung an. |
 
----
+### Codeunit: CXW Import Sales Prices (ID: 60330)
 
-### Enums (reine Werte, keine Prozeduren)
+Liest eine hochgeladene CSV-Datei zeilenweise ein, prüft Spaltenanzahl und -reihenfolge und übernimmt die Werte in die Standard-Verkaufspreise.
 
-| Objekt | ID | Werte | Zweck |
-|---|---|---|---|
-| CXW SW Order Status | 60306 | 7 Werte | Status einer SellWatch-Statusmeldung (z. B. „Watch Arrived", „Watch is Sold"). |
-| CXW Taxation Type | 60331 | 4 Werte | Besteuerungsart (Voll-/Differenzbesteuerung). Aktuell nur informativ. |
-| CXW Sales Price Reason Code | 60332 | 3 Werte | Grund für eine Preisänderung (CatMan, Purchasing, Marketing). |
-| CXW Ext Interface File Status | 60333 | 7 Werte | Status einer Import-/Export-Datei. |
-| CXW Sales Price Export Status | 60334 | 3 Werte | Versandstatus einer Preiszeile (Nicht gesendet/Gesendet/Fehler). |
-| CXW API Auth Type | 60335 | 4 Werte | Authentifizierungsart einer externen Schnittstelle (Keine/API-Schlüssel/Basis-Auth/AWS Signature V4). |
-| CXW Http Method | 60336 | 5 Werte | HTTP-Methode einer externen Schnittstelle (POST/PATCH/PUT/GET/DELETE). |
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnRun` | Trigger | – | Startet die Verarbeitung einer hochgeladenen Preisdatei. |
+| 2 | `ProcessFile` | Prozedur | Internal | Liest die Datei zeilenweise ein, prüft die Kopfzeile und übergibt jede Datenzeile zur Verarbeitung; bricht bei Fehlern mit Protokolleintrag ab. |
+| 3 | `ProcessLine` | Prozedur | Internal | Wandelt eine einzelne CSV-Zeile in einen temporären Verkaufspreis-Datensatz um. |
+| 4 | `EvaluateHeaderRow` | Prozedur | Internal | Prüft, ob die Kopfzeile der Datei exakt den erwarteten Spaltennamen in der erwarteten Reihenfolge entspricht. |
+| 5 | `WriteProtocol` | Prozedur | Internal | Schreibt eine Fehlermeldung zu einer Importdatei in das Importprotokoll. |
+| 6 | `WriteSalesPrices` | Prozedur | Internal | Legt die eingelesenen Preise als neue Verkaufspreise an oder aktualisiert bestehende. |
+| 7 | `OnAfterSalesPriceModify` | Event Publisher | Public | Signalisiert nach der Aktualisierung eines bestehenden Verkaufspreises, damit andere Erweiterungen darauf reagieren können. |
 
----
+### Enum: CXW Taxation Type (ID: 60331)
 
-### Permission Sets (keine Prozeduren)
+Definiert die Besteuerungsart eines SellWatch-Angebots (Vollbesteuerung, Differenzbesteuerung, beides). *Reine Werteliste ohne Prozeduren.*
 
-| Objekt | ID | Deckt ab |
-|---|---|---|
-| CXWSWChronWSAll | 60310 | SellWatch-Tabellen/-Seiten/-Codeunit sowie das gemeinsame Aufrufprotokoll. |
-| CXWChronWSAll | 60336 | Verkaufspreisverwaltungs-Tabellen/-Seiten/-Codeunits/-Xmlport sowie das gemeinsame Aufrufprotokoll. |
+### Enum: CXW Ext Interface File Status (ID: 60333)
+
+Definiert den Verarbeitungsstatus einer Import-/Export-Datei (neu, zu verarbeiten, in Verarbeitung, verarbeitet, Fehler, Hinweis, storniert). *Reine Werteliste ohne Prozeduren.*
+
+### Tabelle: CXW Sales Price Outbound File (ID: 60314)
+
+Speichert jede an die externe Schnittstelle gesendete Preisdatei inklusive Status und Antworttext.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen einer Ausgangsdatei automatisch den Erstellungszeitpunkt ein. |
+
+### Tabelle: CXW Sales Price Inbound File (ID: 60315)
+
+Speichert eine hochgeladene CSV-Preisdatei als Blob zusammen mit ihrem Verarbeitungsstatus.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Hochladen einer Datei automatisch den Zeitpunkt ein. |
+
+### Tabelle: CXW Price Import Protokoll (ID: 60316)
+
+Protokolliert Fehler- und Hinweismeldungen, die beim CSV-Import einer Preisdatei aufgetreten sind.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Protokolleintrags automatisch den Zeitpunkt ein. |
+
+### Permission Set: CXWChronWSAll (ID: 60336)
+
+Berechtigt zum vollständigen Arbeiten mit den Verkaufspreisverwaltungs-Tabellen, -Seiten, -Codeunits und dem CSV-Import sowie dem gemeinsamen HTTP-Aufrufprotokoll und der Schnittstellen-Konfiguration.
 
 ---
 
@@ -368,8 +364,7 @@ Importiert Verkaufspreise aus einer XML-/Textdatei in die Prüfliste.
 
 | Kandidat | Objekte | Begründung |
 |---|---|---|
-| SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305; Page 60307, 60308, 60337 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell. Bereits heute im ID-Bereich 60300–60310 sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. Page 60337 (API-Schreibzugang) liegt außerhalb dieses Bereichs im ID-Bereich 60337, gehört aber fachlich ebenfalls zu SellWatch. |
+| SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305; Page 60307, 60308, 60337; PermissionSet 60300, 60310 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell und jetzt auch eigener API-Schreibschnittstelle. Bereits heute im ID-Bereich 60300–60310 (plus 60337 für die API) sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. |
 | Gemeinsame HTTP-Infrastruktur (Aufrufprotokoll + Schnittstellen-Konfiguration) als Basis-Baustein | Table 60302 „CXW Http Call Log", Table 60317 „CXW API Interface Setup", Page 60309, 60324, 60325 | Wird von SellWatch UND Verkaufspreisverwaltung gleichermaßen genutzt (Authentifizierung, Protokollierung, Signaturberechnung). Sollte bei einer Aufteilung in zwei Extensions als dritter, gemeinsamer Basis-Baustein bestehen bleiben, statt dupliziert zu werden. |
 | CSV-Import-Pfad der Verkaufspreisverwaltung | Codeunit 60330, Table 60315, 60316, Xmlport 60328 | Laut Code-Kommentaren aktuell nicht produktiv angebunden (unabhängiger Baustein). Eigenständig genug, um bei Bedarf separat weiterzuentwickeln oder zu entfernen, ohne den produktiven Preis-Freigabeprozess zu berühren. |
-
-**Hinweis:** Zwei JSON-Aufbaufunktionen in Codeunit 60305 (`CreateSourceFilePurchaseRequest`, `CreateSourceFileOrderStatusSE`) sowie die Online-Check-Funktion in Table 60301 (`CreateEntryInexternalFile`, wird aktuell nirgends automatisch aufgerufen) wirken wie vorbereitete, aber noch nicht angebundene Rückmeldungen an SellWatch — vor einer Auslagerung sollte geklärt werden, ob diese noch benötigt werden.
+| SellWatch-JSON-Rückmeldungen ohne aktuellen Aufrufer | Codeunit 60305 (`CreateSourceFilePurchaseRequest`, `CreateSourceFileOrderStatusSE`), Table 60301 (`CreateJsonObjectCheckOnline`) | Fertige Bausteine für eine Rückmeldung an SellWatch (Bestellstatus, Auszahlungsbetrag), aber im aktuellen Code nirgends aufgerufen. Vor einer Auslagerung klären, ob dieser Rückkanal noch gebraucht wird oder toter Code ist. |
