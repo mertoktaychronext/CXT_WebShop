@@ -28,16 +28,14 @@ codeunit 60305 "CXW SellWatch Mgt"
                     VendorRec."Post Code" := SellWatchVendorInfo."CXW Post Code";
                     VendorRec."Phone No." := SellWatchVendorInfo."CXW PhoneNo";
                     VendorRec."E-Mail" := SellWatchVendorInfo."CXW Email";
-                    // TODO: Objekt Prozedur "SetPostingGroups" nicht geliefert (keine Standardprozedur auf Vendor, vermutlich eigene Table-Extension/Codeunit). Manuell pruefen und Aufruf ggf. wiederherstellen.
-                    // VendorRec.SetPostingGroups();
+                    VendorRec.SetPostingGroups();
                     if SellWatchVendorInfo."CXW CurrencyCode" <> 'EUR' then
                         VendorRec."Currency Code" := SellWatchVendorInfo."CXW CurrencyCode";
                     if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
                         VendorRec."Payment Method Code" := 'C2C'
                     else
                         VendorRec."Payment Method Code" := 'RG';
-                    // TODO: Objekt Prozedur "GetnewNoSeries" nicht geliefert (keine Standardprozedur auf Vendor, vermutlich eigene Table-Extension/Codeunit). Manuell pruefen; andernfalls uebernimmt der Standard-OnInsert-Trigger von Vendor die Nummernvergabe ueber Purchases & Payables Setup.
-                    // VendorRec.GetnewNoSeries(true);
+                    VendorRec.GetnewNoSeries(true);
                     VendorRec.Insert(true);
 
                     VendorBank.Init();
