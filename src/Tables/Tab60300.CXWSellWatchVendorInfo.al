@@ -245,5 +245,8 @@ table 60300 "CXW SellWatch Vendor Info"
         {
             Clustered = true;
         }
+        key(SRid; "CXW SRid")
+        {
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 **Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325)
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 87
+**Gesamtanzahl Funktionen:** 91
 
 ---
 
@@ -10,8 +10,8 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Navigation/Actions | Gesamt |
 |---|---|---|---|---|---|---|---|
-| SL Chronext Webshop | 1.0.0.1 | 37 | 43 | 31 | 1 | 12 | 87 |
-| **Gesamt** | – | **37** | **43** | **31** | **1** | **12** | **87** |
+| SL Chronext Webshop | 1.0.0.1 | 38 | 45 | 33 | 1 | 12 | 91 |
+| **Gesamt** | – | **38** | **45** | **33** | **1** | **12** | **91** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt zwei fachlich unabhängige Bereiche: **SellWatch** (Ankauf gebrauchter Uhren, ID-Bereich 60300–60310) und **SalesPrice/Verkaufspreisverwaltung** (ID-Bereich 60311–60336). Beide teilen sich ein gemeinsames HTTP-Aufrufprotokoll (Table 60302/Page 60309) und eine gemeinsame Schnittstellen-Konfigurationstabelle (Table 60317) mit austauschbarer Authentifizierung. Seit dem AWS-SigV4-Update unterstützt diese Konfiguration zusätzlich zu API-Schlüssel und Basis-Authentifizierung auch AWS Signature V4 (inkl. optionalem X-API-Key-Zweitfaktor, konfigurierbarer HTTP-Methode und SOAPAction-Header), und seit dem Conditional-Fields-Update zeigt eine neue Detailkarte (Page 60325) nur noch die zur gewählten Authentifizierungsart passenden Felder.
 
@@ -80,6 +80,10 @@
 | SL Chronext Webshop | CXW API Interface Setup | Tabelle | `IsAwsFieldsRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart die AWS-Felder benötigt werden. |
 | SL Chronext Webshop | CXW SellWatch-Overview | Seite | `ShowDocument` | Aktion | – | Öffnet die zur Anfrage gehörende Einkaufsbestellung. |
 | SL Chronext Webshop | CXW SellWatch-Overview | Seite | `OnOpenPage` | Trigger | – | Zeigt beim Öffnen nur Anfragen mit gültiger SellWatch-Referenznummer. |
+| SL Chronext Webshop | CXW SellWatch API | Seite | `OnInsertRecord` | Trigger | – | Setzt beim Anlegen über die API das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer zurück, prüft Pflichtfelder und lehnt doppelte SellWatch-Referenznummern ab. |
+| SL Chronext Webshop | CXW SellWatch API | Seite | `OnModifyRecord` | Trigger | – | Verhindert bei Änderungen über die API, dass das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer überschrieben werden, und lehnt eine Änderung der SellWatch-Referenznummer auf einen bereits vergebenen Wert ab. |
+| SL Chronext Webshop | CXW SellWatch API | Seite | `ValidateRequiredFields` | Prozedur | Internal | Stellt sicher, dass Referenznummer, Marke, Modell und Angebotspreis beim Anlegen oder Ändern über die API ausgefüllt sind. |
+| SL Chronext Webshop | CXW SellWatch API | Seite | `CheckDuplicateSRid` | Prozedur | Internal | Lehnt eine Neuanlage oder Änderung ab, wenn bereits eine andere Anfrage mit derselben SellWatch-Referenznummer existiert. |
 | SL Chronext Webshop | CXW Http Call Log | Seite | `DownloadRequest` | Aktion | – | Lädt den protokollierten Anfragetext als Datei herunter. |
 | SL Chronext Webshop | CXW Http Call Log | Seite | `DownloadResponse` | Aktion | – | Lädt den protokollierten Antworttext als Datei herunter. |
 | SL Chronext Webshop | CXW General Sales Price Setup | Seite | `APIInterfaceSetup` | Aktion | – | Öffnet die Verwaltung der externen Schnittstellen. |
@@ -130,7 +134,7 @@
 ### Hohe Priorität
 | Funktionsbereich | Betroffene Objekte | Empfehlung |
 |---|---|---|
-| SellWatch als eigenständige Extension | Table 60300/60301, TableExtension 60303/60304, Codeunit 60305, Page 60307/60308 | Fachlich vollständig unabhängig vom Preisexport; ID-Bereich bereits sauber getrennt (60300–60310). Auslagerung wäre überwiegend eine Verschiebe-Operation, kein Umbau. |
+| SellWatch als eigenständige Extension | Table 60300/60301, TableExtension 60303/60304, Codeunit 60305, Page 60307/60308/60337 | Fachlich vollständig unabhängig vom Preisexport; ID-Bereich bereits sauber getrennt (60300–60310, plus Page 60337 als API-Schreibzugang). Auslagerung wäre überwiegend eine Verschiebe-Operation, kein Umbau. |
 
 ### Mittlere Priorität
 | Funktionsbereich | Betroffene Objekte | Empfehlung |

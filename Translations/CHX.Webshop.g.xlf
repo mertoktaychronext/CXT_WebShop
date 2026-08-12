@@ -1393,6 +1393,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Validate - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 62363589 - NamedType 3125803570" size-unit="char" translate="yes" xml:space="preserve">
+          <source>A SellWatch Vendor Info entry with SRid '%1' already exists.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = SRid value</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch API - NamedType DuplicateSRidErr</note>
+        </trans-unit>
+        <trans-unit id="Page 62363589 - NamedType 610250994" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 must not be empty.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = field caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch API - NamedType FieldRequiredErr</note>
+        </trans-unit>
         <trans-unit id="Page 17306311 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>SellWatch info</source>
           <note from="Developer" annotates="general" priority="2"></note>

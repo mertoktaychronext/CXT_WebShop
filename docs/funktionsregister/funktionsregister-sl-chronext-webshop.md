@@ -21,12 +21,12 @@ CHX.Webshop bündelt zwei weitgehend eigenständige Funktionsbereiche unter eine
 | Codeunits | 3 |
 | Tabellen | 10 |
 | Tabellenerweiterungen | 4 |
-| Seiten | 8 |
+| Seiten | 9 |
 | Seitenerweiterungen | 2 |
 | Xmlports | 1 |
 | Enums | 7 |
 | Permission Sets | 2 |
-| **Gesamt Prozeduren/Trigger/Events** | **87** |
+| **Gesamt Prozeduren/Trigger/Events** | **91** |
 
 ---
 
@@ -225,6 +225,19 @@ Nur-Lese-Übersicht aller eingehenden SellWatch-Ankaufsanfragen.
 
 ---
 
+### Seite: CXW SellWatch API (ID: 60337)
+
+API-Schnittstelle (OData v4), über die externe Systeme per HTTP-Aufruf neue SellWatch-Ankaufsanfragen anlegen oder bestehende aktualisieren können. Ergänzt die reine Anzeige-Seite „CXW SellWatch-Overview" (60307) um einen Schreibzugang, ohne diese zu verändern – Verarbeitungsfelder (Erstellt-Kennzeichen, Bestellnummer, Lieferantennummer) bleiben für externe Aufrufer gesperrt.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnInsertRecord` | Trigger | – | Setzt beim Anlegen über die API das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer zurück, prüft Pflichtfelder und lehnt doppelte SellWatch-Referenznummern ab. |
+| 2 | `OnModifyRecord` | Trigger | – | Verhindert bei Änderungen über die API, dass das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer überschrieben werden, prüft weiterhin die Pflichtfelder und lehnt eine Änderung der SellWatch-Referenznummer auf einen bereits vergebenen Wert ab. |
+| 3 | `ValidateRequiredFields` | Prozedur | Internal | Stellt sicher, dass Referenznummer, Marke, Modell und Angebotspreis beim Anlegen oder Ändern über die API ausgefüllt sind. |
+| 4 | `CheckDuplicateSRid` | Prozedur | Internal | Lehnt einen Neuanlage- oder Änderungs-Aufruf ab, wenn bereits eine andere Anfrage mit derselben SellWatch-Referenznummer existiert. |
+
+---
+
 ### Seite: CXW SellWatch info (ID: 60308)
 
 Reine Anzeige-Kachel mit Uhrendetails (kein eigenes Verhalten).
@@ -355,7 +368,7 @@ Importiert Verkaufspreise aus einer XML-/Textdatei in die Prüfliste.
 
 | Kandidat | Objekte | Begründung |
 |---|---|---|
-| SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305; Page 60307, 60308 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell. Bereits heute im ID-Bereich 60300–60310 sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. |
+| SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305; Page 60307, 60308, 60337 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell. Bereits heute im ID-Bereich 60300–60310 sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. Page 60337 (API-Schreibzugang) liegt außerhalb dieses Bereichs im ID-Bereich 60337, gehört aber fachlich ebenfalls zu SellWatch. |
 | Gemeinsame HTTP-Infrastruktur (Aufrufprotokoll + Schnittstellen-Konfiguration) als Basis-Baustein | Table 60302 „CXW Http Call Log", Table 60317 „CXW API Interface Setup", Page 60309, 60324, 60325 | Wird von SellWatch UND Verkaufspreisverwaltung gleichermaßen genutzt (Authentifizierung, Protokollierung, Signaturberechnung). Sollte bei einer Aufteilung in zwei Extensions als dritter, gemeinsamer Basis-Baustein bestehen bleiben, statt dupliziert zu werden. |
 | CSV-Import-Pfad der Verkaufspreisverwaltung | Codeunit 60330, Table 60315, 60316, Xmlport 60328 | Laut Code-Kommentaren aktuell nicht produktiv angebunden (unabhängiger Baustein). Eigenständig genug, um bei Bedarf separat weiterzuentwickeln oder zu entfernen, ohne den produktiven Preis-Freigabeprozess zu berühren. |
 
