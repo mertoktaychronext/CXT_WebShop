@@ -1853,6 +1853,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Taxation Type - EnumValue Full - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PermissionSet 2901653661 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Sell Watch API</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PermissionSet CXW Sell Watch API - Property Caption</note>
+        </trans-unit>
       </group>
     </body>
   </file>

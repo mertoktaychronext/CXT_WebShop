@@ -61,7 +61,6 @@ page 60337 "CXW SellWatch API"
                 field(gender; Rec."CXW Gender") { }
                 field(languageCode; Rec."CXW LanguageCode") { }
                 field(nuveiAccountCode; Rec."CXW NuveiAccountCode") { }
-                field(trackingNumber; Rec."CXW Tracking Number") { }
                 field(created; Rec."CXW Created")
                 {
                     Editable = false;
