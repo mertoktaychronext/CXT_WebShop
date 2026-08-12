@@ -20,11 +20,11 @@
 ## 4. Validation
 
 - [x] 4.1 Compile the extension and resolve any AL errors/warnings for the new page. **Compiles cleanly (fixed `OnModifyRecord` signature); the one remaining compiler warning is pre-existing and unrelated to this change.**
-- [ ] 4.2 Manually test: POST a new SellWatch entry via HTTP (e.g. Postman with BC Web Service Access Key) and confirm it appears on page 60307 unmodified in behavior.
-- [ ] 4.3 Manually test: attempt to POST with `"CXW Created": true` and confirm the inserted record has `"CXW Created" = false`.
-- [ ] 4.4 Manually test: POST a duplicate `"CXW SRid"` and confirm it is rejected.
-- [ ] 4.5 Confirm `Codeunit "CXW SellWatch Mgt"` picks up and processes an API-inserted row exactly as it would a manually-entered one (Vendor + Purchase Order creation).
-- [ ] 4.6 Confirm an unauthenticated / unauthorized HTTP call to the new endpoint is rejected.
+- [x] 4.2 Manually test: POST a new SellWatch entry via HTTP (e.g. Postman with BC Web Service Access Key) and confirm it appears on page 60307 unmodified in behavior. **Confirmed by user (manual test against live BC environment, outside this session).**
+- [x] 4.3 Manually test: attempt to POST with `"CXW Created": true` and confirm the inserted record has `"CXW Created" = false`. **Confirmed by user.**
+- [x] 4.4 Manually test: POST a duplicate `"CXW SRid"` and confirm it is rejected. **Confirmed by user.**
+- [x] 4.5 Confirm `Codeunit "CXW SellWatch Mgt"` picks up and processes an API-inserted row exactly as it would a manually-entered one (Vendor + Purchase Order creation). **Confirmed by user.**
+- [x] 4.6 Confirm an unauthenticated / unauthorized HTTP call to the new endpoint is rejected. **Confirmed by user.**
 
 ## 5. Documentation
 
