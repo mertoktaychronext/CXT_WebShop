@@ -241,7 +241,7 @@ Externe Werkstatt liest/schreibt über
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
    Endpunkt-Muster .../api/saliniLife/workshop/v1.0/companies({companyId})/
    workshopLines; Insert/Delete gesperrt, Statusrückschritte gesperrt)
-   │  Werkstatt setzt: Genuine, Attribute 1-10, Status = "WS checked"
+   │  Werkstatt setzt: isAuthentic, Attribute 1-10, Status = "WS checked"
    ▼
 Codeunit 60331 "CXW Process Workshop Lines" (job-queue-gesteuert, OnRun
    → ProcessCheckedLines, SetRange Status = "WS checked")
@@ -322,7 +322,7 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | 60315 CXW Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 60316 CXW Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import (fachlich weiterhin das Sales-Price-Import-Protokoll; „Sales" im technischen Bezeichner wegen des 30-Zeichen-Limits von AL entfallen) |
 | 60317 CXW API Interface Setup | Code | Endpunkt-URL, Authentifizierungsart und (im Isolated Storage abgelegter) API-Schlüssel je externer Schnittstelle; bei "CXW Auth Type" = AWSSigV4 zusätzlich AWS Access Key ID/Region/Service (Klartextfelder) sowie AWS Secret Access Key/Session Token (im Isolated Storage) |
-| 60318 CXW Workshop Line | Document Type, Document No., Line No. | Ein Datensatz je an die Werkstatt übergebener Bestellzeile: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), Genuine, acht fachlich benannte Attributfelder (Dial Color … Features) + zwei Platzhalter (Attribut 9/10), Created At, Checked At, Last Error |
+| 60318 CXW Workshop Line | Document Type, Document No., Line No. | Ein Datensatz je an die Werkstatt übergebener Bestellzeile: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), isAuthentic (Echtheits-Kennzeichen), acht fachlich benannte Attributfelder (Dial Color … Features) + zwei Platzhalter (Attribut 9/10), Created At, Checked At, Last Error |
 
 ## Permission Set
 

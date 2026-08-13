@@ -953,10 +953,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Gender - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 3127986241 - Field 4239533697 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Genuine</source>
+        <trans-unit id="Table 3127986241 - Field 312748325 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Authentic</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Genuine - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW isAuthentic - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 1887293546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Item No.</source>
@@ -1813,10 +1813,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Gender - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 1262482968 - Control 4239533697 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+        <trans-unit id="Page 1262482968 - Control 312748325 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether the workshop confirmed the item as genuine.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Genuine - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW isAuthentic - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 1887293546 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the item that was sent to the workshop.</source>

@@ -38,9 +38,9 @@ table 60318 "CXW Workshop Line"
             Caption = 'Status';
             DataClassification = ToBeClassified;
         }
-        field(7; "CXW Genuine"; Boolean)
+        field(7; "CXW isAuthentic"; Boolean)
         {
-            Caption = 'Genuine';
+            Caption = 'Authentic';
             DataClassification = ToBeClassified;
         }
         // TODO: Attributnamen für Attribut 9/10 final klären - Platzhalter-Captions "Attribut 9"-"Attribut 10"

@@ -46,7 +46,7 @@ page 60338 "CXW Workshop Lines"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the current workshop review status.';
                 }
-                field("CXW Genuine"; Rec."CXW Genuine")
+                field("CXW isAuthentic"; Rec."CXW isAuthentic")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether the workshop confirmed the item as genuine.';

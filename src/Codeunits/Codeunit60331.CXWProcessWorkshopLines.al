@@ -32,7 +32,7 @@ codeunit 60331 "CXW Process Workshop Lines"
     [TryFunction]
     local procedure TryProcessLine(var WorkshopLine: Record "CXW Workshop Line")
     begin
-        if WorkshopLine."CXW Genuine" then
+        if WorkshopLine."CXW isAuthentic" then
             ProcessGenuineLine(WorkshopLine)
         else
             ProcessNonGenuineLine(WorkshopLine);

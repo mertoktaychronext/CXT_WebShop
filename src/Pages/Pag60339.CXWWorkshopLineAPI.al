@@ -40,7 +40,7 @@ page 60339 "CXW Workshop Line API"
                     Editable = false;
                 }
                 field(status; Rec."CXW Status") { }
-                field(genuine; Rec."CXW Genuine") { }
+                field(genuine; Rec."CXW isAuthentic") { }
                 field(attribute1; Rec."CXW Dial Color") { }
                 field(attribute2; Rec."CXW Case Diameter") { }
                 field(attribute3; Rec."CXW Bracelet Material") { }

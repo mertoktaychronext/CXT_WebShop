@@ -243,7 +243,7 @@ External workshop reads/writes via
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
    endpoint pattern .../api/saliniLife/workshop/v1.0/companies({companyId})/
    workshopLines; Insert/Delete blocked, status regressions blocked)
-   │  workshop sets: Genuine, Attribute 1-10, Status = "WS checked"
+   │  workshop sets: isAuthentic, Attribute 1-10, Status = "WS checked"
    ▼
 Codeunit 60331 "CXW Process Workshop Lines" (job-queue driven, OnRun
    → ProcessCheckedLines, SetRange Status = "WS checked")
@@ -324,7 +324,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 60315 CXW Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 60316 CXW Price Import Protocol | Entry No. | Error log for the automated import (still the sales price import protocol table; "Sales" dropped from the identifier due to AL's 30-character limit) |
 | 60317 CXW API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface; when "CXW Auth Type" = AWSSigV4, also AWS Access Key ID/Region/Service (plain fields) and AWS Secret Access Key/Session Token (isolated storage) |
-| 60318 CXW Workshop Line | Document Type, Document No., Line No. | One record per purchase line handed over to the workshop: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), Genuine, eight business-named attribute fields (Dial Color … Features) + two placeholders (Attribut 9/10), Created At, Checked At, Last Error |
+| 60318 CXW Workshop Line | Document Type, Document No., Line No. | One record per purchase line handed over to the workshop: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), isAuthentic (authenticity flag), eight business-named attribute fields (Dial Color … Features) + two placeholders (Attribut 9/10), Created At, Checked At, Last Error |
 
 ## Permission Set
 
