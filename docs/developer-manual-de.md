@@ -140,9 +140,10 @@ Datei (CSV) → Table 60315 "CXW Sales Price Inbound File"
 ### SellWatch
 
 ```
-Table 60300 "CXW SellWatch Vendor Info" (Zeilen extern angelegt – kein
-Xmlport/API-Page dafür im Projekt gefunden; Berechtigung dazu über das
-Permission Set 60310 "CXW SWChronWSAll")
+Table 60300 "CXW SellWatch Vendor Info" (Zeilen extern angelegt – über
+Page 60337 "CXW SellWatch API" (PageType = API, siehe unten) oder direkt
+in der Tabelle; Berechtigung dazu über das Permission Set 60310
+"CXW SWChronWSAll")
    │
    │  Codeunit 60305 "CXW SellWatch Mgt".OnRun → ValidateAndCreateVendor
    │  (Trigger selbst ist nicht im AL-Code verdrahtet – kein Installations-
@@ -195,6 +196,18 @@ Codeunit 60305: CreateSourceFilePurchaseRequest(Purchase Header): Text
 Codeunit 60305: CreateSourceFileOrderStatusSE(SellWatch Vendor Info; Enum
    "CXW SW Order Status"): Text
 ```
+
+#### Page 60337 "CXW SellWatch API" – Schreibzugang für externe Systeme
+
+Ergänzt die reine Anzeige-Seite 60307 um einen `PageType = API`-Endpunkt, über den externe Systeme per HTTP-Aufruf neue SellWatch-Anfragen anlegen oder bestehende ändern können. Beide Seiten liegen über derselben Tabelle 60300, sind aber unabhängige Objekte (eine Page kann nicht gleichzeitig `List` und `API` sein).
+
+- **Endpunkt-Muster:** `.../api/saliniLife/sellWatch/v2.0/companies({companyId})/sellWatchVendorInfos` (Standard-BC-OData-v4-Muster aus `APIPublisher`/`APIGroup`/`APIVersion`/`EntitySetName`); einzelner Datensatz per `.../sellWatchVendorInfos({id})`.
+- **Methoden:** `POST` zum Anlegen, `PATCH` zum Ändern; `DELETE` ist nicht erlaubt (`DeleteAllowed = false`).
+- **Authentifizierung:** Standard-BC-API-Authentifizierung (Web Service Access Key oder Entra-ID-OAuth) – keine eigene Auth-Logik im AL-Code. Berechtigung zusätzlich über Permission Set 60310 "CXW SWChronWSAll" (Eintrag `page "CXW SellWatch API" = X`).
+- **Beschreibbare Felder:** alle Vendor-/Uhren-/Angebotsfelder (u. a. Vendor Name, Adresse, IBAN/BIC, E-Mail, Brand/Model/Reference/SKU, Watch Condition, Offer Type, Final Offer Price, Currency Code, SRid).
+- **Nicht beschreibbar (system-eigen):** `CXW Entry No` (Primärschlüssel), `CXW Created`, `CXW PO Number`, `CXW VendorNo` (werden ausschließlich von Codeunit 60305 gesetzt) sowie das FlowField `CXW Tracking Number`. Werte für diese Felder im Payload werden beim Insert/Modify ignoriert bzw. zurückgesetzt.
+- **Validierung:** `OnInsertRecord`/`OnModifyRecord` verlangen `CXW SRid`, `CXW Brand`, `CXW Model` und `CXW Final Offer Price` und lehnen ein doppeltes `CXW SRid` mit einem Fehler (HTTP 4xx) ab, statt den Datensatz unvollständig oder doppelt anzulegen.
+- Neu angelegte/aktualisierte Zeilen erscheinen unverändert auf Page 60307 und werden von Codeunit 60305 wie manuell erfasste Zeilen weiterverarbeitet.
 
 ## Objektschnittstellen (öffentliche Prozeduren & Events)
 

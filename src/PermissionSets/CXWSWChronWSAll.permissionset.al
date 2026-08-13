@@ -10,5 +10,6 @@ permissionset 60310 "CXW SWChronWSAll"
         codeunit "CXW SellWatch Mgt" = X,
         page "CXW SellWatch-Overview" = X,
         page "CXW SellWatch info" = X,
+        page "CXW SellWatch API" = X,
         page "CXW Http Call Log" = X;
 }

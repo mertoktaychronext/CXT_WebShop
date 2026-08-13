@@ -140,9 +140,10 @@ File (CSV) → Table 60315 "CXW Sales Price Inbound File"
 ### SellWatch
 
 ```
-Table 60300 "CXW SellWatch Vendor Info" (rows created externally – no
-xmlport/API page for it found in the project; access controlled via
-permission set 60310 "CXW SWChronWSAll")
+Table 60300 "CXW SellWatch Vendor Info" (rows created externally – via
+Page 60337 "CXW SellWatch API" (PageType = API, see below) or directly
+in the table; access controlled via permission set 60310
+"CXW SWChronWSAll")
    │
    │  Codeunit 60305 "CXW SellWatch Mgt".OnRun → ValidateAndCreateVendor
    │  (the trigger itself is not wired in the AL code — no install
@@ -196,6 +197,18 @@ Codeunit 60305: CreateSourceFilePurchaseRequest(Purchase Header): Text
 Codeunit 60305: CreateSourceFileOrderStatusSE(SellWatch Vendor Info; Enum
    "CXW SW Order Status"): Text
 ```
+
+#### Page 60337 "CXW SellWatch API" – write access for external systems
+
+Adds a `PageType = API` endpoint alongside the read-only page 60307, letting external systems create or update SellWatch entries over HTTP. Both pages sit on the same table 60300 but are separate objects — a page cannot be both `List` and `API` at once.
+
+- **Endpoint pattern:** `.../api/saliniLife/sellWatch/v2.0/companies({companyId})/sellWatchVendorInfos` (standard BC OData v4 pattern from `APIPublisher`/`APIGroup`/`APIVersion`/`EntitySetName`); a single record via `.../sellWatchVendorInfos({id})`.
+- **Methods:** `POST` to create, `PATCH` to update; `DELETE` is not allowed (`DeleteAllowed = false`).
+- **Authentication:** standard BC API authentication (Web Service Access Key or Entra ID OAuth) — no custom auth logic in AL. Access additionally requires permission set 60310 "CXW SWChronWSAll" (`page "CXW SellWatch API" = X` entry).
+- **Writable fields:** all vendor/watch/offer fields (e.g. Vendor Name, address, IBAN/BIC, Email, Brand/Model/Reference/SKU, Watch Condition, Offer Type, Final Offer Price, Currency Code, SRid).
+- **Not writable (system-owned):** `CXW Entry No` (primary key), `CXW Created`, `CXW PO Number`, `CXW VendorNo` (set only by Codeunit 60305), and the FlowField `CXW Tracking Number`. Payload values for these fields are ignored or reset on insert/modify.
+- **Validation:** `OnInsertRecord`/`OnModifyRecord` require `CXW SRid`, `CXW Brand`, `CXW Model`, and `CXW Final Offer Price`, and reject a duplicate `CXW SRid` with an error (HTTP 4xx) rather than creating an incomplete or duplicate row.
+- Rows created/updated this way appear on page 60307 unchanged and are processed by Codeunit 60305 exactly like manually entered rows.
 
 ## Object Interfaces (Public Procedures & Events)
 

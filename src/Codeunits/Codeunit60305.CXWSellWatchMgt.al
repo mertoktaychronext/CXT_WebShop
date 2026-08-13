@@ -28,16 +28,15 @@ codeunit 60305 "CXW SellWatch Mgt"
                     VendorRec."Post Code" := SellWatchVendorInfo."CXW Post Code";
                     VendorRec."Phone No." := SellWatchVendorInfo."CXW PhoneNo";
                     VendorRec."E-Mail" := SellWatchVendorInfo."CXW Email";
-                    // TODO: Objekt Prozedur "SetPostingGroups" nicht geliefert (keine Standardprozedur auf Vendor, vermutlich eigene Table-Extension/Codeunit). Manuell pruefen und Aufruf ggf. wiederherstellen.
-                    // VendorRec.SetPostingGroups();
+                    VendorRec.SetPostingGroups();
                     if SellWatchVendorInfo."CXW CurrencyCode" <> 'EUR' then
                         VendorRec."Currency Code" := SellWatchVendorInfo."CXW CurrencyCode";
                     if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
                         VendorRec."Payment Method Code" := 'C2C'
                     else
                         VendorRec."Payment Method Code" := 'RG';
-                    // TODO: Objekt Prozedur "GetnewNoSeries" nicht geliefert (keine Standardprozedur auf Vendor, vermutlich eigene Table-Extension/Codeunit). Manuell pruefen; andernfalls uebernimmt der Standard-OnInsert-Trigger von Vendor die Nummernvergabe ueber Purchases & Payables Setup.
-                    // VendorRec.GetnewNoSeries(true);
+                    VendorRec.GetnewNoSeries(true);
+                    VendorRec.Validate("Location Code", 'HL'); //TODO: Klären Lagerort für SellWatch Artikel; aktuell hartkodiert auf HL (Hauptlager)
                     VendorRec.Insert(true);
 
                     VendorBank.Init();
@@ -78,23 +77,13 @@ codeunit 60305 "CXW SellWatch Mgt"
             PLRec."Document Type" := PHRec."Document Type";
             PLRec."Line No." := 10000;
             PLRec.Validate(Type, PLRec.Type::Item);
-            if SellWatchVendorInfo."CXW Offer Type" = 'commission' then begin
-                PLRec.Validate("No.", 'C2C-SW');
-                PLRec."Variant Code" := 'C2C-SW';
-            end;
-            if SellWatchVendorInfo."CXW Offer Type" = 'direct' then begin
-                PLRec.Validate("No.", 'CPST-SW');
-                PLRec."Variant Code" := 'CPST-SW';
-            end;
-            if SellWatchVendorInfo."CXW Offer Type" = 'exchange' then begin
-                PLRec.Validate("No.", 'TI-SW');
-                PLRec."Variant Code" := 'TI-SW';
-            end;
+            PLRec.Validate("No.", CreateSellWatchItem());
 
             PLRec.Validate(Quantity, 1);
             PLRec."CXW Used good" := true;
             PLRec.Amount := SellWatchVendorInfo."CXW Final Offer Price";
             PLRec.Validate("Direct Unit Cost", SellWatchVendorInfo."CXW Final Offer Price");
+
             PLRec.Insert();
 
             ReleasePurchDoc.PerformManualRelease(PHRec);
@@ -107,6 +96,31 @@ codeunit 60305 "CXW SellWatch Mgt"
             if GuiAllowed() then
                 Message(VendorAndPOCreatedMsg);
         end;
+    end;
+
+    local procedure CreateSellWatchItem(): Code[20]
+    var
+        Item: Record Item;
+        ItemTemplate: Record "Item Templ.";
+        ItemUnitofMeasure: Record "Item Unit of Measure";
+    begin
+        Item.Init();
+        //TODO: Item Template einrichtenbar, Wo?; Evtl Nummernserie fuer SellWatch Artikel einrichten
+        if not ItemTemplate.FindFirst() then
+            Error(NoItemTemplateFoundErr);
+        Item."No." := '';
+        Item.Validate(Description, CopyStr(SellWatchVendorInfo."CXW Brand" + ' ' + SellWatchVendorInfo."CXW Model" + ' ' + SellWatchVendorInfo."CXW Construction Year", 1, MaxStrLen(Item.Description)));
+        Item.Validate("Description 2", CopyStr(SellWatchVendorInfo."CXW Reference", 1, MaxStrLen(Item."Description 2")));
+
+        Item.TransferFields(ItemTemplate, true);
+        Item.Insert(true);
+        ItemUnitofMeasure.Init();
+        ItemUnitofMeasure."Item No." := Item."No.";
+        ItemUnitofMeasure.Validate("Code", Item."Base Unit of Measure");
+        ItemUnitofMeasure.Validate("Qty. per Unit of Measure", 1);
+        ItemUnitofMeasure.Validate("Qty. Rounding Precision", 1);
+        ItemUnitofMeasure.Insert();
+        exit(Item."No.");
     end;
 
     local procedure CreatePurchaseOrderinBV()
@@ -205,4 +219,5 @@ codeunit 60305 "CXW SellWatch Mgt"
         ReleasePurchDoc: Codeunit "Release Purchase Document";
         WOA: Record "CXW Watch Online Approval";
         VendorAndPOCreatedMsg: Label 'Vendor and PO created';
+        NoItemTemplateFoundErr: Label 'No item template found. Cannot create an item for the SellWatch offer.';
 }
