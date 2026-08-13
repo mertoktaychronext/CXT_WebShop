@@ -116,26 +116,26 @@ codeunit 60331 "CXW Process Workshop Lines"
         end;
     end;
 
-    // TODO: Finale Attributnamen einsetzen (Platzhalter!) - zentrale Zuordnung WL-Feld -> Item-Attribute-Name.
+    // TODO: Attributnamen für Attribut 9/10 final klären (Platzhalter!) - zentrale Zuordnung WL-Feld -> Item-Attribute-Name.
     local procedure GetAttributeMapping(AttributeIndex: Integer): Text[250]
     begin
         case AttributeIndex of
             1:
-                exit('Attribut 1');
+                exit('Dial Color');
             2:
-                exit('Attribut 2');
+                exit('Case Diameter');
             3:
-                exit('Attribut 3');
+                exit('Bracelet Material');
             4:
-                exit('Attribut 4');
+                exit('Case Material');
             5:
-                exit('Attribut 5');
+                exit('Movement');
             6:
-                exit('Attribut 6');
+                exit('Gender');
             7:
-                exit('Attribut 7');
+                exit('Crystal');
             8:
-                exit('Attribut 8');
+                exit('Features');
             9:
                 exit('Attribut 9');
             10:

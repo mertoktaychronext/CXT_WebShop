@@ -1,6 +1,6 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden)
+**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter)
 **Analysierte Projekte:** 1
 **Gesamtanzahl Funktionen:** 114
 
@@ -65,7 +65,7 @@
 | CHX.Webshop | CXW Process Workshop Lines | Codeunit | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit den Wareneingang und überträgt die Attribute auf den Artikel. |
 | CHX.Webshop | CXW Process Workshop Lines | Codeunit | `ProcessNonGenuineLine` | Prozedur | Internal | Storniert bei widerlegter Echtheit die zugehörige Bestellung, die Werkstattzeile bleibt als Nachweis bestehen. |
 | CHX.Webshop | CXW Process Workshop Lines | Codeunit | `GetWorkshopLineAttributeValue` | Prozedur | Internal | Liest den Wert eines der zehn Attributfelder anhand seiner laufenden Nummer aus. |
-| CHX.Webshop | CXW Process Workshop Lines | Codeunit | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (aktuell Platzhalternamen). |
+| CHX.Webshop | CXW Process Workshop Lines | Codeunit | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (Attribut 1–8 fachlich benannt, Attribut 9/10 weiterhin Platzhalter). |
 | CHX.Webshop | CXW Process Workshop Lines | Codeunit | `SetItemAttributeValue` | Prozedur | Internal | Trägt einen Attributwert als Standard-Artikelattribut ein und legt fehlende Attribute automatisch an. |
 | CHX.Webshop | CXW Process Workshop Lines | Codeunit | `GetOrCreateAttributeId` | Prozedur | Internal | Sucht ein Standard-Artikelattribut anhand des Namens oder legt es neu an. |
 | CHX.Webshop | CXW Process Workshop Lines | Codeunit | `GetOrCreateAttributeValueId` | Prozedur | Internal | Sucht einen Attributwert anhand des Textes oder legt ihn neu an. |

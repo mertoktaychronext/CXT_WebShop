@@ -3,7 +3,7 @@
 **Version:** 27.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter)
 **Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
@@ -130,7 +130,7 @@ Definiert die vier Prüfstatus einer Werkstattzeile (Neu, WS geprüft, Verarbeit
 
 ### Tabelle: CXW Workshop Line (ID: 60318)
 
-Ein Datensatz je an die Werkstatt übergebener Bestellzeile: hält die Herstellerseriennummer, den Prüfstatus, das Echtheits-Kennzeichen der Werkstatt, zehn generische Attributfelder (Platzhalter-Bezeichnung, finale Benennung noch offen) sowie den zuletzt aufgetretenen Verarbeitungsfehler.
+Ein Datensatz je an die Werkstatt übergebener Bestellzeile: hält die Herstellerseriennummer, den Prüfstatus, das Echtheits-Kennzeichen der Werkstatt, zehn Attributfelder (die ersten acht fachlich benannt: Zifferblattfarbe, Gehäusedurchmesser, Armbandmaterial, Gehäusematerial, Werk, Geschlecht, Glas, Ausstattung; Attribut 9/10 weiterhin Platzhalter) sowie den zuletzt aufgetretenen Verarbeitungsfehler.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -199,7 +199,7 @@ Als Aufgabenwarteschlangen-Eintrag lauffähige Hintergrundverarbeitung, die alle
 | 5 | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit ausschließlich den Wareneingang der zugehörigen Bestellung (keine Rechnung) und überträgt die gemeldeten Attribute auf den Artikel; setzt danach den Status auf "Verarbeitet" und löscht einen zuvor vermerkten Fehlertext. |
 | 6 | `ProcessNonGenuineLine` | Prozedur | Internal | Storniert bei widerlegter Echtheit die zugehörige Bestellung (öffnet sie bei Bedarf zuvor wieder) und setzt den Status auf "Verarbeitet" sowie den Fehlertext zurück, bevor die Bestellung gelöscht wird, damit die Werkstattzeile als Nachweis erhalten bleibt. |
 | 7 | `GetWorkshopLineAttributeValue` | Prozedur | Internal | Liest den Wert eines der zehn Attributfelder einer Werkstattzeile anhand seiner laufenden Nummer aus. |
-| 8 | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (aktuell Platzhalternamen, finale Benennung offen). |
+| 8 | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (für Attribut 1–8 fachliche Namen wie "Dial Color"/"Case Diameter"; Attribut 9/10 weiterhin Platzhalternamen, finale Benennung offen). |
 | 9 | `SetItemAttributeValue` | Prozedur | Internal | Trägt einen Attributwert als Standard-Artikelattribut auf dem Artikel ein und legt fehlende Attribute/Attributwerte automatisch an. |
 | 10 | `GetOrCreateAttributeId` | Prozedur | Internal | Sucht ein Standard-Artikelattribut anhand des Namens oder legt es neu an (Typ Text). |
 | 11 | `GetOrCreateAttributeValueId` | Prozedur | Internal | Sucht einen Attributwert anhand des Textes oder legt ihn neu an. |

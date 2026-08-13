@@ -43,45 +43,45 @@ table 60318 "CXW Workshop Line"
             Caption = 'Genuine';
             DataClassification = ToBeClassified;
         }
-        // TODO: Attributnamen final klären - Platzhalter-Captions "Attribut 1"-"Attribut 10"
+        // TODO: Attributnamen für Attribut 9/10 final klären - Platzhalter-Captions "Attribut 9"-"Attribut 10"
         field(11; "CXW Attribute 1"; Text[250])
         {
-            Caption = 'Attribut 1';
+            Caption = 'Dial Color';
             DataClassification = ToBeClassified;
         }
         field(12; "CXW Attribute 2"; Text[250])
         {
-            Caption = 'Attribut 2';
+            Caption = 'Case Diameter';
             DataClassification = ToBeClassified;
         }
         field(13; "CXW Attribute 3"; Text[250])
         {
-            Caption = 'Attribut 3';
+            Caption = 'Bracelet Material';
             DataClassification = ToBeClassified;
         }
         field(14; "CXW Attribute 4"; Text[250])
         {
-            Caption = 'Attribut 4';
+            Caption = 'Case Material';
             DataClassification = ToBeClassified;
         }
         field(15; "CXW Attribute 5"; Text[250])
         {
-            Caption = 'Attribut 5';
+            Caption = 'Movement';
             DataClassification = ToBeClassified;
         }
         field(16; "CXW Attribute 6"; Text[250])
         {
-            Caption = 'Attribut 6';
+            Caption = 'Gender';
             DataClassification = ToBeClassified;
         }
         field(17; "CXW Attribute 7"; Text[250])
         {
-            Caption = 'Attribut 7';
+            Caption = 'Crystal';
             DataClassification = ToBeClassified;
         }
         field(18; "CXW Attribute 8"; Text[250])
         {
-            Caption = 'Attribut 8';
+            Caption = 'Features';
             DataClassification = ToBeClassified;
         }
         field(19; "CXW Attribute 9"; Text[250])

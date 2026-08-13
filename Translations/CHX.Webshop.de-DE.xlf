@@ -1066,8 +1066,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - NamedType StatusRegressionErr</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 2671190995 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 1</source>
-          <target>Attribut 1</target>
+          <source>Dial Color</source>
+          <target>Zifferblattfarbe</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 1 - Property Caption</note>
         </trans-unit>
@@ -1078,44 +1078,44 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 10 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 289313550 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 2</source>
-          <target>Attribut 2</target>
+          <source>Case Diameter</source>
+          <target>Gehäusedurchmesser</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 2 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 3946584229 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 3</source>
-          <target>Attribut 3</target>
+          <source>Bracelet Material</source>
+          <target>Armbandmaterial</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 3 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 758101144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 4</source>
-          <target>Attribut 4</target>
+          <source>Case Material</source>
+          <target>Gehäusematerial</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 4 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 120404527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 5</source>
-          <target>Attribut 5</target>
+          <source>Movement</source>
+          <target>Werk</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 5 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 2033494378 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 6</source>
-          <target>Attribut 6</target>
+          <source>Gender</source>
+          <target>Geschlecht</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 6 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 1395797761 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 7</source>
-          <target>Attribut 7</target>
+          <source>Crystal</source>
+          <target>Glas</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 7 - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 4115493252 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Attribut 8</source>
-          <target>Attribut 8</target>
+          <source>Features</source>
+          <target>Ausstattung</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Attribute 8 - Property Caption</note>
         </trans-unit>
