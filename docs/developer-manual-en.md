@@ -285,7 +285,8 @@ Unlike Page 60337 (SellWatch, pure insert/update intake), this API allows the sa
 
 - **Endpoint pattern:** `.../api/saliniLife/workshop/v1.0/companies({companyId})/workshopLines`.
 - **Methods:** `GET` to fetch, `PATCH` to write back; `POST`/`DELETE` are blocked (`InsertAllowed = false`, `DeleteAllowed = false`) — lines are only ever created from within BC via "Send to Workshop".
-- **Writable fields:** `attribute1`–`attribute10`, `genuine`, `status`. Key, item, and serial number fields are locked (`OnModifyRecord` rejects change attempts with an error).
+- **Writable fields:** `dialColor`, `caseDiameter`, `braceletMaterial`, `caseMaterial`, `movement`, `gender`, `crystal`, `features` (business-named, correspond to AL fields 1–8), `attribute9`, `attribute10` (still generic, no business name assigned yet), `genuine`, `status`. Key, item, and serial number fields are locked (`OnModifyRecord` rejects change attempts with an error).
+- **Update 2026-08-13 (Breaking Change):** The OData property names `attribute1`–`attribute8` were switched to their business names (e.g. `attribute1` → `dialColor`). Unlike the earlier internal AL field-identifier rename, this **is a breaking change to the external API contract** — the external workshop service must update its integration accordingly. `attribute9`/`attribute10` are unchanged, since they still have no assigned business name.
 - **Status regressions blocked:** enforced in the table's own `OnModify` trigger (fires regardless of whether the change comes via the API or internally) — `WS checked` → `New` and any move away from `Processed` are rejected; a direct move to `Error` is only allowed from `WS checked`.
 - **Authorization:** Permission Set 60302 "CXW Workshop API" — only `tabledata "CXW Workshop Line" = RM`, no access to Purchase Line, Item, or any other table.
 

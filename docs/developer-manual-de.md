@@ -283,7 +283,8 @@ Im Unterschied zu Page 60337 (SellWatch, reiner Insert/Update-Empfang) erlaubt d
 
 - **Endpunkt-Muster:** `.../api/saliniLife/workshop/v1.0/companies({companyId})/workshopLines`.
 - **Methoden:** `GET` zum Abholen, `PATCH` zum Zurückschreiben; `POST`/`DELETE` gesperrt (`InsertAllowed = false`, `DeleteAllowed = false`) – Zeilen entstehen ausschließlich aus BC heraus über "Send to Workshop".
-- **Beschreibbare Felder:** `attribute1`–`attribute10`, `genuine`, `status`. Schlüssel-, Artikel- und Seriennummernfelder sind gesperrt (`OnModifyRecord` lehnt Änderungsversuche mit Fehler ab).
+- **Beschreibbare Felder:** `dialColor`, `caseDiameter`, `braceletMaterial`, `caseMaterial`, `movement`, `gender`, `crystal`, `features` (fachlich benannt, entsprechen den AL-Feldbezeichnern 1–8), `attribute9`, `attribute10` (weiterhin generisch, da ohne fachlichen Namen), `genuine`, `status`. Schlüssel-, Artikel- und Seriennummernfelder sind gesperrt (`OnModifyRecord` lehnt Änderungsversuche mit Fehler ab).
+- **Update 2026-08-13 (Breaking Change):** Die OData-Eigenschaftsnamen `attribute1`–`attribute8` wurden auf die fachlichen Namen umgestellt (z. B. `attribute1` → `dialColor`). Anders als bei der internen AL-Feldbezeichner-Umbenennung zuvor ist dies eine **Breaking Change am externen API-Vertrag** – der externe Workshop-Dienst muss seine Integration entsprechend anpassen. `attribute9`/`attribute10` bleiben unverändert, da für sie noch kein fachlicher Name vorliegt.
 - **Statusrückschritte gesperrt:** greift über den `OnModify`-Trigger der Tabelle selbst (feuert unabhängig davon, ob die Änderung über die API oder intern erfolgt) – `WS checked` → `New` sowie jeder Wechsel weg von `Processed` werden abgelehnt; ein direkter Wechsel auf `Error` ist nur aus `WS checked` heraus erlaubt.
 - **Berechtigung:** Permission Set 60302 "CXW Workshop API" – ausschließlich `tabledata "CXW Workshop Line" = RM`, kein Zugriff auf Purchase Line, Item oder andere Tabellen.
 
