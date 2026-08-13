@@ -18,4 +18,4 @@ Diese Business-Central-Erweiterung bündelt zwei Bereiche: die Verwaltung von We
 
 ---
 
-*Erstellt am 2026-08-04, aktualisiert am 2026-08-07 (SellWatch-Ankaufsintegration ergänzt). Handbücher/Funktionsregister durch reine Analyse (keine Codeänderungen); der Schwachstellenbericht enthält zusätzlich tatsächlich durchgeführte Code-Änderungen (siehe dort).*
+*Erstellt am 2026-08-04, aktualisiert am 2026-08-07 (SellWatch-Ankaufsintegration ergänzt), aktualisiert am 2026-08-13 (Key-User-Handbuch: Einrichtung der SellWatch-Artikelvorlage in der Einkaufseinrichtung ergänzt). Handbücher/Funktionsregister durch reine Analyse (keine Codeänderungen); der Schwachstellenbericht enthält zusätzlich tatsächlich durchgeführte Code-Änderungen (siehe dort).*
