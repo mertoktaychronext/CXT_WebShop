@@ -1,6 +1,6 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter)
+**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), aktualisiert am 2026-08-13 (SellWatch: 2 neue Objekte TabExt60322/PagExt60330 für konfigurierbare Artikelvorlage in der Einkaufseinrichtung, Gesamtobjekte 50→52)
 **Analysierte Projekte:** 1
 **Gesamtanzahl Funktionen:** 114
 
@@ -10,8 +10,8 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Navigation/Actions | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.1 | 50 | 62 | 40 | 1 | 11 | 114 |
-| **Gesamt** | – | **50** | **62** | **40** | **1** | **11** | **114** |
+| CHX.Webshop | 27.0.0.1 | 52 | 62 | 40 | 1 | 11 | 114 |
+| **Gesamt** | – | **52** | **62** | **40** | **1** | **11** | **114** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt drei fachlich unabhängige Bereiche: **SellWatch** (Ankauf gebrauchter Uhren, ID-Bereich 60300–60310 plus 60337 für die API), **Workshop-Ankaufsprüfung** (externe Echtheitsprüfung angekaufter Uhren, neu seit dieser Aktualisierung — Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Page 60338–60340, Codeunit 60331, PermissionSet 60301/60302) und **SalesPrice/Verkaufspreisverwaltung** (ID-Bereich 60311–60336). Alle drei teilen sich ein gemeinsames HTTP-Aufrufprotokoll (Table 60302/Page 60309) bzw. folgen demselben Zwischentabellen-plus-API-Muster; SalesPrice nutzt zusätzlich eine gemeinsame Schnittstellen-Konfigurationstabelle (Table 60317) mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung, AWS Signature V4). SellWatch besitzt eine eigene API-Schreibschnittstelle (Page 60337) mit eigenem Berechtigungssatz (PermissionSet 60300); die neue Workshop-Ankaufsprüfung folgt demselben Prinzip mit einer eigenen, bidirektionalen API (Page 60339) für die externe Werkstatt.
 >
@@ -37,7 +37,7 @@
 | CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung an, lässt dafür dynamisch einen Artikel anlegen (siehe `CreateSellWatchItem`) und gibt die Bestellung frei. |
 | CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die niederländische Gesellschaft vorgemerkt wurden. |
 | CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt angelegt oder für die niederländische Gesellschaft vorgemerkt wird. |
-| CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand einer Artikelvorlage an (Beschreibung aus Marke/Modell/Baujahr) inkl. passender Basis-Mengeneinheit. |
+| CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand der in der Einkaufseinrichtung hinterlegten Artikelvorlage an (Beschreibung aus Marke/Modell/Baujahr) inkl. passender Basis-Mengeneinheit; bricht mit unterscheidbarer Fehlermeldung ab, falls keine bzw. keine gültige Artikelvorlage eingerichtet ist. |
 | CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und Sendungsverfolgungsnummer; aktuell ohne Aufrufer. |
 | CHX.Webshop | CXW SellWatch Mgt | Codeunit | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung für eine SellWatch-Anfrage; aktuell ohne Aufrufer. |
 | CHX.Webshop | CXW SellWatch-Overview | Seite | `ShowDocument` | Aktion | – | Öffnet die zur Anfrage gehörende Einkaufsbestellung. |

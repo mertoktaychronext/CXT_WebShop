@@ -1018,10 +1018,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Import Sales Prices - NamedType UnexpectedColumnErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3674014615 - NamedType 394646585" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No item template found. Cannot create an item for the SellWatch offer.</source>
+        <trans-unit id="Codeunit 3674014615 - NamedType 2888902389" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The item template %1 set up on the Purchases &amp; Payables Setup page no longer exists. Cannot create an item for the SellWatch offer.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = item template code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType ItemTemplateNotFoundErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3674014615 - NamedType 2056351298" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No item template is set up for SellWatch item creation. Please set the SellWatch Item Template field on the Purchases &amp; Payables Setup page.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType NoItemTemplateFoundErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType NoItemTemplateSetUpErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3674014615 - NamedType 2564218875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Vendor and PO created</source>
@@ -1908,6 +1913,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Sales Prices - Control CXW Unit Price (LCY) incl. VAT - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="PageExtension 2485353633 - Control 3645458448 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
+          <source>SellWatch</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SellWatch Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2485353633 - Control 2393159316 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
+          <source>Specifies the item template used to automatically create items for incoming SellWatch offers.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SW Item Template Code - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="PageExtension 2505294203 - Control 1296630392 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
           <source>Specifies the manufacturer serial number captured when this line was sent to the workshop.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1997,6 +2012,11 @@
           <source>Used Good</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchase Line - Field CXW Used good - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2485353633 - Field 2393159316 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
+          <source>SellWatch Item Template</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Item Template Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 1191816759 - Field 1296630392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1519909599">
           <source>Manufacturer Serial No.</source>

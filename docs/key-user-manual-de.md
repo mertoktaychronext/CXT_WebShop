@@ -82,6 +82,15 @@ Der SellWatch-Online-Check (prüft, ob eine Uhr im SellWatch-Onlineshop sichtbar
 
 > Fehlgeschlagene Aufrufe können Sie über die Seite **"Http Call Log"** nachvollziehen: Sie zeigt zu jedem Aufruf Erfolg/Fehlschlag, HTTP-Statuscode und Fehlermeldung, und erlaubt den Download des gesendeten Requests sowie der empfangenen Antwort als Textdatei (der API-Schlüssel wird im gespeicherten Request nicht im Klartext angezeigt). Seit dem HTTP-Logging-Update vom 2026-08-10 protokolliert diese Seite auch die Aufrufe des Verkaufspreis-Exports (siehe unten) – die Spalte "Quelltabellennr." zeigt, welcher Bereich den Eintrag erzeugt hat.
 
+## SellWatch – Artikelvorlage für die automatische Artikelanlage einrichten
+
+Trifft eine SellWatch-Ankaufsanfrage ein, legt das System automatisch einen neuen Artikel an. Welche Artikelvorlage dabei als Vorlage dient, legen Sie auf der Seite **"Purchases & Payables Setup"** (Einkaufseinrichtung) im neuen Bereich "SellWatch" im Feld **"SellWatch Item Template"** fest:
+
+1. Öffnen Sie die Seite "Purchases & Payables Setup" (Einkaufseinrichtung).
+2. Wählen Sie im Bereich "SellWatch" im Feld "SellWatch Item Template" die gewünschte Artikelvorlage aus (Nachschlagen zeigt alle vorhandenen Artikelvorlagen).
+
+> Ist dieses Feld leer, bricht die nächste automatische SellWatch-Artikelanlage mit einer Fehlermeldung ab, statt wie zuvor eine beliebige Artikelvorlage zu verwenden. Wird eine bereits konfigurierte Artikelvorlage nachträglich gelöscht, erscheint eine eigene, davon unterscheidbare Fehlermeldung.
+
 ## Datenmanagement
 
 - **Sales Price / Archiv**: Bei jedem Ausführen von "Upload Sales Price" wird die freigegebene Preiszeile automatisch in die produktive Verkaufspreis-Tabelle (immer gültig für alle Kunden) sowie als neue, fortlaufend nummerierte Version in "Sales Price Archive" übernommen – auch bei einem erneuten Senden bereits übertragener Zeilen. Eine manuelle Pflege dieser beiden Tabellen ist nicht vorgesehen und nicht nötig.
@@ -90,7 +99,7 @@ Der SellWatch-Online-Check (prüft, ob eine Uhr im SellWatch-Onlineshop sichtbar
 
 ## Berechtigungen
 
-Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permission Set **"CXWChronWSAll"** geregelt (deckt seit dem HTTP-Logging-Update auch die mit SellWatch geteilte Seite "Http Call Log" ab). Für SellWatch gilt das eigene Permission Set **"CXW SWChronWSAll"** (deckt "SellWatch-Overview", "SellWatch info" und die ebenfalls geteilte Seite "Http Call Log" sowie die zugrundeliegenden Tabellen ab). Beide Sets müssen den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor diese die jeweiligen Seiten der Erweiterung nutzen können.
+Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permission Set **"CXWChronWSAll"** geregelt (deckt seit dem HTTP-Logging-Update auch die mit SellWatch geteilte Seite "Http Call Log" ab). Für SellWatch gilt das eigene Permission Set **"CXW SWChronWSAll"** (deckt "SellWatch-Overview", "SellWatch info" und die ebenfalls geteilte Seite "Http Call Log" sowie die zugrundeliegenden Tabellen ab; seit der Artikelvorlagen-Einrichtung zusätzlich Lesezugriff auf "Purchases & Payables Setup"). Beide Sets müssen den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor diese die jeweiligen Seiten der Erweiterung nutzen können.
 
 ## Troubleshooting
 
@@ -105,6 +114,7 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 | Ein Benutzer kann die SellWatch-Seiten nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXW SWChronWSAll" zugewiesen ist. |
 | Eine Uhr wird auf "SellWatch-Overview" nie als online markiert bzw. "Http Call Log" zeigt Fehlschläge | Prüfen Sie, ob unter "API Interface Setup" ein Eintrag mit Code `WOA` existiert, aktiv ist und Endpoint URL sowie API Key gesetzt sind. Details zum konkreten Fehler (Statuscode, Fehlermeldung) finden Sie auf der Seite "Http Call Log". |
 | Zu einer SellWatch-Anfrage wird kein Lieferant/keine Bestellung angelegt | Die Anlage erfolgt vollautomatisiert im Hintergrund; es gibt keine Aktion, mit der Sie dies als Key User manuell anstoßen können. Prüfen Sie zunächst, ob die Anfrage überhaupt vollständig eingegangen ist, und eskalieren Sie sonst an das Entwicklungsteam. |
+| Zu einer SellWatch-Anfrage wird kein Artikel angelegt, Fehlermeldung zur Artikelvorlage | Prüfen Sie in der Einkaufseinrichtung ("Purchases & Payables Setup"), Bereich "SellWatch", ob im Feld "SellWatch Item Template" eine gültige, noch existierende Artikelvorlage hinterlegt ist. |
 
 ## Eskalationswege
 

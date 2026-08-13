@@ -82,6 +82,15 @@ The SellWatch online check (verifies whether a watch should be visible in the Se
 
 > You can trace failed calls on the **"Http Call Log"** page: it shows success/failure, HTTP status code, and error message for every call, and lets you download the sent request and the received response as text files (the API key is not shown in plain text in the stored request). Since the 2026-08-10 HTTP-logging update, this page also logs sales price export calls (see below) — the "Source Table No." column shows which area produced the entry.
 
+## SellWatch – Setting up the item template for automatic item creation
+
+When a SellWatch purchase request arrives, the system automatically creates a new item. Which item template is used for that is set on the **"Purchases & Payables Setup"** page, in the new "SellWatch" section, field **"SellWatch Item Template"**:
+
+1. Open the "Purchases & Payables Setup" page.
+2. In the "SellWatch" section, set the "SellWatch Item Template" field to the desired item template (the lookup shows all existing item templates).
+
+> If this field is left empty, the next automatic SellWatch item creation aborts with an error message instead of using an arbitrary item template as before. If a configured item template is later deleted, a separate, distinguishable error message appears.
+
 ## Data management
 
 - **Sales Price / Archive**: Every time "Upload Sales Price" runs, the approved price line is automatically written into the live sales price table (always valid for all customers) and stored as a new, sequentially numbered version in "Sales Price Archive" — including when an already-transmitted line is resent. These two tables are not meant to be maintained manually.
@@ -90,7 +99,7 @@ The SellWatch online check (verifies whether a watch should be visible in the Se
 
 ## Permissions
 
-Access to all sales price management objects is controlled through the **"CXWChronWSAll"** permission set (since the HTTP-logging update, also covers the "Http Call Log" page shared with SellWatch). SellWatch has its own **"CXW SWChronWSAll"** permission set (covers "SellWatch-Overview", "SellWatch info", and the likewise-shared "Http Call Log" page, plus the underlying tables). Both sets still need to be assigned to the relevant users or user groups before they can use the respective extension pages.
+Access to all sales price management objects is controlled through the **"CXWChronWSAll"** permission set (since the HTTP-logging update, also covers the "Http Call Log" page shared with SellWatch). SellWatch has its own **"CXW SWChronWSAll"** permission set (covers "SellWatch-Overview", "SellWatch info", and the likewise-shared "Http Call Log" page, plus the underlying tables; since the item template setup, also read access to "Purchases & Payables Setup"). Both sets still need to be assigned to the relevant users or user groups before they can use the respective extension pages.
 
 ## Troubleshooting
 
@@ -105,6 +114,7 @@ Access to all sales price management objects is controlled through the **"CXWChr
 | A user cannot open the SellWatch pages | Check whether the user has been assigned the "CXW SWChronWSAll" permission set. |
 | A watch on "SellWatch-Overview" is never marked online, or "Http Call Log" shows failures | Check that an entry with code `WOA` exists under "API Interface Setup", is active, and has the Endpoint URL and API Key set. Details on the specific failure (status code, error message) are on the "Http Call Log" page. |
 | No vendor/order is created for a SellWatch request | Creation happens fully automatically in the background; there is no action you can trigger manually as a key user. First check whether the request actually arrived completely, then escalate to the development team if not. |
+| No item is created for a SellWatch request, error message about the item template | On the "Purchases & Payables Setup" page, "SellWatch" section, check that the "SellWatch Item Template" field is set to a valid, still-existing item template. |
 
 ## Escalation path
 
