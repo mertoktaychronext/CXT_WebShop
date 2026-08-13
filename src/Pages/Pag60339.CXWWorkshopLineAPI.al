@@ -41,14 +41,14 @@ page 60339 "CXW Workshop Line API"
                 }
                 field(status; Rec."CXW Status") { }
                 field(genuine; Rec."CXW Genuine") { }
-                field(attribute1; Rec."CXW Attribute 1") { }
-                field(attribute2; Rec."CXW Attribute 2") { }
-                field(attribute3; Rec."CXW Attribute 3") { }
-                field(attribute4; Rec."CXW Attribute 4") { }
-                field(attribute5; Rec."CXW Attribute 5") { }
-                field(attribute6; Rec."CXW Attribute 6") { }
-                field(attribute7; Rec."CXW Attribute 7") { }
-                field(attribute8; Rec."CXW Attribute 8") { }
+                field(attribute1; Rec."CXW Dial Color") { }
+                field(attribute2; Rec."CXW Case Diameter") { }
+                field(attribute3; Rec."CXW Bracelet Material") { }
+                field(attribute4; Rec."CXW Case Material") { }
+                field(attribute5; Rec."CXW Movement") { }
+                field(attribute6; Rec."CXW Gender") { }
+                field(attribute7; Rec."CXW Crystal") { }
+                field(attribute8; Rec."CXW Features") { }
                 field(attribute9; Rec."CXW Attribute 9") { }
                 field(attribute10; Rec."CXW Attribute 10") { }
                 field(systemId; Rec.SystemId)

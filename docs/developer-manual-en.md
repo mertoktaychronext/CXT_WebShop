@@ -8,6 +8,10 @@ This Business Central (AL) extension covers webshop sales price management: CSV 
 
 As a second, functionally independent component, the extension includes **SellWatch**: purchase requests for used watches coming in from the SellWatch partner are automatically turned into a vendor and a purchase order (Codeunit 60305 "CXW SellWatch Mgt"); a read-only overview page (Page 60307 "CXW SellWatch-Overview") shows seller, watch, and order data. A separate mechanism checks over HTTP whether a watch is visible in the SellWatch online shop (Table 60301 "CXW Watch Online Approval"), and logs every call including failure telemetry (Table 60302 "CXW Http Call Log", Page 60309). SellWatch and sales price management are functionally separate but share the same interface master data table "CXW API Interface Setup" (Table 60317), and since the HTTP-logging update also the shared "CXW Http Call Log": the online check uses the hard-coded code `'WOA'` there.
 
+As a third, likewise functionally independent component, the extension includes the **Workshop authenticity check** (Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Pages 60338–60340, Codeunit 60331, PermissionSets 60301/60302): once a purchased watch has arrived, it is handed over to an external workshop via the "Send to Workshop" action on the purchase order page (capturing the manufacturer serial number), and the workshop reports back authenticity and item attributes through a bidirectional custom API (Page 60339, OAuth2-S2S authenticated). A job-queue-driven codeunit (60331) processes checked lines: if authenticity is confirmed, only the goods receipt is posted and the reported attributes are written as standard item attributes; if authenticity is disproved, the purchase order is cancelled. See the "Workshop Authenticity Check" section below for details.
+
+> **Update 2026-08-13 (Workshop authenticity check documented):** The Workshop authenticity check has existed since an earlier extension update but wasn't documented in any of the three manuals. This update adds it to all three manuals (DE/EN) and to `docs/README.md`; it also corrects the outdated claim about hard-coded SellWatch variant codes (see Known Limitations) — no code changes.
+
 > **Update 2026-08-10 (unified HTTP call logging):** Table 60302/Page 60309 were previously named `"CXW SW Http Call Log"` and hard-wired to `"CXW Watch Online Approval"`. Renamed to `"CXW Http Call Log"` (Caption `'Http Call Log'`) and given a new `"CXW Source Table No."` field (same pattern as `"CXW API Interface Setup"."CXW Source Table No."`), so `"CXW Source Entry No"` now points at either `"CXW Watch Online Approval"` (60301) or `"CXW Sales Price Outbound File"` (60314) depending on `"CXW Source Table No."`. `Codeunit "CXW Export Gateway Sales Price"`'s `SendToApiInterface` now logs every call (success, non-success HTTP status, network failure) into the same log SellWatch uses, redacting the `Authorization` header (mirroring the existing `X-API-KEY` redaction for SellWatch). Both permission sets (`CXWChronWSAll`, `CXW SWChronWSAll`) were updated accordingly.
 
 > **Update 2026-08-10:** Also on 2026-08-10, the 11 SellWatch objects (previously IDs 51001–51010, inconsistent "SW"/"SellWatch"/no-prefix naming) were moved, as a pure rename/renumber, into the registered idRange block 60300–60310 and given a consistent "CXW " prefix, as were the roughly 70 fields they define. Field captions, enum values, and business logic are unchanged (see `openspec/changes/archive/2026-08-10-sellwatch-cxw-renumbering/`). IDs 60311–60349 were already reserved for/occupied by sales price management at that point; SellWatch has used 60300–60310 since, and the rest of 60300–60349 remains free for future objects.
@@ -18,7 +22,7 @@ As a second, functionally independent component, the extension includes **SellWa
 |---|---|---|
 | Extension type | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 26.0.0.0 |
 | Runtime | AL Runtime | 17.0 |
-| Object ID range | Customer range | 60300–60349 (used: 60300–60310 SellWatch, 60311–60336 sales price management); 51000–51049 remains registered but, since the 2026-08-10 rename, is no longer occupied by any object in this extension |
+| Object ID range | Customer range | 60300–60349 (used: 60300–60310 SellWatch, 60311–60336 sales price management, 60318–60340 Workshop authenticity check — object types overlap since each object type has its own ID namespace); 51000–51049 remains registered but, since the 2026-08-10 rename, is no longer occupied by any object in this extension |
 | Dependencies | – | none (`dependencies: []` in `app.json`) |
 | Publisher | Salini Life | – |
 | Extension ID | `5df32934-5708-418c-ba16-44b30feb51f4` | – |
@@ -28,13 +32,13 @@ As a second, functionally independent component, the extension includes **SellWa
 ```
 app.json                          # Extension manifest, idRanges 51000-51049 + 60300-60349
 src/
-  Tables/                         # 10 tables (60300-60302 SellWatch; 60311-60313, 60314-60317 sales price management)
-  TableExtensions/                # 5 extensions (Purchase Line, Purchase Header – SellWatch; Country/Region, Sales Price, Currency – sales price management)
-  PageExtensions/                 # 3 extensions (Countries/Regions, Sales Prices, Currencies) – sales price management only
-  Pages/                          # 8 pages + 1 xmlport (60307-60309 SellWatch; 60321-60325 + Xmlport 60328 sales price management)
-  Codeunits/                      # 3 codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – sales price management)
-  Enums/                          # 7 enums (SW Order Status – SellWatch; 6 more – sales price management)
-  PermissionSets/                 # 2 permission sets (CXW SWChronWSAll – SellWatch; CXWChronWSAll – sales price management)
+  Tables/                         # 11 tables (60300-60302 SellWatch; 60311-60317 sales price management; 60318 Workshop)
+  TableExtensions/                # 5 extensions (Purchase Line, Purchase Header – SellWatch; Sales Price, Currency – sales price management; Purchase Line – Workshop)
+  PageExtensions/                 # 4 extensions (Sales Prices, Currencies – sales price management; Purchase Order, Purchase Order Subform – Workshop)
+  Pages/                          # 12 pages + 1 xmlport (60307-60309 + 60337 SellWatch; 60321-60325 + Xmlport 60328 sales price management; 60338-60340 Workshop)
+  Codeunits/                      # 4 codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – sales price management; Process Workshop Lines – Workshop)
+  Enums/                          # 8 enums (SW Order Status – SellWatch; 6 more – sales price management; Workshop Line Status – Workshop)
+  PermissionSets/                 # 5 permission sets (CXW SWChronWSAll, CXW Sell Watch API – SellWatch; CXWChronWSAll – sales price management; CXW Workshop All, CXW Workshop API – Workshop)
 Translations/                     # .g.xlf (generated) + de-DE.xlf (maintained)
 openspec/
   specs/                          # durable capability specs (e.g. sales-price-currency-copy, sellwatch-http-call-logging, sellwatch-standard-table-extensions)
@@ -210,6 +214,81 @@ Adds a `PageType = API` endpoint alongside the read-only page 60307, letting ext
 - **Validation:** `OnInsertRecord`/`OnModifyRecord` require `CXW SRid`, `CXW Brand`, `CXW Model`, and `CXW Final Offer Price`, and reject a duplicate `CXW SRid` with an error (HTTP 4xx) rather than creating an incomplete or duplicate row.
 - Rows created/updated this way appear on page 60307 unchanged and are processed by Codeunit 60305 exactly like manually entered rows.
 
+### Workshop Authenticity Check
+
+```
+Purchase Order (staff member)
+   │  Action "Send to Workshop" (PageExtension 60328 "CXW Workshop
+   │  Purchase Order", on Page "Purchase Order")
+   ▼
+For each open line (Type = Item, Quantity <> 0, Sent to Workshop = false):
+   ├─► Confirm "Is item {No.} {Description} really arrived?"
+   │     No  → "CXW Not Arrived" := true, line skipped (no abort)
+   │     Yes → Page 60340 "CXW Serial No. Input" (StandardDialog, modal)
+   │              mandatory manufacturer serial number field; blank/cancel
+   │              → error collected for this line, continues with the
+   │              next line
+   ▼
+On valid input:
+   "CXW Manufacturer Serial No." + "CXW Sent to Workshop" := true on the
+   Purchase Line (TableExtension 60321 "CXW Workshop Purchase Line")
+   ▼
+Table 60318 "CXW Workshop Line" created (PK: Document Type/No./Line No.),
+Status = New, Item No. copied from the purchase line
+   │
+   │  PageExtension 60329 "CXW Workshop Purch Order Subf" locks the
+   │  standard line fields (Editable = false) once "Sent to Workshop" = true
+   ▼
+External workshop reads/writes via
+Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
+   endpoint pattern .../api/saliniLife/workshop/v1.0/companies({companyId})/
+   workshopLines; Insert/Delete blocked, status regressions blocked)
+   │  workshop sets: Genuine, Attribute 1-10, Status = "WS checked"
+   ▼
+Codeunit 60331 "CXW Process Workshop Lines" (job-queue driven, OnRun
+   → ProcessCheckedLines, SetRange Status = "WS checked")
+   │  per line: ProcessLineWithErrorHandling wraps TryProcessLine
+   │  ([TryFunction]) – a failure doesn't block the remaining lines
+   │
+   ├─► Genuine = true → ProcessGenuineLine:
+   │      "Qty. to Receive" = order quantity, Codeunit "Purch.-Post"
+   │      (Receive = true, Invoice = false), then GetAttributeMapping
+   │      transfers attributes 1-8 (business-named: Dial Color, Case
+   │      Diameter, Bracelet Material, Case Material, Movement, Gender,
+   │      Crystal, Features; 9-10 still placeholders) as standard item
+   │      attributes (Item Attribute/Item Attribute Value/Item Attribute
+   │      Value Mapping, missing entries created automatically as type
+   │      Text) → Status = "Processed", "CXW Last Error" := ''
+   │
+   ├─► Genuine = false → ProcessNonGenuineLine:
+   │      Status = "Processed" (deliberately set BEFORE deleting the PO,
+   │      so the cascade-delete guard in TabExt60321 applies), then the
+   │      purchase order is reopened if needed and deleted
+   │
+   └─► Failure (anywhere in the processing path) → Status = Error (only
+          allowed from "WS checked", otherwise an OnModify error),
+          "CXW Last Error" = GetLastErrorText(); Commit() after each line
+          preserves already-successful lines regardless of the next
+          line's outcome
+
+View (read-only): Page 60338 "CXW Workshop Lines" (list, all fields incl.
+   status, attributes, last error)
+
+Delete behavior (TableExtension 60321, OnDelete of the Purchase Line):
+   Workshop Line with status New/WS checked → deleted along with the line
+   Workshop Line with status Processed → remains as an audit record
+```
+
+#### Page 60339 "CXW Workshop Line API" – bidirectional access for the workshop
+
+Unlike Page 60337 (SellWatch, pure insert/update intake), this API allows the same external party to both read (open lines) and write (check result).
+
+- **Endpoint pattern:** `.../api/saliniLife/workshop/v1.0/companies({companyId})/workshopLines`.
+- **Methods:** `GET` to fetch, `PATCH` to write back; `POST`/`DELETE` are blocked (`InsertAllowed = false`, `DeleteAllowed = false`) — lines are only ever created from within BC via "Send to Workshop".
+- **Writable fields:** `attribute1`–`attribute10`, `genuine`, `status`. Key, item, and serial number fields are locked (`OnModifyRecord` rejects change attempts with an error).
+- **Status regressions blocked:** enforced in the table's own `OnModify` trigger (fires regardless of whether the change comes via the API or internally) — `WS checked` → `New` and any move away from `Processed` are rejected; a direct move to `Error` is only allowed from `WS checked`.
+- **Authorization:** Permission Set 60302 "CXW Workshop API" — only `tabledata "CXW Workshop Line" = RM`, no access to Purchase Line, Item, or any other table.
+
 ## Object Interfaces (Public Procedures & Events)
 
 Full list of all procedures, triggers, and events: see `docs/funktionsregister/funktionsregister-sl-chronext-webshop.md`. Key public interfaces:
@@ -225,6 +304,9 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 | Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON for a purchase-order acknowledgment (SRid, purchase_order, optional tracking_number). Currently not called from anywhere else in the code. |
 | Codeunit 60305 | `CreateSourceFileOrderStatusSE(SellWatchInfo: Record "CXW SellWatch Vendor Info"; Status: Enum "CXW SW Order Status"): Text` | Builds the JSON for a status update to SellWatch (name, e-mail, watch data, link to the online approval, payout currency/amount from the archived purchase line). Currently not called from anywhere else in the code. |
 | Table 60301 | `CreateEntryInexternalFile(var WOA: Record "CXW Watch Online Approval")` | Sends an HTTP GET to the SellWatch endpoint to check whether a watch should be online, updates the row accordingly, and logs the call in Table 60302 ("CXW Source Table No." = 60301). Currently not called from anywhere else in the code. |
+| Codeunit 60331 | `OnRun` / `ProcessCheckedLines` (local) | Job queue entry point; processes every Table 60318 row with status "WS checked" individually via `ProcessLineWithErrorHandling`. |
+| Codeunit 60331 | `ProcessLineWithErrorHandling` / `TryProcessLine` (both local) | Wraps processing of a single line as a `[TryFunction]`; on failure, sets status to `Error` and writes `GetLastErrorText()` into "CXW Last Error", without blocking processing of the remaining lines (`Commit()` after each line). |
+| Codeunit 60331 | `GetAttributeMapping(AttributeIndex: Integer): Text[250]` (local) | Central, swappable mapping from attribute index to standard item attribute name; index 1–8 returns the business names (Dial Color, Case Diameter, …), index 9–10 still returns placeholders "Attribut 9"/"Attribut 10". |
 
 Full list of all objects and their function counts: see `docs/funktionsregister/gesamtuebersicht.md`.
 
@@ -242,6 +324,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 60315 CXW Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 60316 CXW Price Import Protocol | Entry No. | Error log for the automated import (still the sales price import protocol table; "Sales" dropped from the identifier due to AL's 30-character limit) |
 | 60317 CXW API Interface Setup | Code | Endpoint URL, auth type, and (isolated-storage) API key per external interface; when "CXW Auth Type" = AWSSigV4, also AWS Access Key ID/Region/Service (plain fields) and AWS Secret Access Key/Session Token (isolated storage) |
+| 60318 CXW Workshop Line | Document Type, Document No., Line No. | One record per purchase line handed over to the workshop: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), Genuine, eight business-named attribute fields (Dial Color … Features) + two placeholders (Attribut 9/10), Created At, Checked At, Last Error |
 
 ## Permission Set
 
@@ -249,9 +332,11 @@ The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWS
 
 For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the two SellWatch-only tables (60300–60301) plus the shared Table 60302 "CXW Http Call Log", along with execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309, where Page 60309 "CXW Http Call Log" is likewise shared). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
 
+For the Workshop authenticity check, there are two separate permission sets: **`CXW Workshop All`** (ID 60301, `src/PermissionSets/CXWWorkshopAll.permissionset.al`) for full internal access to Table 60318, all Workshop pages, and Codeunit 60331 — including the standard tables needed for goods receipt, cancellation, and item attributes (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping), so the job queue codeunit can run standalone — and **`CXW Workshop API`** (ID 60302, `src/PermissionSets/CXWWorkshopAPI.permissionset.al`) as a lean counterpart exclusively for the external workshop user: only `tabledata "CXW Workshop Line" = RM`, no insert/delete, no access to Purchase Line or Item. Both sets still need to be actively assigned (`CXW Workshop All` to internal staff / the job queue execution user, `CXW Workshop API` exclusively to the workshop's dedicated OAuth2-S2S user).
+
 ## Running Tests
 
-There are currently **no** AL test codeunits in this project. The specification `openspec/specs/sales-price-currency-copy/spec.md` (10 scenarios for the "Add all Currencies" action) is a good basis for future tests — note that this spec predates the switch from country-based to currency-based activation and should be reviewed against the current behavior before writing tests from it. For SellWatch, `openspec/specs/sellwatch-http-call-logging/spec.md` (scenarios for success/failure logging, API key redaction, and telemetry from `CreateEntryInexternalFile`) and `openspec/specs/sellwatch-standard-table-extensions/spec.md` (scenarios for "CXW Used good" and "CXW Tracking Number") offer a comparable starting point.
+There are currently **no** AL test codeunits in this project. The specification `openspec/specs/sales-price-currency-copy/spec.md` (10 scenarios for the "Add all Currencies" action) is a good basis for future tests — note that this spec predates the switch from country-based to currency-based activation and should be reviewed against the current behavior before writing tests from it. For SellWatch, `openspec/specs/sellwatch-http-call-logging/spec.md` (scenarios for success/failure logging, API key redaction, and telemetry from `CreateEntryInexternalFile`) and `openspec/specs/sellwatch-standard-table-extensions/spec.md` (scenarios for "CXW Used good" and "CXW Tracking Number") offer a comparable starting point. For the Workshop authenticity check, scenarios are still spread across several, partly unarchived OpenSpec changes (`openspec/changes/purchase-workshop-integration/specs/` plus the deltas built on top of it in `openspec/changes/archive/2026-08-13-workshop-line-error-handling/` and `openspec/changes/archive/2026-08-13-workshop-attribute-*`) — before writing tests, these should be consolidated into a canonical spec under `openspec/specs/workshop-line-processing/` (see Known Limitations).
 
 ## Deployment
 
@@ -274,5 +359,8 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 - **The actual trigger for Codeunit 60305 "CXW SellWatch Mgt".OnRun is not part of the AL source code.** The project has no install/upgrade codeunit, no event subscriber, and no API page that calls `OnRun` or inserts rows into Table 60300. In practice, execution must happen via a job queue entry created at runtime, a manual invocation, or an integration outside this codebase — that doesn't contradict the automated processing described in the User Manual, but it isn't traceable in the code itself.
 - **`CreateSourceFilePurchaseRequest`, `CreateSourceFileOrderStatusSE` (Codeunit 60305), and `CreateEntryInexternalFile` (Table 60301, for the actual online check) are currently not called from anywhere else in the project.** The two JSON builders in particular look like prepared but not-yet-wired status updates back to SellWatch.
 - **`CreatePurchaseOrderinBV` and `CreatePurchaseOrderinGmBH` (Codeunit 60305, both local)** are likewise never called — leftovers of the GMBH/BV branching that, per a code comment, was already disabled in the source system. `ReadJSONFile` (Table 60301, local) is an empty stub with no function.
-- **Item/variant codes for SellWatch purchase lines are hard-coded** (`C2C-SW`, `CPST-SW`, `TI-SW`, depending on "CXW Offer Type"). If the corresponding item/variant doesn't exist in the item master, `PLRec.Validate("No.", ...)` in `CreatePurchaseOrder` fails; there is no configuration page for this mapping.
+- **(Fixed, then reverted) SellWatch item creation now uses an item template instead of hard-coded variant codes, but the template selection still isn't configurable.** Item/variant codes for SellWatch purchase lines used to be hard-coded (`C2C-SW`, `CPST-SW`, `TI-SW`); that was replaced with dynamic item creation via an item template (`CreateSellWatchItem`, Codeunit 60305, `Item.TransferFields(ItemTemplate, true)`). Which item template is used, however, is still **not** configurable: the code simply takes the first item template found via `ItemTemplate.FindFirst()` with no filter — with more than one template defined, the result is unpredictable. A change (`sellwatch-item-template-setup`) that added a setup field for this on Purchases & Payables Setup was designed and implemented, but the uncommitted code changes were lost before being committed (only the OpenSpec planning docs survive, under `openspec/changes/archive/2026-08-13-sellwatch-item-template-setup/`) — re-implement if needed. The corresponding `// TODO: Item Template einrichtenbar, Wo?` in the code is still open.
 - **The online check (`CreateEntryInexternalFile`) uses a hard-coded interface code `'WOA'`** on Table 60317 "CXW API Interface Setup" — the same table sales price management uses for its price export (there, via the configurable "CXW API Interface Code" field). For SellWatch, the code is not configurable; it must be exactly `'WOA'`.
+- **The Workshop authenticity check only covers the standard case "one purchase order = one purchase line".** Mixed orders (multiple lines, some genuine, some not) are not implemented — on non-authenticity, `ProcessNonGenuineLine` (Codeunit 60331) currently cancels the *entire* purchase order even if only one of several lines were affected (marked `// TODO:` in the code).
+- **Two of the ten Workshop attribute fields (Attribut 9/10) still have no business name assigned** (placeholder captions), unlike attributes 1–8, which are already named (Dial Color … Features).
+- **The base spec for the Workshop authenticity check isn't cleanly archived.** The original `purchase-workshop-integration` change (Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Pages 60338–60340, Codeunit 60331, PermissionSets 60301/60302) sits misplaced under `openspec/changes/archive/2026-08-13-workshop-line-error-handling/purchase-workshop-integration/` instead of a proper, dated archive location, and is invisible to `openspec list`/`openspec status` (as of writing: 30/34 tasks). Several later changes (`workshop-line-error-handling`, `workshop-attribute-names`, `workshop-attribute-field-names`) ship delta specs against the `workshop-line-processing`/`workshop-line-api` capabilities that were consequently never consolidated into a canonical spec under `openspec/specs/`. This should be cleaned up before further changes to Workshop processing.

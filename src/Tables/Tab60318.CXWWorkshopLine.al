@@ -44,42 +44,42 @@ table 60318 "CXW Workshop Line"
             DataClassification = ToBeClassified;
         }
         // TODO: Attributnamen für Attribut 9/10 final klären - Platzhalter-Captions "Attribut 9"-"Attribut 10"
-        field(11; "CXW Attribute 1"; Text[250])
+        field(11; "CXW Dial Color"; Text[250])
         {
             Caption = 'Dial Color';
             DataClassification = ToBeClassified;
         }
-        field(12; "CXW Attribute 2"; Text[250])
+        field(12; "CXW Case Diameter"; Text[250])
         {
             Caption = 'Case Diameter';
             DataClassification = ToBeClassified;
         }
-        field(13; "CXW Attribute 3"; Text[250])
+        field(13; "CXW Bracelet Material"; Text[250])
         {
             Caption = 'Bracelet Material';
             DataClassification = ToBeClassified;
         }
-        field(14; "CXW Attribute 4"; Text[250])
+        field(14; "CXW Case Material"; Text[250])
         {
             Caption = 'Case Material';
             DataClassification = ToBeClassified;
         }
-        field(15; "CXW Attribute 5"; Text[250])
+        field(15; "CXW Movement"; Text[250])
         {
             Caption = 'Movement';
             DataClassification = ToBeClassified;
         }
-        field(16; "CXW Attribute 6"; Text[250])
+        field(16; "CXW Gender"; Text[250])
         {
             Caption = 'Gender';
             DataClassification = ToBeClassified;
         }
-        field(17; "CXW Attribute 7"; Text[250])
+        field(17; "CXW Crystal"; Text[250])
         {
             Caption = 'Crystal';
             DataClassification = ToBeClassified;
         }
-        field(18; "CXW Attribute 8"; Text[250])
+        field(18; "CXW Features"; Text[250])
         {
             Caption = 'Features';
             DataClassification = ToBeClassified;

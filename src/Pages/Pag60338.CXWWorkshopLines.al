@@ -51,42 +51,42 @@ page 60338 "CXW Workshop Lines"
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether the workshop confirmed the item as genuine.';
                 }
-                field("CXW Attribute 1"; Rec."CXW Attribute 1")
+                field("CXW Dial Color"; Rec."CXW Dial Color")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 1 as reported by the workshop.';
                 }
-                field("CXW Attribute 2"; Rec."CXW Attribute 2")
+                field("CXW Case Diameter"; Rec."CXW Case Diameter")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 2 as reported by the workshop.';
                 }
-                field("CXW Attribute 3"; Rec."CXW Attribute 3")
+                field("CXW Bracelet Material"; Rec."CXW Bracelet Material")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 3 as reported by the workshop.';
                 }
-                field("CXW Attribute 4"; Rec."CXW Attribute 4")
+                field("CXW Case Material"; Rec."CXW Case Material")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 4 as reported by the workshop.';
                 }
-                field("CXW Attribute 5"; Rec."CXW Attribute 5")
+                field("CXW Movement"; Rec."CXW Movement")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 5 as reported by the workshop.';
                 }
-                field("CXW Attribute 6"; Rec."CXW Attribute 6")
+                field("CXW Gender"; Rec."CXW Gender")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 6 as reported by the workshop.';
                 }
-                field("CXW Attribute 7"; Rec."CXW Attribute 7")
+                field("CXW Crystal"; Rec."CXW Crystal")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 7 as reported by the workshop.';
                 }
-                field("CXW Attribute 8"; Rec."CXW Attribute 8")
+                field("CXW Features"; Rec."CXW Features")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies attribute 8 as reported by the workshop.';

@@ -2,10 +2,11 @@
 
 ## Introduction
 
-This extension for Microsoft Dynamics 365 Business Central covers two independent workflows:
+This extension for Microsoft Dynamics 365 Business Central covers three independent workflows:
 
 1. **Sales price management** (this chapter): You import a price list (CSV file), the system automatically checks the minimum margin and unusual price swings, and a staff member then approves the prices before they are transmitted to the webshop.
 2. **SellWatch purchase requests** (see the [dedicated chapter](#viewing-sellwatch-purchase-requests) below): A read-only overview of used-watch purchase requests coming in from the SellWatch partner.
+3. **Workshop authenticity check** (see the [dedicated chapter](#sending-watches-to-the-workshop-for-authenticity-check) below): Purchased watches that have arrived are checked for authenticity by an external workshop before being put into stock. You record the manufacturer serial number per purchase line; the check itself runs automatically.
 
 ## Prerequisites
 
@@ -76,6 +77,34 @@ Use the **"Show Document"** action to open the purchase order created for a requ
 
 > New purchase requests, and the creation of the vendor and purchase order, happen automatically in the background; this page is view-only. If a request shows no order number, the order hasn't been created for it automatically yet.
 
+## Sending watches to the workshop for authenticity check
+
+For purchased watches that need to be checked for authenticity by an external workshop before being put into stock, you record on the purchase order which lines have arrived.
+
+### Running the "Send to Workshop" action
+
+Open the relevant **purchase order** and click **"Send to Workshop"**. The system asks you, one line at a time, for every line not yet transmitted (type Item, quantity not 0):
+
+1. **"Is item {item no.} {description} really arrived?"** – Confirm with "Yes" if the item has physically arrived. On "No" the line is marked "Not Arrived" and skipped; you can run the action again later once the item has arrived.
+2. On "Yes", an input dialog opens for the **manufacturer serial number**. This entry is mandatory — without a valid serial number the line is skipped and listed in a summary message at the end of the action, while the remaining lines are still processed normally.
+
+Once entered successfully, the line is marked "Sent to Workshop" and its fields on the purchase line become **read-only** (item, quantity, price, etc.) — this prevents a line already handed over to the workshop from being changed afterwards while the check is still in progress.
+
+> A line that has already been sent cannot be transmitted a second time through this action.
+
+### What happens automatically afterwards
+
+The actual check by the workshop, and the follow-up processing based on the check result, run fully automatically in the background — no further action is needed on your part:
+
+- If the workshop confirms authenticity, the system automatically posts **only the goods receipt** for the purchase line (no invoice), and the item attributes reported by the workshop (e.g. dial color, case diameter, bracelet material) are written to the item as item attributes.
+- If the workshop disproves authenticity, the associated purchase order is automatically cancelled.
+
+## Viewing Workshop lines
+
+The **"CXW Workshop Lines"** page shows every line handed over to the workshop, its current check status (New / WS checked / Processed / Error), the item attributes reported by the workshop, and — if automatic processing failed — the most recent error message. This page is read-only.
+
+> If a line shows status "Error", a problem occurred during the last automatic processing attempt (e.g. a closed posting period). Contact a key user or the development team in this case (see the Key User Manual).
+
 ## Frequently Asked Questions (FAQ)
 
 **"Nothing to process" when clicking Validate/Approve/Add all Currencies**
@@ -95,3 +124,9 @@ The price export has not been set up or is disabled. Contact a key user (see the
 
 **A SellWatch request shows no order number.**
 The order hasn't been created for this request automatically yet.
+
+**"Send to Workshop" asks for the manufacturer serial number even though I wanted to cancel.**
+The dialog is mandatory for items marked as arrived. Choose "No" in the preceding confirmation dialog if the item hasn't actually arrived yet — the line is then skipped without cancelling the rest of the action.
+
+**A Workshop line stays on status "Error" permanently.**
+Automatic processing failed for this line. This isn't something you can fix yourself as an end user — contact a key user (see the Key User Manual).

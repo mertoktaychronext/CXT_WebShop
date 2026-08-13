@@ -2,10 +2,11 @@
 
 ## Einleitung
 
-Diese Erweiterung für Microsoft Dynamics 365 Business Central deckt zwei unabhängige Abläufe ab:
+Diese Erweiterung für Microsoft Dynamics 365 Business Central deckt drei unabhängige Abläufe ab:
 
 1. **Verkaufspreisverwaltung** (dieses Kapitel): Sie importieren eine Preisliste (CSV-Datei), das System prüft automatisch Mindestmarge und ungewöhnliche Preisschwankungen, und ein Sachbearbeiter gibt die Preise anschließend frei, bevor sie an den Webshop übertragen werden.
 2. **SellWatch-Ankaufsanfragen** (siehe [entsprechendes Kapitel](#sellwatch-ankaufsanfragen-einsehen) unten): Eine schreibgeschützte Übersicht über Ankaufsanfragen für gebrauchte Uhren, die über den Partner SellWatch eingehen.
+3. **Workshop-Ankaufsprüfung** (siehe [entsprechendes Kapitel](#uhren-zur-echtheitsprüfung-an-die-werkstatt-senden) unten): Angekommene, angekaufte Uhren werden vor der Einlagerung von einer externen Werkstatt auf Echtheit geprüft. Sie erfassen dafür pro Bestellzeile die Herstellerseriennummer; die Prüfung selbst läuft automatisiert.
 
 ## Voraussetzungen
 
@@ -76,6 +77,34 @@ Die Seite **"SellWatch-Overview"** zeigt alle über den Partner SellWatch eingeg
 
 > Neue Ankaufsanfragen sowie die Anlage von Lieferant und Bestellung erfolgen automatisiert im Hintergrund; diese Seite dient ausschließlich der Ansicht. Fehlt zu einer Anfrage die Bestellnummer, wurde die Bestellung für diese Anfrage noch nicht automatisiert angelegt.
 
+## Uhren zur Echtheitsprüfung an die Werkstatt senden
+
+Für angekaufte Uhren, die vor der Einlagerung von einer externen Werkstatt auf Echtheit geprüft werden müssen, erfassen Sie auf der Einkaufsbestellung, welche Zeilen angekommen sind.
+
+### Die Aktion "Send to Workshop" ausführen
+
+Öffnen Sie die betreffende **Einkaufsbestellung** und klicken Sie auf **"Send to Workshop"**. Das System fragt Sie für jede noch nicht übertragene Zeile (Typ Artikel, Menge ungleich 0) einzeln:
+
+1. **"Ist Artikel {Artikelnummer} {Beschreibung} wirklich angekommen?"** – Bestätigen Sie mit "Ja", wenn der Artikel physisch eingetroffen ist. Bei "Nein" wird die Zeile als "Nicht angekommen" markiert und übersprungen; Sie können die Aktion später erneut ausführen, sobald der Artikel angekommen ist.
+2. Bei "Ja" öffnet sich ein Eingabedialog für die **Herstellerseriennummer**. Diese Eingabe ist Pflicht – ohne gültige Seriennummer wird die Zeile übersprungen und am Ende der Aktion in einer Sammelmeldung aufgeführt, während die übrigen Zeilen normal weiterverarbeitet werden.
+
+Nach erfolgreicher Eingabe wird die Zeile als "An Werkstatt gesendet" markiert und ist auf der Bestellzeile **nicht mehr editierbar** (Artikel, Menge, Preis etc.) – so wird verhindert, dass eine bereits an die Werkstatt übergebene Zeile nachträglich verändert wird, während die Prüfung noch läuft.
+
+> Eine bereits gesendete Zeile lässt sich über diese Aktion kein zweites Mal übertragen.
+
+### Was danach automatisch passiert
+
+Die eigentliche Prüfung durch die Werkstatt sowie die Weiterverarbeitung nach dem Prüfergebnis laufen vollautomatisiert im Hintergrund – dafür ist keine weitere Aktion Ihrerseits nötig:
+
+- Bestätigt die Werkstatt die Echtheit, wird für die Bestellzeile automatisch **nur der Wareneingang** gebucht (keine Rechnung), und die von der Werkstatt gemeldeten Artikelmerkmale (z. B. Zifferblattfarbe, Gehäusedurchmesser, Armbandmaterial) werden als Artikelattribute auf den Artikel übernommen.
+- Widerlegt die Werkstatt die Echtheit, wird die zugehörige Einkaufsbestellung automatisch storniert.
+
+## Workshop-Zeilen einsehen
+
+Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Diese Seite ist schreibgeschützt.
+
+> Steht eine Zeile auf Status "Fehler", ist bei der letzten automatischen Verarbeitung ein Problem aufgetreten (z. B. eine gesperrte Buchungsperiode). Wenden Sie sich in diesem Fall an einen Key User bzw. das Entwicklungsteam (siehe Key-User-Handbuch).
+
 ## Häufige Fragen (FAQ)
 
 **"Nothing to process" beim Klick auf Validate/Approve/Add all Currencies**
@@ -95,3 +124,9 @@ Der Preisexport ist nicht eingerichtet oder deaktiviert. Wenden Sie sich an eine
 
 **Eine SellWatch-Anfrage zeigt keine Bestellnummer.**
 Die Bestellung wurde für diese Anfrage noch nicht automatisiert angelegt.
+
+**"Send to Workshop" fragt nach der Herstellerseriennummer, obwohl ich abbrechen wollte.**
+Der Dialog ist für angekommene Artikel verpflichtend. Wählen Sie im vorherigen Bestätigungsdialog "Nein", wenn der Artikel tatsächlich noch nicht angekommen ist – die Zeile wird dann übersprungen, ohne die restliche Aktion abzubrechen.
+
+**Eine Workshop-Zeile bleibt dauerhaft auf Status "Fehler" stehen.**
+Die automatische Verarbeitung ist bei dieser Zeile fehlgeschlagen. Das ist keine Aktion, die Sie als Endnutzer selbst beheben können – wenden Sie sich an einen Key User (siehe Key-User-Handbuch).

@@ -8,6 +8,10 @@ Diese Business-Central-Erweiterung (AL) bildet die Verwaltung von Webshop-Verkau
 
 Als zweiter, fachlich unabhängiger Baustein enthält die Erweiterung **SellWatch**: Ankaufsanfragen für gebrauchte Uhren, die vom Partner SellWatch eingehen, werden automatisiert zu Lieferant und Einkaufsbestellung verarbeitet (Codeunit 60305 "CXW SellWatch Mgt"); eine schreibgeschützte Übersichtsseite (Page 60307 "CXW SellWatch-Overview") zeigt Verkäufer-, Uhren- und Bestelldaten. Ein separater Mechanismus prüft per HTTP, ob eine Uhr im SellWatch-Onlineshop sichtbar ist (Table 60301 "CXW Watch Online Approval"), und protokolliert jeden Aufruf inklusive Fehlertelemetrie (Table 60302 "CXW Http Call Log", Page 60309). SellWatch und die Verkaufspreisverwaltung sind fachlich getrennt, teilen sich aber dieselbe Schnittstellen-Stammdatentabelle "CXW API Interface Setup" (Table 60317) sowie seit dem HTTP-Logging-Update das gemeinsame Protokoll `"CXW Http Call Log"`: der Online-Check verwendet dort den fest verdrahteten Code `'WOA'`.
 
+Als dritter, ebenfalls fachlich unabhängiger Baustein enthält die Erweiterung die **Workshop-Ankaufsprüfung** (Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Pages 60338–60340, Codeunit 60331, PermissionSets 60301/60302): Angekaufte Uhren werden nach Ankunft über die Aktion "Send to Workshop" auf der Purchase-Order-Page an eine externe Werkstatt übergeben (inkl. Erfassung der Herstellerseriennummer), die per bidirektionaler Custom-API (Page 60339, OAuth2-S2S-authentifiziert) Echtheit und Artikelmerkmale zurückmeldet. Eine job-queue-gesteuerte Codeunit (60331) verarbeitet geprüfte Zeilen: bei bestätigter Echtheit wird nur der Wareneingang gebucht und die gemeldeten Attribute werden als Standard-Artikelattribute übernommen; bei widerlegter Echtheit wird die Bestellung storniert. Details siehe Abschnitt "Workshop-Ankaufsprüfung" unten.
+
+> **Update 2026-08-13 (Workshop-Ankaufsprüfung nachdokumentiert):** Die Workshop-Ankaufsprüfung existierte bereits seit einer früheren Erweiterung, war aber in keinem der drei Handbücher dokumentiert. Dieses Update ergänzt sie in allen drei Handbüchern (DE/EN) sowie im `docs/README.md`; zusätzlich wurde die veraltete Aussage zu fest hinterlegten SellWatch-Variantencodes korrigiert (siehe Bekannte Einschränkungen) – keine Code-Änderungen.
+
 > **Update 2026-08-10 (HTTP-Call-Logging vereinheitlicht):** Table 60302/Page 60309 hießen zuvor `"CXW SW Http Call Log"` und waren fest mit `"CXW Watch Online Approval"` verdrahtet. Umbenannt in `"CXW Http Call Log"` (Caption `'Http Call Log'`) und um ein neues Feld `"CXW Source Table No."` (gleiches Muster wie `"CXW API Interface Setup"."CXW Source Table No."`) ergänzt, sodass `"CXW Source Entry No"` je nach `"CXW Source Table No."` wahlweise auf `"CXW Watch Online Approval"` (60301) oder `"CXW Sales Price Outbound File"` (60314) verweist. `Codeunit "CXW Export Gateway Sales Price"`'s `SendToApiInterface` protokolliert seither jeden Aufruf (Erfolg, Non-Success-HTTP-Status, Netzwerkfehler) im selben Protokoll wie SellWatch, inklusive Redigierung des `Authorization`-Headers (analog zur bestehenden `X-API-KEY`-Redigierung bei SellWatch). Beide Permission Sets (`CXWChronWSAll`, `CXW SWChronWSAll`) wurden entsprechend angepasst.
 
 > **Update 2026-08-10:** Ebenfalls am 2026-08-10 wurden die 11 SellWatch-Objekte (bisher IDs 51001–51010, uneinheitliche Präfixe „SW"/„SellWatch"/kein Präfix) als reines Rename/Renumber in den registrierten idRange-Block 60300–60310 verschoben und einheitlich mit „CXW " präfixiert, ebenso die rund 70 von ihnen definierten Felder. Feld-Captions, Enum-Werte und Geschäftslogik sind unverändert (siehe `openspec/changes/archive/2026-08-10-sellwatch-cxw-renumbering/`). IDs 60311–60349 waren zu diesem Zeitpunkt bereits für die Verkaufspreisverwaltung reserviert bzw. belegt; SellWatch nutzt seither 60300–60310, der Rest von 60300–60349 bleibt für künftige Objekte frei.
@@ -18,7 +22,7 @@ Als zweiter, fachlich unabhängiger Baustein enthält die Erweiterung **SellWatc
 |---|---|---|
 | Erweiterungstyp | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 26.0.0.0 |
 | Runtime | AL Runtime | 17.0 |
-| Objekt-ID-Bereich | Kundenbereich | 60300–60349 (genutzt: 60300–60310 SellWatch, 60311–60336 Verkaufspreisverwaltung); 51000–51049 bleibt registriert, wird aber seit dem Rename vom 2026-08-10 von keinem Objekt dieser Erweiterung mehr belegt |
+| Objekt-ID-Bereich | Kundenbereich | 60300–60349 (genutzt: 60300–60310 SellWatch, 60311–60336 Verkaufspreisverwaltung, 60318–60340 Workshop-Ankaufsprüfung – Objekttypen überschneiden sich, da jeder Objekttyp einen eigenen ID-Namensraum hat); 51000–51049 bleibt registriert, wird aber seit dem Rename vom 2026-08-10 von keinem Objekt dieser Erweiterung mehr belegt |
 | Abhängigkeiten | – | keine (`dependencies: []` in `app.json`) |
 | Publisher | Salini Life | – |
 | Extension-ID | `5df32934-5708-418c-ba16-44b30feb51f4` | – |
@@ -28,13 +32,13 @@ Als zweiter, fachlich unabhängiger Baustein enthält die Erweiterung **SellWatc
 ```
 app.json                          # Extension-Manifest, idRanges 51000-51049 + 60300-60349
 src/
-  Tables/                         # 10 Tabellen (60300-60302 SellWatch; 60311-60313, 60314-60317 Verkaufspreisverwaltung)
-  TableExtensions/                # 5 Erweiterungen (Purchase Line, Purchase Header – SellWatch; Country/Region, Sales Price, Currency – Verkaufspreisverwaltung)
-  PageExtensions/                 # 3 Erweiterungen (Countries/Regions, Sales Prices, Currencies) – nur Verkaufspreisverwaltung
-  Pages/                          # 8 Seiten + 1 Xmlport (60307-60309 SellWatch; 60321-60325 + Xmlport 60328 Verkaufspreisverwaltung)
-  Codeunits/                      # 3 Codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – Verkaufspreisverwaltung)
-  Enums/                          # 7 Enums (SW Order Status – SellWatch; 6 weitere – Verkaufspreisverwaltung)
-  PermissionSets/                 # 2 Permission Sets (CXW SWChronWSAll – SellWatch; CXWChronWSAll – Verkaufspreisverwaltung)
+  Tables/                         # 11 Tabellen (60300-60302 SellWatch; 60311-60317 Verkaufspreisverwaltung; 60318 Workshop)
+  TableExtensions/                # 5 Erweiterungen (Purchase Line, Purchase Header – SellWatch; Sales Price, Currency – Verkaufspreisverwaltung; Purchase Line – Workshop)
+  PageExtensions/                 # 4 Erweiterungen (Sales Prices, Currencies – Verkaufspreisverwaltung; Purchase Order, Purchase Order Subform – Workshop)
+  Pages/                          # 12 Seiten + 1 Xmlport (60307-60309 + 60337 SellWatch; 60321-60325 + Xmlport 60328 Verkaufspreisverwaltung; 60338-60340 Workshop)
+  Codeunits/                      # 4 Codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – Verkaufspreisverwaltung; Process Workshop Lines – Workshop)
+  Enums/                          # 8 Enums (SW Order Status – SellWatch; 6 weitere – Verkaufspreisverwaltung; Workshop Line Status – Workshop)
+  PermissionSets/                 # 5 Permission Sets (CXW SWChronWSAll, CXW Sell Watch API – SellWatch; CXWChronWSAll – Verkaufspreisverwaltung; CXW Workshop All, CXW Workshop API – Workshop)
 Translations/                     # .g.xlf (generiert) + de-DE.xlf (gepflegt)
 openspec/
   specs/                          # dauerhafte Capability-Spezifikationen (z.B. sales-price-currency-copy, sellwatch-http-call-logging, sellwatch-standard-table-extensions)
@@ -209,6 +213,80 @@ Ergänzt die reine Anzeige-Seite 60307 um einen `PageType = API`-Endpunkt, über
 - **Validierung:** `OnInsertRecord`/`OnModifyRecord` verlangen `CXW SRid`, `CXW Brand`, `CXW Model` und `CXW Final Offer Price` und lehnen ein doppeltes `CXW SRid` mit einem Fehler (HTTP 4xx) ab, statt den Datensatz unvollständig oder doppelt anzulegen.
 - Neu angelegte/aktualisierte Zeilen erscheinen unverändert auf Page 60307 und werden von Codeunit 60305 wie manuell erfasste Zeilen weiterverarbeitet.
 
+### Workshop-Ankaufsprüfung
+
+```
+Purchase Order (Sachbearbeiter)
+   │  Aktion "Send to Workshop" (PageExtension 60328 "CXW Workshop
+   │  Purchase Order", auf Page "Purchase Order")
+   ▼
+Je offener Zeile (Type = Item, Quantity <> 0, Sent to Workshop = false):
+   ├─► Confirm "Ist Artikel {No.} {Description} wirklich angekommen?"
+   │     Nein → "CXW Not Arrived" := true, Zeile übersprungen (kein Abbruch)
+   │     Ja   → Page 60340 "CXW Serial No. Input" (StandardDialog, modal)
+   │              Pflichtfeld Herstellerseriennummer; leer/Abbruch → Fehler
+   │              für diese Zeile gesammelt, weiter mit nächster Zeile
+   ▼
+Bei gültiger Eingabe:
+   "CXW Manufacturer Serial No." + "CXW Sent to Workshop" := true auf
+   Purchase Line (TableExtension 60321 "CXW Workshop Purchase Line")
+   ▼
+Table 60318 "CXW Workshop Line" neu angelegt (PK: Document Type/No./
+Line No.), Status = New, Item No. aus der Purchase Line übernommen
+   │
+   │  PageExtension 60329 "CXW Workshop Purch Order Subf" sperrt ab
+   │  "Sent to Workshop" = true die Standardfelder der Zeile (Editable = false)
+   ▼
+Externe Werkstatt liest/schreibt über
+Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
+   Endpunkt-Muster .../api/saliniLife/workshop/v1.0/companies({companyId})/
+   workshopLines; Insert/Delete gesperrt, Statusrückschritte gesperrt)
+   │  Werkstatt setzt: Genuine, Attribute 1-10, Status = "WS checked"
+   ▼
+Codeunit 60331 "CXW Process Workshop Lines" (job-queue-gesteuert, OnRun
+   → ProcessCheckedLines, SetRange Status = "WS checked")
+   │  pro Zeile: ProcessLineWithErrorHandling kapselt TryProcessLine
+   │  ([TryFunction]) – ein Fehlschlag blockiert nicht die übrigen Zeilen
+   │
+   ├─► Genuine = true → ProcessGenuineLine:
+   │      "Qty. to Receive" = Bestellmenge, Codeunit "Purch.-Post"
+   │      (Receive = true, Invoice = false), danach GetAttributeMapping
+   │      überträgt Attribute 1-8 (fachlich benannt: Dial Color, Case
+   │      Diameter, Bracelet Material, Case Material, Movement, Gender,
+   │      Crystal, Features; 9-10 weiterhin Platzhalter) als Standard-
+   │      Artikelattribute (Item Attribute/Item Attribute Value/Item
+   │      Attribute Value Mapping, fehlende Einträge automatisch als
+   │      Typ Text angelegt) → Status = "Processed", "CXW Last Error" := ''
+   │
+   ├─► Genuine = false → ProcessNonGenuineLine:
+   │      Status = "Processed" (bewusst VOR dem PO-Löschen gesetzt, damit
+   │      der Cascade-Delete-Schutz in TabExt60321 greift), danach
+   │      Purchase Order ggf. reopened und gelöscht
+   │
+   └─► Fehlschlag (beliebige Stelle im Verarbeitungspfad) → Status = Error
+          (nur aus "WS checked" heraus erlaubt, sonst OnModify-Fehler),
+          "CXW Last Error" = GetLastErrorText(); Commit() nach jeder Zeile
+          sichert bereits erfolgreiche Zeilen unabhängig vom Ausgang der
+          nächsten
+
+Ansicht (read-only): Page 60338 "CXW Workshop Lines" (Liste, alle Felder
+   inkl. Status, Attribute, Last Error)
+
+Löschverhalten (TableExtension 60321, OnDelete der Purchase Line):
+   Workshop Line im Status New/WS checked → wird mitgelöscht
+   Workshop Line im Status Processed → bleibt als Prüfnachweis bestehen
+```
+
+#### Page 60339 "CXW Workshop Line API" – bidirektionaler Zugang für die Werkstatt
+
+Im Unterschied zu Page 60337 (SellWatch, reiner Insert/Update-Empfang) erlaubt diese API sowohl Lesen (offene Zeilen) als auch Schreiben (Prüfergebnis) durch dieselbe externe Partei.
+
+- **Endpunkt-Muster:** `.../api/saliniLife/workshop/v1.0/companies({companyId})/workshopLines`.
+- **Methoden:** `GET` zum Abholen, `PATCH` zum Zurückschreiben; `POST`/`DELETE` gesperrt (`InsertAllowed = false`, `DeleteAllowed = false`) – Zeilen entstehen ausschließlich aus BC heraus über "Send to Workshop".
+- **Beschreibbare Felder:** `attribute1`–`attribute10`, `genuine`, `status`. Schlüssel-, Artikel- und Seriennummernfelder sind gesperrt (`OnModifyRecord` lehnt Änderungsversuche mit Fehler ab).
+- **Statusrückschritte gesperrt:** greift über den `OnModify`-Trigger der Tabelle selbst (feuert unabhängig davon, ob die Änderung über die API oder intern erfolgt) – `WS checked` → `New` sowie jeder Wechsel weg von `Processed` werden abgelehnt; ein direkter Wechsel auf `Error` ist nur aus `WS checked` heraus erlaubt.
+- **Berechtigung:** Permission Set 60302 "CXW Workshop API" – ausschließlich `tabledata "CXW Workshop Line" = RM`, kein Zugriff auf Purchase Line, Item oder andere Tabellen.
+
 ## Objektschnittstellen (öffentliche Prozeduren & Events)
 
 Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsregister/funktionsregister-sl-chronext-webshop.md`. Die wichtigsten öffentlichen Schnittstellen:
@@ -224,6 +302,9 @@ Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsr
 | Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Baut das JSON für eine Bestellrückmeldung (SRid, purchase_order, optional tracking_number). Aktuell aus keiner anderen Stelle im Code aufgerufen. |
 | Codeunit 60305 | `CreateSourceFileOrderStatusSE(SellWatchInfo: Record "CXW SellWatch Vendor Info"; Status: Enum "CXW SW Order Status"): Text` | Baut das JSON für eine Statusmeldung an SellWatch (Name, E-Mail, Uhrendaten, Link zur Online-Freigabe, Auszahlungswährung/-betrag aus der archivierten Einkaufszeile). Aktuell aus keiner anderen Stelle im Code aufgerufen. |
 | Table 60301 | `CreateEntryInexternalFile(var WOA: Record "CXW Watch Online Approval")` | Fragt per HTTP GET beim SellWatch-Endpunkt ab, ob eine Uhr online sein sollte, aktualisiert die Zeile entsprechend und protokolliert den Aufruf in Table 60302 ("CXW Source Table No." = 60301). Aktuell aus keiner anderen Stelle im Code aufgerufen. |
+| Codeunit 60331 | `OnRun` / `ProcessCheckedLines` (lokal) | Job-Queue-Einstiegspunkt; verarbeitet alle Table-60318-Zeilen mit Status "WS checked" einzeln über `ProcessLineWithErrorHandling`. |
+| Codeunit 60331 | `ProcessLineWithErrorHandling` / `TryProcessLine` (beide lokal) | Kapselt die Verarbeitung einer einzelnen Zeile als `[TryFunction]`; bei Fehlschlag wird Status auf `Error` gesetzt und `GetLastErrorText()` in "CXW Last Error" geschrieben, ohne die Verarbeitung der übrigen Zeilen zu blockieren (`Commit()` nach jeder Zeile). |
+| Codeunit 60331 | `GetAttributeMapping(AttributeIndex: Integer): Text[250]` (lokal) | Zentrale, austauschbare Zuordnung Attributindex → Name des Standard-Artikelattributs; Index 1–8 liefert die fachlichen Namen (Dial Color, Case Diameter, …), Index 9–10 weiterhin Platzhalter "Attribut 9"/"Attribut 10". |
 
 Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregister/gesamtuebersicht.md`.
 
@@ -241,6 +322,7 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | 60315 CXW Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 60316 CXW Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import (fachlich weiterhin das Sales-Price-Import-Protokoll; „Sales" im technischen Bezeichner wegen des 30-Zeichen-Limits von AL entfallen) |
 | 60317 CXW API Interface Setup | Code | Endpunkt-URL, Authentifizierungsart und (im Isolated Storage abgelegter) API-Schlüssel je externer Schnittstelle; bei "CXW Auth Type" = AWSSigV4 zusätzlich AWS Access Key ID/Region/Service (Klartextfelder) sowie AWS Secret Access Key/Session Token (im Isolated Storage) |
+| 60318 CXW Workshop Line | Document Type, Document No., Line No. | Ein Datensatz je an die Werkstatt übergebener Bestellzeile: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), Genuine, acht fachlich benannte Attributfelder (Dial Color … Features) + zwei Platzhalter (Attribut 9/10), Created At, Checked At, Last Error |
 
 ## Permission Set
 
@@ -248,9 +330,11 @@ Das Permission Set **`CXWChronWSAll`** (ID 60336, `src/PermissionSets/CXWChronWS
 
 Für SellWatch deckt das separate Permission Set **`CXW SWChronWSAll`** (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) RIMD-Zugriff auf die beiden SellWatch-eigenen Tabellen (60300–60301) sowie das mit der Verkaufspreisverwaltung geteilte Table 60302 "CXW Http Call Log" ab, dazu Ausführungsrechte für Codeunit 60305 und die drei SellWatch-Seiten (60307–60309, wobei Page 60309 "CXW Http Call Log" ebenfalls geteilt ist). Die Table Extensions 60303/60304 auf "Purchase Line"/"Purchase Header" benötigen wie bei der Verkaufspreisverwaltung keinen eigenen Eintrag, da sie über die Standardberechtigung auf die jeweilige Basistabelle mit abgedeckt sind. Auch dieses Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
 
+Für die Workshop-Ankaufsprüfung gibt es zwei getrennte Permission Sets: **`CXW Workshop All`** (ID 60301, `src/PermissionSets/CXWWorkshopAll.permissionset.al`) für den vollständigen internen Zugriff auf Table 60318, alle Workshop-Seiten und Codeunit 60331 – inklusive der für Wareneingang, Stornierung und Artikelattribute benötigten Standardtabellen (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping), damit die Job-Queue-Codeunit eigenständig lauffähig ist – und **`CXW Workshop API`** (ID 60302, `src/PermissionSets/CXWWorkshopAPI.permissionset.al`) als schlankes Gegenstück ausschließlich für den externen Workshop-Benutzer: nur `tabledata "CXW Workshop Line" = RM`, kein Insert/Delete, kein Zugriff auf Purchase Line oder Item. Beide Sets müssen noch aktiv zugewiesen werden (`CXW Workshop All` an interne Sachbearbeiter/den Job-Queue-Ausführungsbenutzer, `CXW Workshop API` ausschließlich an den dedizierten OAuth2-S2S-Benutzer der Werkstatt).
+
 ## Tests ausführen
 
-Es existieren aktuell **keine** AL-Testcodeunits in diesem Projekt. Als Grundlage für zukünftige Tests eignet sich die Spezifikation `openspec/specs/sales-price-currency-copy/spec.md` (10 Szenarien für die Aktion "Add all Currencies") – zu beachten ist, dass diese Spezifikation vor der Umstellung von Land- auf Currency-Aktivierung entstand und vor Testerstellung gegen den aktuellen Stand geprüft werden sollte. Für SellWatch liefern `openspec/specs/sellwatch-http-call-logging/spec.md` (Szenarien für Erfolgs-/Fehlschlag-Logging, API-Key-Redaktion und Telemetrie von `CreateEntryInexternalFile`) und `openspec/specs/sellwatch-standard-table-extensions/spec.md` (Szenarien für "CXW Used good" und "CXW Tracking Number") eine vergleichbare Grundlage.
+Es existieren aktuell **keine** AL-Testcodeunits in diesem Projekt. Als Grundlage für zukünftige Tests eignet sich die Spezifikation `openspec/specs/sales-price-currency-copy/spec.md` (10 Szenarien für die Aktion "Add all Currencies") – zu beachten ist, dass diese Spezifikation vor der Umstellung von Land- auf Currency-Aktivierung entstand und vor Testerstellung gegen den aktuellen Stand geprüft werden sollte. Für SellWatch liefern `openspec/specs/sellwatch-http-call-logging/spec.md` (Szenarien für Erfolgs-/Fehlschlag-Logging, API-Key-Redaktion und Telemetrie von `CreateEntryInexternalFile`) und `openspec/specs/sellwatch-standard-table-extensions/spec.md` (Szenarien für "CXW Used good" und "CXW Tracking Number") eine vergleichbare Grundlage. Für die Workshop-Ankaufsprüfung liegen die Szenarien noch verteilt auf mehrere, teils noch nicht archivierte OpenSpec-Changes (`openspec/changes/purchase-workshop-integration/specs/` sowie die darauf aufbauenden Deltas in `openspec/changes/archive/2026-08-13-workshop-line-error-handling/` und `openspec/changes/archive/2026-08-13-workshop-attribute-*`) – vor einer Testerstellung sollten diese zu einer konsolidierten Spec unter `openspec/specs/workshop-line-processing/` zusammengeführt werden (siehe Bekannte Einschränkungen).
 
 ## Deployment
 
@@ -273,5 +357,8 @@ Kein CI/CD-Setup (z. B. AL-Go-Workflow) im Projekt gefunden. Deployment erfolgt 
 - **Der eigentliche Auslöser von Codeunit 60305 "CXW SellWatch Mgt".OnRun ist nicht Teil des AL-Quellcodes.** Im Projekt existiert weder ein Installations-/Upgrade-Codeunit noch ein Event-Subscriber noch eine API-Page, die `OnRun` aufruft oder Zeilen in Table 60300 einfügt. In der Praxis muss die Ausführung daher über einen zur Laufzeit angelegten Job-Queue-Eintrag, einen manuellen Aufruf oder eine außerhalb dieses Codes liegende Integration erfolgen; das steht nicht im Widerspruch zur im Benutzerhandbuch beschriebenen automatisierten Verarbeitung, ist im Code selbst aber nicht nachvollziehbar.
 - **`CreateSourceFilePurchaseRequest`, `CreateSourceFileOrderStatusSE` (Codeunit 60305) und `CreateEntryInexternalFile` (Table 60301, für den eigentlichen Online-Check) werden aktuell von keiner anderen Stelle im Projekt aufgerufen.** Insbesondere die beiden JSON-Builder wirken wie vorbereitete, aber (noch) nicht angebundene Rückmeldungen an SellWatch.
 - **`CreatePurchaseOrderinBV` und `CreatePurchaseOrderinGmBH` (Codeunit 60305, beide lokal)** sind ebenfalls nicht aufgerufen – Reste der im Quellsystem laut Code-Kommentar bereits deaktivierten GMBH/BV-Fallunterscheidung. `ReadJSONFile` (Table 60301, lokal) ist ein leerer Stub ohne Funktion.
-- **Artikel-/Variantencodes für SellWatch-Einkaufszeilen sind fest im Code hinterlegt** (`C2C-SW`, `CPST-SW`, `TI-SW`, abhängig von "CXW Offer Type"). Existiert der jeweilige Artikel/die Variante nicht im Artikelstamm, schlägt `PLRec.Validate("No.", ...)` in `CreatePurchaseOrder` fehl; es gibt keine Konfigurationsseite für diese Zuordnung.
+- **(Behoben, danach wieder zurückgesetzt) SellWatch-Artikelanlage nutzt eine Artikelvorlage statt fester Variantencodes, die Auswahl der Vorlage ist aber weiterhin nicht konfigurierbar.** Ursprünglich waren Artikel-/Variantencodes für SellWatch-Einkaufszeilen fest im Code hinterlegt (`C2C-SW`, `CPST-SW`, `TI-SW`); das wurde durch eine dynamische Artikelanlage per Artikelvorlage ersetzt (`CreateSellWatchItem`, Codeunit 60305, `Item.TransferFields(ItemTemplate, true)`). Welche Artikelvorlage dabei verwendet wird, ist aber weiterhin **nicht** konfigurierbar: der Code nimmt per `ItemTemplate.FindFirst()` ohne Filter einfach die erste beliebige Artikelvorlage aus der Tabelle "Item Templ." – bei mehr als einer angelegten Vorlage im System ist das Ergebnis nicht vorhersehbar. Ein Change (`sellwatch-item-template-setup`), der dafür ein Einrichtungsfeld auf der Purchases & Payables Setup vorsah, wurde entworfen und implementiert, aber die unkommitteten Code-Änderungen gingen vor dem Commit verloren (nur die OpenSpec-Planungsdokumente sind unter `openspec/changes/archive/2026-08-13-sellwatch-item-template-setup/` erhalten) – bei Bedarf erneut umsetzen. Der zugehörige `// TODO: Item Template einrichtenbar, Wo?` im Code ist weiterhin offen.
 - **Der Online-Check (`CreateEntryInexternalFile`) verwendet einen fest verdrahteten Schnittstellen-Code `'WOA'`** auf Table 60317 "CXW API Interface Setup" – derselben Tabelle, die auch die Verkaufspreisverwaltung für ihren Preisexport nutzt (dort über das konfigurierbare Feld "CXW API Interface Code"). Für SellWatch ist der Code nicht konfigurierbar, sondern muss exakt `'WOA'` lauten.
+- **Workshop-Ankaufsprüfung deckt nur den Standardfall "eine Purchase Order = eine Purchase Line" ab.** Gemischte Bestellungen (mehrere Zeilen, teils echt/teils nicht echt) sind nicht implementiert – bei Nicht-Echtheit storniert `ProcessNonGenuineLine` (Codeunit 60331) aktuell die *gesamte* Purchase Order, auch wenn nur eine von mehreren Zeilen betroffen wäre (`// TODO:`-markiert im Code).
+- **Zwei der zehn Workshop-Attributfelder (Attribut 9/10) haben weiterhin keine fachliche Bezeichnung** (Platzhalter-Captions), im Unterschied zu den bereits benannten Attributen 1–8 (Dial Color … Features).
+- **Die Basis-Spezifikation der Workshop-Ankaufsprüfung ist nicht sauber archiviert.** Der ursprüngliche Change `purchase-workshop-integration` (Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Pages 60338–60340, Codeunit 60331, PermissionSets 60301/60302) liegt fehlplatziert unter `openspec/changes/archive/2026-08-13-workshop-line-error-handling/purchase-workshop-integration/` statt an einer regulären, datierten Archiv-Stelle und ist für `openspec list`/`openspec status` unsichtbar (Stand: 30/34 Tasks). Mehrere spätere Changes (`workshop-line-error-handling`, `workshop-attribute-names`, `workshop-attribute-field-names`) liefern Delta-Specs gegen die Capabilities `workshop-line-processing`/`workshop-line-api`, die dadurch nie zu einer kanonischen Spec unter `openspec/specs/` konsolidiert wurden. Vor weiteren Änderungen an der Workshop-Verarbeitung sollte dies bereinigt werden.
