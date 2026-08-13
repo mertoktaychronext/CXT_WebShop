@@ -106,9 +106,9 @@ table 60318 "CXW Workshop Line"
             Editable = false;
             DataClassification = ToBeClassified;
         }
-        field(23; "CXW Processing Error"; Text[250])
+        field(23; "CXW Last Error"; Text[250])
         {
-            Caption = 'Processing Error';
+            Caption = 'Last Error';
             Editable = false;
             DataClassification = ToBeClassified;
         }
@@ -130,12 +130,14 @@ table 60318 "CXW Workshop Line"
 
     trigger OnModify()
     begin
-        if (xRec."CXW Status" = xRec."CXW Status"::"WS geprüft") and ("CXW Status" = "CXW Status"::"Neu") then
+        if (xRec."CXW Status" = xRec."CXW Status"::"WS checked") and ("CXW Status" = "CXW Status"::"new") then
             Error(StatusRegressionErr, xRec."CXW Status", "CXW Status");
-        if (xRec."CXW Status" = xRec."CXW Status"::"Verarbeitet") and ("CXW Status" <> xRec."CXW Status") then
+        if (xRec."CXW Status" = xRec."CXW Status"::"Processed") and ("CXW Status" <> xRec."CXW Status") then
+            Error(StatusRegressionErr, xRec."CXW Status", "CXW Status");
+        if (xRec."CXW Status" <> "CXW Status") and ("CXW Status" = "CXW Status"::Error) and (xRec."CXW Status" <> xRec."CXW Status"::"WS checked") then
             Error(StatusRegressionErr, xRec."CXW Status", "CXW Status");
 
-        if (xRec."CXW Status" <> "CXW Status") and ("CXW Status" = "CXW Status"::"WS geprüft") then
+        if (xRec."CXW Status" <> "CXW Status") and ("CXW Status" = "CXW Status"::"WS checked") then
             "CXW Checked At" := CurrentDateTime;
     end;
 

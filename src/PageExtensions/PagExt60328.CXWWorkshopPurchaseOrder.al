@@ -86,7 +86,7 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         WorkshopLine."CXW Line No." := PurchLine."Line No.";
         WorkshopLine."CXW Item No." := PurchLine."No.";
         WorkshopLine."CXW Manufacturer Serial No." := PurchLine."CXW Manufacturer Serial No.";
-        WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"Neu";
+        WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"new";
         WorkshopLine.Insert(true);
     end;
 

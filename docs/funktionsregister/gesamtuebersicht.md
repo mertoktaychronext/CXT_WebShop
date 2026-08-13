@@ -1,8 +1,8 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt)
+**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden)
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 113
+**Gesamtanzahl Funktionen:** 114
 
 ---
 
@@ -10,12 +10,14 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Navigation/Actions | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.1 | 50 | 62 | 40 | 1 | 10 | 113 |
-| **Gesamt** | – | **50** | **62** | **40** | **1** | **10** | **113** |
+| CHX.Webshop | 27.0.0.1 | 50 | 62 | 40 | 1 | 11 | 114 |
+| **Gesamt** | – | **50** | **62** | **40** | **1** | **11** | **114** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt drei fachlich unabhängige Bereiche: **SellWatch** (Ankauf gebrauchter Uhren, ID-Bereich 60300–60310 plus 60337 für die API), **Workshop-Ankaufsprüfung** (externe Echtheitsprüfung angekaufter Uhren, neu seit dieser Aktualisierung — Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Page 60338–60340, Codeunit 60331, PermissionSet 60301/60302) und **SalesPrice/Verkaufspreisverwaltung** (ID-Bereich 60311–60336). Alle drei teilen sich ein gemeinsames HTTP-Aufrufprotokoll (Table 60302/Page 60309) bzw. folgen demselben Zwischentabellen-plus-API-Muster; SalesPrice nutzt zusätzlich eine gemeinsame Schnittstellen-Konfigurationstabelle (Table 60317) mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung, AWS Signature V4). SellWatch besitzt eine eigene API-Schreibschnittstelle (Page 60337) mit eigenem Berechtigungssatz (PermissionSet 60300); die neue Workshop-Ankaufsprüfung folgt demselben Prinzip mit einer eigenen, bidirektionalen API (Page 60339) für die externe Werkstatt.
 >
 > **Hinweis zur Neuverifikation (2026-08-12):** Diese Ausgabe wurde am 2026-08-12 zunächst durch eine vollständige Neuanalyse aller 39 AL-Dateien ersetzt und danach um die neue Workshop-Ankaufsprüfung (11 zusätzliche Objekte, 24 zusätzliche Funktionen) fortgeschrieben. Navigations-Aktionen ohne eigene `OnAction`-Logik (reine `RunObject`-Verknüpfungen, z. B. auf den Seiten 60321 und 60324) werden weiterhin konsequent nicht mitgezählt, da sie keine eigene Geschäftslogik enthalten.
+>
+> **Hinweis zur Neuverifikation (2026-08-13):** Alle 50 AL-Objekte wurden erneut vollständig gegen den aktuellen Code geprüft. Dabei wurde eine bislang nicht dokumentierte Aktion mit eigener Geschäftslogik gefunden und ergänzt: `Upload Sales Price` auf Seite 60322 "CXW Sales Price Checking List" (Export freigegebener Preiszeilen an die externe Schnittstelle inkl. Archivierung und Wiederversand-Abfrage). Objekt-Anzahl und alle übrigen Funktionen waren unverändert korrekt.
 
 ---
 
@@ -99,6 +101,7 @@
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft alle offenen Zeilen auf Marge, Preisabweichung und Datumsplausibilität. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Approve` | Aktion | – | Gibt nach Bestätigung alle validierten Zeilen zur Übernahme frei und vermerkt den freigebenden Benutzer. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Add all Currencies` | Aktion | – | Legt für eine freigegebene Zeile automatisch Preise in allen weiteren aktivierten Währungen anhand des Wechselkurses an. |
+| CHX.Webshop | CXW Sales Price Checking List | Seite | `Upload Sales Price` | Aktion | – | Übernimmt freigegebene Preiszeilen als Standard-Verkaufspreise, archiviert sie und sendet sie an die externe Schnittstelle; fragt bei bereits gesendeten Zeilen nach, ob sie erneut gesendet werden sollen. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur zuletzt importierte Zeilen bearbeitet werden. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `fnValidate` | Prozedur | Internal | Führt die Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft Mindestmarge und Datumsplausibilität. |

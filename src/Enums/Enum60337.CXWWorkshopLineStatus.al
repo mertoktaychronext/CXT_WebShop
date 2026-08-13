@@ -3,17 +3,21 @@ enum 60337 "CXW Workshop Line Status"
     Extensible = true;
 
     // Wertnamen entsprechen bewusst wörtlich dem API-Vertrag mit dem Workshop
-    // (z.B. Filter "status eq 'Neu'"), nicht nur der UI-Anzeige.
-    value(0; "Neu")
+    // (z.B. Filter "status eq 'New'"), nicht nur der UI-Anzeige.
+    value(0; "New")
     {
-        Caption = 'Neu';
+        Caption = 'New';
     }
-    value(1; "WS geprüft")
+    value(1; "WS checked")
     {
-        Caption = 'WS geprüft';
+        Caption = 'WS checked';
     }
-    value(2; "Verarbeitet")
+    value(2; "Processed")
     {
-        Caption = 'Verarbeitet';
+        Caption = 'Processed';
+    }
+    value(3; "Error")
+    {
+        Caption = 'Error';
     }
 }

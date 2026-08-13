@@ -109,9 +109,9 @@ page 60338 "CXW Workshop Lines"
                 field("CXW Checked At"; Rec."CXW Checked At")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies when the workshop set the status to "WS geprüft".';
+                    ToolTip = 'Specifies when the workshop set the status to "WS checked".';
                 }
-                field("CXW Processing Error"; Rec."CXW Processing Error")
+                field("CXW Last Error"; Rec."CXW Last Error")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the last error encountered while processing this workshop line.';

@@ -24,8 +24,8 @@ tableextension 60321 "CXW Workshop Purchase Line" extends "Purchase Line"
         WorkshopLine: Record "CXW Workshop Line";
     begin
         if WorkshopLine.Get(Rec."Document Type", Rec."Document No.", Rec."Line No.") then
-            if WorkshopLine."CXW Status" <> WorkshopLine."CXW Status"::"Verarbeitet" then
+            if WorkshopLine."CXW Status" <> WorkshopLine."CXW Status"::"Processed" then
                 WorkshopLine.Delete();
-        // Workshop Lines im Status "Verarbeitet" bleiben als Prüfnachweis bestehen (kein Cascade-Delete).
+        // Workshop Lines im Status "Processed" bleiben als Prüfnachweis bestehen (kein Cascade-Delete).
     end;
 }

@@ -9,7 +9,7 @@ codeunit 60331 "CXW Process Workshop Lines"
     var
         WorkshopLine: Record "CXW Workshop Line";
     begin
-        WorkshopLine.SetRange("CXW Status", WorkshopLine."CXW Status"::"WS geprüft");
+        WorkshopLine.SetRange("CXW Status", WorkshopLine."CXW Status"::"WS checked");
         if WorkshopLine.FindSet() then
             repeat
                 ProcessLineWithErrorHandling(WorkshopLine);
@@ -22,7 +22,8 @@ codeunit 60331 "CXW Process Workshop Lines"
             Commit()
         else begin
             WorkshopLine.Get(WorkshopLine."CXW Document Type", WorkshopLine."CXW Document No.", WorkshopLine."CXW Line No.");
-            WorkshopLine."CXW Processing Error" := CopyStr(GetLastErrorText(), 1, MaxStrLen(WorkshopLine."CXW Processing Error"));
+            WorkshopLine."CXW Last Error" := CopyStr(GetLastErrorText(), 1, MaxStrLen(WorkshopLine."CXW Last Error"));
+            WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::Error;
             WorkshopLine.Modify();
             Commit();
         end;
@@ -62,7 +63,8 @@ codeunit 60331 "CXW Process Workshop Lines"
                 SetItemAttributeValue(WorkshopLine."CXW Item No.", GetAttributeMapping(AttributeIndex), AttributeValue);
         end;
 
-        WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"Verarbeitet";
+        WorkshopLine."CXW Last Error" := '';
+        WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"Processed";
         WorkshopLine.Modify();
     end;
 
@@ -74,7 +76,8 @@ codeunit 60331 "CXW Process Workshop Lines"
         // Status zuerst auf Verarbeitet setzen, damit der Cascade-Delete-Schutz in
         // TabExt60321 "CXW Workshop Purchase Line" beim gleich folgenden PO-Löschen greift
         // und diese Workshop Line als Prüfnachweis stehen bleibt.
-        WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"Verarbeitet";
+        WorkshopLine."CXW Last Error" := '';
+        WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"Processed";
         WorkshopLine.Modify();
 
         // Standardfall: eine Purchase Line = eine Purchase Order, es ist noch nichts gebucht,

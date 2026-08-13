@@ -3,7 +3,7 @@
 **Version:** 27.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden)
 **Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
@@ -27,7 +27,7 @@ CHX.Webshop bündelt drei weitgehend eigenständige Funktionsbereiche unter eine
 | Enums | 8 |
 | Permission Sets | 5 |
 | **Gesamt Objekte** | **50** |
-| **Gesamt Prozeduren/Trigger/Events** | **113** |
+| **Gesamt Prozeduren/Trigger/Events** | **114** |
 
 ---
 
@@ -126,16 +126,16 @@ Bindet eine externe Werkstatt in den Einkaufsprozess für angekaufte Uhren ein: 
 
 ### Enum: CXW Workshop Line Status (ID: 60337)
 
-Definiert die drei Prüfstatus einer Werkstattzeile (Neu, WS geprüft, Verarbeitet). *Reine Werteliste ohne Prozeduren.*
+Definiert die vier Prüfstatus einer Werkstattzeile (Neu, WS geprüft, Verarbeitet, Fehler). *Reine Werteliste ohne Prozeduren.*
 
 ### Tabelle: CXW Workshop Line (ID: 60318)
 
-Ein Datensatz je an die Werkstatt übergebener Bestellzeile: hält die Herstellerseriennummer, den Prüfstatus, das Echtheits-Kennzeichen der Werkstatt, zehn generische Attributfelder (Platzhalter-Bezeichnung, finale Benennung noch offen) sowie den letzten Verarbeitungsfehler.
+Ein Datensatz je an die Werkstatt übergebener Bestellzeile: hält die Herstellerseriennummer, den Prüfstatus, das Echtheits-Kennzeichen der Werkstatt, zehn generische Attributfelder (Platzhalter-Bezeichnung, finale Benennung noch offen) sowie den zuletzt aufgetretenen Verarbeitungsfehler.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen einer Werkstattzeile automatisch den Erstellungszeitpunkt ein. |
-| 2 | `OnModify` | Trigger | – | Verhindert einen Rückschritt des Prüfstatus (von "WS geprüft" zurück auf "Neu" oder weg von "Verarbeitet") unabhängig davon, ob die Änderung über die API oder intern erfolgt, und trägt beim Wechsel auf "WS geprüft" automatisch den Prüfzeitpunkt ein. |
+| 2 | `OnModify` | Trigger | – | Verhindert einen Rückschritt des Prüfstatus (von "WS geprüft" zurück auf "Neu" oder weg von "Verarbeitet") sowie einen Wechsel auf "Fehler" aus einem anderen Status als "WS geprüft" heraus, unabhängig davon, ob die Änderung über die API oder intern erfolgt; trägt beim Wechsel auf "WS geprüft" automatisch den Prüfzeitpunkt ein. |
 
 ### Tabellenerweiterung: CXW Workshop Purchase Line (ID: 60321)
 
@@ -168,7 +168,7 @@ Zeigt auf der Bestellzeilen-Übersicht zusätzlich Herstellerseriennummer und "A
 
 ### Seite: CXW Workshop Lines (ID: 60338)
 
-Nur-Lese-Übersicht aller Werkstattzeilen (inkl. Attribute, Status, Prüfzeitpunkt und Verarbeitungsfehler) für die interne Nachverfolgung. *Keine eigenen Prozeduren oder Trigger.*
+Nur-Lese-Übersicht aller Werkstattzeilen (inkl. Attribute, Status, Prüfzeitpunkt und letztem Verarbeitungsfehler) für die interne Nachverfolgung. *Keine eigenen Prozeduren oder Trigger.*
 
 ### Seite: CXW Workshop Line API (ID: 60339)
 
@@ -194,10 +194,10 @@ Als Aufgabenwarteschlangen-Eintrag lauffähige Hintergrundverarbeitung, die alle
 |---|---|---|---|---|
 | 1 | `OnRun` | Trigger | – | Startet die Verarbeitung aller Werkstattzeilen im Status "WS geprüft". |
 | 2 | `ProcessCheckedLines` | Prozedur | Internal | Ermittelt alle geprüften Werkstattzeilen und übergibt sie einzeln zur Verarbeitung. |
-| 3 | `ProcessLineWithErrorHandling` | Prozedur | Internal | Verarbeitet eine Zeile fehlerisoliert: bei Fehlschlag wird der Fehlertext auf der Zeile vermerkt, ohne die Verarbeitung der übrigen Zeilen zu blockieren. |
+| 3 | `ProcessLineWithErrorHandling` | Prozedur | Internal | Verarbeitet eine Zeile fehlerisoliert: bei Fehlschlag werden der Fehlertext und der Status "Fehler" auf der Zeile vermerkt, ohne die Verarbeitung der übrigen Zeilen zu blockieren. |
 | 4 | `TryProcessLine` | Prozedur | Internal | Entscheidet anhand des Echtheits-Kennzeichens, ob die Zeile als echt oder nicht echt weiterverarbeitet wird. |
-| 5 | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit ausschließlich den Wareneingang der zugehörigen Bestellung (keine Rechnung) und überträgt die gemeldeten Attribute auf den Artikel; setzt danach den Status auf "Verarbeitet". |
-| 6 | `ProcessNonGenuineLine` | Prozedur | Internal | Storniert bei widerlegter Echtheit die zugehörige Bestellung (öffnet sie bei Bedarf zuvor wieder) und setzt den Status auf "Verarbeitet", bevor die Bestellung gelöscht wird, damit die Werkstattzeile als Nachweis erhalten bleibt. |
+| 5 | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit ausschließlich den Wareneingang der zugehörigen Bestellung (keine Rechnung) und überträgt die gemeldeten Attribute auf den Artikel; setzt danach den Status auf "Verarbeitet" und löscht einen zuvor vermerkten Fehlertext. |
+| 6 | `ProcessNonGenuineLine` | Prozedur | Internal | Storniert bei widerlegter Echtheit die zugehörige Bestellung (öffnet sie bei Bedarf zuvor wieder) und setzt den Status auf "Verarbeitet" sowie den Fehlertext zurück, bevor die Bestellung gelöscht wird, damit die Werkstattzeile als Nachweis erhalten bleibt. |
 | 7 | `GetWorkshopLineAttributeValue` | Prozedur | Internal | Liest den Wert eines der zehn Attributfelder einer Werkstattzeile anhand seiner laufenden Nummer aus. |
 | 8 | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (aktuell Platzhalternamen, finale Benennung offen). |
 | 9 | `SetItemAttributeValue` | Prozedur | Internal | Trägt einen Attributwert als Standard-Artikelattribut auf dem Artikel ein und legt fehlende Attribute/Attributwerte automatisch an. |
@@ -314,10 +314,11 @@ Arbeitsliste zur Prüfung, Validierung und Freigabe neuer Verkaufspreise inklusi
 | 3 | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft alle offenen Zeilen auf Marge, Preisabweichung und Datumsplausibilität. |
 | 4 | `Approve` | Aktion | – | Gibt nach Bestätigung alle validierten Zeilen zur Übernahme frei und vermerkt den freigebenden Benutzer. |
 | 5 | `Add all Currencies` | Aktion | – | Legt für eine freigegebene Zeile automatisch die Preise in allen weiteren aktivierten Währungen anhand des aktuellen Wechselkurses an. |
-| 6 | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur die zuletzt importierten Zeilen bearbeitet werden. |
-| 7 | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
-| 8 | `fnValidate` | Prozedur | Internal | Führt die eigentliche Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft die Mindestmarge und das Start-/Enddatum und trägt passende Hinweise ein. |
-| 9 | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
+| 6 | `Upload Sales Price` | Aktion | – | Übernimmt alle freigegebenen Preiszeilen als Standard-Verkaufspreise, archiviert sie und sendet sie einzeln an die konfigurierte externe Schnittstelle; fragt bei bereits zuvor gesendeten Zeilen nach, ob diese erneut gesendet werden sollen, und meldet am Ende, wie viele von wie vielen Zeilen erfolgreich exportiert wurden. |
+| 7 | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur die zuletzt importierten Zeilen bearbeitet werden. |
+| 8 | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
+| 9 | `fnValidate` | Prozedur | Internal | Führt die eigentliche Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft die Mindestmarge und das Start-/Enddatum und trägt passende Hinweise ein. |
+| 10 | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
 
 ### Seite: CXW General Sales Price Setup (ID: 60321)
 

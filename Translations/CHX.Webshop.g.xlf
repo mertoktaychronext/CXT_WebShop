@@ -968,6 +968,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Item No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 190970234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Error</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Last Error - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3127986241 - Field 4036788647 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Line No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -977,11 +982,6 @@
           <source>Manufacturer Serial No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Manufacturer Serial No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3127986241 - Field 1827099537 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Processing Error</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Processing Error - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3127986241 - Field 3326622484 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Status</source>
@@ -1799,7 +1799,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Attribute 9 - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3485529898 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies when the workshop set the status to "WS geprüft".</source>
+          <source>Specifies when the workshop set the status to "WS checked".</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Checked At - Property ToolTip</note>
         </trans-unit>
@@ -1828,6 +1828,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Item No. - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 190970234 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the last error encountered while processing this workshop line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Last Error - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 1262482968 - Control 4036788647 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the purchase line number this workshop line belongs to.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1837,11 +1842,6 @@
           <source>Specifies the manufacturer serial number captured when the item was sent to the workshop.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Manufacturer Serial No. - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 1262482968 - Control 1827099537 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the last error encountered while processing this workshop line.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Processing Error - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3326622484 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the current workshop review status.</source>
@@ -2153,20 +2153,25 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Taxation Type - EnumValue Full - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Enum 303451821 - EnumValue 1117477338 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Neu</source>
+        <trans-unit id="Enum 303451821 - EnumValue 2248886284 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue Neu - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue Error - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Enum 303451821 - EnumValue 379358907 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Verarbeitet</source>
+        <trans-unit id="Enum 303451821 - EnumValue 4137051400 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>New</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue Verarbeitet - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue New - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Enum 303451821 - EnumValue 3539459742 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>WS geprüft</source>
+        <trans-unit id="Enum 303451821 - EnumValue 3208180638 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Processed</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue WS geprüft - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue Processed - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 303451821 - EnumValue 1164221061 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>WS checked</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue WS checked - Property Caption</note>
         </trans-unit>
         <trans-unit id="PermissionSet 2901653661 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>CXW Sell Watch API</source>
