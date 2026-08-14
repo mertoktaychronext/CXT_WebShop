@@ -103,11 +103,15 @@ codeunit 60305 "CXW SellWatch Mgt"
         Item: Record Item;
         ItemTemplate: Record "Item Templ.";
         ItemUnitofMeasure: Record "Item Unit of Measure";
+        PurchSetup: Record "Purchases & Payables Setup";
     begin
         Item.Init();
-        //TODO: Item Template einrichtenbar, Wo?; Evtl Nummernserie fuer SellWatch Artikel einrichten
-        if not ItemTemplate.FindFirst() then
-            Error(NoItemTemplateFoundErr);
+        // TODO: Nummernserie für SellWatch-Artikel einrichten
+        PurchSetup.Get();
+        if PurchSetup."CXW SW Item Template Code" = '' then
+            Error(NoItemTemplateSetUpErr);
+        if not ItemTemplate.Get(PurchSetup."CXW SW Item Template Code") then
+            Error(ItemTemplateNotFoundErr, PurchSetup."CXW SW Item Template Code");
         Item."No." := '';
         Item.Validate(Description, CopyStr(SellWatchVendorInfo."CXW Brand" + ' ' + SellWatchVendorInfo."CXW Model" + ' ' + SellWatchVendorInfo."CXW Construction Year", 1, MaxStrLen(Item.Description)));
         Item.Validate("Description 2", CopyStr(SellWatchVendorInfo."CXW Reference", 1, MaxStrLen(Item."Description 2")));
@@ -219,5 +223,6 @@ codeunit 60305 "CXW SellWatch Mgt"
         ReleasePurchDoc: Codeunit "Release Purchase Document";
         WOA: Record "CXW Watch Online Approval";
         VendorAndPOCreatedMsg: Label 'Vendor and PO created';
-        NoItemTemplateFoundErr: Label 'No item template found. Cannot create an item for the SellWatch offer.';
+        NoItemTemplateSetUpErr: Label 'No item template is set up for SellWatch item creation. Please set the SellWatch Item Template field on the Purchases & Payables Setup page.';
+        ItemTemplateNotFoundErr: Label 'The item template %1 set up on the Purchases & Payables Setup page no longer exists. Cannot create an item for the SellWatch offer.', Comment = '%1 = item template code';
 }
