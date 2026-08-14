@@ -3,7 +3,7 @@
 **Version:** 27.0.0.1
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), aktualisiert am 2026-08-13 (SellWatch: Artikelvorlage für Artikelanlage über neue Einkaufseinrichtungs-Erweiterung TabExt60322/PagExt60330 konfigurierbar, ersetzt bisherige beliebige Artikelvorlagen-Auswahl)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig; zusätzlich geprüft, ob Dokumentation die verworfene, nie committete SellWatch-Artikelvorlagen-Konfiguration [TableExtension 60322 "CXW SW Purchases Setup", PageExtension 60330] erwähnt – keine solche Referenz gefunden, `CreateSellWatchItem` in Codeunit 60305 ist weiterhin korrekt als `ItemTemplate.FindFirst()`-basiert dokumentiert)
 **Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
@@ -20,13 +20,13 @@ CHX.Webshop bündelt drei weitgehend eigenständige Funktionsbereiche unter eine
 |---|---|
 | Codeunits | 4 |
 | Tabellen | 11 |
-| Tabellenerweiterungen | 6 |
+| Tabellenerweiterungen | 5 |
 | Seiten | 12 |
-| Seitenerweiterungen | 5 |
+| Seitenerweiterungen | 4 |
 | Xmlports | 1 |
 | Enums | 8 |
 | Permission Sets | 5 |
-| **Gesamt Objekte** | **52** |
+| **Gesamt Objekte** | **50** |
 | **Gesamt Prozeduren/Trigger/Events** | **114** |
 
 ---
@@ -67,18 +67,6 @@ Ergänzt den Standard-Einkaufskopf um eine Sendungsverfolgungsnummer, die auf ei
 
 *Keine eigenen Trigger – reine Felderweiterung.*
 
-### Tabellenerweiterung: CXW SW Purchases Setup (ID: 60322)
-
-Ergänzt die Standard-Einkaufseinrichtung um die Artikelvorlage, die für die automatische SellWatch-Artikelanlage verwendet wird.
-
-*Keine eigenen Trigger – reine Felderweiterung.*
-
-### Seitenerweiterung: CXW SW Purchases Setup (ID: 60330)
-
-Zeigt auf der Einkaufseinrichtungs-Karte eine neue Gruppe "SellWatch" mit dem Feld für die zu verwendende Artikelvorlage.
-
-*Keine eigenen Prozeduren oder Trigger.*
-
 ### Codeunit: CXW SellWatch Mgt (ID: 60305)
 
 Legt aus eingehenden SellWatch-Verkaufsanfragen automatisch Lieferanten und Einkaufsbestellungen an.
@@ -90,7 +78,7 @@ Legt aus eingehenden SellWatch-Verkaufsanfragen automatisch Lieferanten und Eink
 | 3 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`) und gibt die Bestellung sofort frei. |
 | 4 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
 | 5 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
-| 6 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand der in der Einkaufseinrichtung hinterlegten Artikelvorlage an (Beschreibung aus Marke/Modell/Baujahr, zweite Beschreibungszeile aus der Referenz) inklusive passender Basis-Mengeneinheit; bricht mit unterscheidbaren Fehlermeldungen ab, falls keine Artikelvorlage eingerichtet ist bzw. die eingerichtete Artikelvorlage nicht mehr existiert. |
+| 6 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand einer Artikelvorlage an (Beschreibung aus Marke/Modell/Baujahr, zweite Beschreibungszeile aus der Referenz) inklusive passender Basis-Mengeneinheit; bricht kontrolliert ab, falls keine Artikelvorlage existiert. |
 | 7 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
 | 8 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
 
@@ -124,7 +112,7 @@ API-Schnittstelle (OData v4, `saliniLife/sellWatch/v2.0`), über die externe Sys
 
 ### Permission Set: CXW SWChronWSAll (ID: 60310)
 
-Berechtigt zum vollständigen Arbeiten mit den SellWatch-Tabellen, -Seiten und der Verarbeitungslogik sowie dem gemeinsamen HTTP-Aufrufprotokoll. Deckt seit dieser Version auch die neue API-Page 60337 sowie Lesezugriff auf die Standard-Einkaufseinrichtung ab (für die dort hinterlegte Artikelvorlage).
+Berechtigt zum vollständigen Arbeiten mit den SellWatch-Tabellen, -Seiten und der Verarbeitungslogik sowie dem gemeinsamen HTTP-Aufrufprotokoll. Deckt seit dieser Version auch die neue API-Page 60337 ab.
 
 ### Permission Set: CXW Sell Watch API (ID: 60300)
 

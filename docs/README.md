@@ -1,6 +1,6 @@
 # Dokumentation – CHX.Webshop
 
-Diese Business-Central-Erweiterung bündelt zwei Bereiche: die Verwaltung von Webshop-Verkaufspreisen (Import, Prüfung, Freigabe, Fremdwährungs-Vervielfältigung) und die SellWatch-Ankaufsintegration für gebrauchte Uhren (automatisierte Lieferanten-/Bestellanlage, Statusrückmeldung, Online-Freigabeprüfung). Wähle das passende Handbuch:
+Diese Business-Central-Erweiterung bündelt drei Bereiche: die Verwaltung von Webshop-Verkaufspreisen (Import, Prüfung, Freigabe, Fremdwährungs-Vervielfältigung), die SellWatch-Ankaufsintegration für gebrauchte Uhren (automatisierte Lieferanten-/Bestellanlage, Statusrückmeldung, Online-Freigabeprüfung) und die Workshop-Ankaufsprüfung (externe Echtheitsprüfung angekaufter Uhren über eine Werkstatt, mit automatisiertem Wareneingang bzw. Stornierung). Wähle das passende Handbuch:
 
 ## Handbücher
 
@@ -18,4 +18,4 @@ Diese Business-Central-Erweiterung bündelt zwei Bereiche: die Verwaltung von We
 
 ---
 
-*Erstellt am 2026-08-04, aktualisiert am 2026-08-07 (SellWatch-Ankaufsintegration ergänzt), aktualisiert am 2026-08-13 (Key-User-Handbuch: Einrichtung der SellWatch-Artikelvorlage in der Einkaufseinrichtung ergänzt). Handbücher/Funktionsregister durch reine Analyse (keine Codeänderungen); der Schwachstellenbericht enthält zusätzlich tatsächlich durchgeführte Code-Änderungen (siehe dort).*
+*Erstellt am 2026-08-04, aktualisiert am 2026-08-07 (SellWatch-Ankaufsintegration ergänzt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung in allen drei Handbüchern ergänzt — war bislang undokumentiert, obwohl bereits im Funktionsregister erfasst). Handbücher/Funktionsregister durch reine Analyse (keine Codeänderungen); der Schwachstellenbericht enthält zusätzlich tatsächlich durchgeführte Code-Änderungen (siehe dort).*

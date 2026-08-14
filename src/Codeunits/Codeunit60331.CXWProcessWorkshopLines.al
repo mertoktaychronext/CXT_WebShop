@@ -32,7 +32,7 @@ codeunit 60331 "CXW Process Workshop Lines"
     [TryFunction]
     local procedure TryProcessLine(var WorkshopLine: Record "CXW Workshop Line")
     begin
-        if WorkshopLine."CXW Genuine" then
+        if WorkshopLine."CXW isAuthentic" then
             ProcessGenuineLine(WorkshopLine)
         else
             ProcessNonGenuineLine(WorkshopLine);
@@ -94,21 +94,21 @@ codeunit 60331 "CXW Process Workshop Lines"
     begin
         case AttributeIndex of
             1:
-                exit(WorkshopLine."CXW Attribute 1");
+                exit(WorkshopLine."CXW Dial Color");
             2:
-                exit(WorkshopLine."CXW Attribute 2");
+                exit(WorkshopLine."CXW Case Diameter");
             3:
-                exit(WorkshopLine."CXW Attribute 3");
+                exit(WorkshopLine."CXW Bracelet Material");
             4:
-                exit(WorkshopLine."CXW Attribute 4");
+                exit(WorkshopLine."CXW Case Material");
             5:
-                exit(WorkshopLine."CXW Attribute 5");
+                exit(WorkshopLine."CXW Movement");
             6:
-                exit(WorkshopLine."CXW Attribute 6");
+                exit(WorkshopLine."CXW Gender");
             7:
-                exit(WorkshopLine."CXW Attribute 7");
+                exit(WorkshopLine."CXW Crystal");
             8:
-                exit(WorkshopLine."CXW Attribute 8");
+                exit(WorkshopLine."CXW Features");
             9:
                 exit(WorkshopLine."CXW Attribute 9");
             10:
