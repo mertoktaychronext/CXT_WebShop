@@ -1,8 +1,8 @@
-# Key User Manual – SL Chronext Webshop (Sales Price Management, SellWatch & Workshop Authenticity Check)
+# Key User Manual – SL Chronext Webshop (Sales Price Management, SellWatch, Workshop Authenticity Check & Consignment Sales)
 
 ## About this document
 
-This manual is for key users who maintain the base settings of the sales price management module, activate countries and currencies for price generation, configure the external interface used by the SellWatch online check, set up the workshop connection for the authenticity check, and act as the first point of contact for the business department. It covers three functionally independent parts of the extension: sales price management, SellWatch (used-watch purchase requests), and the Workshop authenticity check (external authenticity verification of purchased watches).
+This manual is for key users who maintain the base settings of the sales price management module, activate countries and currencies for price generation, configure the external interface used by the SellWatch online check, set up the workshop connection for the authenticity check, set up the delayed purchase invoicing for consignment sales, and act as the first point of contact for the business department. It covers four functionally independent parts of the extension: sales price management, SellWatch (used-watch purchase requests), the Workshop authenticity check (external authenticity verification of purchased watches), and Consignment Sales (delayed, automatic purchase invoicing for watches sold on consignment).
 
 ## Base settings (General Sales Price Setup)
 
@@ -69,6 +69,8 @@ For SellWatch there is no flow the business department triggers manually: new pu
 
 For the Workshop authenticity check, the business department only triggers the first step itself (the "Send to Workshop" action on the purchase order, see User Manual); the actual check by the workshop and the subsequent goods-receipt posting or cancellation run automatically via the external Workshop API and a job queue entry. As a key user you set up the OAuth2 connection for the workshop, the job queue entry, and the item attribute mapping (see below), and you are the first point of contact if a Workshop line stays stuck on status "Error".
 
+For Consignment Sales there is likewise no flow the business department triggers manually: as soon as a sales invoice for a consignment item is posted, a consignment posting entry is created automatically, and a job queue entry posts the related purchase invoice automatically once the configured delay has elapsed. As a key user you set up the delay in days and the job queue entry (see below), and you are the first point of contact if a consignment posting entry stays stuck on status "Error".
+
 ## SellWatch – Setting up the online-check interface (API Interface Setup)
 
 The SellWatch online check (verifies whether a watch should be visible in the SellWatch online shop) uses the same **"API Interface Setup"** page as sales price management's price export (see above) — but always the fixed interface code **`WOA`**. Create or maintain an entry with code `WOA` there:
@@ -132,16 +134,52 @@ A Workshop line moves through the statuses **New → WS checked → Processed**.
 
 > A direct change to status "Error" from any status other than "WS checked" (e.g. accidentally via the API) is rejected by the system with an error — this status is set exclusively by the automatic processing itself.
 
+## Setting up Consignment Sales
+
+When an item flagged as consignment stock is sold via a sales invoice, the related purchase invoice should not be posted immediately, but automatically after a defined number of days. Two one-time setup steps are needed after initial installation of the extension:
+
+### 1. Set the delay in days
+
+On the **"Purchases & Payables Setup"** page, in the "SellWatch" section, you'll find:
+
+| Field | Meaning |
+|---|---|
+| Consignment Invoice Delay (Days) | Number of days between posting the sales invoice and automatically posting the related purchase invoice. 0 means: on the next background processing run, with no additional wait. |
+
+> If this field is blank (0), the purchase invoice is posted on the next background processing run without any delay.
+
+### 2. Set up the job queue entry for processing
+
+Codeunit **"CXW Post Consignment Purchases"** automatically posts all due consignment posting entries (status "Open", due date reached) as a purchase invoice:
+
+1. Job Queue Entries → New.
+2. Object Type: Codeunit, Object: "CXW Post Consignment Purchases".
+3. Recommended recurrence: daily.
+4. The executing user needs the **"CXW Workshop All"** permission set (also covers Consignment Sales since this update) plus the standard purchasing permissions needed for invoice posting.
+
+## Status and error handling of consignment posting entries
+
+The **"CXW Cons. Posting Entries"** page shows all consignment posting entries with the item, the resolved purchase order, the triggering sales invoice, the due date, the status, and — on failure — an error text. An entry moves through the statuses **Open → Posted**, or on failure **Open → Error**.
+
+An entry shows status "Error" when either
+- **no matching open purchase order, or more than one, was found** for the sold item (the error text names the item number), or
+- **posting the purchase invoice itself failed** (e.g. a closed posting period) — the error text contains the specific error message.
+
+**Retrying a failed entry:** Select the affected entry (or several) on the "CXW Cons. Posting Entries" page and run the **"Retry"** action. The status is reset to "Open"; the entry is automatically retried on the next background processing run — including re-resolving the matching purchase order if it wasn't found on the first attempt.
+
+> A pure delivery without invoicing, and selling an item without the "Consignment Sales" flag, do not create an entry.
+
 ## Data management
 
 - **Sales Price / Archive**: Every time "Upload Sales Price" runs, the approved price line is automatically written into the live sales price table (always valid for all customers) and stored as a new, sequentially numbered version in "Sales Price Archive" — including when an already-transmitted line is resent. These two tables are not meant to be maintained manually.
 - **File-based import**: A prepared but not yet connected component exists for automated, file-based price import. It is currently not part of the live process (no job queue entry).
 - **SellWatch purchase requests**: The tables behind "SellWatch-Overview" and the online-check log ("Http Call Log") are populated exclusively by automation; manual maintenance is not intended and isn't possible via the extension's pages either (all SellWatch pages are read-only).
 - **Workshop lines**: Created or changed exclusively via the "Send to Workshop" action (business department) and the external Workshop API. The internal overview page "CXW Workshop Lines" is read-only. An already-processed Workshop line (status "Processed") remains as an audit record even if the associated purchase order is cancelled (deleted).
+- **Consignment posting entries**: Created exclusively and automatically when a sales invoice is posted. The "CXW Cons. Posting Entries" overview page allows no manual editing other than the "Retry" action (status change Error → Open).
 
 ## Permissions
 
-Access to all sales price management objects is controlled through the **"CXWChronWSAll"** permission set (since the HTTP-logging update, also covers the "Http Call Log" page shared with SellWatch). SellWatch has its own **"CXW SWChronWSAll"** permission set (covers "SellWatch-Overview", "SellWatch info", and the likewise-shared "Http Call Log" page, plus the underlying tables). The Workshop authenticity check has two separate permission sets: **"CXW Workshop All"** for full internal access (e.g. for the job queue execution user), and **"CXW Workshop API"** exclusively for the external workshop service user (read/modify access to Workshop lines only, no access to the purchase document or item). All sets still need to be assigned to the relevant users or user groups before they can use the respective extension pages.
+Access to all sales price management objects is controlled through the **"CXWChronWSAll"** permission set (since the HTTP-logging update, also covers the "Http Call Log" page shared with SellWatch). SellWatch has its own **"CXW SWChronWSAll"** permission set (covers "SellWatch-Overview", "SellWatch info", and the likewise-shared "Http Call Log" page, plus the underlying tables). The Workshop authenticity check has two separate permission sets: **"CXW Workshop All"** for full internal access (e.g. for the job queue execution user), and **"CXW Workshop API"** exclusively for the external workshop service user (read/modify access to Workshop lines only, no access to the purchase document or item). Consignment Sales does **not** have its own permission set — since this update it is covered by **"CXW Workshop All"** (including read access to sales invoices and the purchasing setup). All sets still need to be assigned to the relevant users or user groups before they can use the respective extension pages.
 
 ## Troubleshooting
 
@@ -160,6 +198,9 @@ Access to all sales price management objects is controlled through the **"CXWChr
 | Workshop lines aren't processed, staying stuck on "WS checked" | Check whether the job queue entry for Codeunit "CXW Process Workshop Lines" exists, is active, and isn't erroring, and whether the executing user has the "CXW Workshop All" permission set. |
 | A Workshop line shows status "Error" | Check the error text in the "Last Error" field on the "CXW Workshop Lines" page. After fixing the cause (e.g. reopening the posting period), manually reset the status back to "WS checked" — the line is automatically reprocessed on the next job queue run. |
 | Trying to set a Workshop line directly to status "Error" fails | This is intentional: status "Error" can only be set from "WS checked", and only by the automatic processing itself. |
+| No consignment posting entry is created for a consignment sale | Check that the "Consignment Sales" flag is set on the sold item, and that the sales invoice was actually posted as an invoice (not just delivered). |
+| A consignment posting entry stays stuck on status "Error" | Check the error text on the "CXW Cons. Posting Entries" page. For "no/multiple open purchase orders found": clarify the order situation for the item (e.g. was the order already cancelled or invoiced?). For a posting error message: fix the cause (e.g. reopen the posting period), then run the "Retry" action. |
+| The automatic purchase invoice isn't posted even though the due date has passed | Check whether the job queue entry for Codeunit "CXW Post Consignment Purchases" exists, is active, and isn't erroring, and whether the executing user has the "CXW Workshop All" permission set. |
 
 ## Escalation path
 

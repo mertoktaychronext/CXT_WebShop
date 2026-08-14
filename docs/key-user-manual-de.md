@@ -1,8 +1,8 @@
-# Key-User-Handbuch – SL Chronext Webshop (Verkaufspreisverwaltung, SellWatch & Workshop-Ankaufsprüfung)
+# Key-User-Handbuch – SL Chronext Webshop (Verkaufspreisverwaltung, SellWatch, Workshop-Ankaufsprüfung & Kommissionsverkauf)
 
 ## Über dieses Dokument
 
-Dieses Handbuch richtet sich an Key User, die die Grundeinstellungen der Verkaufspreisverwaltung pflegen, Länder und Währungen für die Preiserzeugung freischalten, die externe Schnittstelle für den SellWatch-Online-Check konfigurieren, die Werkstatt-Anbindung für die Echtheitsprüfung einrichten und bei Problemen die erste Anlaufstelle für die Fachabteilung sind. Das Handbuch deckt drei fachlich unabhängige Teile der Erweiterung ab: die Verkaufspreisverwaltung, SellWatch (Ankaufsanfragen für gebrauchte Uhren) und die Workshop-Ankaufsprüfung (externe Echtheitsprüfung angekaufter Uhren).
+Dieses Handbuch richtet sich an Key User, die die Grundeinstellungen der Verkaufspreisverwaltung pflegen, Länder und Währungen für die Preiserzeugung freischalten, die externe Schnittstelle für den SellWatch-Online-Check konfigurieren, die Werkstatt-Anbindung für die Echtheitsprüfung einrichten, die verzögerte EK-Faktura für Kommissionsverkäufe einrichten und bei Problemen die erste Anlaufstelle für die Fachabteilung sind. Das Handbuch deckt vier fachlich unabhängige Teile der Erweiterung ab: die Verkaufspreisverwaltung, SellWatch (Ankaufsanfragen für gebrauchte Uhren), die Workshop-Ankaufsprüfung (externe Echtheitsprüfung angekaufter Uhren) und den Kommissionsverkauf (verzögerte, automatische EK-Faktura für auf Kommission verkaufte Uhren).
 
 ## Grundeinstellungen (General Sales Price Setup)
 
@@ -69,6 +69,8 @@ Für SellWatch gibt es keinen von der Fachabteilung manuell ausgelösten Ablauf:
 
 Bei der Workshop-Ankaufsprüfung löst die Fachabteilung selbst nur den ersten Schritt aus (Aktion "Send to Workshop" auf der Einkaufsbestellung, siehe Benutzerhandbuch); die eigentliche Prüfung durch die Werkstatt und die anschließende Wareneingangsbuchung bzw. Stornierung laufen automatisiert über die externe Workshop-API und einen Job-Queue-Eintrag. Als Key User richten Sie die OAuth2-Anbindung für die Werkstatt, den Job-Queue-Eintrag und die Artikelattribut-Zuordnung ein (siehe unten) und sind erste Anlaufstelle, wenn eine Workshop-Zeile dauerhaft im Status "Fehler" hängen bleibt.
 
+Beim Kommissionsverkauf gibt es ebenfalls keinen von der Fachabteilung manuell ausgelösten Ablauf: Sobald eine VK-Rechnung für einen Kommissionsartikel gebucht wird, entsteht automatisch ein Kommissions-Buchungseintrag, und ein Job-Queue-Eintrag bucht die zugehörige EK-Faktura nach Ablauf der eingerichteten Verzögerung automatisch. Als Key User richten Sie die Verzögerung in Tagen und den Job-Queue-Eintrag ein (siehe unten) und sind erste Anlaufstelle, wenn ein Kommissions-Buchungseintrag dauerhaft im Status "Fehler" hängen bleibt.
+
 ## SellWatch – Online-Check-Schnittstelle einrichten (API Interface Setup)
 
 Der SellWatch-Online-Check (prüft, ob eine Uhr im SellWatch-Onlineshop sichtbar sein sollte) nutzt dieselbe Seite **"API Interface Setup"** wie der Preisexport der Verkaufspreisverwaltung (siehe oben) – jedoch immer den festen Schnittstellen-Code **`WOA`**. Legen Sie dort einen Eintrag mit Code `WOA` an bzw. pflegen Sie ihn:
@@ -132,16 +134,52 @@ Eine Workshop-Zeile durchläuft die Status **Neu → WS geprüft → Verarbeitet
 
 > Ein direkter Wechsel auf Status "Fehler" von einem anderen Status als "WS geprüft" aus (z. B. versehentlich über die API) wird vom System mit einer Fehlermeldung abgelehnt – dieser Status wird ausschließlich von der automatischen Verarbeitung selbst gesetzt.
 
+## Kommissionsverkauf einrichten
+
+Wird ein als Kommissionsware markierter Artikel per Verkaufsrechnung verkauft, soll die zugehörige Einkaufsrechnung nicht sofort, sondern erst nach einer festgelegten Anzahl Tage automatisch gebucht werden. Nach der Erstinstallation der Erweiterung sind zwei Schritte einmalig einzurichten:
+
+### 1. Verzögerung in Tagen festlegen
+
+Auf der Seite **"Purchases & Payables Setup"** (Einkaufseinrichtung) finden Sie im Bereich "SellWatch" das Feld:
+
+| Feld | Bedeutung |
+|---|---|
+| Consignment Invoice Delay (Days) | Anzahl Tage zwischen der Buchung der Verkaufsrechnung und der automatischen Buchung der zugehörigen Einkaufsrechnung. 0 bedeutet: am nächsten Lauf der Hintergrundverarbeitung, ohne zusätzliche Wartezeit. |
+
+> Ist das Feld leer (0), wird die EK-Faktura beim nächsten Lauf der Hintergrundverarbeitung ohne Verzögerung gebucht.
+
+### 2. Job-Queue-Eintrag für die Verarbeitung anlegen
+
+Codeunit **"CXW Post Consignment Purchases"** bucht alle fälligen Kommissions-Buchungseinträge (Status "Offen", Fälligkeitsdatum erreicht) automatisch als Einkaufsrechnung:
+
+1. Job-Queue-Einträge → Neu.
+2. Objekttyp: Codeunit, Objekt: "CXW Post Consignment Purchases".
+3. Empfohlene Wiederholung: täglich.
+4. Der ausführende Benutzer benötigt das Permission Set **"CXW Workshop All"** (deckt seit dieser Version auch den Kommissionsverkauf ab) sowie die Standard-Einkaufs-Berechtigungen für die Rechnungsbuchung.
+
+## Status und Fehlerbehandlung der Kommissions-Buchungseinträge
+
+Auf der Seite **"CXW Cons. Posting Entries"** sehen Sie alle Kommissions-Buchungseinträge mit Artikel, ermittelter Einkaufsbestellung, auslösender Verkaufsrechnung, Fälligkeitsdatum, Status und – im Fehlerfall – Fehlertext. Ein Eintrag durchläuft die Status **Offen → Gebucht** bzw. bei einem Fehlschlag **Offen → Fehler**.
+
+Ein Eintrag steht auf Status "Fehler", wenn entweder
+- **keine oder mehrere passende offene Einkaufsbestellungen** zum verkauften Artikel gefunden wurden (Fehlertext nennt die Artikelnummer), oder
+- **das Buchen der Einkaufsrechnung selbst fehlgeschlagen ist** (z. B. gesperrte Buchungsperiode) – Fehlertext enthält die konkrete Fehlermeldung.
+
+**Einen fehlerhaften Eintrag erneut anstoßen:** Wählen Sie den betroffenen Eintrag (oder mehrere) auf der Seite "CXW Cons. Posting Entries" aus und führen Sie die Aktion **"Retry"** aus. Der Status wird auf "Offen" zurückgesetzt; beim nächsten Lauf der Hintergrundverarbeitung wird der Eintrag automatisch erneut versucht – inklusive einer erneuten Ermittlung der passenden Einkaufsbestellung, falls diese beim ersten Versuch nicht gefunden wurde.
+
+> Eine reine Lieferung ohne Fakturierung sowie der Verkauf eines Artikels ohne das Kennzeichen "Kommissionsverkauf" erzeugen keinen Eintrag.
+
 ## Datenmanagement
 
 - **Sales Price / Archiv**: Bei jedem Ausführen von "Upload Sales Price" wird die freigegebene Preiszeile automatisch in die produktive Verkaufspreis-Tabelle (immer gültig für alle Kunden) sowie als neue, fortlaufend nummerierte Version in "Sales Price Archive" übernommen – auch bei einem erneuten Senden bereits übertragener Zeilen. Eine manuelle Pflege dieser beiden Tabellen ist nicht vorgesehen und nicht nötig.
 - **Import/Export über Dateien**: Es existiert ein vorbereiteter, aber noch nicht angebundener Baustein für einen automatisierten, dateibasierten Preisimport. Dieser ist aktuell nicht Teil des produktiven Ablaufs (kein Job-Queue-Eintrag).
 - **SellWatch-Ankaufsanfragen**: Die Tabellen hinter "SellWatch-Overview" sowie das Protokoll des Online-Checks ("Http Call Log") werden ausschließlich automatisiert befüllt; eine manuelle Pflege ist nicht vorgesehen und über die Seiten der Erweiterung auch nicht möglich (alle SellWatch-Seiten sind schreibgeschützt).
 - **Workshop-Zeilen**: Werden ausschließlich über die Aktion "Send to Workshop" (Fachabteilung) sowie über die externe Workshop-API angelegt bzw. geändert. Die interne Übersichtsseite "CXW Workshop Lines" ist schreibgeschützt. Eine bereits verarbeitete Workshop-Zeile (Status "Verarbeitet") bleibt auch dann als Prüfnachweis bestehen, wenn die zugehörige Einkaufsbestellung storniert (gelöscht) wird.
+- **Kommissions-Buchungseinträge**: Werden ausschließlich automatisch bei der VK-Rechnungsbuchung angelegt. Die Übersichtsseite "CXW Cons. Posting Entries" erlaubt außer der Aktion "Retry" (Statusänderung Fehler → Offen) keine manuelle Bearbeitung.
 
 ## Berechtigungen
 
-Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permission Set **"CXWChronWSAll"** geregelt (deckt seit dem HTTP-Logging-Update auch die mit SellWatch geteilte Seite "Http Call Log" ab). Für SellWatch gilt das eigene Permission Set **"CXW SWChronWSAll"** (deckt "SellWatch-Overview", "SellWatch info" und die ebenfalls geteilte Seite "Http Call Log" sowie die zugrundeliegenden Tabellen ab). Für die Workshop-Ankaufsprüfung gibt es zwei getrennte Permission Sets: **"CXW Workshop All"** für den internen Vollzugriff (u. a. für den Job-Queue-Ausführungsbenutzer) und **"CXW Workshop API"** ausschließlich für den externen Workshop-Dienstbenutzer (nur Lese-/Änderungsrecht auf die Workshop-Zeilen, kein Zugriff auf Einkaufsbeleg oder Artikel). Alle Sets müssen den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor diese die jeweiligen Seiten der Erweiterung nutzen können.
+Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permission Set **"CXWChronWSAll"** geregelt (deckt seit dem HTTP-Logging-Update auch die mit SellWatch geteilte Seite "Http Call Log" ab). Für SellWatch gilt das eigene Permission Set **"CXW SWChronWSAll"** (deckt "SellWatch-Overview", "SellWatch info" und die ebenfalls geteilte Seite "Http Call Log" sowie die zugrundeliegenden Tabellen ab). Für die Workshop-Ankaufsprüfung gibt es zwei getrennte Permission Sets: **"CXW Workshop All"** für den internen Vollzugriff (u. a. für den Job-Queue-Ausführungsbenutzer) und **"CXW Workshop API"** ausschließlich für den externen Workshop-Dienstbenutzer (nur Lese-/Änderungsrecht auf die Workshop-Zeilen, kein Zugriff auf Einkaufsbeleg oder Artikel). Der Kommissionsverkauf nutzt **kein eigenes** Permission Set, sondern ist seit dieser Version in **"CXW Workshop All"** enthalten (inkl. Lesezugriff auf Verkaufsrechnungen und die Einkaufseinrichtung). Alle Sets müssen den entsprechenden Benutzern bzw. Benutzergruppen noch zugewiesen werden, bevor diese die jeweiligen Seiten der Erweiterung nutzen können.
 
 ## Troubleshooting
 
@@ -160,6 +198,9 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 | Workshop-Zeilen werden nicht verarbeitet, bleiben dauerhaft auf "WS geprüft" | Prüfen Sie, ob der Job-Queue-Eintrag für Codeunit "CXW Process Workshop Lines" existiert, aktiv und nicht fehlerhaft ist, und ob der ausführende Benutzer das Permission Set "CXW Workshop All" besitzt. |
 | Eine Workshop-Zeile steht auf Status "Fehler" | Fehlertext im Feld "Last Error" auf Seite "CXW Workshop Lines" prüfen. Nach Behebung der Ursache (z. B. Buchungsperiode öffnen) Status manuell zurück auf "WS geprüft" setzen – die Zeile wird beim nächsten Job-Queue-Lauf automatisch erneut verarbeitet. |
 | Versuch, eine Workshop-Zeile direkt auf Status "Fehler" zu setzen, schlägt fehl | Das ist beabsichtigt: Der Status "Fehler" darf nur aus "WS geprüft" heraus gesetzt werden und ausschließlich durch die automatische Verarbeitung selbst. |
+| Für einen Kommissionsverkauf entsteht kein Kommissions-Buchungseintrag | Prüfen Sie, ob am verkauften Artikel das Kennzeichen "Consignment Sales" gesetzt ist und ob die Verkaufsrechnung tatsächlich als Rechnung gebucht wurde (nicht nur geliefert). |
+| Ein Kommissions-Buchungseintrag steht dauerhaft auf Status "Fehler" | Fehlertext auf Seite "CXW Cons. Posting Entries" prüfen. Bei "keine/mehrere offene Bestellungen gefunden": Bestellsituation zum Artikel klären (z. B. wurde die Bestellung bereits storniert oder fakturiert?). Bei einer Buchungsfehlermeldung: Ursache beheben (z. B. Buchungsperiode öffnen) und danach die Aktion "Retry" ausführen. |
+| Die automatische EK-Faktura wird nicht gebucht, obwohl das Fälligkeitsdatum erreicht ist | Prüfen Sie, ob der Job-Queue-Eintrag für Codeunit "CXW Post Consignment Purchases" existiert, aktiv und nicht fehlerhaft ist, und ob der ausführende Benutzer das Permission Set "CXW Workshop All" besitzt. |
 
 ## Eskalationswege
 

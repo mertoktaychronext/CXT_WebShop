@@ -8,5 +8,11 @@ tableextension 60322 "CXW SW Purchases Setup" extends "Purchases & Payables Setu
             TableRelation = "Item Templ.";
             DataClassification = ToBeClassified;
         }
+        field(60301; "CXW SW Consignment Invoice Delay (Days)"; Integer)
+        {
+            Caption = 'Consignment Invoice Delay (Days)';
+            MinValue = 0;
+            DataClassification = ToBeClassified;
+        }
     }
 }
