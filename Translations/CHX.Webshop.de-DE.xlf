@@ -99,6 +99,60 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW Source Table No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2009118285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Consignment Posting Entry</source>
+          <target>Kommissions-Buchungseintrag</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 3759899616 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Due Date</source>
+          <target>Fälligkeitsdatum</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Due Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 4158875555 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No</source>
+          <target>Lfd. Nr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Entry No - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 839663323 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error Text</source>
+          <target>Fehlertext</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Error Text - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 1887293546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Artikelnr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 330495498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase Order No.</source>
+          <target>Bestellnr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Purchase Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 1060481006 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Invoice No.</source>
+          <target>Verkaufsrechnungsnr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Sales Invoice No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 2152162196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Posting Date</source>
+          <target>Verkaufsbuchungsdatum</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Sales Posting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2009118285 - Field 3326622484 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Status</source>
+          <target>Status</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Consignment Posting Entry - Field CXW Status - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3250934196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General Sales Price Setup</source>
           <target>Allgemeine Verkaufspreiseinrichtung</target>
@@ -1185,6 +1239,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Status - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Codeunit 868959245 - NamedType 3358213697" size-unit="char" translate="yes" xml:space="preserve">
+          <source>More than one open, received but not yet invoiced purchase order found for item %1.</source>
+          <target>Für Artikel %1 wurde mehr als eine offene, wareneingebuchte, aber noch nicht fakturierte Einkaufsbestellung gefunden.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item number</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Consignment Sale Detection - NamedType MultipleOpenPurchaseOrdersErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 868959245 - NamedType 3339451703" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No open, received but not yet invoiced purchase order found for item %1.</source>
+          <target>Für Artikel %1 wurde keine offene, wareneingebuchte, aber noch nicht fakturierte Einkaufsbestellung gefunden.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item number</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Consignment Sale Detection - NamedType NoOpenPurchaseOrderErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1695587631 - NamedType 738529365" size-unit="char" translate="yes" xml:space="preserve">
           <source>API interface %1 (selected on the general sales price setup) no longer exists.</source>
           <target>Die API-Schnittstelle %1 (ausgewählt in der allgemeinen Verkaufspreiseinrichtung) existiert nicht mehr.</target>
@@ -1220,6 +1286,12 @@
           <target>Unerwartete Spalte an Position %1: erwartet "%2", gefunden "%3".</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Import Sales Prices - NamedType UnexpectedColumnErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1414986601 - NamedType 3640727966" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase order %1 has no remaining received, not yet invoiced quantity.</source>
+          <target>Für Einkaufsbestellung %1 ist keine wareneingebuchte, aber noch nicht fakturierte Menge mehr offen.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = purchase order number</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Post Consignment Purchases - NamedType NothingToInvoiceErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3674014615 - NamedType 2888902389" size-unit="char" translate="yes" xml:space="preserve">
           <source>The item template %1 set up on the Purchases &amp; Payables Setup page no longer exists. Cannot create an item for the SellWatch offer.</source>
@@ -1388,6 +1460,72 @@
           <target>Gibt an, für welche Tabelle diese Schnittstelle Daten überträgt.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW Source Table No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Consignment Posting Entries</source>
+          <target>Kommissions-Buchungseinträge</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 3759899616 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date from which the purchase invoice may be posted automatically.</source>
+          <target>Gibt das Datum an, ab dem die Einkaufsrechnung automatisch gebucht werden darf.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Due Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 4158875555 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the entry number.</source>
+          <target>Gibt die laufende Nummer an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Entry No - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 839663323 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the last error encountered while processing this entry.</source>
+          <target>Gibt den zuletzt aufgetretenen Fehler bei der Verarbeitung dieses Eintrags an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Error Text - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 1887293546 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the consignment item that was sold.</source>
+          <target>Gibt den verkauften Kommissionsartikel an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Item No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 330495498 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the purchase order to be invoiced for this consignment sale.</source>
+          <target>Gibt die für diesen Kommissionsverkauf zu fakturierende Einkaufsbestellung an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Purchase Order No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 1060481006 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the posted sales invoice that triggered this entry.</source>
+          <target>Gibt die gebuchte Verkaufsrechnung an, die diesen Eintrag ausgelöst hat.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Sales Invoice No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 2152162196 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the posting date of the triggering sales invoice.</source>
+          <target>Gibt das Buchungsdatum der auslösenden Verkaufsrechnung an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Sales Posting Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Control 3326622484 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the processing status of this entry.</source>
+          <target>Gibt den Verarbeitungsstatus dieses Eintrags an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Control CXW Status - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Action 3488904508 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Resets the selected entries with status Error back to Open so they are processed again on the next run.</source>
+          <target>Setzt die ausgewählten Einträge mit Status Fehler wieder auf Offen zurück, damit sie beim nächsten Lauf erneut verarbeitet werden.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Action Retry - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3353865835 - Action 3488904508 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Retry</source>
+          <target>Wiederholen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Cons. Posting Entries - Action Retry - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 3250934196 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>General Sales Price Setup</source>
@@ -2301,6 +2439,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SellWatch Setup - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 2485353633 - Control 2072471027 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
+          <source>Specifies the number of days between posting the sales invoice for a consignment item and automatically posting the related purchase invoice.</source>
+          <target>Gibt die Anzahl Tage zwischen der Buchung der Verkaufsrechnung für einen Kommissionsartikel und der automatischen Buchung der zugehörigen Einkaufsrechnung an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SW Consignment Invoice Delay (Days) - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="PageExtension 2485353633 - Control 2393159316 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
           <source>Specifies the item template used to automatically create items for incoming SellWatch offers.</source>
           <target>Gibt die Artikelvorlage an, mit der für eingehende SellWatch-Angebote automatisch Artikel angelegt werden.</target>
@@ -2415,6 +2559,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchase Line - Field CXW Used good - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 2485353633 - Field 2072471027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
+          <source>Consignment Invoice Delay (Days)</source>
+          <target>Verzögerung Kommissionsrechnung (Tage)</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Consignment Invoice Delay (Days) - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 2485353633 - Field 2393159316 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
           <source>SellWatch Item Template</source>
           <target>SellWatch-Artikelvorlage</target>
@@ -2462,6 +2612,24 @@
           <target>Keine</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW API Auth Type - EnumValue None - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3802463381 - EnumValue 2248886284 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Error</source>
+          <target>Fehler</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Consignment Posting Status - EnumValue Error - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3802463381 - EnumValue 4259830144 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open</source>
+          <target>Offen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Consignment Posting Status - EnumValue Open - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Enum 3802463381 - EnumValue 35450067 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Posted</source>
+          <target>Gebucht</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Consignment Posting Status - EnumValue Posted - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 66537382 - EnumValue 3844911025 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Canceled</source>

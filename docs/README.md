@@ -1,6 +1,6 @@
 # Dokumentation – CHX.Webshop
 
-Diese Business-Central-Erweiterung bündelt drei Bereiche: die Verwaltung von Webshop-Verkaufspreisen (Import, Prüfung, Freigabe, Fremdwährungs-Vervielfältigung), die SellWatch-Ankaufsintegration für gebrauchte Uhren (automatisierte Lieferanten-/Bestellanlage, Statusrückmeldung, Online-Freigabeprüfung) und die Workshop-Ankaufsprüfung (externe Echtheitsprüfung angekaufter Uhren über eine Werkstatt, mit automatisiertem Wareneingang bzw. Stornierung). Wähle das passende Handbuch:
+Diese Business-Central-Erweiterung bündelt vier Bereiche: die Verwaltung von Webshop-Verkaufspreisen (Import, Prüfung, Freigabe, Fremdwährungs-Vervielfältigung), die SellWatch-Ankaufsintegration für gebrauchte Uhren (automatisierte Lieferanten-/Bestellanlage, Statusrückmeldung, Online-Freigabeprüfung), die Workshop-Ankaufsprüfung (externe Echtheitsprüfung angekaufter Uhren über eine Werkstatt, mit automatisiertem Wareneingang bzw. Stornierung) und den Kommissionsverkauf (verzögerte, automatische EK-Faktura für auf Kommission verkaufte Uhren nach der VK-Rechnungsbuchung). Wähle das passende Handbuch:
 
 ## Handbücher
 
@@ -18,4 +18,4 @@ Diese Business-Central-Erweiterung bündelt drei Bereiche: die Verwaltung von We
 
 ---
 
-*Erstellt am 2026-08-04, aktualisiert am 2026-08-07 (SellWatch-Ankaufsintegration ergänzt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung in allen drei Handbüchern ergänzt — war bislang undokumentiert, obwohl bereits im Funktionsregister erfasst). Handbücher/Funktionsregister durch reine Analyse (keine Codeänderungen); der Schwachstellenbericht enthält zusätzlich tatsächlich durchgeführte Code-Änderungen (siehe dort).*
+*Erstellt am 2026-08-04, aktualisiert am 2026-08-07 (SellWatch-Ankaufsintegration ergänzt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung in allen drei Handbüchern ergänzt — war bislang undokumentiert, obwohl bereits im Funktionsregister erfasst), aktualisiert am 2026-08-14 (Kommissionsverkauf ergänzt — verzögerte, automatische EK-Faktura für auf Kommission verkaufte Uhren; dabei auch die SellWatch-Artikelvorlagen-Konfiguration im Entwicklerhandbuch korrigiert, die fälschlich als verworfen dokumentiert war). Handbücher/Funktionsregister durch reine Analyse (keine Codeänderungen); der Schwachstellenbericht enthält zusätzlich tatsächlich durchgeführte Code-Änderungen (siehe dort).*
