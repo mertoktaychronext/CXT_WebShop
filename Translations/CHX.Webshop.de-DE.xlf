@@ -99,6 +99,54 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - Field CXW Source Table No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1641156729 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability Change Entry</source>
+          <target>Verfügbarkeitsänderungsposten</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 1454455705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <target>Lfd. Nr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 2276244867 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exported</source>
+          <target>Exportiert</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Exported - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 1469697952 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exported At</source>
+          <target>Exportiert am</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Exported At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 596576857 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Inserted At</source>
+          <target>Eingefügt am</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Inserted At - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 1887293546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <target>Artikelnr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 1386201392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Location Code</source>
+          <target>Lagerortcode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Location Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 1641156729 - Field 329903938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Variantencode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Availability Change Entry - Field CXW Variant Code - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 2009118285 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Consignment Posting Entry</source>
           <target>Kommissions-Buchungseintrag</target>
@@ -1461,6 +1509,54 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control CXW Source Table No. - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 796116933 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability Check</source>
+          <target>Verfügbarkeitsprüfung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 2346885236 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Options</source>
+          <target>Optionen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control Options - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 1020675092 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the bin used for the delivery-time calculation. If a bin is entered, the zone is ignored.</source>
+          <target></target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control BinCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 1020675092 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Bin Code</source>
+          <target>Lagerplatzcode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control BinCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 2292808279 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the country/region code used for the delivery-time calculation.</source>
+          <target>Gibt den Länder-/Regionscode an, der für die Berechnung der Lieferzeit verwendet wird.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control CountryRegionCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 2292808279 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Country/Region Code</source>
+          <target>Land-/Regionscode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control CountryRegionCode - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 3237028245 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the zone used for the delivery-time calculation when no bin is entered.</source>
+          <target>Gibt die Zone an, die für die Berechnung der Lieferzeit verwendet wird, wenn kein Lagerplatz angegeben ist.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control ZoneCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 796116933 - Control 3237028245 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Zone Code</source>
+          <target>Zonencode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Availability Check Dialog - Control ZoneCode - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 3353865835 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Consignment Posting Entries</source>
           <target>Kommissions-Buchungseinträge</target>
@@ -2361,6 +2457,54 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Status - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 2192701707 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Availability Change Entries</source>
+          <target>Verfügbarkeitsänderungsposten</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 1454455705 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the unique entry number of this availability change entry.</source>
+          <target>Gibt die eindeutige Postennummer dieses Verfügbarkeitsänderungspostens an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Entry No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 2276244867 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether the availability change entry has already been exported.</source>
+          <target>Gibt an, ob der Verfügbarkeitsänderungsposten bereits exportiert wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Exported - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 1469697952 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the availability change entry was exported.</source>
+          <target>Gibt an, wann der Verfügbarkeitsänderungsposten exportiert wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Exported At - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 596576857 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the availability change entry was created.</source>
+          <target>Gibt an, wann der Verfügbarkeitsänderungsposten erstellt wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Inserted At - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 1887293546 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the item number of the moved article.</source>
+          <target>Gibt die Artikelnummer des bewegten Artikels an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Item No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 1386201392 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the location code involved in the availability change.</source>
+          <target>Gibt den Lagerortcode an, der von der Änderung der Verfügbarkeit betroffen ist.“</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Location Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2192701707 - Control 329903938 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the variant code of the moved article.</source>
+          <target>Gibt den Variantencode des bewegten Artikels an.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXWAvailabilityChange Entries - Control CXW Variant Code - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="XmlPort 3262264592 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import Sales Price</source>
           <target>Verkaufspreis importieren</target>
@@ -2384,6 +2528,30 @@
           <target>Preis für alle Länder festlegen</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort CXW Import Sales Price - Control SetPriceForAllCountries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3603935223 - NamedType 4114943979" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3603935223">
+          <source>Item %1 has availability %2. Calculated delivery date: %3 (%4 day(s)).</source>
+          <target>Artikel %1 hat eine Verfügbarkeit von %2. Berechnetes Lieferdatum: %3 (%4 Tag(e)).</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item no.; %2 = availability; %3 = delivery date; %4 = day count</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Item Card - NamedType DeliveryDateMsg</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3603935223 - NamedType 2348448557" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3603935223">
+          <source>Item %1 has availability %2 and is currently not deliverable.</source>
+          <target>Artikel %1 hat eine Verfügbarkeit von %2 und ist derzeit nicht lieferbar.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item no.; %2 = availability</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Item Card - NamedType NotDeliverableMsg</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3603935223 - Action 1998945205 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1434786627">
+          <source>Calculates the current delivery date for this item based on availability and delivery-time rules.</source>
+          <target>Berechnet das aktuelle Lieferdatum für diesen Artikel basierend auf der Verfügbarkeit und den Lieferzeitregeln.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Item Card - Action CXWCheckAvailabilityDeliveryDate - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3603935223 - Action 1998945205 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1434786627">
+          <source>Check Availability Date</source>
+          <target>Verfügbarkeitsdatum prüfen</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Item Card - Action CXWCheckAvailabilityDeliveryDate - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 883660078 - Control 3759243109 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 352260082">
           <source>Webshop Details</source>
