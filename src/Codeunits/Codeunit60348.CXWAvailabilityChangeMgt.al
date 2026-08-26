@@ -15,9 +15,12 @@ codeunit 60348 "CXW Availability Change Mgt"
         QueueAvailabilityChange(Rec."Item No.", Rec."Variant Code", Rec."Location Code");
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterInsertEvent', '', false, false)]
-    local procedure OnAfterInsertSalesLine(var Rec: Record "Sales Line"; RunTrigger: Boolean)
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterModifyEvent', '', false, false)]
+    local procedure OnAfterModifySalesLine(var Rec: Record "Sales Line"; var xRec: Record "Sales Line"; RunTrigger: Boolean)
     begin
+        if Rec."No." = '' then
+            exit;
+
         if not IsRelevantSalesLine(Rec) then
             exit;
 
