@@ -119,6 +119,19 @@ codeunit 60346 "CXW On Demand Link Mgt"
         exit(true);
     end;
 
+    procedure LookupSalesLineForPurchaseLine(PurchaseLine: Record "Purchase Line"; var SalesLine: Record "Sales Line"): Boolean
+    var
+        SalesLineLookup: Page "CXW On Demand Sales Lookup";
+    begin
+        SalesLineLookup.LookupMode(true);
+        SalesLineLookup.SetPurchaseLineFilter(PurchaseLine);
+        if SalesLineLookup.RunModal() <> Action::LookupOK then
+            exit(false);
+
+        SalesLineLookup.GetRecord(SalesLine);
+        exit(true);
+    end;
+
     procedure LinkSalesLineToPurchaseLine(var SalesLine: Record "Sales Line"; var PurchaseLine: Record "Purchase Line")
     begin
         TestSalesLineForLinking(SalesLine);
@@ -142,14 +155,61 @@ codeunit 60346 "CXW On Demand Link Mgt"
         SalesLine."CXW Purchase Line No." := PurchaseLine."Line No.";
         SalesLine.Modify(true);
 
+        EnsurePurchaseLineDocumentOpen(PurchaseLine);
         PurchaseLine."CXW Sales Order No." := SalesLine."Document No.";
         PurchaseLine."CXW Sales Line No." := SalesLine."Line No.";
         PurchaseLine.Modify(true);
     end;
 
-    procedure ResetSalesLineLink(var SalesLine: Record "Sales Line")
+    procedure ResetSalesLineLink(var SalesLine: Record "Sales Line"; DeletePurchaseLine: Boolean)
+    var
+        PurchaseLine: Record "Purchase Line";
     begin
+        if DeletePurchaseLine and
+           (SalesLine."CXW Purchase Order No." <> '') and
+           (SalesLine."CXW Purchase Line No." <> 0)
+        then
+            if PurchaseLine.Get(PurchaseLine."Document Type"::Order, SalesLine."CXW Purchase Order No.", SalesLine."CXW Purchase Line No.") then begin
+                ClearPurchaseLinkInternal(SalesLine, false);
+                EnsurePurchaseLineDocumentOpen(PurchaseLine);
+                PurchaseLine.Delete(true);
+                exit;
+            end;
+
         ClearPurchaseLinkInternal(SalesLine, true);
+    end;
+
+    procedure ResetPurchaseLineLink(var PurchaseLine: Record "Purchase Line")
+    begin
+        ClearSalesLinkInternal(PurchaseLine, true);
+    end;
+
+    procedure IsOnDemandPurchaseLine(PurchaseLine: Record "Purchase Line"): Boolean
+    begin
+        if PurchaseLine.IsTemporary() then
+            exit(false);
+
+        if PurchaseLine."Document Type" <> PurchaseLine."Document Type"::Order then
+            exit(false);
+
+        if PurchaseLine.Type <> PurchaseLine.Type::Item then
+            exit(false);
+
+        if PurchaseLine."No." = '' then
+            exit(false);
+
+        if PurchaseLine."Outstanding Quantity" <= 0 then
+            exit(false);
+
+        exit(IsOnDemandItem(PurchaseLine."No."));
+    end;
+
+    procedure PurchaseLineNeedsOnDemandAssignment(PurchaseLine: Record "Purchase Line"): Boolean
+    begin
+        if not IsOnDemandPurchaseLine(PurchaseLine) then
+            exit(false);
+
+        exit((PurchaseLine."CXW Sales Order No." = '') and (PurchaseLine."CXW Sales Line No." = 0));
     end;
 
     procedure CreatePurchaseOrderForSalesLines(var TempSalesLines: Record "Sales Line" temporary; VendorNo: Code[20]): Code[20]
@@ -181,6 +241,7 @@ codeunit 60346 "CXW On Demand Link Mgt"
         if not PurchaseLine.Get(PurchaseLine."Document Type"::Order, SalesLine."CXW Purchase Order No.", SalesLine."CXW Purchase Line No.") then
             exit;
 
+        EnsurePurchaseLineDocumentOpen(PurchaseLine);
         PurchaseLine."CXW Sales Order No." := '';
         PurchaseLine."CXW Sales Line No." := 0;
         PurchaseLine.Modify(true);
@@ -280,6 +341,7 @@ codeunit 60346 "CXW On Demand Link Mgt"
            (SalesLineToModify."CXW Purchase Line No." <> 0) and
            PurchaseLine.Get(PurchaseLine."Document Type"::Order, SalesLineToModify."CXW Purchase Order No.", SalesLineToModify."CXW Purchase Line No.")
         then begin
+            EnsurePurchaseLineDocumentOpen(PurchaseLine);
             PurchaseLine."CXW Sales Order No." := '';
             PurchaseLine."CXW Sales Line No." := 0;
             PurchaseLine.Modify(true);
@@ -314,9 +376,24 @@ codeunit 60346 "CXW On Demand Link Mgt"
         if (PurchaseLineToModify."CXW Sales Order No." = '') and (PurchaseLineToModify."CXW Sales Line No." = 0) then
             exit;
 
+        EnsurePurchaseLineDocumentOpen(PurchaseLineToModify);
         PurchaseLineToModify."CXW Sales Order No." := '';
         PurchaseLineToModify."CXW Sales Line No." := 0;
         PurchaseLineToModify.Modify(true);
+    end;
+
+    local procedure EnsurePurchaseLineDocumentOpen(PurchaseLine: Record "Purchase Line")
+    var
+        PurchaseHeader: Record "Purchase Header";
+        ReleasePurchDoc: Codeunit "Release Purchase Document";
+    begin
+        if not PurchaseHeader.Get(PurchaseLine."Document Type", PurchaseLine."Document No.") then
+            exit;
+
+        if PurchaseHeader.Status = PurchaseHeader.Status::Open then
+            exit;
+
+        ReleasePurchDoc.PerformManualReopen(PurchaseHeader);
     end;
 
     var

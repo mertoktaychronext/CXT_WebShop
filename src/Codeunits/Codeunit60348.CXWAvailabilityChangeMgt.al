@@ -104,6 +104,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityChangeEntry."CXW Item No." := ItemNo;
         AvailabilityChangeEntry."CXW Variant Code" := VariantCode;
         AvailabilityChangeEntry."CXW Location Code" := LocationCode;
+        AvailabilityChangeEntry."CXW Inserted At" := CurrentDateTime;
         AvailabilityChangeEntry.Insert();
     end;
 

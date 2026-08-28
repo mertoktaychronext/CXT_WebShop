@@ -6,6 +6,7 @@ page 60341 "CXW On Demand Sales Lines"
     SourceTableTemporary = true;
     ApplicationArea = All;
     UsageCategory = Lists;
+    RefreshOnActivate = true;
     InsertAllowed = false;
     DeleteAllowed = false;
 
@@ -28,7 +29,16 @@ page 60341 "CXW On Demand Sales Lines"
                 field("Document No."; Rec."Document No.")
                 {
                     ApplicationArea = All;
+                    DrillDown = true;
                     ToolTip = 'Specifies the sales order number.';
+
+                    trigger OnDrillDown()
+                    var
+                        SalesHeader: Record "Sales Header";
+                    begin
+                        if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then
+                            Page.RunModal(Page::"Sales Order", SalesHeader);
+                    end;
                 }
                 field("Line No."; Rec."Line No.")
                 {
@@ -63,7 +73,19 @@ page 60341 "CXW On Demand Sales Lines"
                 field("CXW Purchase Order No."; Rec."CXW Purchase Order No.")
                 {
                     ApplicationArea = All;
+                    DrillDown = true;
                     ToolTip = 'Specifies the linked purchase order number.';
+
+                    trigger OnDrillDown()
+                    var
+                        PurchaseHeader: Record "Purchase Header";
+                    begin
+                        if Rec."CXW Purchase Order No." = '' then
+                            exit;
+
+                        if PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, Rec."CXW Purchase Order No.") then
+                            Page.RunModal(Page::"Purchase Order", PurchaseHeader);
+                    end;
                 }
                 field("CXW Purchase Line No."; Rec."CXW Purchase Line No.")
                 {
@@ -136,11 +158,23 @@ page 60341 "CXW On Demand Sales Lines"
                 begin
                     GetSelectedSalesLines(TempSelectedSalesLines);
                     PurchaseOrderNo := OnDemandLinkMgt.CreatePurchaseOrderForSalesLines(TempSelectedSalesLines, SelectedVendorNo);
+                    Commit();
                     if PurchaseHeader.Get(PurchaseHeader."Document Type"::Order, PurchaseOrderNo) then
                         Page.RunModal(Page::"Purchase Order", PurchaseHeader);
 
                     LoadLines();
                     CurrPage.Update(false);
+                end;
+            }
+            action(ShowOpenPurchaseLines)
+            {
+                ApplicationArea = All;
+                Caption = 'Show Open Purchase Lines';
+                ToolTip = 'Opens the list of open on-demand purchase lines that are not yet linked to a sales line.';
+
+                trigger OnAction()
+                begin
+                    Page.RunModal(Page::"CXW On Demand Purchase Lines");
                 end;
             }
             action(ResetLink)
@@ -155,12 +189,15 @@ page 60341 "CXW On Demand Sales Lines"
                 var
                     TempSelectedSalesLines: Record "Sales Line" temporary;
                     SalesLine: Record "Sales Line";
+                    DeleteLinkedPurchaseLines: Boolean;
                 begin
                     GetSelectedSalesLines(TempSelectedSalesLines);
+                    if SelectionContainsPurchaseLink(TempSelectedSalesLines) then
+                        DeleteLinkedPurchaseLines := Confirm(DeleteLinkedPurchaseLineQst, false);
                     if TempSelectedSalesLines.FindSet() then
                         repeat
                             SalesLine.Get(TempSelectedSalesLines."Document Type", TempSelectedSalesLines."Document No.", TempSelectedSalesLines."Line No.");
-                            OnDemandLinkMgt.ResetSalesLineLink(SalesLine);
+                            OnDemandLinkMgt.ResetSalesLineLink(SalesLine, DeleteLinkedPurchaseLines);
                         until TempSelectedSalesLines.Next() = 0;
 
                     LoadLines();
@@ -259,10 +296,22 @@ page 60341 "CXW On Demand Sales Lines"
         SalesLine.Get(TempSelectedSalesLines."Document Type", TempSelectedSalesLines."Document No.", TempSelectedSalesLines."Line No.");
     end;
 
+    local procedure SelectionContainsPurchaseLink(var TempSelectedSalesLines: Record "Sales Line" temporary): Boolean
+    begin
+        if TempSelectedSalesLines.FindSet() then
+            repeat
+                if (TempSelectedSalesLines."CXW Purchase Order No." <> '') and (TempSelectedSalesLines."CXW Purchase Line No." <> 0) then
+                    exit(true);
+            until TempSelectedSalesLines.Next() = 0;
+
+        exit(false);
+    end;
+
     var
         OnDemandLinkMgt: Codeunit "CXW On Demand Link Mgt";
         SelectedVendorNo: Code[20];
         PurchaseStatusTxt: Text[50];
+        DeleteLinkedPurchaseLineQst: Label 'Soll die verknuepfte Einkaufsbestellungszeile ebenfalls geloescht werden?';
         NoSalesLinesSelectedErr: Label 'Please select at least one sales line.';
         SingleLineRequiredErr: Label 'Please select exactly one sales line.';
 }

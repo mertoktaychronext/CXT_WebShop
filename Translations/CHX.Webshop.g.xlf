@@ -1693,10 +1693,115 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purch. Lookup - Control Quantity Received - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 1151739128 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>On-Demand Purchase Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - NamedType 2943966837" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Please select at least one purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - NamedType NoPurchaseLinesSelectedErr</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - NamedType 4013669850" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - NamedType OpenLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - NamedType 2127878785" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Released</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - NamedType ReleasedLbl</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - NamedType 4017306492" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Please select exactly one purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - NamedType SingleLineRequiredErr</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 3792369418 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the vendor on the purchase order.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control Buy-from Vendor No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the description on the purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 486908828 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the purchase order number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control Document No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 3320823955 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the purchase order line number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control Line No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 4200184881 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the item number on the purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 184790795 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the outstanding quantity on the purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control Outstanding Quantity - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 358725209 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the current status of the purchase order.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control PurchaseStatusTxt - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 358725209 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Purchase Status</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control PurchaseStatusTxt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Control 3122616504 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies how much quantity has already been received on the purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Control Quantity Received - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Action 1303672059 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opens the purchase order of the selected line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Action OpenPurchaseOrder - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Action 1303672059 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open Purchase Order</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Action OpenPurchaseOrder - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Action 4068808250 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Links the selected purchase line to an open on-demand sales line for the same item.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Action LinkSalesLine - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Action 4068808250 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Link Sales Line</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Action LinkSalesLine - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Action 4144472988 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reloads the list of open on-demand purchase lines that are not yet linked to a sales line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Action RefreshLines - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1151739128 - Action 4144472988 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Purchase Lines - Action RefreshLines - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 4081239697 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>On Demand Sales Lines</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4081239697 - NamedType 2145748909" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Soll die verknuepfte Einkaufsbestellungszeile ebenfalls geloescht werden?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lines - NamedType DeleteLinkedPurchaseLineQst</note>
         </trans-unit>
         <trans-unit id="Page 4081239697 - NamedType 2695139140" size-unit="char" translate="yes" xml:space="preserve">
           <source>Please select at least one sales line.</source>
@@ -1832,6 +1937,61 @@
           <source>Reset Link</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lines - Action ResetLink - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 4081239697 - Action 2716202427 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Opens the list of open on-demand purchase lines that are not yet linked to a sales line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lines - Action ShowOpenPurchaseLines - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 4081239697 - Action 2716202427 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Show Open Purchase Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lines - Action ShowOpenPurchaseLines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>On-Demand Sales Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 2536215954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the linked purchase order line number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control CXW Purchase Line No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 330495498 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the linked purchase order number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control CXW Purchase Order No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 3461834954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the item description on the sales line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 486908828 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the sales order number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Document No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 3320823955 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the sales order line number.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Line No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 4200184881 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the item number on the sales line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 184790795 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the outstanding quantity on the sales line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Outstanding Quantity - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 504116268 - Control 1225278069 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the customer on the sales order.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Sell-to Customer No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1583426037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Archive</source>
@@ -2407,6 +2567,56 @@
           <source>Check Availability Date</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Item Card - Action CXWCheckAvailabilityDeliveryDate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3145489792 - Action 3452724152 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 387971303">
+          <source>Opens the work list for open on-demand purchase lines that do not yet have a sales assignment.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order - Action CXWOnDemandPurchaseLines - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3145489792 - Action 3452724152 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 387971303">
+          <source>On-Demand Purchase Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order - Action CXWOnDemandPurchaseLines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - NamedType 2943966837" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 2670301181">
+          <source>Please select at least one purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - NamedType NoPurchaseLinesSelectedErr</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - NamedType 4017306492" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 2670301181">
+          <source>Please select exactly one purchase line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - NamedType SingleLineRequiredErr</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - Action 90434230 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
+          <source>Links the selected purchase line to an open on-demand sales line for the same item.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - Action CXW Link Sales Line - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - Action 90434230 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
+          <source>Link Sales Line</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - Action CXW Link Sales Line - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - Action 1325470839 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
+          <source>Opens the work list of open on-demand purchase lines without a sales assignment.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - Action CXW Open On-Demand Purchase Lines - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - Action 1325470839 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
+          <source>Open On-Demand Purchase Lines</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - Action CXW Open On-Demand Purchase Lines - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - Action 2795153086 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
+          <source>Removes the purchase-to-sales link from the selected purchase lines.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - Action CXW Reset On-Demand Link - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2505294203 - Action 2795153086 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
+          <source>Reset On-Demand Link</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Purchase Order Subform - Action CXW Reset On-Demand Link - Property Caption</note>
         </trans-unit>
         <trans-unit id="PageExtension 2505294203 - Control 844578799 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 526152577">
           <source>Specifies the linked sales order line number for this purchase line.</source>
