@@ -12,6 +12,8 @@ As a third, likewise functionally independent component, the extension includes 
 
 As a fourth, new component, the extension includes **Consignment Sales** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): when a sales invoice is posted with a line for an item whose `"CXB Consignment Sales"` = true (a field supplied by the CHX.Base dependency), an event subscriber on `Codeunit "Sales-Post"` creates a consignment posting entry and automatically resolves the matching, received-but-not-yet-invoiced purchase order. A job-queue-driven codeunit posts due entries (due date = sales invoice posting date + a configurable delay in days) automatically as a purchase invoice. See the "Consignment Sales" section below for details.
 
+> **Update 2026-09-02 (Full re-verification):** All 57 AL objects were reconciled line by line against the current code (branch `03-FEAT/Workshop`). Corrected: the architecture sketch still referred to a "Country/Region" table/page extension that does not (any longer) exist in this extension — activation for "Add all Currencies" lives exclusively on "Currency". Clarified: `CreateSellWatchItem` reads the item template from `Purchases & Payables Setup."CXW SW Item Template Code"`. No code changes.
+
 > **Update 2026-08-14 (Consignment Sales added):** New objects 60341/60342/60343/60344/60345, new setup field `"CXW SW Consignment Invoice Delay (Days)"` on `TableExtension 60322 "CXW SW Purchases Setup"`. This also restored the SellWatch item-template configuration that a previous version of this manual documented as "lost before commit" (see Known Limitations, prior wording) — it is now present in production code, and the note below has been corrected. Also corrected the previously wrong "no dependencies" claim: `app.json` has depended on **CHX.Base** since the item-template configuration was added.
 
 > **Update 2026-08-13 (Workshop authenticity check documented):** The Workshop authenticity check has existed since an earlier extension update but wasn't documented in any of the three manuals. This update adds it to all three manuals (DE/EN) and to `docs/README.md`; it also corrects the outdated claim about hard-coded SellWatch variant codes (see Known Limitations) — no code changes.
@@ -134,9 +136,10 @@ Control data for "Add all Currencies":
 Table Extension "CXWCurrency" (on standard table "Currency", field "CXW Sales Price Activated")
    ◄── Page Extension "CXWCurrencies" (on standard page "Currencies")
 
-Country/Region now only supplies informational fields (taxation type, delivery time,
-default foreign currency) via Table Extension "CXW Country Region" / Page Extension
-"CXW Country Region Card" — no activation logic anymore.
+This extension has no table/page extension on "Country/Region" — activation for
+"Add all Currencies" lives exclusively on "Currency". Enums 60331 "CXW Taxation Type" /
+60332 "CXW Sales Price Reason Code" exist, but 60331 is currently not referenced by any
+object in this extension (Table 60300 stores the taxation as a free-text "CXW Taxation").
 
 Independent, not-yet-live component:
 File (CSV) → Table 60315 "CXW Sales Price Inbound File"
@@ -185,9 +188,9 @@ uses, see Codeunit 60329)
    │  "CXW First Online Date" if not yet set; otherwise "CXW Remark" =
    │  'Watch is offline'
    └─► logs every call (success and failure alike, API key redacted in
-          the stored request text) into Table 60302 "CXW SW Http Call
-          Log"; on failure, also raises telemetry (Session.LogMessage,
-          event ID 'SW-0101')
+          the stored request text) into Table 60302 "CXW Http Call
+          Log" ("CXW Source Table No." = 60301); on failure, also raises
+          telemetry (Session.LogMessage, event ID 'SW-0101')
 
 View (read-only, no insert/modify/delete via the pages):
 Page 60307 "CXW SellWatch-Overview" (list, SourceTable Table 60300,
@@ -388,7 +391,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 
 ## Permission Set
 
-The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"/"Country/Region"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. The set still needs to be actively assigned to a user group.
+The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. The set still needs to be actively assigned to a user group.
 
 For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the two SellWatch-only tables (60300–60301) plus the shared Table 60302 "CXW Http Call Log", along with execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309, where Page 60309 "CXW Http Call Log" is likewise shared). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
 

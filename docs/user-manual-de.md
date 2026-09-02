@@ -2,11 +2,12 @@
 
 ## Einleitung
 
-Diese Erweiterung für Microsoft Dynamics 365 Business Central deckt drei unabhängige Abläufe ab:
+Diese Erweiterung für Microsoft Dynamics 365 Business Central deckt vier weitgehend unabhängige Abläufe ab:
 
 1. **Verkaufspreisverwaltung** (dieses Kapitel): Sie importieren eine Preisliste (CSV-Datei), das System prüft automatisch Mindestmarge und ungewöhnliche Preisschwankungen, und ein Sachbearbeiter gibt die Preise anschließend frei, bevor sie an den Webshop übertragen werden.
 2. **SellWatch-Ankaufsanfragen** (siehe [entsprechendes Kapitel](#sellwatch-ankaufsanfragen-einsehen) unten): Eine schreibgeschützte Übersicht über Ankaufsanfragen für gebrauchte Uhren, die über den Partner SellWatch eingehen.
 3. **Workshop-Ankaufsprüfung** (siehe [entsprechendes Kapitel](#uhren-zur-echtheitsprüfung-an-die-werkstatt-senden) unten): Angekommene, angekaufte Uhren werden vor der Einlagerung von einer externen Werkstatt auf Echtheit geprüft. Sie erfassen dafür pro Bestellzeile die Herstellerseriennummer; die Prüfung selbst läuft automatisiert.
+4. **Kommissionsverkauf** (siehe [entsprechendes Kapitel](#kommissionsverkauf-verzögerte-einkaufsrechnung) unten): Für auf Kommission angekaufte Uhren wird die Einkaufsrechnung nach dem Verkauf zeitverzögert und vollautomatisch gebucht. Als Endnutzer ist hier keine Aktion nötig.
 
 ## Voraussetzungen
 
@@ -58,7 +59,7 @@ Wenn Sie einen Basispreis importiert, geprüft und freigegeben haben, können Si
 Klicken Sie auf **"Upload Sales Price"**, um alle freigegebenen Preiszeilen an das externe System (z. B. den Webshop) zu übertragen. Dabei passiert automatisch Folgendes für jede Zeile:
 
 1. Der Preis wird in die produktive Verkaufspreis-Tabelle übernommen (neu angelegt oder aktualisiert) – gültig für **alle Kunden**.
-2. Eine Kopie des Preises wird zusätzlich im **Preisarchiv** abgelegt, mit einer fortlaufenden Versionsnummer je Artikel/Variante/Währung.
+2. Eine Kopie des Preises wird zusätzlich im **Preisarchiv** abgelegt, mit einer fortlaufenden Versionsnummer je Artikel/Währung.
 3. Der Preis wird über die konfigurierte Schnittstelle an das externe System gesendet.
 
 Am Ende erhalten Sie eine Meldung, wie viele der freigegebenen Zeilen erfolgreich übertragen wurden. Zeilen, die bereits einmal erfolgreich übertragen wurden ("Export Status" = "Sent"), werden beim erneuten Klicken **nicht** automatisch nochmals gesendet – Sie werden vorher gefragt, ob diese wirklich erneut übertragen werden sollen.
@@ -104,6 +105,14 @@ Die eigentliche Prüfung durch die Werkstatt sowie die Weiterverarbeitung nach d
 Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Diese Seite ist schreibgeschützt.
 
 > Steht eine Zeile auf Status "Fehler", ist bei der letzten automatischen Verarbeitung ein Problem aufgetreten (z. B. eine gesperrte Buchungsperiode). Wenden Sie sich in diesem Fall an einen Key User bzw. das Entwicklungsteam (siehe Key-User-Handbuch).
+
+## Kommissionsverkauf: Verzögerte Einkaufsrechnung
+
+Für Uhren, die auf Kommission angekauft wurden (Artikel-Kennzeichen "Kommissionsverkauf"), wird die zugehörige **Einkaufsrechnung nicht sofort** beim Verkauf gebucht, sondern zeitverzögert und automatisch – eine festgelegte Anzahl Tage nach der Buchung der Verkaufsrechnung.
+
+Dieser Ablauf ist **vollständig automatisiert**: Sobald Sie eine Verkaufsrechnung für eine Kommissionsuhr buchen, entsteht im Hintergrund ein Kommissions-Buchungseintrag; eine Hintergrundverarbeitung bucht die Einkaufsrechnung anschließend zum Fälligkeitsdatum. Als Endnutzer müssen Sie hierfür nichts tun.
+
+> Die Einrichtung der Verzögerung, die Überwachung der Einträge und die Nachbearbeitung fehlgeschlagener Fälle (Seite "CXW Cons. Posting Entries", Aktion "Retry") übernimmt ein Key User – siehe Key-User-Handbuch.
 
 ## Häufige Fragen (FAQ)
 

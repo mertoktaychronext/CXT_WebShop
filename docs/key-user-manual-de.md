@@ -28,10 +28,14 @@ Diese Einstellungen **müssen** befüllt sein (Mindestmarge %, Schwellenwert Lag
 | Code | Eindeutiger Code der Schnittstelle – wird im Feld "API-Schnittstellencode" der Grundeinstellungen ausgewählt. |
 | Description | Freitext-Beschreibung der Schnittstelle. |
 | Endpoint URL | Die Ziel-URL, an die die Preisdaten per HTTP gesendet werden. Pflichtfeld, sobald die Schnittstelle aktiviert wird. |
-| Auth Type | Art der Authentifizierung: Keine, API-Schlüssel (Header) oder Basisauthentifizierung. |
-| API Key | Der API-Schlüssel bzw. das Token für die Authentifizierung. Wird verschlüsselt gespeichert und nach dem Speichern nicht mehr im Klartext angezeigt. Pflichtfeld, sobald eine Authentifizierungsart außer "Keine" gewählt wurde. |
+| HTTP Method | HTTP-Methode für den Aufruf: POST, PATCH, PUT, GET oder DELETE. Bei GET/DELETE wird kein Anfragekörper gesendet. |
+| SOAP Action | Wert für den `SOAPAction`-Header. Leer lassen, um den Header wegzulassen. |
+| Auth Type | Art der Authentifizierung: **Keine**, **API-Schlüssel (Header)**, **Basisauthentifizierung** oder **AWS Signature V4**. Je nach Auswahl blendet die Detailkarte die passenden Eingabefelder ein. |
+| API Key | Der API-Schlüssel bzw. das Token für die Authentifizierung (bei "API-Schlüssel (Header)" / "Basisauthentifizierung"; bei "AWS Signature V4" optional als zusätzlicher `X-API-Key`-Header). Wird verschlüsselt im Isolated Storage gespeichert und nach dem Speichern nicht mehr im Klartext angezeigt. Pflichtfeld bei "API-Schlüssel (Header)" und "Basisauthentifizierung". |
+| AWS Access Key ID / AWS Region / AWS Service | Nur bei Auth Type = "AWS Signature V4": Klartext-Angaben für die Anfragesignierung (Service typischerweise `execute-api` für API Gateway). |
+| AWS Secret Access Key / AWS Session Token | Nur bei Auth Type = "AWS Signature V4": verschlüsselt im Isolated Storage gespeichert. Secret Access Key ist Pflicht, Session Token nur bei temporären/STS-Zugangsdaten. |
 | Source Table No. | Die Tabelle, für die diese Schnittstelle Daten überträgt (für den Preisexport: die Tabellennummer von "Sales Price"). |
-| Active | Muss gesetzt sein, damit die Schnittstelle in den Grundeinstellungen auswählbar ist. Beim Aktivieren prüft das System automatisch, dass Endpoint URL und – falls nötig – API Key hinterlegt sind. |
+| Active | Muss gesetzt sein, damit die Schnittstelle in den Grundeinstellungen auswählbar ist. Beim Aktivieren prüft das System automatisch, dass Endpoint URL und – je nach Auth Type – API Key bzw. die AWS-Felder vollständig hinterlegt sind. |
 
 > Ohne eine aktive, vollständig konfigurierte Schnittstelle schlägt "Upload Sales Price" fehl bzw. markiert betroffene Preiszeilen mit "Export Status" = "Error".
 
@@ -45,17 +49,7 @@ In den Stammdaten der **Währung** (Seite "Currencies") wurde folgendes Feld erg
 
 > Ohne "Verkaufspreis aktiviert" wird eine Währung bei "Add all Currencies" nicht berücksichtigt.
 
-## Land/Region – Zusatzangaben
-
-In den Stammdaten von **Land/Region** (Seite "Countries/Regions") wurden folgende Felder ergänzt:
-
-| Feld | Bedeutung |
-|---|---|
-| Verkaufspreis-Währungscode | Die Standard-Fremdwährung dieses Landes. Rein informativ hinterlegt. |
-| Besteuerungsart | Vollbesteuerung, Differenzbesteuerung oder beides – aktuell nur informativ hinterlegt, ohne automatische Auswirkung auf die Preisberechnung. |
-| Lieferzeit (Tage) | Informationsfeld, aktuell ohne automatische Auswirkung auf die Preisprüfung. |
-
-> **Wichtig:** Die Freischaltung für "Add all Currencies" erfolgt seit der letzten Überarbeitung direkt auf der **Währung**, nicht mehr auf dem Land. Ein Land ohne "Verkaufspreis-Währungscode" kann trotzdem Preise erhalten, solange die zugehörige Währung aktiviert ist.
+> **Hinweis zur Währungs-/Länderfreischaltung:** Die Freischaltung für "Add all Currencies" erfolgt seit einer früheren Überarbeitung **ausschließlich** über das Feld "Verkaufspreis aktiviert" auf der **Währung**. Eine Erweiterung der Stammdaten von Land/Region ist in dieser App nicht (mehr) enthalten – frühere Angaben zu Feldern wie "Verkaufspreis-Währungscode", "Besteuerungsart" oder "Lieferzeit (Tage)" auf dem Land treffen auf den aktuellen Stand nicht zu.
 
 ## Grundcode (Reason Code)
 
