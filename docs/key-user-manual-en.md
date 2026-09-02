@@ -28,10 +28,14 @@ The **"API Interface Setup"** navigation button on the "General Sales Price Setu
 | Code | Unique interface code — selected in the "API Interface Code" field on the base settings. |
 | Description | Free-text description of the interface. |
 | Endpoint URL | The target URL the price data is sent to via HTTP. Required once the interface is activated. |
-| Auth Type | Authentication method: None, API Key (Header), or Basic Authentication. |
-| API Key | The API key or token used for authentication. Stored encrypted and no longer shown in plain text after saving. Required once an authentication type other than "None" is selected. |
+| HTTP Method | HTTP method for the call: POST, PATCH, PUT, GET, or DELETE. No request body is sent for GET/DELETE. |
+| SOAP Action | Value for the `SOAPAction` header. Leave blank to omit the header. |
+| Auth Type | Authentication method: **None**, **API Key (Header)**, **Basic Authentication**, or **AWS Signature V4**. The detail card shows the relevant input fields based on the selection. |
+| API Key | The API key or token used for authentication (for "API Key (Header)" / "Basic Authentication"; for "AWS Signature V4" optionally as an additional `X-API-Key` header). Stored encrypted in isolated storage and no longer shown in plain text after saving. Required for "API Key (Header)" and "Basic Authentication". |
+| AWS Access Key ID / AWS Region / AWS Service | Only for Auth Type = "AWS Signature V4": plain-text values for request signing (service typically `execute-api` for API Gateway). |
+| AWS Secret Access Key / AWS Session Token | Only for Auth Type = "AWS Signature V4": stored encrypted in isolated storage. Secret Access Key is required; Session Token only for temporary/STS credentials. |
 | Source Table No. | The table this interface transmits data for (for the price export: the table number of "Sales Price"). |
-| Active | Must be enabled for the interface to be selectable on the base settings. Activating it automatically checks that the Endpoint URL and — if needed — the API Key are set. |
+| Active | Must be enabled for the interface to be selectable on the base settings. Activating it automatically checks that the Endpoint URL and — depending on the Auth Type — the API Key or the AWS fields are fully set. |
 
 > Without an active, fully configured interface, "Upload Sales Price" fails, or marks the affected price lines with "Export Status" = "Error".
 
@@ -45,17 +49,7 @@ The following field was added to the **Currency** master data (the "Currencies" 
 
 > A currency without "Sales Price Activated" is ignored by "Add all Currencies".
 
-## Country/Region – additional fields
-
-The following fields were added to the **Country/Region** master data (the "Countries/Regions" page):
-
-| Field | Meaning |
-|---|---|
-| Sales Price Currency Code | The standard foreign currency for this country. Informational only. |
-| Taxation Type | Full, differential, or both — currently informational only, with no automatic effect on price calculation. |
-| Delivery Time (Days) | Informational field, currently with no automatic effect on price checking. |
-
-> **Important:** Activation for "Add all Currencies" now happens directly on the **currency**, not on the country. A country without a "Sales Price Currency Code" can still receive prices as long as the relevant currency itself is activated.
+> **Note on currency/country activation:** Since an earlier revision, activation for "Add all Currencies" happens **exclusively** through the "Sales Price Activated" field on the **currency**. This app no longer includes any Country/Region master data extension — earlier references to fields such as "Sales Price Currency Code", "Taxation Type", or "Delivery Time (Days)" on the country do not apply to the current state.
 
 ## Reason Code
 

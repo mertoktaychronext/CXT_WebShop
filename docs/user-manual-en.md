@@ -2,11 +2,12 @@
 
 ## Introduction
 
-This extension for Microsoft Dynamics 365 Business Central covers three independent workflows:
+This extension for Microsoft Dynamics 365 Business Central covers four largely independent workflows:
 
 1. **Sales price management** (this chapter): You import a price list (CSV file), the system automatically checks the minimum margin and unusual price swings, and a staff member then approves the prices before they are transmitted to the webshop.
 2. **SellWatch purchase requests** (see the [dedicated chapter](#viewing-sellwatch-purchase-requests) below): A read-only overview of used-watch purchase requests coming in from the SellWatch partner.
 3. **Workshop authenticity check** (see the [dedicated chapter](#sending-watches-to-the-workshop-for-authenticity-check) below): Purchased watches that have arrived are checked for authenticity by an external workshop before being put into stock. You record the manufacturer serial number per purchase line; the check itself runs automatically.
+4. **Consignment Sales** (see the [dedicated chapter](#consignment-sales-delayed-purchase-invoice) below): For watches purchased on consignment, the purchase invoice is posted automatically after a delay once the watch is sold. No action is required from you as an end user.
 
 ## Prerequisites
 
@@ -58,7 +59,7 @@ Once you have imported, validated, and approved a base price, use **"Add all Cur
 Click **"Upload Sales Price"** to transmit all approved price lines to the external system (e.g. the webshop). For each line, the system automatically:
 
 1. Writes the price into the live sales price table (creating it or updating an existing one) — valid for **all customers**.
-2. Also stores a copy of the price in the **price archive**, with a running version number per item/variant/currency.
+2. Also stores a copy of the price in the **price archive**, with a running version number per item/currency.
 3. Sends the price to the external system via the configured interface.
 
 At the end you get a message showing how many of the approved lines were transmitted successfully. Lines that were already sent successfully before ("Export Status" = "Sent") are **not** resent automatically when you click again — you are asked first whether you really want to resend them.
@@ -104,6 +105,14 @@ The actual check by the workshop, and the follow-up processing based on the chec
 The **"CXW Workshop Lines"** page shows every line handed over to the workshop, its current check status (New / WS checked / Processed / Error), the item attributes reported by the workshop, and — if automatic processing failed — the most recent error message. This page is read-only.
 
 > If a line shows status "Error", a problem occurred during the last automatic processing attempt (e.g. a closed posting period). Contact a key user or the development team in this case (see the Key User Manual).
+
+## Consignment Sales: Delayed purchase invoice
+
+For watches purchased on consignment (item flagged as "Consignment Sales"), the related **purchase invoice is not posted immediately** on sale, but automatically after a set number of days following the posting of the sales invoice.
+
+This workflow is **fully automated**: as soon as you post a sales invoice for a consignment watch, a consignment posting entry is created in the background; a background job then posts the purchase invoice on its due date. Nothing is required from you as an end user.
+
+> Configuring the delay, monitoring the entries, and reprocessing failed cases ("CXW Cons. Posting Entries" page, "Retry" action) is handled by a key user — see the Key User Manual.
 
 ## Frequently Asked Questions (FAQ)
 
