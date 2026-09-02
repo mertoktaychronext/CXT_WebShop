@@ -12,6 +12,8 @@ Als dritter, ebenfalls fachlich unabhängiger Baustein enthält die Erweiterung 
 
 Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): Wird eine VK-Rechnung mit einer Zeile eines Artikels mit `"CXB Consignment Sales"` = true (Feld aus der Dependency CHX.Base) gebucht, legt ein Event-Subscriber auf `Codeunit "Sales-Post"` einen Kommissions-Buchungseintrag an und ermittelt dabei automatisch die zugehörige, wareneingebuchte, noch nicht fakturierte Einkaufsbestellung. Eine job-queue-gesteuerte Codeunit bucht fällige Einträge (Fälligkeitsdatum = VK-Buchungsdatum + einrichtbare Verzögerung in Tagen) automatisiert als Einkaufsrechnung. Details siehe Abschnitt "Kommissionsverkauf" unten.
 
+> **Update 2026-09-02 (Vollständige Neuverifikation):** Alle 57 AL-Objekte wurden Zeile für Zeile gegen den aktuellen Code (Branch `03-FEAT/Workshop`) abgeglichen. Korrigiert: die Architektur-Skizze verwies noch auf eine "Country/Region"-Table-/Page-Erweiterung, die in dieser Erweiterung nicht (mehr) existiert – die Aktivierung für "Add all Currencies" liegt ausschließlich auf der "Currency". Präzisiert: `CreateSellWatchItem` liest die Artikelvorlage aus `Purchases & Payables Setup."CXW SW Item Template Code"`. Keine Code-Änderungen.
+
 > **Update 2026-08-14 (Kommissionsverkauf ergänzt):** Neue Objekte 60341/60342/60343/60344/60345, neues Setup-Feld `"CXW SW Consignment Invoice Delay (Days)"` auf `TableExtension 60322 "CXW SW Purchases Setup"`. Dabei wurde auch die zuvor als "verloren gegangen" dokumentierte SellWatch-Artikelvorlagen-Konfiguration (siehe Bekannte Einschränkungen, alter Stand) tatsächlich wiederhergestellt und ist seither produktiv im Code vorhanden – der entsprechende Hinweis unten wurde korrigiert. Zusätzlich wurde die bislang falsche Aussage "keine Dependencies" korrigiert: `app.json` hängt seit der Artikelvorlagen-Konfiguration von **CHX.Base** ab.
 
 > **Update 2026-08-13 (Workshop-Ankaufsprüfung nachdokumentiert):** Die Workshop-Ankaufsprüfung existierte bereits seit einer früheren Erweiterung, war aber in keinem der drei Handbücher dokumentiert. Dieses Update ergänzt sie in allen drei Handbüchern (DE/EN) sowie im `docs/README.md`; zusätzlich wurde die veraltete Aussage zu fest hinterlegten SellWatch-Variantencodes korrigiert (siehe Bekannte Einschränkungen) – keine Code-Änderungen.
@@ -134,9 +136,11 @@ Steuerdaten für "Add all Currencies":
 Table Extension "CXWCurrency" (auf Standard-Tabelle "Currency", Feld "CXW Sales Price Activated")
    ◄── Page Extension "CXWCurrencies" (auf Standard-Seite "Currencies")
 
-Land/Region liefert nur noch informative Zusatzangaben (Besteuerungsart, Lieferzeit,
-Standard-Fremdwährung) über Table Extension "CXW Country Region" / Page Extension
-"CXW Country Region Card" – keine Aktivierungslogik mehr.
+Es gibt in dieser Erweiterung keine Table-/Page-Erweiterung auf "Country/Region" –
+die Aktivierung für "Add all Currencies" liegt ausschließlich auf der "Currency".
+Die Enums 60331 "CXW Taxation Type" / 60332 "CXW Sales Price Reason Code" existieren,
+wobei 60331 derzeit von keinem Objekt dieser Erweiterung referenziert wird (Table 60300
+speichert die Besteuerung als Freitext "CXW Taxation").
 
 Unabhängiger, nicht produktiv angebundener Baustein:
 Datei (CSV) → Table 60315 "CXW Sales Price Inbound File"
@@ -385,7 +389,7 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 
 ## Permission Set
 
-Das Permission Set **`CXWChronWSAll`** (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) deckt Lese-/Schreibzugriff auf alle sieben Tabellen der Verkaufspreisverwaltung sowie – seit dem HTTP-Logging-Update – auf das mit SellWatch geteilte Table 60302 "CXW Http Call Log" ab, dazu Ausführungsrechte für beide Codeunits, Xmlport 60328 und die fünf Seiten (die vier der Verkaufspreisverwaltung plus Page 60309 "CXW Http Call Log"). Tabellenerweiterungen und Seitenerweiterungen benötigen keine eigenen Einträge, da sie über die Berechtigung des jeweiligen Basisobjekts (z. B. Standard-Zugriff auf "Currency"/"Country/Region") mit abgedeckt sind; die Standardtabelle "Sales Price", in die Codeunit 60329 schreibt, ist ebenso über die Base-App-Berechtigungen abgedeckt, nicht über dieses Set. Das Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
+Das Permission Set **`CXWChronWSAll`** (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) deckt Lese-/Schreibzugriff auf alle sieben Tabellen der Verkaufspreisverwaltung sowie – seit dem HTTP-Logging-Update – auf das mit SellWatch geteilte Table 60302 "CXW Http Call Log" ab, dazu Ausführungsrechte für beide Codeunits, Xmlport 60328 und die fünf Seiten (die vier der Verkaufspreisverwaltung plus Page 60309 "CXW Http Call Log"). Tabellenerweiterungen und Seitenerweiterungen benötigen keine eigenen Einträge, da sie über die Berechtigung des jeweiligen Basisobjekts (z. B. Standard-Zugriff auf "Currency") mit abgedeckt sind; die Standardtabelle "Sales Price", in die Codeunit 60329 schreibt, ist ebenso über die Base-App-Berechtigungen abgedeckt, nicht über dieses Set. Das Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
 
 Für SellWatch deckt das separate Permission Set **`CXW SWChronWSAll`** (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) RIMD-Zugriff auf die beiden SellWatch-eigenen Tabellen (60300–60301) sowie das mit der Verkaufspreisverwaltung geteilte Table 60302 "CXW Http Call Log" ab, dazu Ausführungsrechte für Codeunit 60305 und die drei SellWatch-Seiten (60307–60309, wobei Page 60309 "CXW Http Call Log" ebenfalls geteilt ist). Die Table Extensions 60303/60304 auf "Purchase Line"/"Purchase Header" benötigen wie bei der Verkaufspreisverwaltung keinen eigenen Eintrag, da sie über die Standardberechtigung auf die jeweilige Basistabelle mit abgedeckt sind. Auch dieses Set muss noch aktiv einer Benutzergruppe zugewiesen werden.
 
