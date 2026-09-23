@@ -12,7 +12,7 @@ codeunit 60349 "CXW Availability Calculation"
 
     procedure GetArticleAvailabilityAtLocation(ItemNo: Code[20]; LocationCode: Code[10]): Decimal
     begin
-        if LocationCode <> GetAvailabilityLocationCode() then
+        if not IsAvailabilityLocation(LocationCode) then
             exit(0);
 
         exit(GetArticleAvailability(ItemNo));
@@ -48,16 +48,54 @@ codeunit 60349 "CXW Availability Calculation"
         exit(true);
     end;
 
+    procedure TryGetStockDeliveryDays(ItemNo: Code[20]; CountryRegionCode: Code[10]; var DeliveryDays: Integer): Boolean
+    var
+        DeliveryDate: Date;
+        DeliveryFormula: DateFormula;
+    begin
+        // STOCK is optional. Without it, country delivery time is the complete stock lead time.
+        Clear(DeliveryFormula);
+        TryGetSetupDeliveryFormula(StockSetupCategoryLbl, DeliveryFormula);
+
+        DeliveryDate := Today;
+        ApplyDeliveryFormula(DeliveryDate, DeliveryFormula);
+        ApplyCountryDeliveryTime(DeliveryDate, CountryRegionCode);
+        DeliveryDays := DeliveryDate - Today;
+        exit(true);
+    end;
+
+    procedure TryGetNonStockDeliveryDays(ItemNo: Code[20]; CountryRegionCode: Code[10]; var DeliveryDays: Integer): Boolean
+    var
+        Item: Record Item;
+        DeliveryDate: Date;
+        DeliveryFormula: DateFormula;
+    begin
+        if not IsReplenishable(ItemNo) then
+            exit(false);
+
+        if Item.Get(ItemNo) and (Format(Item."CXB Additional Delivery Time") <> '') then
+            DeliveryFormula := Item."CXB Additional Delivery Time"
+        else
+            if not TryGetSetupDeliveryFormula(DemandSetupCategoryLbl, DeliveryFormula) then
+                exit(false);
+
+        DeliveryDate := Today;
+        ApplyDeliveryFormula(DeliveryDate, DeliveryFormula);
+        ApplyCountryDeliveryTime(DeliveryDate, CountryRegionCode);
+        DeliveryDays := DeliveryDate - Today;
+        exit(true);
+    end;
+
     local procedure GetInventoryAtAvailabilityLocation(ItemNo: Code[20]): Decimal
     var
-        ItemLedgerEntry: Record "Item Ledger Entry";
+        Item: Record Item;
     begin
-        ItemLedgerEntry.SetRange("Item No.", ItemNo);
-        ItemLedgerEntry.SetRange("Location Code", GetAvailabilityLocationCode());
-        ItemLedgerEntry.SetRange(Open, true);
-        ItemLedgerEntry.CalcSums("Remaining Quantity");
+        if not Item.Get(ItemNo) then
+            exit(0);
 
-        exit(ItemLedgerEntry."Remaining Quantity");
+        Item.SetFilter("Location Filter", GetAvailabilityLocationFilter());
+        Item.CalcFields(Inventory);
+        exit(Item.Inventory);
     end;
 
     local procedure GetOpenPurchaseQuantity(ItemNo: Code[20]): Decimal
@@ -71,7 +109,7 @@ codeunit 60349 "CXW Availability Calculation"
         PurchaseLine.SetRange("Document Type", PurchaseLine."Document Type"::Order);
         PurchaseLine.SetRange(Type, PurchaseLine.Type::Item);
         PurchaseLine.SetRange("No.", ItemNo);
-        PurchaseLine.SetRange("Location Code", GetAvailabilityLocationCode());
+        PurchaseLine.SetFilter("Location Code", GetAvailabilityLocationFilter());
         PurchaseLine.SetFilter("Outstanding Qty. (Base)", '>0');
         if PurchaseLine.FindSet() then
             repeat
@@ -89,7 +127,7 @@ codeunit 60349 "CXW Availability Calculation"
         SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
         SalesLine.SetRange(Type, SalesLine.Type::Item);
         SalesLine.SetRange("No.", ItemNo);
-        SalesLine.SetRange("Location Code", GetAvailabilityLocationCode());
+        SalesLine.SetFilter("Location Code", GetAvailabilityLocationFilter());
         SalesLine.SetFilter("Outstanding Qty. (Base)", '>0');
         SalesLine.CalcSums("Outstanding Qty. (Base)");
 
@@ -98,21 +136,21 @@ codeunit 60349 "CXW Availability Calculation"
 
     local procedure GetOutboundTransferQuantity(ItemNo: Code[20]): Decimal
     begin
-        exit(GetOpenTransferQuantity(ItemNo, GetAvailabilityLocationCode(), TransferLocationCodeLbl));
+        exit(GetOpenTransferQuantity(ItemNo, GetAvailabilityLocationFilter(), TransferLocationCodeLbl));
     end;
 
     local procedure GetInboundTransferQuantity(ItemNo: Code[20]): Decimal
     begin
-        exit(GetOpenTransferQuantity(ItemNo, TransferLocationCodeLbl, GetAvailabilityLocationCode()));
+        exit(GetOpenTransferQuantity(ItemNo, TransferLocationCodeLbl, GetAvailabilityLocationFilter()));
     end;
 
-    local procedure GetOpenTransferQuantity(ItemNo: Code[20]; TransferFromCode: Code[10]; TransferToCode: Code[10]): Decimal
+    local procedure GetOpenTransferQuantity(ItemNo: Code[20]; TransferFromFilter: Text; TransferToFilter: Text): Decimal
     var
         TransferLine: Record "Transfer Line";
     begin
         TransferLine.SetRange("Item No.", ItemNo);
-        TransferLine.SetRange("Transfer-from Code", TransferFromCode);
-        TransferLine.SetRange("Transfer-to Code", TransferToCode);
+        TransferLine.SetFilter("Transfer-from Code", TransferFromFilter);
+        TransferLine.SetFilter("Transfer-to Code", TransferToFilter);
         TransferLine.SetFilter("Outstanding Qty. (Base)", '>0');
         TransferLine.CalcSums("Outstanding Qty. (Base)");
 
@@ -129,8 +167,15 @@ codeunit 60349 "CXW Availability Calculation"
     var
         Item: Record Item;
     begin
-        if Availability > 0 then
-            exit(TryGetSetupDeliveryFormula(StockSetupCategoryLbl, DeliveryFormula));
+        // In-stock items can always be delivered. A configured STOCK formula is optional;
+        // when it is not maintained, the country-specific delivery time is the complete lead time.
+        if Availability > 0 then begin
+            if TryGetSetupDeliveryFormula(StockSetupCategoryLbl, DeliveryFormula) then
+                exit(true);
+
+            Clear(DeliveryFormula);
+            exit(true);
+        end;
 
         if not IsReplenishable(ItemNo) then
             exit(false);
@@ -162,7 +207,7 @@ codeunit 60349 "CXW Availability Calculation"
         Zone: Record Zone;
     begin
         if BinCode <> '' then begin
-            Bin.SetRange("Location Code", GetAvailabilityLocationCode());
+            Bin.SetFilter("Location Code", GetAvailabilityLocationFilter());
             Bin.SetRange(Code, BinCode);
             if Bin.FindFirst() then begin
                 ApplyDeliveryFormula(DeliveryDate, Bin."CXB Additional Delivery Time");
@@ -173,7 +218,7 @@ codeunit 60349 "CXW Availability Calculation"
         if ZoneCode = '' then
             exit;
 
-        Zone.SetRange("Location Code", GetAvailabilityLocationCode());
+        Zone.SetFilter("Location Code", GetAvailabilityLocationFilter());
         Zone.SetRange(Code, ZoneCode);
         if Zone.FindFirst() then
             ApplyDeliveryFormula(DeliveryDate, Zone."CXB Additional Delivery Time");
@@ -223,28 +268,42 @@ codeunit 60349 "CXW Availability Calculation"
         exit(ItemAttributeValueMapping.FindFirst());
     end;
 
-    local procedure GetAvailabilityLocationCode(): Code[10]
+    local procedure IsAvailabilityLocation(LocationCode: Code[10]): Boolean
+    var
+        Location: Record Location;
     begin
-        if CachedAvailabilityLocationCode = '' then begin
-            if not TryLoadAvailabilityLocationCode(CachedAvailabilityLocationCode) then
-                CachedAvailabilityLocationCode := '';
+        Location.SetFilter(Code, GetAvailabilityLocationFilter());
+        if Location.FindSet() then
+            repeat
+                if Location.Code = LocationCode then
+                    exit(true);
+            until Location.Next() = 0;
 
-            if CachedAvailabilityLocationCode = '' then
-                CachedAvailabilityLocationCode := 'HL';
+        exit(false);
+    end;
+
+    local procedure GetAvailabilityLocationFilter(): Text
+    begin
+        if CachedAvailabilityLocationFilter = '' then begin
+            if not TryLoadAvailabilityLocationFilter(CachedAvailabilityLocationFilter) then
+                CachedAvailabilityLocationFilter := '';
+
+            if CachedAvailabilityLocationFilter = '' then
+                CachedAvailabilityLocationFilter := 'HL';
         end;
 
-        exit(CachedAvailabilityLocationCode);
+        exit(CachedAvailabilityLocationFilter);
     end;
 
     [TryFunction]
-    local procedure TryLoadAvailabilityLocationCode(var LocationCode: Code[10])
+    local procedure TryLoadAvailabilityLocationFilter(var LocationFilter: Text)
     var
         SetupValue: Text;
     begin
         if not TryLoadSetupValue(WebshopSetupCategoryLbl, SetupValue) then
             exit;
 
-        LocationCode := CopyStr(SetupValue, 1, MaxStrLen(LocationCode));
+        LocationFilter := SetupValue;
     end;
 
     [TryFunction]
@@ -284,7 +343,7 @@ codeunit 60349 "CXW Availability Calculation"
     end;
 
     var
-        CachedAvailabilityLocationCode: Code[10];
+        CachedAvailabilityLocationFilter: Text;
         ReplenishmentAttributeNameLbl: Label 'Wiederbeschaffbarkeit', Locked = true;
         ReplenishmentYesValueLbl: Label 'ja', Locked = true;
         TransferLocationCodeLbl: Label 'W', Locked = true;

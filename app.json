@@ -16,7 +16,13 @@
       "name": "CHX.Base",
       "publisher": "Salini Life",
       "version": "27.0.2.1"
+    },
+    {  "id": "9699be36-20ce-4911-a988-5eb58385243f",
+      "name": "ChronextBC",
+      "publisher": "Default Publisher",
+      "version": "1.0.0.0"
     }
+
   ],
   "screenshots": [],
   "platform": "26.0.0.0",

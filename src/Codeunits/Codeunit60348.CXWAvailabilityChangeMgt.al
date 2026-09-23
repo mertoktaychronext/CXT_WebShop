@@ -12,7 +12,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         if not IsAvailabilityLocation(Rec."Location Code") then
             exit;
 
-        QueueAvailabilityChange(Rec."Item No.", Rec."Variant Code", Rec."Location Code");
+        QueueItemLedgerEntryChange(Rec);
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterModifyEvent', '', false, false)]
@@ -24,7 +24,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         if not IsRelevantSalesLine(Rec) then
             exit;
 
-        QueueAvailabilityChange(Rec."No.", Rec."Variant Code", Rec."Location Code");
+        QueueAvailabilityChange(Rec."No.", Rec."Variant Code", Rec."Location Code", 0, false);
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterDeleteEvent', '', false, false)]
@@ -33,18 +33,43 @@ codeunit 60348 "CXW Availability Change Mgt"
         if not IsRelevantSalesLine(Rec) then
             exit;
 
-        QueueAvailabilityChange(Rec."No.", Rec."Variant Code", Rec."Location Code");
+        QueueAvailabilityChange(Rec."No.", Rec."Variant Code", Rec."Location Code", 0, false);
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", 'OnAfterDeleteEvent', '', false, false)]
     local procedure OnAfterDeleteReservationEntry(var Rec: Record "Reservation Entry"; RunTrigger: Boolean)
-    var
-        SalesLine: Record "Sales Line";
     begin
-        if not TryGetRelevantSalesOrderLineFromReservation(Rec, SalesLine) then
-            exit;
+        RemoveOpenItemLedgerEntryChangeFromReservation(Rec);
+    end;
 
-        QueueAvailabilityChange(SalesLine."No.", SalesLine."Variant Code", SalesLine."Location Code");
+    [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", 'OnAfterInsertEvent', '', false, false)]
+    local procedure OnAfterInsertReservationEntry(var Rec: Record "Reservation Entry"; RunTrigger: Boolean)
+    begin
+        QueueItemLedgerEntryChangeFromReservation(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", 'OnAfterModifyEvent', '', false, false)]
+    local procedure OnAfterModifyReservationEntry(var Rec: Record "Reservation Entry"; var xRec: Record "Reservation Entry"; RunTrigger: Boolean)
+    begin
+        QueueItemLedgerEntryChangeFromReservation(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterInsertEvent', '', false, false)]
+    local procedure OnAfterInsertTransferLine(var Rec: Record "Transfer Line"; RunTrigger: Boolean)
+    begin
+        QueueTransferLineChange(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterModifyEvent', '', false, false)]
+    local procedure OnAfterModifyTransferLine(var Rec: Record "Transfer Line"; var xRec: Record "Transfer Line"; RunTrigger: Boolean)
+    begin
+        QueueTransferLineChange(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterDeleteEvent', '', false, false)]
+    local procedure OnAfterDeleteTransferLine(var Rec: Record "Transfer Line"; RunTrigger: Boolean)
+    begin
+        QueueTransferLineChange(Rec);
     end;
 
     local procedure IsRelevantSalesLine(SalesLine: Record "Sales Line"): Boolean
@@ -64,70 +89,397 @@ codeunit 60348 "CXW Availability Change Mgt"
         exit(IsAvailabilityLocation(SalesLine."Location Code"));
     end;
 
-    local procedure TryGetRelevantSalesOrderLineFromReservation(ReservationEntry: Record "Reservation Entry"; var SalesLine: Record "Sales Line"): Boolean
+    local procedure QueueItemLedgerEntryChange(ItemLedgerEntry: Record "Item Ledger Entry")
     begin
-        if ReservationEntry.IsTemporary() then
-            exit(false);
-
-        if ReservationEntry."Source Type" <> Database::"Sales Line" then
-            exit(false);
-
-        SalesLine.Reset();
-        SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
-        SalesLine.SetRange("Document No.", ReservationEntry."Source ID");
-        SalesLine.SetRange("Line No.", ReservationEntry."Source Ref. No.");
-        if not SalesLine.FindFirst() then
-            exit(false);
-
-        if not IsRelevantSalesLine(SalesLine) then
-            exit(false);
-
-        // Reservation deletions caused by posting should not enqueue exports.
-        if SalesLine."Outstanding Quantity" = 0 then
-            exit(false);
-
-        exit(true);
+        QueueAvailabilityChange(
+            ItemLedgerEntry."Item No.", ItemLedgerEntry."Variant Code", ItemLedgerEntry."Location Code",
+            ItemLedgerEntry."Entry No.", ItemLedgerEntry."CXB Margin Taxation");
     end;
 
-    local procedure QueueAvailabilityChange(ItemNo: Code[20]; VariantCode: Code[20]; LocationCode: Code[10])
+    local procedure QueueItemLedgerEntryChangeFromReservation(ReservationEntry: Record "Reservation Entry")
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+    begin
+        if ReservationEntry.IsTemporary() then
+            exit;
+        if not TryGetItemLedgerEntryFromReservation(ReservationEntry, ItemLedgerEntry) then
+            exit;
+        if not IsAvailabilityLocation(ItemLedgerEntry."Location Code") then
+            exit;
+
+        QueueItemLedgerEntryChange(ItemLedgerEntry);
+    end;
+
+    local procedure RemoveOpenItemLedgerEntryChangeFromReservation(ReservationEntry: Record "Reservation Entry")
+    var
+        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
+        ItemLedgerEntry: Record "Item Ledger Entry";
+    begin
+        if ReservationEntry.IsTemporary() then
+            exit;
+        if not TryGetItemLedgerEntryFromReservation(ReservationEntry, ItemLedgerEntry) then
+            exit;
+
+        AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", ItemLedgerEntry."Entry No.");
+        AvailabilityChangeEntry.SetRange("CXW Exported", false);
+        if AvailabilityChangeEntry.FindSet() then
+            repeat
+                AvailabilityChangeEntry.Delete();
+            until AvailabilityChangeEntry.Next() = 0;
+
+        // The stock interface receives a current aggregate, never a reservation deletion.
+        // Queue the recalculated amount after removing a potentially stale open message.
+        QueueItemLedgerEntryChange(ItemLedgerEntry);
+    end;
+
+    local procedure TryGetItemLedgerEntryFromReservation(ReservationEntry: Record "Reservation Entry"; var ItemLedgerEntry: Record "Item Ledger Entry"): Boolean
+    var
+        ItemLedgerEntryNo: Integer;
+    begin
+        ItemLedgerEntryNo := ReservationEntry."Item Ledger Entry No.";
+        if ItemLedgerEntryNo = 0 then
+            ItemLedgerEntryNo := ReservationEntry."Appl.-to Item Entry";
+        if ItemLedgerEntryNo = 0 then
+            ItemLedgerEntryNo := ReservationEntry."Appl.-from Item Entry";
+
+        if (ItemLedgerEntryNo <> 0) and ItemLedgerEntry.Get(ItemLedgerEntryNo) then
+            exit(true);
+
+        // Reservations created from a sales line can carry the serial number but no direct
+        // item-ledger-entry number. Resolve the open item ledger entry from that serial number.
+        if ReservationEntry."Serial No." = '' then
+            exit(false);
+
+        ItemLedgerEntry.Reset();
+        ItemLedgerEntry.SetRange("Item No.", ReservationEntry."Item No.");
+        ItemLedgerEntry.SetRange("Variant Code", ReservationEntry."Variant Code");
+        ItemLedgerEntry.SetRange("Location Code", ReservationEntry."Location Code");
+        ItemLedgerEntry.SetRange("Serial No.", ReservationEntry."Serial No.");
+        ItemLedgerEntry.SetRange(Open, true);
+        exit(ItemLedgerEntry.FindFirst());
+    end;
+
+    local procedure QueueTransferLineChange(TransferLine: Record "Transfer Line")
+    begin
+        if TransferLine.IsTemporary() then
+            exit;
+        if TransferLine."Item No." = '' then
+            exit;
+
+        if IsAvailabilityLocation(TransferLine."Transfer-from Code") then
+            QueueAvailabilityChange(TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-from Code", 0, false)
+        else
+            if IsAvailabilityLocation(TransferLine."Transfer-to Code") then
+                QueueAvailabilityChange(TransferLine."Item No.", TransferLine."Variant Code", TransferLine."Transfer-to Code", 0, false);
+    end;
+
+    local procedure QueueAvailabilityChange(ItemNo: Code[20]; VariantCode: Code[20]; LocationCode: Code[10]; ItemLedgerEntryNo: Integer; DifferentialTaxationPurchase: Boolean)
     var
         AvailabilityChangeEntry: Record "CXW Availability Change Entry";
     begin
         AvailabilityChangeEntry.SetRange("CXW Item No.", ItemNo);
         AvailabilityChangeEntry.SetRange("CXW Variant Code", VariantCode);
         AvailabilityChangeEntry.SetRange("CXW Location Code", LocationCode);
+        AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", ItemLedgerEntryNo);
+        AvailabilityChangeEntry.SetRange("CXW Differential Taxation Purchase", DifferentialTaxationPurchase);
         AvailabilityChangeEntry.SetRange("CXW Exported", false);
-        if AvailabilityChangeEntry.FindFirst() then
+        if AvailabilityChangeEntry.FindFirst() then begin
+            AvailabilityChangeEntry.Modify(true);
+            RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
             exit;
+        end;
+
+        // A sales or transfer line can already have created an aggregate open queue entry before
+        // its reservation is linked to an item ledger entry. Promote that entry to the detailed
+        // item-ledger-entry message instead of sending both representations.
+        if ItemLedgerEntryNo <> 0 then begin
+            AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", 0);
+            if AvailabilityChangeEntry.FindFirst() then begin
+                AvailabilityChangeEntry."CXW Item Ledger Entry No." := ItemLedgerEntryNo;
+                AvailabilityChangeEntry.Modify(true);
+                RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
+                exit;
+            end;
+        end;
 
         AvailabilityChangeEntry.Init();
         AvailabilityChangeEntry."CXW Item No." := ItemNo;
         AvailabilityChangeEntry."CXW Variant Code" := VariantCode;
         AvailabilityChangeEntry."CXW Location Code" := LocationCode;
-        AvailabilityChangeEntry."CXW Inserted At" := CurrentDateTime;
+        AvailabilityChangeEntry."CXW Item Ledger Entry No." := ItemLedgerEntryNo;
+        AvailabilityChangeEntry."CXW Differential Taxation Purchase" := DifferentialTaxationPurchase;
         AvailabilityChangeEntry.Insert();
+        RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
+    end;
+
+    procedure PrepareItemForExport(ItemNo: Code[20])
+    var
+        ItemVariant: Record "Item Variant";
+    begin
+        ItemVariant.SetRange("Item No.", ItemNo);
+        if ItemVariant.FindSet() then
+            repeat
+                PrepareItemVariantForExport(ItemNo, ItemVariant.Code);
+            until ItemVariant.Next() = 0
+        else
+            PrepareItemVariantForExport(ItemNo, '');
+
+        // The direct export from the item card is a complete snapshot. Re-export the
+        // calculated time records even if their calculated value has not changed.
+        MarkTimeRecordsForExport(ItemNo);
+    end;
+
+    local procedure MarkTimeRecordsForExport(ItemNo: Code[20])
+    var
+        AvailabilityDeliveryTime: Record "CXW Availability Delivery Time";
+        AvailabilityInventoryTime: Record "CXW Availability Inv. Time";
+    begin
+        AvailabilityDeliveryTime.SetRange("CXW Item No.", ItemNo);
+        AvailabilityDeliveryTime.ModifyAll("CXW Exported", false);
+        AvailabilityDeliveryTime.ModifyAll("CXW Exported At", 0DT);
+
+        AvailabilityInventoryTime.SetRange("CXW Item No.", ItemNo);
+        AvailabilityInventoryTime.ModifyAll("CXW Exported", false);
+        AvailabilityInventoryTime.ModifyAll("CXW Exported At", 0DT);
+    end;
+
+    local procedure PrepareItemVariantForExport(ItemNo: Code[20]; VariantCode: Code[20])
+    var
+        AvailabilityLocationCode: Code[10];
+    begin
+        AvailabilityLocationCode := GetFirstAvailabilityLocationCode();
+        QueueAvailabilityChange(ItemNo, VariantCode, AvailabilityLocationCode, 0, false);
+        QueueAvailabilityChange(ItemNo, VariantCode, AvailabilityLocationCode, 0, true);
+        RefreshDeliveryTimes(ItemNo, VariantCode);
+    end;
+
+    procedure RefreshAvailabilityChangeDetails(var AvailabilityChangeEntry: Record "CXW Availability Change Entry")
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+    begin
+        if AvailabilityChangeEntry."CXW Item Ledger Entry No." <> 0 then begin
+            Clear(AvailabilityChangeEntry."CXW Differential Taxation Purchase");
+
+            if ItemLedgerEntry.Get(AvailabilityChangeEntry."CXW Item Ledger Entry No.") then
+                AvailabilityChangeEntry."CXW Differential Taxation Purchase" := ItemLedgerEntry."CXB Margin Taxation";
+        end;
+
+        AvailabilityChangeEntry."CXW Inventory Quantity" := GetAvailableInventoryQuantity(
+            AvailabilityChangeEntry."CXW Item No.",
+            AvailabilityChangeEntry."CXW Variant Code",
+            AvailabilityChangeEntry."CXW Location Code",
+            AvailabilityChangeEntry."CXW Differential Taxation Purchase");
+
+        AvailabilityChangeEntry."CXW Changed At" := CurrentDateTime;
+        AvailabilityChangeEntry.Modify(true);
+    end;
+
+    local procedure GetAvailableInventoryQuantity(ItemNo: Code[20]; VariantCode: Code[20]; LocationCode: Code[10]; DifferentialTaxationPurchase: Boolean): Decimal
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        AvailableQuantity: Decimal;
+    begin
+        ItemLedgerEntry.SetRange("Item No.", ItemNo);
+        ItemLedgerEntry.SetRange("Variant Code", VariantCode);
+        ItemLedgerEntry.SetFilter("Location Code", GetAvailabilityLocationFilter());
+        ItemLedgerEntry.SetRange(Open, true);
+        ItemLedgerEntry.SetRange("CXB Margin Taxation", DifferentialTaxationPurchase);
+        if ItemLedgerEntry.FindSet() then
+            repeat begin
+                ItemLedgerEntry.CalcFields("Reserved Quantity");
+                AvailableQuantity += ItemLedgerEntry."Remaining Quantity" - Abs(ItemLedgerEntry."Reserved Quantity");
+            end;
+            until ItemLedgerEntry.Next() = 0;
+
+        if AvailableQuantity < 0 then
+            exit(0);
+
+        exit(AvailableQuantity);
+    end;
+
+    procedure RefreshDeliveryTimes(ItemNo: Code[20]; VariantCode: Code[20])
+    var
+        AvailabilityCalculation: Codeunit "CXW Availability Calculation";
+        CountryRegion: Record "Country/Region";
+    begin
+        CountryRegion.SetRange("CXW Webshop Delivery Time Active", true);
+        if not CountryRegion.FindSet() then
+            exit;
+
+        repeat
+            RefreshDeliveryTimeForCountry(ItemNo, GetDeliveryTimeVariantCode(ItemNo, VariantCode), CountryRegion.Code, AvailabilityCalculation);
+            RefreshInventoryTimesForCountry(ItemNo, GetDeliveryTimeVariantCode(ItemNo, VariantCode), CountryRegion.Code, AvailabilityCalculation);
+        until CountryRegion.Next() = 0;
+    end;
+
+    procedure RefreshDeliveryTimesForCountry(CountryRegionCode: Code[10])
+    var
+        AvailabilityCalculation: Codeunit "CXW Availability Calculation";
+        CountryRegion: Record "Country/Region";
+        Item: Record Item;
+        ItemVariant: Record "Item Variant";
+    begin
+        if not CountryRegion.Get(CountryRegionCode) then
+            exit;
+        if not CountryRegion."CXW Webshop Delivery Time Active" then
+            exit;
+
+        if not Item.FindSet() then
+            exit;
+
+        repeat
+            ItemVariant.SetRange("Item No.", Item."No.");
+            if ItemVariant.FindSet() then
+                repeat
+                    RefreshDeliveryTimeForCountry(Item."No.", ItemVariant.Code, CountryRegion.Code, AvailabilityCalculation);
+                    RefreshInventoryTimesForCountry(Item."No.", ItemVariant.Code, CountryRegion.Code, AvailabilityCalculation);
+                until ItemVariant.Next() = 0
+            else begin
+                RefreshDeliveryTimeForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
+                RefreshInventoryTimesForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
+            end;
+        until Item.Next() = 0;
+    end;
+
+    procedure RefreshDeliveryTimesForActiveCountries()
+    var
+        CountryRegion: Record "Country/Region";
+    begin
+        CountryRegion.SetRange("CXW Webshop Delivery Time Active", true);
+        if not CountryRegion.FindSet() then
+            exit;
+
+        repeat
+            RefreshDeliveryTimesForCountry(CountryRegion.Code);
+        until CountryRegion.Next() = 0;
+    end;
+
+    local procedure RefreshDeliveryTimeForCountry(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; AvailabilityCalculation: Codeunit "CXW Availability Calculation")
+    var
+        DeliveryDays: Integer;
+    begin
+        if AvailabilityCalculation.TryGetArticleDeliveryDays(ItemNo, CountryRegionCode, '', '', DeliveryDays) then
+            UpsertDeliveryTime(ItemNo, VariantCode, CountryRegionCode, DeliveryDays)
+        else
+            UpsertDeliveryTime(ItemNo, VariantCode, CountryRegionCode, -1);
+    end;
+
+    local procedure GetDeliveryTimeVariantCode(ItemNo: Code[20]; VariantCode: Code[20]): Code[20]
+    var
+        ItemVariant: Record "Item Variant";
+    begin
+        if VariantCode <> '' then
+            exit(VariantCode);
+
+        ItemVariant.SetRange("Item No.", ItemNo);
+        if not ItemVariant.FindFirst() then
+            exit(ItemNo);
+
+        exit('');
+    end;
+
+    local procedure RefreshInventoryTimesForCountry(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; AvailabilityCalculation: Codeunit "CXW Availability Calculation")
+    var
+        DeliveryDays: Integer;
+    begin
+        if AvailabilityCalculation.TryGetStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
+            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, DeliveryDays)
+        else
+            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, 0);
+
+        if AvailabilityCalculation.TryGetNonStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
+            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, DeliveryDays)
+        else
+            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, 0);
+    end;
+
+    local procedure UpsertInventoryTime(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; InventoryType: Code[10]; DeliveryDays: Integer)
+    var
+        AvailabilityInventoryTime: Record "CXW Availability Inv. Time";
+    begin
+        if AvailabilityInventoryTime.Get(ItemNo, VariantCode, CountryRegionCode, InventoryType) then begin
+            if AvailabilityInventoryTime."CXW Delivery Days" = DeliveryDays then
+                exit;
+
+            AvailabilityInventoryTime."CXW Delivery Days" := DeliveryDays;
+            AvailabilityInventoryTime."CXW Exported" := false;
+            Clear(AvailabilityInventoryTime."CXW Exported At");
+            AvailabilityInventoryTime.Modify(true);
+            exit;
+        end;
+
+        AvailabilityInventoryTime.Init();
+        AvailabilityInventoryTime."CXW Item No." := ItemNo;
+        AvailabilityInventoryTime."CXW Variant Code" := VariantCode;
+        AvailabilityInventoryTime."CXW Country/Region Code" := CountryRegionCode;
+        AvailabilityInventoryTime."CXW Inventory Type" := InventoryType;
+        AvailabilityInventoryTime."CXW Delivery Days" := DeliveryDays;
+        AvailabilityInventoryTime.Insert(true);
+    end;
+
+    local procedure UpsertDeliveryTime(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; DeliveryDays: Integer)
+    var
+        AvailabilityDeliveryTime: Record "CXW Availability Delivery Time";
+    begin
+        if AvailabilityDeliveryTime.Get(ItemNo, VariantCode, CountryRegionCode) then begin
+            if AvailabilityDeliveryTime."CXW Delivery Days" = DeliveryDays then
+                exit;
+
+            AvailabilityDeliveryTime."CXW Delivery Days" := DeliveryDays;
+            AvailabilityDeliveryTime."CXW Exported" := false;
+            Clear(AvailabilityDeliveryTime."CXW Exported At");
+            AvailabilityDeliveryTime.Modify(true);
+            exit;
+        end;
+
+        AvailabilityDeliveryTime.Init();
+        AvailabilityDeliveryTime."CXW Item No." := ItemNo;
+        AvailabilityDeliveryTime."CXW Variant Code" := VariantCode;
+        AvailabilityDeliveryTime."CXW Country/Region Code" := CountryRegionCode;
+        AvailabilityDeliveryTime."CXW Delivery Days" := DeliveryDays;
+        AvailabilityDeliveryTime.Insert(true);
     end;
 
     local procedure IsAvailabilityLocation(LocationCode: Code[10]): Boolean
+    var
+        Location: Record Location;
     begin
-        exit(LocationCode = GetAvailabilityLocationCode());
+        Location.SetFilter(Code, GetAvailabilityLocationFilter());
+        if Location.FindSet() then
+            repeat
+                if Location.Code = LocationCode then
+                    exit(true);
+            until Location.Next() = 0;
+
+        exit(false);
     end;
 
-    local procedure GetAvailabilityLocationCode(): Code[10]
+    local procedure GetFirstAvailabilityLocationCode(): Code[10]
+    var
+        Location: Record Location;
     begin
-        if CachedAvailabilityLocationCode = '' then begin
-            if not TryLoadAvailabilityLocationCode(CachedAvailabilityLocationCode) then
-                CachedAvailabilityLocationCode := '';
+        Location.SetFilter(Code, GetAvailabilityLocationFilter());
+        if Location.FindFirst() then
+            exit(Location.Code);
 
-            if CachedAvailabilityLocationCode = '' then
-                CachedAvailabilityLocationCode := 'HL';
+        exit('HL');
+    end;
+
+    local procedure GetAvailabilityLocationFilter(): Text
+    begin
+        if CachedAvailabilityLocationFilter = '' then begin
+            if not TryLoadAvailabilityLocationFilter(CachedAvailabilityLocationFilter) then
+                CachedAvailabilityLocationFilter := '';
+
+            if CachedAvailabilityLocationFilter = '' then
+                CachedAvailabilityLocationFilter := 'HL';
         end;
 
-        exit(CachedAvailabilityLocationCode);
+        exit(CachedAvailabilityLocationFilter);
     end;
 
     [TryFunction]
-    local procedure TryLoadAvailabilityLocationCode(var LocationCode: Code[10])
+    local procedure TryLoadAvailabilityLocationFilter(var LocationFilter: Text)
     var
         SetupValuesRef: RecordRef;
         ValueFieldRef: FieldRef;
@@ -140,7 +492,7 @@ codeunit 60348 "CXW Availability Change Mgt"
             exit;
 
         ValueFieldRef := GetFieldRefByName(SetupValuesRef, 'Value');
-        LocationCode := CopyStr(Format(ValueFieldRef.Value), 1, MaxStrLen(LocationCode));
+        LocationFilter := Format(ValueFieldRef.Value);
     end;
 
     local procedure ApplySetupValueFilter(var SetupValuesRef: RecordRef; FieldName: Text; FilterValue: Text)
@@ -163,5 +515,7 @@ codeunit 60348 "CXW Availability Change Mgt"
     end;
 
     var
-        CachedAvailabilityLocationCode: Code[10];
+        CachedAvailabilityLocationFilter: Text;
+        InventoryTimeStockTypeLbl: Label 'stock', Locked = true;
+        InventoryTimeNonStockTypeLbl: Label 'non-stock', Locked = true;
 }

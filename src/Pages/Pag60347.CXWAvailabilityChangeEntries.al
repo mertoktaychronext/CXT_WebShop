@@ -5,7 +5,7 @@ page 60347 "CXWAvailabilityChange Entries"
     SourceTable = "CXW Availability Change Entry";
     Editable = false;
     InsertAllowed = false;
-    DeleteAllowed = false;
+    DeleteAllowed = true;
     ModifyAllowed = false;
     ApplicationArea = All;
     UsageCategory = Lists;
@@ -36,10 +36,25 @@ page 60347 "CXWAvailabilityChange Entries"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the location code involved in the availability change.';
                 }
-                field("CXW Inserted At"; Rec."CXW Inserted At")
+                field("CXW Item Ledger Entry No."; Rec."CXW Item Ledger Entry No.")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies when the availability change entry was created.';
+                    ToolTip = 'Specifies the item ledger entry that triggered this availability change.';
+                }
+                field("CXW Inventory Quantity"; Rec."CXW Inventory Quantity")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the available inventory quantity after all reservations have been deducted.';
+                }
+                field("CXW Differential Taxation Purchase"; Rec."CXW Differential Taxation Purchase")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether the triggering item ledger entry is subject to differential taxation.';
+                }
+                field("CXW Changed At"; Rec."CXW Changed At")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies when the stock or reservation details were last refreshed.';
                 }
                 field("CXW Exported"; Rec."CXW Exported")
                 {
@@ -54,4 +69,55 @@ page 60347 "CXWAvailabilityChange Entries"
             }
         }
     }
+
+    actions
+    {
+        area(Processing)
+        {
+            action(DeleteSelectedEntries)
+            {
+                ApplicationArea = All;
+                Caption = 'Delete Selected Entries';
+                Image = Delete;
+                Promoted = true;
+                PromotedCategory = Process;
+                ToolTip = 'Deletes the selected availability change entries.';
+
+                trigger OnAction()
+                var
+                    SelectedEntryCount: Integer;
+                begin
+                    CurrPage.SetSelectionFilter(Rec);
+                    SelectedEntryCount := Rec.Count();
+                    if not Confirm(DeleteSelectedQst, false, SelectedEntryCount) then
+                        exit;
+
+                    Rec.DeleteAll(true);
+                    CurrPage.Update(false);
+                end;
+            }
+            action(ExportOpenEntries)
+            {
+                ApplicationArea = All;
+                Caption = 'Export Open Entries';
+                ToolTip = 'Sends the selected availability change entries that have not yet been exported to the UPDSTOFILE interface.';
+                Image = Export;
+
+                trigger OnAction()
+                var
+                    ExportAvailabilityChanges: Codeunit "CXW Export Availability Change";
+                    ExportedCount: Integer;
+                    FailedCount: Integer;
+                begin
+                    CurrPage.SetSelectionFilter(Rec);
+                    ExportAvailabilityChanges.ExportSelectedEntries(Rec, ExportedCount, FailedCount);
+                    Message(ExportResultMsg, ExportedCount, FailedCount);
+                end;
+            }
+        }
+    }
+
+    var
+        ExportResultMsg: Label '%1 availability change entries exported successfully. %2 entries could not be exported; see the HTTP call log for details.', Comment = '%1 = successful exports, %2 = failed exports';
+        DeleteSelectedQst: Label 'Do you want to delete %1 selected availability change entry(ies)?', Comment = '%1 = selected entry count';
 }

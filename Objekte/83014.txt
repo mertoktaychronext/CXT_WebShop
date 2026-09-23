@@ -1,0 +1,149 @@
+OBJECT Codeunit 82014 Export Gateway Delivery Times
+{
+  OBJECT-PROPERTIES
+  {
+    Date=08.01.21;
+    Time=15:38:44;
+    Modified=Yes;
+    Version List=CHNX;
+  }
+  PROPERTIES
+  {
+    OnRun=BEGIN
+          END;
+
+  }
+  CODE
+  {
+    VAR
+      NotImplemented@301480000 : TextConst 'DEU=Externes Interface %1 ist nicht implementiert;ENU=External Interface %1 is not implemented';
+
+    PROCEDURE CreateExternalInterfaceFile@301480003(pDeliveryTimesAggregate@301480001 : Record 88014);
+    VAR
+      lExtInterfaceOutboundFile@301480000 : Record 5275378;
+      lExtInterfaceSetup@301480002 : Record 5275373;
+    BEGIN
+      // 01 08.01.21 KEGG MSD-13678 Delivery Times File deaktiviert
+      EXIT;
+      // 01 08.01.21 KEGG MSD-13678 Delivery Times File deaktiviert ENDE
+      IF NOT lExtInterfaceSetup.GET('UPDDLT') THEN
+        ERROR(STRSUBSTNO(NotImplemented,'UPDDLT'));
+
+      lExtInterfaceOutboundFile.INIT;
+      lExtInterfaceOutboundFile.Status := lExtInterfaceOutboundFile.Status::"to process";
+      lExtInterfaceOutboundFile."Message Code" := 'UPDDLTFILE';
+
+      lExtInterfaceOutboundFile.Filename :=
+        'Item No.=' + FORMAT(pDeliveryTimesAggregate."Item No.",0,9) +
+        '&Variant Code=' + FORMAT(pDeliveryTimesAggregate."Variant Code",0,9) +
+        '&Country/Region Code=' + FORMAT(pDeliveryTimesAggregate."Country/Region Code",0,9);
+
+      CreateSourceFile(lExtInterfaceOutboundFile,pDeliveryTimesAggregate);
+      lExtInterfaceOutboundFile.User := USERID;
+      lExtInterfaceOutboundFile.INSERT(TRUE);
+    END;
+
+    LOCAL PROCEDURE CreateSourceFile@301480008(VAR vExtInterfaceOutboundFile@301480007 : Record 5275378;pDeliveryTimesAggregate@301480000 : Record 88014);
+    VAR
+      lJSONManagement@301480001 : Codeunit 5459;
+      lDataTypeManagement@301480004 : Codeunit 701;
+      lJObject@301480002 : DotNet "'Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed'.Newtonsoft.Json.Linq.JObject";
+      lRecordRef@301480003 : RecordRef;
+      lFieldRef@301480005 : FieldRef;
+      lFieldCount@301480006 : Integer;
+      lOStream@301480008 : OutStream;
+      lJsonPropertyNames@301480009 : DotNet "'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.System.Collections.Generic.List`1";
+      lPropertyName@301480010 : Text;
+      lCurrentPropertyName@301480011 : Text;
+    BEGIN
+      IF NOT lDataTypeManagement.GetRecordRef(pDeliveryTimesAggregate,lRecordRef) THEN
+        EXIT;
+
+      lJObject := lJObject.JObject;
+      lJSONManagement.GetJsonPropertyNamesByEntity(PAGE::"CHNX Delivery Time Entity",lJsonPropertyNames);
+      FOR lFieldCount := 1 TO lRecordRef.FIELDCOUNT DO BEGIN
+        lFieldRef := lRecordRef.FIELDINDEX(lFieldCount);
+        IF ProcessFieldRef(lFieldRef) THEN BEGIN
+          lPropertyName := lJSONManagement.PrettifyJsonProperty(lFieldRef.NAME);
+          FOREACH lCurrentPropertyName IN lJsonPropertyNames DO BEGIN
+            IF UPPERCASE(lPropertyName) = UPPERCASE(lCurrentPropertyName) THEN
+              lPropertyName := lCurrentPropertyName;
+          END;
+          lJSONManagement.AddJPropertyToJObject(lJObject,lPropertyName,lFieldRef.VALUE);
+        END;
+      END;
+
+      vExtInterfaceOutboundFile.SourceFile.CREATEOUTSTREAM(lOStream,TEXTENCODING::UTF8);
+      lOStream.WRITE(lJObject.ToString());
+    END;
+
+    LOCAL PROCEDURE ProcessFieldRef@301480021(VAR vFieldRef@301480000 : FieldRef) : Boolean;
+    BEGIN
+      // Handle Special Cases
+
+      IF UPPERCASE(FORMAT(vFieldRef.CLASS)) IN ['MEDIA','MEDIASET','BLOB'] THEN
+        EXIT(FALSE);
+
+      IF UPPERCASE(FORMAT(vFieldRef.CLASS)) = 'FLOWFIELD' THEN BEGIN
+        vFieldRef.CALCFIELD;
+        EXIT(TRUE);
+      END;
+
+      EXIT(TRUE);
+    END;
+
+    [EventSubscriber(Table,88014,OnAfterDeleteEvent)]
+    LOCAL PROCEDURE OnAfterDeleteEvent@301480004(VAR Rec@301480000 : Record 88014;RunTrigger@301480001 : Boolean);
+    VAR
+      lSetupGet@301490000 : Codeunit 5105007;
+    BEGIN
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt
+      //IF NOT Rec.ISTEMPORARY THEN
+        //CreateExternalInterfaceFile(Rec);
+      IF lSetupGet.GetDontCreateDeliveryTimeMessageExtInt THEN
+        EXIT;
+      IF NOT Rec.ISTEMPORARY THEN
+        CreateExternalInterfaceFile(Rec);
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt ENDE
+    END;
+
+    [EventSubscriber(Table,88014,OnAfterInsertEvent)]
+    LOCAL PROCEDURE OnAfterInsertEvent@301480005(VAR Rec@301480000 : Record 88014;RunTrigger@301480001 : Boolean);
+    VAR
+      lSetupGet@301490000 : Codeunit 5105007;
+    BEGIN
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt
+      //IF NOT Rec.ISTEMPORARY THEN
+        //CreateExternalInterfaceFile(Rec);
+      IF lSetupGet.GetDontCreateDeliveryTimeMessageExtInt THEN
+        EXIT;
+      IF NOT Rec.ISTEMPORARY THEN
+        CreateExternalInterfaceFile(Rec);
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt ENDE
+    END;
+
+    [EventSubscriber(Table,88014,OnAfterModifyEvent)]
+    LOCAL PROCEDURE OnAfterModifyEvent@301480006(VAR Rec@301480000 : Record 88014;VAR xRec@301480001 : Record 88014;RunTrigger@301480002 : Boolean);
+    VAR
+      lSetupGet@301490000 : Codeunit 5105007;
+    BEGIN
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt
+      //IF NOT Rec.ISTEMPORARY THEN
+        //CreateExternalInterfaceFile(Rec);
+      IF lSetupGet.GetDontCreateDeliveryTimeMessageExtInt THEN
+        EXIT;
+      IF NOT Rec.ISTEMPORARY THEN
+        CreateExternalInterfaceFile(Rec);
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt ENDE
+    END;
+
+    BEGIN
+    {
+      // 00 31.10.18 MKLE CHR-116 Export Delivery Times
+      // 01 11.07.19 MKLE CHR-702 CreateDeliveryTimeMessageExtInt
+      // 01 08.01.21 KEGG MSD-13678 Delivery Times File deaktiviert
+    }
+    END.
+  }
+}
+
