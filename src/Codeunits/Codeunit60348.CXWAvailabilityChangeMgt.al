@@ -36,24 +36,6 @@ codeunit 60348 "CXW Availability Change Mgt"
         QueueAvailabilityChange(Rec."No.", Rec."Variant Code", Rec."Location Code", 0, false);
     end;
 
-    [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", 'OnAfterDeleteEvent', '', false, false)]
-    local procedure OnAfterDeleteReservationEntry(var Rec: Record "Reservation Entry"; RunTrigger: Boolean)
-    begin
-        RemoveOpenItemLedgerEntryChangeFromReservation(Rec);
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", 'OnAfterInsertEvent', '', false, false)]
-    local procedure OnAfterInsertReservationEntry(var Rec: Record "Reservation Entry"; RunTrigger: Boolean)
-    begin
-        QueueItemLedgerEntryChangeFromReservation(Rec);
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", 'OnAfterModifyEvent', '', false, false)]
-    local procedure OnAfterModifyReservationEntry(var Rec: Record "Reservation Entry"; var xRec: Record "Reservation Entry"; RunTrigger: Boolean)
-    begin
-        QueueItemLedgerEntryChangeFromReservation(Rec);
-    end;
-
     [EventSubscriber(ObjectType::Table, Database::"Transfer Line", 'OnAfterInsertEvent', '', false, false)]
     local procedure OnAfterInsertTransferLine(var Rec: Record "Transfer Line"; RunTrigger: Boolean)
     begin
@@ -94,69 +76,6 @@ codeunit 60348 "CXW Availability Change Mgt"
         QueueAvailabilityChange(
             ItemLedgerEntry."Item No.", ItemLedgerEntry."Variant Code", ItemLedgerEntry."Location Code",
             ItemLedgerEntry."Entry No.", ItemLedgerEntry."CXB Margin Taxation");
-    end;
-
-    local procedure QueueItemLedgerEntryChangeFromReservation(ReservationEntry: Record "Reservation Entry")
-    var
-        ItemLedgerEntry: Record "Item Ledger Entry";
-    begin
-        if ReservationEntry.IsTemporary() then
-            exit;
-        if not TryGetItemLedgerEntryFromReservation(ReservationEntry, ItemLedgerEntry) then
-            exit;
-        if not IsAvailabilityLocation(ItemLedgerEntry."Location Code") then
-            exit;
-
-        QueueItemLedgerEntryChange(ItemLedgerEntry);
-    end;
-
-    local procedure RemoveOpenItemLedgerEntryChangeFromReservation(ReservationEntry: Record "Reservation Entry")
-    var
-        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
-        ItemLedgerEntry: Record "Item Ledger Entry";
-    begin
-        if ReservationEntry.IsTemporary() then
-            exit;
-        if not TryGetItemLedgerEntryFromReservation(ReservationEntry, ItemLedgerEntry) then
-            exit;
-
-        AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", ItemLedgerEntry."Entry No.");
-        AvailabilityChangeEntry.SetRange("CXW Exported", false);
-        if AvailabilityChangeEntry.FindSet() then
-            repeat
-                AvailabilityChangeEntry.Delete();
-            until AvailabilityChangeEntry.Next() = 0;
-
-        // The stock interface receives a current aggregate, never a reservation deletion.
-        // Queue the recalculated amount after removing a potentially stale open message.
-        QueueItemLedgerEntryChange(ItemLedgerEntry);
-    end;
-
-    local procedure TryGetItemLedgerEntryFromReservation(ReservationEntry: Record "Reservation Entry"; var ItemLedgerEntry: Record "Item Ledger Entry"): Boolean
-    var
-        ItemLedgerEntryNo: Integer;
-    begin
-        ItemLedgerEntryNo := ReservationEntry."Item Ledger Entry No.";
-        if ItemLedgerEntryNo = 0 then
-            ItemLedgerEntryNo := ReservationEntry."Appl.-to Item Entry";
-        if ItemLedgerEntryNo = 0 then
-            ItemLedgerEntryNo := ReservationEntry."Appl.-from Item Entry";
-
-        if (ItemLedgerEntryNo <> 0) and ItemLedgerEntry.Get(ItemLedgerEntryNo) then
-            exit(true);
-
-        // Reservations created from a sales line can carry the serial number but no direct
-        // item-ledger-entry number. Resolve the open item ledger entry from that serial number.
-        if ReservationEntry."Serial No." = '' then
-            exit(false);
-
-        ItemLedgerEntry.Reset();
-        ItemLedgerEntry.SetRange("Item No.", ReservationEntry."Item No.");
-        ItemLedgerEntry.SetRange("Variant Code", ReservationEntry."Variant Code");
-        ItemLedgerEntry.SetRange("Location Code", ReservationEntry."Location Code");
-        ItemLedgerEntry.SetRange("Serial No.", ReservationEntry."Serial No.");
-        ItemLedgerEntry.SetRange(Open, true);
-        exit(ItemLedgerEntry.FindFirst());
     end;
 
     local procedure QueueTransferLineChange(TransferLine: Record "Transfer Line")
