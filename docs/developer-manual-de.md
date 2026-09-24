@@ -12,6 +12,8 @@ Als dritter, ebenfalls fachlich unabhängiger Baustein enthält die Erweiterung 
 
 Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): Wird eine VK-Rechnung mit einer Zeile eines Artikels mit `"CXB Consignment Sales"` = true (Feld aus der Dependency CHX.Base) gebucht, legt ein Event-Subscriber auf `Codeunit "Sales-Post"` einen Kommissions-Buchungseintrag an und ermittelt dabei automatisch die zugehörige, wareneingebuchte, noch nicht fakturierte Einkaufsbestellung. Eine job-queue-gesteuerte Codeunit bucht fällige Einträge (Fälligkeitsdatum = VK-Buchungsdatum + einrichtbare Verzögerung in Tagen) automatisiert als Einkaufsrechnung. Details siehe Abschnitt "Kommissionsverkauf" unten.
 
+> **Update 2026-09-23 (Add all Countries):** Aktion "Add all Currencies" durch "Add all Countries" ersetzt – Aktivierung und Verkaufspreiswährung jetzt pro Land (Table/Page Extension 60346/60347 auf "Country/Region"), Table/Page Extension 60320/60327 auf "Currency" entfernt, neues Schlüsselfeld "CXW Country Code" auf Table 60312/60313, Ländercode im Export-JSON. Details: `openspec/changes/add-all-countries-sales-price/`.
+
 > **Update 2026-09-02 (Vollständige Neuverifikation):** Alle 57 AL-Objekte wurden Zeile für Zeile gegen den aktuellen Code (Branch `03-FEAT/Workshop`) abgeglichen. Korrigiert: die Architektur-Skizze verwies noch auf eine "Country/Region"-Table-/Page-Erweiterung, die in dieser Erweiterung nicht (mehr) existiert – die Aktivierung für "Add all Currencies" liegt ausschließlich auf der "Currency". Präzisiert: `CreateSellWatchItem` liest die Artikelvorlage aus `Purchases & Payables Setup."CXW SW Item Template Code"`. Keine Code-Änderungen.
 
 > **Update 2026-08-14 (Kommissionsverkauf ergänzt):** Neue Objekte 60341/60342/60343/60344/60345, neues Setup-Feld `"CXW SW Consignment Invoice Delay (Days)"` auf `TableExtension 60322 "CXW SW Purchases Setup"`. Dabei wurde auch die zuvor als "verloren gegangen" dokumentierte SellWatch-Artikelvorlagen-Konfiguration (siehe Bekannte Einschränkungen, alter Stand) tatsächlich wiederhergestellt und ist seither produktiv im Code vorhanden – der entsprechende Hinweis unten wurde korrigiert. Zusätzlich wurde die bislang falsche Aussage "keine Dependencies" korrigiert: `app.json` hängt seit der Artikelvorlagen-Konfiguration von **CHX.Base** ab.
@@ -39,15 +41,15 @@ Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** 
 app.json                          # Extension-Manifest, idRanges 51000-51049 + 60300-60349, Dependency CHX.Base
 src/
   Tables/                         # 12 Tabellen (60300-60302 SellWatch; 60311-60317 Verkaufspreisverwaltung; 60318 Workshop; 60341 Kommissionsverkauf)
-  TableExtensions/                # 6 Erweiterungen (Purchase Line, Purchase Header, Purchases & Payables Setup – SellWatch/Kommission; Sales Price, Currency – Verkaufspreisverwaltung; Purchase Line – Workshop)
-  PageExtensions/                 # 5 Erweiterungen (Sales Prices, Currencies – Verkaufspreisverwaltung; Purchase Order, Purchase Order Subform – Workshop; Purchases & Payables Setup – SellWatch/Kommission)
+  TableExtensions/                # 6 Erweiterungen (Purchase Line, Purchase Header, Purchases & Payables Setup – SellWatch/Kommission; Sales Price, Country/Region – Verkaufspreisverwaltung; Purchase Line – Workshop)
+  PageExtensions/                 # 5 Erweiterungen (Sales Prices, Countries/Regions – Verkaufspreisverwaltung; Purchase Order, Purchase Order Subform – Workshop; Purchases & Payables Setup – SellWatch/Kommission)
   Pages/                          # 13 Seiten + 1 Xmlport (60307-60309 + 60337 SellWatch; 60321-60325 + Xmlport 60328 Verkaufspreisverwaltung; 60338-60340 Workshop; 60342 Kommissionsverkauf)
   Codeunits/                      # 6 Codeunits (SellWatch Mgt – SellWatch; Export Gateway Sales Price, Import Sales Prices – Verkaufspreisverwaltung; Process Workshop Lines – Workshop; Consignment Sale Detection, Post Consignment Purchases – Kommissionsverkauf)
   Enums/                          # 9 Enums (SW Order Status – SellWatch; 6 weitere – Verkaufspreisverwaltung; Workshop Line Status – Workshop; Consignment Posting Status – Kommissionsverkauf)
   PermissionSets/                 # 5 Permission Sets (CXW SWChronWSAll, CXW Sell Watch API – SellWatch; CXWChronWSAll – Verkaufspreisverwaltung; CXW Workshop All [deckt seit dieser Version auch den Kommissionsverkauf ab], CXW Workshop API – Workshop)
 Translations/                     # .g.xlf (generiert) + de-DE.xlf (gepflegt)
 openspec/
-  specs/                          # dauerhafte Capability-Spezifikationen (z.B. sales-price-currency-copy, sellwatch-http-call-logging, sellwatch-standard-table-extensions)
+  specs/                          # dauerhafte Capability-Spezifikationen (z.B. sales-price-country-copy, sellwatch-http-call-logging, sellwatch-standard-table-extensions)
   changes/                        # laufende und archivierte Change-Proposals
 docs/                             # dieses Handbuch + Funktionsregister
 ```
@@ -91,8 +93,8 @@ Xmlport 60328 "CXW Import Sales Price"
    │  schreibt Zeilen in
    ▼
 Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Checking List"
-   │  (Item No./Currency Code – kein eigener Länder-        (Validate / Approve / Add all Currencies /
-   │   code und kein Variantencode mehr auf dieser Tabelle)   Upload Sales Price)
+   │  (Item No./Currency Code/Country Code – Land leer =    (Validate / Approve / Add all Countries /
+   │   importierte Quellzeile; kein Variantencode)            Upload Sales Price)
    │
    │  Action "Upload Sales Price" → Codeunit 60329 "CXW Export Gateway Sales Price"
    │
@@ -132,12 +134,17 @@ Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Ch
           Active); Details siehe
           `openspec/changes/api-interface-setup-conditional-fields/design.md`.
 
-Steuerdaten für "Add all Currencies":
-Table Extension "CXWCurrency" (auf Standard-Tabelle "Currency", Feld "CXW Sales Price Activated")
-   ◄── Page Extension "CXWCurrencies" (auf Standard-Seite "Currencies")
+Steuerdaten für "Add all Countries":
+Table Extension 60346 "CXW Country/Region" (auf Standard-Tabelle "Country/Region",
+   Felder "CXW Sales Price Activated", "CXW Sales Price Currency Code" – leer = MW)
+   ◄── Page Extension 60347 "CXW Countries/Regions" (auf Standard-Seite "Countries/Regions")
 
-Es gibt in dieser Erweiterung keine Table-/Page-Erweiterung auf "Country/Region" –
-die Aktivierung für "Add all Currencies" liegt ausschließlich auf der "Currency".
+"Add all Countries" (Page 60322, lokale Prozeduren fnAddAllCountries/CreateCountryLine)
+expandiert jede Quellzeile ("CXW Country Code" leer, "CXW Countries Processed" = false) in
+eine Zeile je aktiviertem Land mit dessen Verkaufspreiswährung. Gleiche Währung wie die
+Quellzeile → Preise 1:1, sonst Umrechnung über GetLastestExchangeRate. Die frühere
+Aktivierung pro Währung (Table/Page Extension 60320/60327 auf "Currency", Aktion
+"Add all Currencies") wurde entfernt (Change `add-all-countries-sales-price`).
 Die Enums 60331 "CXW Taxation Type" / 60332 "CXW Sales Price Reason Code" existieren,
 wobei 60331 derzeit von keinem Objekt dieser Erweiterung referenziert wird (Table 60300
 speichert die Besteuerung als Freitext "CXW Taxation").
@@ -354,7 +361,7 @@ Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsr
 | Objekt | Element | Zweck |
 |---|---|---|
 | Codeunit 60329 | `WriteBackAndArchive(SalesPriceChecking: Record "CXW Sales Price Checking"; var SalesPrice: Record "Sales Price")` | Schreibt/aktualisiert einen "Sales Price"-Datensatz aus einer freigegebenen Preiszeile (Sales Type = All Customers) und archiviert eine neue Version. `[TryFunction]` – ein Fehlschlag wird abgefangen und als `false` zurückgemeldet, statt den gesamten Batch des Aufrufers abzubrechen. |
-| Codeunit 60329 | `CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean` | Wandelt einen "Sales Price"-Datensatz per Reflection in JSON um, legt ihn in Table 60314 ab, sendet ihn an die konfigurierte API-Schnittstelle und protokolliert den Aufruf in Table 60302 "CXW Http Call Log". |
+| Codeunit 60329 | `CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"; pCountryCode: Code[10]): Boolean` | Wandelt einen "Sales Price"-Datensatz per Reflection in JSON um, ergänzt das Feld `"CXW Country Code"` der Prüfzeile (Dateiname `SalesPrice_<Artikel>_<Währung>_<Land>.json`), legt ihn in Table 60314 ab, sendet ihn an die konfigurierte API-Schnittstelle und protokolliert den Aufruf in Table 60302 "CXW Http Call Log". |
 | Page 60322 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Berechnet den Nicht-Lagerpreis für Zeilen innerhalb einer Preisspanne. Aktuell aus keiner aktiven Stelle im Code aufgerufen. |
 | Codeunit 60330 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Wird ausgelöst, wenn der automatisierte Dateiimport einen bestehenden Verkaufspreis ändert. Aktuell ohne Subscriber. |
 | Table 60317 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Speichert/liest den API-Schlüssel einer Schnittstelle im Isolated Storage (Modul-Scope) statt in einem Klartext-Tabellenfeld. |
@@ -378,8 +385,8 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | 60301 CXW Watch Online Approval | Entry No | Ergebnis der Online-Sichtbarkeitsprüfung je Artikel/Variante ("CXW Check Online", "CXW First Online Date", "CXW Remark"); FlowField "CXW SRid" liest "Vendor Order No." der zugehörigen Bestellung |
 | 60302 CXW Http Call Log | Entry No | Gemeinsames Protokoll jedes HTTP-Aufrufs von `CreateEntryInexternalFile` (SellWatch) UND `SendToApiInterface` (Verkaufspreis-Export) – Erfolg/Fehlschlag, Statuscode, redigierter Request, Response als Blob; "CXW Source Table No." (60301 bzw. 60314) + "CXW Source Entry No" identifizieren die auslösende Zeile |
 | 60311 CXW General Sales Price Setup | Primary Key (Singleton) | Grundeinstellungen, inkl. Export-Schalter und ausgewählter API-Schnittstelle |
-| 60312 CXW Sales Price Checking | Item No., Currency Code | Zwischenablage für Import/Prüfung/Freigabe |
-| 60313 CXW Sales Price Archive | + Version No. | Historie; wird bei "Upload Sales Price" (Page 60322) über Codeunit 60329 automatisch befüllt, Version No. je Item No./Currency Code hochgezählt |
+| 60312 CXW Sales Price Checking | Item No., Currency Code, Country Code | Zwischenablage für Import/Prüfung/Freigabe |
+| 60313 CXW Sales Price Archive | + Version No. | Historie; wird bei "Upload Sales Price" (Page 60322) über Codeunit 60329 automatisch befüllt, Version No. je Item No./Currency Code/Country Code hochgezählt |
 | 60314 CXW Sales Price Outbound File | Entry No. | Gesendete JSON-Nutzdaten mit Versandstatus und Antworttext, zur Fehleranalyse fehlgeschlagener Übertragungen |
 | 60315 CXW Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 60316 CXW Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import (fachlich weiterhin das Sales-Price-Import-Protokoll; „Sales" im technischen Bezeichner wegen des 30-Zeichen-Limits von AL entfallen) |
@@ -399,7 +406,7 @@ Für die Workshop-Ankaufsprüfung gibt es zwei getrennte Permission Sets: **`CXW
 
 ## Tests ausführen
 
-Es existieren aktuell **keine** AL-Testcodeunits in diesem Projekt. Als Grundlage für zukünftige Tests eignet sich die Spezifikation `openspec/specs/sales-price-currency-copy/spec.md` (10 Szenarien für die Aktion "Add all Currencies") – zu beachten ist, dass diese Spezifikation vor der Umstellung von Land- auf Currency-Aktivierung entstand und vor Testerstellung gegen den aktuellen Stand geprüft werden sollte. Für SellWatch liefern `openspec/specs/sellwatch-http-call-logging/spec.md` (Szenarien für Erfolgs-/Fehlschlag-Logging, API-Key-Redaktion und Telemetrie von `CreateEntryInexternalFile`) und `openspec/specs/sellwatch-standard-table-extensions/spec.md` (Szenarien für "CXW Used good" und "CXW Tracking Number") eine vergleichbare Grundlage. Für die Workshop-Ankaufsprüfung liegen die Szenarien noch verteilt auf mehrere, teils noch nicht archivierte OpenSpec-Changes (`openspec/changes/purchase-workshop-integration/specs/` sowie die darauf aufbauenden Deltas in `openspec/changes/archive/2026-08-13-workshop-line-error-handling/` und `openspec/changes/archive/2026-08-13-workshop-attribute-*`) – vor einer Testerstellung sollten diese zu einer konsolidierten Spec unter `openspec/specs/workshop-line-processing/` zusammengeführt werden (siehe Bekannte Einschränkungen).
+Es existieren aktuell **keine** AL-Testcodeunits in diesem Projekt. Als Grundlage für zukünftige Tests eignet sich die Spezifikation `openspec/specs/sales-price-country-copy/spec.md` (Szenarien für Ländereinrichtung und die Aktion "Add all Countries"). Für SellWatch liefern `openspec/specs/sellwatch-http-call-logging/spec.md` (Szenarien für Erfolgs-/Fehlschlag-Logging, API-Key-Redaktion und Telemetrie von `CreateEntryInexternalFile`) und `openspec/specs/sellwatch-standard-table-extensions/spec.md` (Szenarien für "CXW Used good" und "CXW Tracking Number") eine vergleichbare Grundlage. Für die Workshop-Ankaufsprüfung liegen die Szenarien noch verteilt auf mehrere, teils noch nicht archivierte OpenSpec-Changes (`openspec/changes/purchase-workshop-integration/specs/` sowie die darauf aufbauenden Deltas in `openspec/changes/archive/2026-08-13-workshop-line-error-handling/` und `openspec/changes/archive/2026-08-13-workshop-attribute-*`) – vor einer Testerstellung sollten diese zu einer konsolidierten Spec unter `openspec/specs/workshop-line-processing/` zusammengeführt werden (siehe Bekannte Einschränkungen).
 
 ## Deployment
 
@@ -414,6 +421,8 @@ Kein CI/CD-Setup (z. B. AL-Go-Workflow) im Projekt gefunden. Deployment erfolgt 
 
 ## Bekannte Einschränkungen
 
+- **"Add all Countries" rechnet nur von einer Quellzeile in Mandantenwährung korrekt um.** Die Umrechnung (`Preis * (1 / Kurs)` über `GetLastestExchangeRate`) setzt voraus, dass die importierte Quellzeile in MW vorliegt. Eine Quellzeile in Fremdwährung (z. B. CHF) würde für Länder mit anderer Währung falsch umgerechnet. Länder mit derselben Währung wie die Quellzeile erhalten den Preis unverändert.
+- **"Sales Price" kennt kein Land.** Bei mehreren Ländern derselben Währung wird derselbe "Sales Price"-Datensatz (Schlüssel ohne Land) mehrfach mit identischen Werten geschrieben; das Land wird nur im Archiv (Table 60313) und im gesendeten JSON (`"CXW Country Code"`) geführt.
 - **"Approve" selbst übernimmt Preise nicht in die Standardtabelle "Sales Price" oder in "CXW Sales Price Archive".** Die Aktion setzt nur die Freigabe-Kennzeichen auf Table 60312. Die Übernahme erfolgt erst im nachgelagerten Schritt "Upload Sales Price" (Page 60322, Codeunit 60329), der vor der Dateierzeugung sowohl "Sales Price" (Sales Type = All Customers) als auch "CXW Sales Price Archive" (mit hochgezählter Version No.) beschreibt.
 - **(Behoben am 2026-08-10) `"CXW Unit Price (LCY)"` wurde nie automatisch befüllt** – `WriteBackAndArchive` schrieb bislang nur das Standardfeld `"Unit Price"`, während `fnValidate` auf Page 60322 beim Vergleich mit dem vorherigen Preis durch `"CXW Unit Price (LCY)"` dividierte. Da dieses Feld bei jedem automatisiert geschriebenen Datensatz `0` blieb, führte jeder zweite "Validate"-Lauf für ein bereits einmal hochgeladenes Artikel/Währungs-Paar zuverlässig zu `Attempted to divide by zero.` und brach den gesamten Batch ab. Seit `Codeunit 60329`.`ResolveUnitPriceLCY` befüllt `WriteBackAndArchive` das Feld bei jedem Schreiben automatisch (Umrechnung über den auf der Preiszeile bereits erfassten Wechselkurs bzw. per Fallback-Lookup); zusätzlich überspringt `fnValidate` den Vergleich statt zu dividieren, wenn der vorherige Datensatz noch `0` enthält. Bereits vor dem Fix geschriebene "Sales Price"-Datensätze bleiben bei `0`, bis sie das nächste Mal über "Upload Sales Price" neu geschrieben werden – kein rückwirkendes Backfill (siehe `openspec/changes/archive/2026-08-10-sales-price-unit-price-lcy-autofill/design.md`).
 - **`Reason Code` als Enum ohne echten Leerwert**: Das Enum hat immer einen Default-Wert (`CatMan`), es gibt keinen Zustand "kein Grund angegeben".

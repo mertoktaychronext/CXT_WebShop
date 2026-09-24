@@ -3,15 +3,25 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="CHX.Webshop">
     <body>
       <group id="body">
-        <trans-unit id="PageExtension 1117127223 - Control 1971448704 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 4081634891">
-          <source>Specifies whether the currency is activated for webshop sales prices.</source>
+        <trans-unit id="PageExtension 2769419090 - Control 1971448704 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
+          <source>Specifies whether webshop sales prices are generated for this country/region by the action Add all Countries.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXWCurrencies - Control CXW Sales Price Activated - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Activated - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="TableExtension 3503425477 - Field 1971448704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3561154705">
+        <trans-unit id="PageExtension 2769419090 - Control 311270661 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
+          <source>Specifies the currency in which webshop sales prices are generated for this country/region. Leave blank to use the local currency (LCY).</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3342327973 - Field 1971448704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Sales Price Activated</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXWCurrency - Field CXW Sales Price Activated - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country/Region - Field CXW Sales Price Activated - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3342327973 - Field 311270661 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Sales Price Currency Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country/Region - Field CXW Sales Price Currency Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Interface Setup</source>
@@ -303,6 +313,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Archive - Field CXW Comment - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 1583426037 - Field 1447630355 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Country Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Archive - Field CXW Country Code - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1583426037 - Field 3842441922 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Currency Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -428,10 +443,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Comment - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2693214649 - Field 1436444737 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Currencies Processed</source>
+        <trans-unit id="Table 2693214649 - Field 2579785932 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Countries Processed</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Currencies Processed - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Countries Processed - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2693214649 - Field 1447630355 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Country Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Country Code - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 2693214649 - Field 3842441922 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Currency Code</source>
@@ -1478,6 +1498,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Archive - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 1583426037 - Control 1447630355 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the country/region of the archived sales price line. Blank for source lines without a country.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Archive - Control CXW Country Code - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 2641804079 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Checking List</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1563,6 +1588,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Control Approver - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2641804079 - Control 1447630355 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the country/region the line was created for by Add all Countries. Blank for imported source lines.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Control CXW Country Code - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 2641804079 - Control 3569840675 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>FinalPrice</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1608,10 +1638,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Import - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2641804079 - Action 699038459 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Add all Currencies</source>
+        <trans-unit id="Page 2641804079 - Action 3647381754 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Creates one sales price line per country/region activated for sales prices, in the sales price currency of that country/region.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Add all Currencies - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action AddAllCountries - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2641804079 - Action 3647381754 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Add all Countries</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action AddAllCountries - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2641804079 - Action 803889193 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Approve</source>

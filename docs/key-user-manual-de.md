@@ -39,25 +39,25 @@ Diese Einstellungen **müssen** befüllt sein (Mindestmarge %, Schwellenwert Lag
 
 > Ohne eine aktive, vollständig konfigurierte Schnittstelle schlägt "Upload Sales Price" fehl bzw. markiert betroffene Preiszeilen mit "Export Status" = "Error".
 
-## Währungen für "Add all Currencies" freischalten
+## Länder für "Add all Countries" freischalten
 
-In den Stammdaten der **Währung** (Seite "Currencies") wurde folgendes Feld ergänzt:
+In den Stammdaten von **Land/Region** (Seite "Countries/Regions") wurden folgende Felder ergänzt:
 
 | Feld | Bedeutung |
 |---|---|
-| Verkaufspreis aktiviert | Muss gesetzt sein, damit für diese Währung automatisch eine Preiszeile erzeugt wird, wenn "Add all Currencies" ausgeführt wird. |
+| Verkaufspreis aktiviert | Muss gesetzt sein, damit für dieses Land automatisch eine Preiszeile erzeugt wird, wenn "Add all Countries" ausgeführt wird. |
+| Verkaufspreis-Währungscode | Währung, in der die Preiszeile für dieses Land erzeugt wird. Leer = Mandantenwährung (z. B. EUR). |
 
-> Ohne "Verkaufspreis aktiviert" wird eine Währung bei "Add all Currencies" nicht berücksichtigt.
+> Ohne "Verkaufspreis aktiviert" wird ein Land bei "Add all Countries" nicht berücksichtigt. Jedes aktivierte Land erhält eine eigene Zeile – auch wenn mehrere Länder dieselbe Währung nutzen (z. B. DE, AT, FR in EUR).
 
-> **Hinweis zur Währungs-/Länderfreischaltung:** Die Freischaltung für "Add all Currencies" erfolgt seit einer früheren Überarbeitung **ausschließlich** über das Feld "Verkaufspreis aktiviert" auf der **Währung**. Eine Erweiterung der Stammdaten von Land/Region ist in dieser App nicht (mehr) enthalten – frühere Angaben zu Feldern wie "Verkaufspreis-Währungscode", "Besteuerungsart" oder "Lieferzeit (Tage)" auf dem Land treffen auf den aktuellen Stand nicht zu.
-
+> **Umstellung von Währungs- auf Länderfreischaltung:** Bis zur Einführung von "Add all Countries" erfolgte die Freischaltung über das Feld "Verkaufspreis aktiviert" auf der **Währung** (Aktion "Add all Currencies"). Dieses Feld wurde entfernt. Notieren Sie vor dem Update die bisher aktivierten Währungen und richten Sie danach die entsprechenden Länder mit Verkaufspreis-Währungscode ein.
 ## Grundcode (Reason Code)
 
 Jeder Preisänderung kann ein Grund zugeordnet werden: **CatMan**, **Einkauf** oder **Marketing**. Dies dient der Nachvollziehbarkeit, warum ein Preis geändert wurde, wird aber aktuell nicht weiter ausgewertet. Ohne explizite Auswahl wird "CatMan" als Standardwert verwendet.
 
 ## Workflows und Prozesse
 
-Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Approve → (optional) Add all Currencies → Upload Sales Price**. Als Key User sind Sie zuständig für die Rahmenbedingungen (Grundeinstellungen, Währungsfreischaltung, API-Schnittstelle), nicht für den täglichen Ablauf selbst (siehe Benutzerhandbuch).
+Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Approve → (optional) Add all Countries → Upload Sales Price**. Als Key User sind Sie zuständig für die Rahmenbedingungen (Grundeinstellungen, Länderfreischaltung, API-Schnittstelle), nicht für den täglichen Ablauf selbst (siehe Benutzerhandbuch).
 
 Für SellWatch gibt es keinen von der Fachabteilung manuell ausgelösten Ablauf: Neue Ankaufsanfragen (Verkäufer-, Uhren- und Angebotsdaten) treffen automatisiert ein und werden automatisiert zu Lieferant und Einkaufsbestellung verarbeitet; die Fachabteilung sieht das Ergebnis nur lesend auf der Seite "SellWatch-Overview" (Benutzerhandbuch). Als Key User sind Sie hier zuständig für die Konfiguration der Online-Check-Schnittstelle (siehe unten) und für die Berechtigungsvergabe.
 
@@ -180,7 +180,7 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 | Problem | Ursache / Lösung |
 |---|---|
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
-| "Add all Currencies" erzeugt keine Zeile für eine bestimmte Währung | Prüfen Sie, ob für die Währung (Seite "Currencies") "Verkaufspreis aktiviert" gesetzt ist. |
+| "Add all Countries" erzeugt keine Zeile für ein bestimmtes Land | Prüfen Sie, ob für das Land (Seite "Countries/Regions") "Verkaufspreis aktiviert" gesetzt ist. |
 | Ein Benutzer kann die Seiten der Verkaufspreisverwaltung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXWChronWSAll" zugewiesen ist. |
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
 | "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. Details zum konkreten Fehler (Statuscode, Fehlermeldung) finden Sie auf der Seite "Http Call Log". |

@@ -50,17 +50,17 @@ Click **"Approve"** to release the checked prices. You will be asked to confirm.
 
 > Approved prices can no longer be changed afterwards.
 
-### 4. Add prices for all foreign currencies
+### 4. Add prices for all countries ("Add all Countries")
 
-Once you have imported, validated, and approved a base price, use **"Add all Currencies"** to automatically generate one converted price line per currency that has been activated for this. The system considers every currency a key user has enabled (see the Key User Manual) and creates **one** line per currency.
+Once you have imported, validated, and approved a base price, use **"Add all Countries"** to automatically generate one price line per activated country. The system considers every country a key user has enabled (see the Key User Manual) and creates **one** line per country — in the currency set up for that country. If the country uses the same currency as the base price, the price is copied unchanged; otherwise it is converted with the latest exchange rate. The **"Country Code"** column shows which country a line applies to; the imported base line has no country.
 
 ### 5. Upload prices ("Upload Sales Price")
 
 Click **"Upload Sales Price"** to transmit all approved price lines to the external system (e.g. the webshop). For each line, the system automatically:
 
 1. Writes the price into the live sales price table (creating it or updating an existing one) — valid for **all customers**.
-2. Also stores a copy of the price in the **price archive**, with a running version number per item/currency.
-3. Sends the price to the external system via the configured interface.
+2. Also stores a copy of the price in the **price archive**, with a running version number per item/currency/country.
+3. Sends the price — including the country code — to the external system via the configured interface.
 
 At the end you get a message showing how many of the approved lines were transmitted successfully. Lines that were already sent successfully before ("Export Status" = "Sent") are **not** resent automatically when you click again — you are asked first whether you really want to resend them.
 
@@ -116,7 +116,7 @@ This workflow is **fully automated**: as soon as you post a sales invoice for a 
 
 ## Frequently Asked Questions (FAQ)
 
-**"Nothing to process" when clicking Validate/Approve/Add all Currencies**
+**"Nothing to process" when clicking Validate/Approve/Add all Countries**
 There are no matching price lines for this step — check whether the previous step (import or validate) actually completed.
 
 **"Please click Validate button"**
