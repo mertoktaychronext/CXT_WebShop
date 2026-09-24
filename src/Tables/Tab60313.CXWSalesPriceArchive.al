@@ -121,6 +121,12 @@ table 60313 "CXW Sales Price Archive"
             Caption = 'Old Stock Price';
             DataClassification = ToBeClassified;
         }
+        field(27; "CXW Country Code"; Code[10])
+        {
+            Caption = 'Country Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Country/Region";
+        }
         field(50000; "CXW Version No."; Integer)
         {
             Caption = 'Version No.';
@@ -130,7 +136,7 @@ table 60313 "CXW Sales Price Archive"
 
     keys
     {
-        key(PK; "CXW Item No.", "CXW Currency Code", "CXW Version No.")
+        key(PK; "CXW Item No.", "CXW Currency Code", "CXW Country Code", "CXW Version No.")
         {
             Clustered = true;
         }

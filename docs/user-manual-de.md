@@ -50,17 +50,17 @@ Klicken Sie auf **"Approve"**, um die geprüften Preise freizugeben. Sie werden 
 
 > Freigegebene Preise können nicht mehr nachträglich geändert werden.
 
-### 4. Preise für alle Fremdwährungen anlegen ("Add all Currencies")
+### 4. Preise für alle Länder anlegen ("Add all Countries")
 
-Wenn Sie einen Basispreis importiert, geprüft und freigegeben haben, können Sie mit **"Add all Currencies"** automatisch je aktivierter Fremdwährung eine umgerechnete Preiszeile erzeugen lassen. Das System berücksichtigt dabei alle Währungen, die von einem Key User dafür freigeschaltet wurden (siehe Key-User-Handbuch), und legt **eine** Preiszeile je Währung an.
+Wenn Sie einen Basispreis importiert, geprüft und freigegeben haben, können Sie mit **"Add all Countries"** automatisch je aktiviertem Land eine Preiszeile erzeugen lassen. Das System berücksichtigt dabei alle Länder, die von einem Key User dafür freigeschaltet wurden (siehe Key-User-Handbuch), und legt **eine** Preiszeile je Land an – in der für das Land hinterlegten Währung. Hat das Land dieselbe Währung wie der Basispreis, wird der Preis unverändert übernommen, sonst mit dem aktuellen Wechselkurs umgerechnet. Die Spalte **"Country Code"** zeigt, für welches Land eine Zeile gilt; die importierte Basiszeile hat kein Land.
 
 ### 5. Preise hochladen ("Upload Sales Price")
 
 Klicken Sie auf **"Upload Sales Price"**, um alle freigegebenen Preiszeilen an das externe System (z. B. den Webshop) zu übertragen. Dabei passiert automatisch Folgendes für jede Zeile:
 
 1. Der Preis wird in die produktive Verkaufspreis-Tabelle übernommen (neu angelegt oder aktualisiert) – gültig für **alle Kunden**.
-2. Eine Kopie des Preises wird zusätzlich im **Preisarchiv** abgelegt, mit einer fortlaufenden Versionsnummer je Artikel/Währung.
-3. Der Preis wird über die konfigurierte Schnittstelle an das externe System gesendet.
+2. Eine Kopie des Preises wird zusätzlich im **Preisarchiv** abgelegt, mit einer fortlaufenden Versionsnummer je Artikel/Währung/Land.
+3. Der Preis wird – inklusive Ländercode – über die konfigurierte Schnittstelle an das externe System gesendet.
 
 Am Ende erhalten Sie eine Meldung, wie viele der freigegebenen Zeilen erfolgreich übertragen wurden. Zeilen, die bereits einmal erfolgreich übertragen wurden ("Export Status" = "Sent"), werden beim erneuten Klicken **nicht** automatisch nochmals gesendet – Sie werden vorher gefragt, ob diese wirklich erneut übertragen werden sollen.
 
@@ -116,7 +116,7 @@ Dieser Ablauf ist **vollständig automatisiert**: Sobald Sie eine Verkaufsrechnu
 
 ## Häufige Fragen (FAQ)
 
-**"Nothing to process" beim Klick auf Validate/Approve/Add all Currencies**
+**"Nothing to process" beim Klick auf Validate/Approve/Add all Countries**
 Es gibt keine passenden Preiszeilen für diesen Schritt – prüfen Sie, ob der vorherige Schritt (Import bzw. Validate) tatsächlich abgeschlossen wurde.
 
 **"Please click Validate button"**

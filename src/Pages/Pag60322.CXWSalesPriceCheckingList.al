@@ -45,6 +45,12 @@ page 60322 "CXW Sales Price Checking List"
                     ApplicationArea = All;
                     Enabled = false;
                 }
+                field("CXW Country Code"; Rec."CXW Country Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the country/region the line was created for by Add all Countries. Blank for imported source lines.';
+
+                }
                 field("CXW Starting Date"; Rec."CXW Starting Date")
                 {
                     ApplicationArea = All;
@@ -248,10 +254,11 @@ page 60322 "CXW Sales Price Checking List"
                         end;
                     end;
                 }
-                action("Add all Currencies")
+                action(AddAllCountries)
                 {
                     ApplicationArea = All;
-                    Caption = 'Add all Currencies';
+                    Caption = 'Add all Countries';
+                    ToolTip = 'Creates one sales price line per country/region activated for sales prices, in the sales price currency of that country/region.';
                     Image = Add;
                     Promoted = true;
                     PromotedCategory = New;
@@ -268,8 +275,7 @@ page 60322 "CXW Sales Price Checking List"
                             Error(NothingToProcessErr);
 
                         g_recSalesPriceCheck.Reset();
-
-                        g_recSalesPriceCheck.SetRange("CXW Currencies Processed", false);
+                        g_recSalesPriceCheck.SetRange("CXW Countries Processed", false);
                         if not g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
@@ -283,50 +289,7 @@ page 60322 "CXW Sales Price Checking List"
                         if g_recSalesPriceCheck.FindFirst() then
                             Error(NothingToProcessErr);
 
-                        g_recSalesPriceCheck.Reset();
-
-                        g_recSalesPriceCheck.SetRange("CXW Currencies Processed", false);
-                        if g_recSalesPriceCheck.FindSet() then
-                            repeat
-                                g_recCurrencies.Reset();
-                                g_recCurrencies.SetFilter(Code, '<>%1', 'DE');
-                                g_recCurrencies.SetRange("CXW Sales Price Activated", true);
-                                if g_recCurrencies.FindSet() then
-                                    repeat
-                                        if (g_recCurrencies."Code" <> '') and
-                                           (g_recCurrencies."Code" <> g_recSalesPriceCheck."CXW Currency Code") and
-                                           (not g_recSalesPriceCheck2.Get(g_recSalesPriceCheck."CXW Item No.", g_recCurrencies."Code"))
-                                        then begin
-                                            g_recSalesPriceCheck2.Init();
-                                            g_recSalesPriceCheck2."CXW Item No." := g_recSalesPriceCheck."CXW Item No.";
-
-                                            g_recSalesPriceCheck2."CXW Currency Code" := g_recCurrencies."Code";
-                                            g_recCurrExcRate.Reset();
-                                            g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."CXW Currency Code");
-                                            if g_recCurrExcRate.FindLast() then begin
-                                                g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."CXW Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."CXW Stock Price" := g_recSalesPriceCheck."CXW Stock Price" * (1 / g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."CXW Recom. Retail Price" := g_recSalesPriceCheck."CXW Recom. Retail Price" * (1 / g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."CXW Strike Price" := g_recSalesPriceCheck."CXW Strike Price" * (1 / g_decExchangeRateAmt);
-                                                g_recSalesPriceCheck2."CXW Exchange Rate Amount" := 1 / g_decExchangeRateAmt;
-                                                g_recSalesPriceCheck2."CXW Exchange Rate Date" := g_dateExchangeRateDate;
-                                            end;
-                                            g_recSalesPriceCheck2."CXW Starting Date" := g_recSalesPriceCheck."CXW Starting Date";
-                                            g_recSalesPriceCheck2."CXW Starting Time" := g_recSalesPriceCheck."CXW Starting Time";
-                                            g_recSalesPriceCheck2."CXW Ending Date" := g_recSalesPriceCheck."CXW Ending Date";
-                                            g_recSalesPriceCheck2."CXW Ending Time" := g_recSalesPriceCheck."CXW Ending Time";
-                                            g_recSalesPriceCheck2."CXW Reason Code" := g_recSalesPriceCheck."CXW Reason Code";
-                                            g_recSalesPriceCheck2."CXW Comment" := g_recSalesPriceCheck."CXW Comment";
-                                            g_recSalesPriceCheck2."CXW Validated" := true;
-                                            g_recSalesPriceCheck2."CXW Approved By" := g_recSalesPriceCheck."CXW Approved By";
-                                            g_recSalesPriceCheck2."CXW Accept New Setup" := g_recSalesPriceCheck."CXW Accept New Setup";
-                                            g_recSalesPriceCheck2.Insert(true);
-                                        end;
-                                    until g_recCurrencies.Next() = 0;
-                                UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."CXW Item No.", g_recSalesPriceCheck."CXW Currency Code");
-                                UpdateSalesPriceCheck."CXW Currencies Processed" := true;
-                                UpdateSalesPriceCheck.Modify();
-                            until g_recSalesPriceCheck.Next() = 0;
+                        fnAddAllCountries();
 
                         Message(DoneMsg);
                     end;
@@ -379,7 +342,7 @@ page 60322 "CXW Sales Price Checking List"
                                 if (l_recSalesPriceCheck."CXW Export Status" <> l_recSalesPriceCheck."CXW Export Status"::Sent) or l_boolResendAlreadySent then begin
                                     l_intTotal += 1;
                                     if g_cuExportGatewaySalesPrice.WriteBackAndArchive(l_recSalesPriceCheck, l_recSP) and
-                                       g_cuExportGatewaySalesPrice.CreateExternalInterfaceFile(l_recSP)
+                                       g_cuExportGatewaySalesPrice.CreateExternalInterfaceFile(l_recSP, l_recSalesPriceCheck."CXW Country Code")
                                     then begin
                                         l_recSalesPriceCheck."CXW Export Status" := l_recSalesPriceCheck."CXW Export Status"::Sent;
                                         l_intExported += 1;
@@ -418,7 +381,7 @@ page 60322 "CXW Sales Price Checking List"
         g_decProfit: Decimal;
         g_decProfitPercent: Decimal;
         TXT003: Label 'New Final Price has %1% profit, less than %2% setup margin';
-        g_recCurrencies: Record currency;
+        g_recCountryRegion: Record "Country/Region";
         TXT005: Label 'Currency Code %1 is not set for Country %2';
 
         TXT006: Label 'Starting Date %1 cannot be greater than Ending Date %2';
@@ -510,6 +473,66 @@ page 60322 "CXW Sales Price Checking List"
             until g_recSalesPriceCheck.Next() = 0;
             ProgressWindow.Close();
         end;
+    end;
+
+    local procedure fnAddAllCountries()
+    begin
+        // Source lines are the imported lines without a country; generated lines always carry one.
+        g_recSalesPriceCheck.Reset();
+        g_recSalesPriceCheck.SetRange("CXW Countries Processed", false);
+        if g_recSalesPriceCheck.FindSet() then
+            repeat
+                g_recCountryRegion.Reset();
+                g_recCountryRegion.SetRange("CXW Sales Price Activated", true);
+                if g_recCountryRegion.FindSet() then
+                    repeat
+                        if not g_recSalesPriceCheck2.Get(
+                             g_recSalesPriceCheck."CXW Item No.", g_recCountryRegion."CXW Sales Price Currency Code", g_recCountryRegion.Code)
+                        then
+                            CreateCountryLine(g_recSalesPriceCheck, g_recCountryRegion);
+                    until g_recCountryRegion.Next() = 0;
+                UpdateSalesPriceCheck.Get(g_recSalesPriceCheck."CXW Item No.", g_recSalesPriceCheck."CXW Currency Code", g_recSalesPriceCheck."CXW Country Code");
+                UpdateSalesPriceCheck."CXW Countries Processed" := true;
+                UpdateSalesPriceCheck.Modify();
+            until g_recSalesPriceCheck.Next() = 0;
+    end;
+
+    local procedure CreateCountryLine(p_recSourceLine: Record "CXW Sales Price Checking"; p_recCountryRegion: Record "Country/Region")
+    begin
+        g_recSalesPriceCheck2.Init();
+        g_recSalesPriceCheck2."CXW Item No." := p_recSourceLine."CXW Item No.";
+        g_recSalesPriceCheck2."CXW Country Code" := p_recCountryRegion.Code;
+        g_recSalesPriceCheck2."CXW Currency Code" := p_recCountryRegion."CXW Sales Price Currency Code";
+
+        if g_recSalesPriceCheck2."CXW Currency Code" = p_recSourceLine."CXW Currency Code" then begin
+            g_recSalesPriceCheck2."CXW Stock Price" := p_recSourceLine."CXW Stock Price";
+            g_recSalesPriceCheck2."CXW Recom. Retail Price" := p_recSourceLine."CXW Recom. Retail Price";
+            g_recSalesPriceCheck2."CXW Strike Price" := p_recSourceLine."CXW Strike Price";
+            g_recSalesPriceCheck2."CXW Exchange Rate Amount" := p_recSourceLine."CXW Exchange Rate Amount";
+            g_recSalesPriceCheck2."CXW Exchange Rate Date" := p_recSourceLine."CXW Exchange Rate Date";
+        end else begin
+            g_recCurrExcRate.Reset();
+            g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."CXW Currency Code");
+            if g_recCurrExcRate.FindLast() then begin
+                g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."CXW Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
+                g_recSalesPriceCheck2."CXW Stock Price" := p_recSourceLine."CXW Stock Price" * (1 / g_decExchangeRateAmt);
+                g_recSalesPriceCheck2."CXW Recom. Retail Price" := p_recSourceLine."CXW Recom. Retail Price" * (1 / g_decExchangeRateAmt);
+                g_recSalesPriceCheck2."CXW Strike Price" := p_recSourceLine."CXW Strike Price" * (1 / g_decExchangeRateAmt);
+                g_recSalesPriceCheck2."CXW Exchange Rate Amount" := 1 / g_decExchangeRateAmt;
+                g_recSalesPriceCheck2."CXW Exchange Rate Date" := g_dateExchangeRateDate;
+            end;
+        end;
+
+        g_recSalesPriceCheck2."CXW Starting Date" := p_recSourceLine."CXW Starting Date";
+        g_recSalesPriceCheck2."CXW Starting Time" := p_recSourceLine."CXW Starting Time";
+        g_recSalesPriceCheck2."CXW Ending Date" := p_recSourceLine."CXW Ending Date";
+        g_recSalesPriceCheck2."CXW Ending Time" := p_recSourceLine."CXW Ending Time";
+        g_recSalesPriceCheck2."CXW Reason Code" := p_recSourceLine."CXW Reason Code";
+        g_recSalesPriceCheck2."CXW Comment" := p_recSourceLine."CXW Comment";
+        g_recSalesPriceCheck2."CXW Validated" := true;
+        g_recSalesPriceCheck2."CXW Approved By" := p_recSourceLine."CXW Approved By";
+        g_recSalesPriceCheck2."CXW Accept New Setup" := p_recSourceLine."CXW Accept New Setup";
+        g_recSalesPriceCheck2.Insert(true);
     end;
 
     procedure fnCalcNonStockPrice(p_decStockPriceFrom: Decimal; p_decStockPriceTo: Decimal; p_decNonStockPercent: Decimal)

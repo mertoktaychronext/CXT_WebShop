@@ -39,25 +39,25 @@ The **"API Interface Setup"** navigation button on the "General Sales Price Setu
 
 > Without an active, fully configured interface, "Upload Sales Price" fails, or marks the affected price lines with "Export Status" = "Error".
 
-## Activating currencies for "Add all Currencies"
+## Activating countries for "Add all Countries"
 
-The following field was added to the **Currency** master data (the "Currencies" page):
+The following fields were added to the **Country/Region** master data (the "Countries/Regions" page):
 
 | Field | Meaning |
 |---|---|
-| Sales Price Activated | Must be enabled for this currency to receive an automatically generated price line when "Add all Currencies" is run. |
+| Sales Price Activated | Must be enabled for this country to receive an automatically generated price line when "Add all Countries" is run. |
+| Sales Price Currency Code | Currency in which the price line for this country is generated. Blank = local currency (e.g. EUR). |
 
-> A currency without "Sales Price Activated" is ignored by "Add all Currencies".
+> A country without "Sales Price Activated" is ignored by "Add all Countries". Every activated country receives its own line — even if several countries share the same currency (e.g. DE, AT, FR in EUR).
 
-> **Note on currency/country activation:** Since an earlier revision, activation for "Add all Currencies" happens **exclusively** through the "Sales Price Activated" field on the **currency**. This app no longer includes any Country/Region master data extension — earlier references to fields such as "Sales Price Currency Code", "Taxation Type", or "Delivery Time (Days)" on the country do not apply to the current state.
-
+> **Switch from currency to country activation:** Until "Add all Countries" was introduced, activation happened through the "Sales Price Activated" field on the **currency** (action "Add all Currencies"). That field has been removed. Before the update, note which currencies were activated, and afterwards set up the corresponding countries with a Sales Price Currency Code.
 ## Reason Code
 
 Every price change can be tagged with a reason: **CatMan**, **Purchasing**, or **Marketing**. This supports traceability of why a price changed but is not currently evaluated further by any automated logic. "CatMan" is used as the default value when none is explicitly selected.
 
 ## Workflows and processes
 
-The standard flow for the business department is: **Import → Validate → Approve → (optional) Add all Currencies → Upload Sales Price**. As a key user you are responsible for the framework (base settings, currency activation, API interface), not the day-to-day operation itself (see User Manual).
+The standard flow for the business department is: **Import → Validate → Approve → (optional) Add all Countries → Upload Sales Price**. As a key user you are responsible for the framework (base settings, country activation, API interface), not the day-to-day operation itself (see User Manual).
 
 For SellWatch there is no flow the business department triggers manually: new purchase requests (seller, watch, and offer data) arrive automatically and are automatically turned into a vendor and a purchase order; the business department only ever sees the result, read-only, on the "SellWatch-Overview" page (see User Manual). As a key user you are responsible here for configuring the online-check interface (see below) and for assigning permissions.
 
@@ -180,7 +180,7 @@ Access to all sales price management objects is controlled through the **"CXWChr
 | Problem | Cause / Solution |
 |---|---|
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
-| "Add all Currencies" produces no line for a specific currency | Check that "Sales Price Activated" is enabled for that currency on the "Currencies" page. |
+| "Add all Countries" produces no line for a specific country | Check that "Sales Price Activated" is enabled for that country on the "Countries/Regions" page. |
 | A user cannot open the sales price management pages | Check whether the user has been assigned the "CXWChronWSAll" permission set. |
 | A price isn't calculated with margin X% despite correct input | The category-based non-stock price calculation is not currently wired into the live flow — escalate to the development team if this feature is needed. |
 | "Upload Sales Price" reports that no API interface is configured, or aborts | Check on the base settings that "Price Export Active" is enabled and an "API Interface Code" is selected, and that the corresponding interface under "API Interface Setup" is active and fully configured (Endpoint URL, API Key if required). Details on the specific failure (status code, error message) are on the "Http Call Log" page. |

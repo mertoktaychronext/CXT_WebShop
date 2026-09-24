@@ -1,8 +1,8 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (AL-Bezeichner-Umbenennung der Felder 11–18 auf Tabelle 60318 geprüft – keine Doku-Abweichung gefunden), aktualisiert am 2026-08-14 (Kommissionsverkauf ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345, +7 Objekte/+8 Funktionen; außerdem TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst, da real im Code vorhanden [+0 Funktionen, aber +2 Objekte gegenüber der bisherigen Zählung] – neue Gesamtsumme 57 Objekte, 122 Funktionen), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte Zeile für Zeile gegen den aktuellen Stand des Branches 03-FEAT/Workshop abgeglichen – keine strukturellen Abweichungen, Zählung 57 Objekte / 122 Funktionen unverändert; `CreateSellWatchItem` präzisiert [Artikelvorlage jetzt aus der Einkaufseinrichtung])
+**Erstellt am:** 2026-08-11 (Neuerstellung nach dem AWS-SigV4-Update und der Umstellung von Page 60324 auf bedingte Feldanzeige mit neuer Detailkarte Page 60325), vollständig neu erstellt am 2026-08-12 (SellWatch-API-Page 60337 ergänzt, vollständige Neuverifikation aller 39 AL-Objekte), aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung mit 11 neuen Objekten ergänzt, SellWatch-Artikelanlage auf dynamisches Item-Template umgestellt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Objekte erneut mit dem Code abgeglichen; fehlende Aktion "Upload Sales Price" auf Seite 60322 "CXW Sales Price Checking List" ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (AL-Bezeichner-Umbenennung der Felder 11–18 auf Tabelle 60318 geprüft – keine Doku-Abweichung gefunden), aktualisiert am 2026-08-14 (Kommissionsverkauf ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345, +7 Objekte/+8 Funktionen; außerdem TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst, da real im Code vorhanden [+0 Funktionen, aber +2 Objekte gegenüber der bisherigen Zählung] – neue Gesamtsumme 57 Objekte, 122 Funktionen), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte Zeile für Zeile gegen den aktuellen Stand des Branches 03-FEAT/Workshop abgeglichen – keine strukturellen Abweichungen, Zählung 57 Objekte / 122 Funktionen unverändert; `CreateSellWatchItem` präzisiert [Artikelvorlage jetzt aus der Einkaufseinrichtung]), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen)
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 122
+**Gesamtanzahl Funktionen:** 124
 
 ---
 
@@ -10,8 +10,8 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Navigation/Actions | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.2 | 57 | 69 | 41 | 2 | 10 | 122 |
-| **Gesamt** | – | **57** | **69** | **41** | **2** | **10** | **122** |
+| CHX.Webshop | 27.0.0.2 | 57 | 71 | 41 | 2 | 10 | 124 |
+| **Gesamt** | – | **57** | **71** | **41** | **2** | **10** | **124** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt drei fachlich unabhängige Bereiche: **SellWatch** (Ankauf gebrauchter Uhren, ID-Bereich 60300–60310 plus 60337 für die API), **Workshop-Ankaufsprüfung** (externe Echtheitsprüfung angekaufter Uhren, neu seit dieser Aktualisierung — Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Page 60338–60340, Codeunit 60331, PermissionSet 60301/60302) und **SalesPrice/Verkaufspreisverwaltung** (ID-Bereich 60311–60336). Alle drei teilen sich ein gemeinsames HTTP-Aufrufprotokoll (Table 60302/Page 60309) bzw. folgen demselben Zwischentabellen-plus-API-Muster; SalesPrice nutzt zusätzlich eine gemeinsame Schnittstellen-Konfigurationstabelle (Table 60317) mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung, AWS Signature V4). SellWatch besitzt eine eigene API-Schreibschnittstelle (Page 60337) mit eigenem Berechtigungssatz (PermissionSet 60300); die neue Workshop-Ankaufsprüfung folgt demselben Prinzip mit einer eigenen, bidirektionalen API (Page 60339) für die externe Werkstatt.
 >
@@ -110,11 +110,13 @@
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Import CSV` | Aktion | – | Importiert eine CSV-Datei mit neuen Verkaufspreisen, sofern keine offenen Prüfzeilen vorhanden sind. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft alle offenen Zeilen auf Marge, Preisabweichung und Datumsplausibilität. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Approve` | Aktion | – | Gibt nach Bestätigung alle validierten Zeilen zur Übernahme frei und vermerkt den freigebenden Benutzer. |
-| CHX.Webshop | CXW Sales Price Checking List | Seite | `Add all Currencies` | Aktion | – | Legt für eine freigegebene Zeile automatisch Preise in allen weiteren aktivierten Währungen anhand des Wechselkurses an. |
+| CHX.Webshop | CXW Sales Price Checking List | Seite | `Add all Countries` | Aktion | – | Legt für freigegebene Basiszeilen automatisch je aktiviertem Land eine Preiszeile in der Landeswährung an (bei Bedarf per Wechselkurs umgerechnet). |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `Upload Sales Price` | Aktion | – | Übernimmt freigegebene Preiszeilen als Standard-Verkaufspreise, archiviert sie und sendet sie an die externe Schnittstelle; fragt bei bereits gesendeten Zeilen nach, ob sie erneut gesendet werden sollen. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur zuletzt importierte Zeilen bearbeitet werden. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `fnValidate` | Prozedur | Internal | Führt die Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft Mindestmarge und Datumsplausibilität. |
+| CHX.Webshop | CXW Sales Price Checking List | Seite | `fnAddAllCountries` | Prozedur | Internal | Erzeugt für alle unverarbeiteten Basiszeilen die fehlenden Länderzeilen und markiert die Basiszeile als verarbeitet. |
+| CHX.Webshop | CXW Sales Price Checking List | Seite | `CreateCountryLine` | Prozedur | Internal | Legt eine Preiszeile für ein Land in dessen Währung an und übernimmt die Angaben der Basiszeile. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
 | CHX.Webshop | CXW Sales Price Archive | Tabelle | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Archiveintrags automatisch Bearbeiter und Zeitpunkt ein. |
 | CHX.Webshop | CXW Sales Price Archive | Tabelle | `OnModify` | Trigger | – | Aktualisiert Bearbeiter und Zeitpunkt bei jeder nachträglichen Änderung eines Archiveintrags. |
@@ -122,7 +124,7 @@
 | CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Preis und Zusatzfelder von der Prüfzeile auf den Verkaufspreis. |
 | CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `ResolveUnitPriceLCY` | Prozedur | Internal | Ermittelt den Preis in Hauswährung anhand des Wechselkurses. |
 | CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `ArchiveCheckingLine` | Prozedur | Internal | Legt eine neue, fortlaufend nummerierte Archivversion der Prüfzeile an. |
-| CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis in JSON um, legt ihn als Ausgangsdatei ab und sendet ihn an die externe Schnittstelle. |
+| CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis in JSON um, ergänzt den Ländercode, legt ihn als Ausgangsdatei ab und sendet ihn an die externe Schnittstelle. |
 | CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `SendToApiInterface` | Prozedur | Internal | Baut die HTTP-Anfrage inkl. Authentifizierung auf, sendet sie und protokolliert das Ergebnis. |
 | CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die AWS-Signatur-Header nach dem AWS-Signature-V4-Verfahren. |
 | CHX.Webshop | CXW Export Gateway Sales Price | Codeunit | `SanitizeHeaderText` | Prozedur | Internal | Entfernt aus Zugangsdaten Zeichen, die als ungültiger HTTP-Header abgelehnt würden. |
@@ -150,7 +152,7 @@
 | CHX.Webshop | CXW Sales Price Inbound File | Tabelle | `OnInsert` | Trigger | – | Trägt beim Hochladen einer Datei automatisch den Zeitpunkt ein. |
 | CHX.Webshop | CXW Price Import Protokoll | Tabelle | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Protokolleintrags automatisch den Zeitpunkt ein. |
 
-> Die Tabelle ist nach Funktionsbereich (SellWatch → Workshop-Ankaufsprüfung → gemeinsame HTTP-Infrastruktur → Verkaufspreisverwaltung) und darin nach Objekt-ID sortiert. Für Details und die reinen Datentabellen/Erweiterungen ohne eigene Prozeduren (Table 60300, TableExtension 60303/60304/60319/60320, PageExtension 60326/60327, Page 60308/60323/60338, alle Enums, alle Permission Sets) siehe die Einzeldatei im selben Ordner.
+> Die Tabelle ist nach Funktionsbereich (SellWatch → Workshop-Ankaufsprüfung → gemeinsame HTTP-Infrastruktur → Verkaufspreisverwaltung) und darin nach Objekt-ID sortiert. Für Details und die reinen Datentabellen/Erweiterungen ohne eigene Prozeduren (Table 60300, TableExtension 60303/60304/60319/60346, PageExtension 60326/60347, Page 60308/60323/60338, alle Enums, alle Permission Sets) siehe die Einzeldatei im selben Ordner.
 
 ---
 

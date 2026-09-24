@@ -137,9 +137,9 @@ table 60312 "CXW Sales Price Checking"
             Caption = 'Old Stock Price';
             DataClassification = ToBeClassified;
         }
-        field(24; "CXW Currencies Processed"; Boolean)
+        field(24; "CXW Countries Processed"; Boolean)
         {
-            Caption = 'Currencies Processed';
+            Caption = 'Countries Processed';
             DataClassification = ToBeClassified;
         }
         field(25; "CXW Approved By"; Code[50])
@@ -152,6 +152,20 @@ table 60312 "CXW Sales Price Checking"
             Caption = 'Export Status';
             DataClassification = ToBeClassified;
         }
+        field(27; "CXW Country Code"; Code[10])
+        {
+            Caption = 'Country Code';
+            DataClassification = ToBeClassified;
+            TableRelation = "Country/Region";
+
+            trigger OnValidate()
+            begin
+                Country.Get("CXW Country Code");
+                Country.TestField("CXW Sales Price Activated", true);
+                "CXW Currency Code" := Country."CXW Sales Price Currency Code";
+            end;
+
+        }
         field(50000; "CXW Version No."; Integer)
         {
             Caption = 'Version No.';
@@ -161,7 +175,7 @@ table 60312 "CXW Sales Price Checking"
 
     keys
     {
-        key(PK; "CXW Item No.", "CXW Currency Code")
+        key(PK; "CXW Item No.", "CXW Currency Code", "CXW Country Code")
         {
             Clustered = true;
         }
@@ -192,6 +206,6 @@ table 60312 "CXW Sales Price Checking"
     end;
 
     var
-        Country: Record "Country/Region";
         PleaseValidateErr: Label 'Please click Validate button.';
+        Country: Record "Country/Region";
 }

@@ -69,6 +69,7 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         l_recSalesPriceArchive.LockTable();
         l_recSalesPriceArchive.SetRange("CXW Item No.", pSalesPriceChecking."CXW Item No.");
         l_recSalesPriceArchive.SetRange("CXW Currency Code", pSalesPriceChecking."CXW Currency Code");
+        l_recSalesPriceArchive.SetRange("CXW Country Code", pSalesPriceChecking."CXW Country Code");
         if l_recSalesPriceArchive.FindLast() then
             l_intNextVersionNo := l_recSalesPriceArchive."CXW Version No." + 1
         else
@@ -80,7 +81,7 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         l_recSalesPriceArchive.Insert(true);
     end;
 
-    procedure CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"): Boolean
+    procedure CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"; pCountryCode: Code[10]): Boolean
     var
         OutboundFile: Record "CXW Sales Price Outbound File";
         RecRef: RecordRef;
@@ -95,13 +96,15 @@ codeunit 60329 "CXW Export Gateway Sales Price"
             FldRef := RecRef.FieldIndex(Index);
             AddFieldToJson(JsonObj, FldRef.Name, FldRef.Value);
         end;
+        // "Sales Price" has no country in its key - the country of the checking line is sent alongside.
+        JsonObj.Add('CXW Country Code', pCountryCode);
         JsonObj.WriteTo(JsonText);
 
         OutboundFile.Init();
         OutboundFile."CXW Status" := OutboundFile."CXW Status"::New;
         OutboundFile."CXW Filename" :=
             CopyStr(
-                StrSubstNo('SalesPrice_%1_%2.json', SalesPrice."Item No.", SalesPrice."Currency Code"),
+                StrSubstNo('SalesPrice_%1_%2_%3.json', SalesPrice."Item No.", SalesPrice."Currency Code", pCountryCode),
                 1, MaxStrLen(OutboundFile."CXW Filename"));
         OutboundFile."CXW TargetFile".CreateOutStream(OutStr, TextEncoding::UTF8);
         OutStr.WriteText(JsonText);

@@ -12,7 +12,7 @@ xmlport 60328 "CXW Import Sales Price"
             tableelement(SalesPriceChecking; "CXW Sales Price Checking")
             {
                 XmlName = 'SalesPrice';
-                SourceTableView = sorting("CXW Item No.", "CXW Currency Code");
+                SourceTableView = sorting("CXW Item No.", "CXW Currency Code", "CXW Country Code");
 
                 fieldelement(ItemNo; SalesPriceChecking."CXW Item No.")
                 {
