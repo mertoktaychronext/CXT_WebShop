@@ -2,6 +2,9 @@ table 60314 "CXW Sales Price Outbound File"
 {
     Caption = 'Sales Price Outbound File';
     DataClassification = ToBeClassified;
+    ObsoleteState = Pending;
+    ObsoleteReason = 'Replaced by ChronextBC table "Data Export Entry" (Destination Code SALESPRICE)';
+    ObsoleteTag = '27.0.0.3';
 
     fields
     {
