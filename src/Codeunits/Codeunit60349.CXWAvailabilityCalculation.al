@@ -29,6 +29,7 @@ codeunit 60349 "CXW Availability Calculation"
 
         DeliveryDate := Today;
         ApplyDeliveryFormula(DeliveryDate, DeliveryFormula);
+        ApplyItemDeliveryTime(DeliveryDate, ItemNo);
         ApplyCountryDeliveryTime(DeliveryDate, CountryRegionCode);
 
         if Availability > 0 then
@@ -59,6 +60,7 @@ codeunit 60349 "CXW Availability Calculation"
 
         DeliveryDate := Today;
         ApplyDeliveryFormula(DeliveryDate, DeliveryFormula);
+        ApplyItemDeliveryTime(DeliveryDate, ItemNo);
         ApplyCountryDeliveryTime(DeliveryDate, CountryRegionCode);
         DeliveryDays := DeliveryDate - Today;
         exit(true);
@@ -66,21 +68,18 @@ codeunit 60349 "CXW Availability Calculation"
 
     procedure TryGetNonStockDeliveryDays(ItemNo: Code[20]; CountryRegionCode: Code[10]; var DeliveryDays: Integer): Boolean
     var
-        Item: Record Item;
         DeliveryDate: Date;
         DeliveryFormula: DateFormula;
     begin
         if not IsReplenishable(ItemNo) then
             exit(false);
 
-        if Item.Get(ItemNo) and (Format(Item."CXB Additional Delivery Time") <> '') then
-            DeliveryFormula := Item."CXB Additional Delivery Time"
-        else
-            if not TryGetSetupDeliveryFormula(DemandSetupCategoryLbl, DeliveryFormula) then
-                exit(false);
+        if not TryGetDemandDeliveryFormula(ItemNo, DeliveryFormula) then
+            exit(false);
 
         DeliveryDate := Today;
         ApplyDeliveryFormula(DeliveryDate, DeliveryFormula);
+        ApplyItemDeliveryTime(DeliveryDate, ItemNo);
         ApplyCountryDeliveryTime(DeliveryDate, CountryRegionCode);
         DeliveryDays := DeliveryDate - Today;
         exit(true);
@@ -164,8 +163,6 @@ codeunit 60349 "CXW Availability Calculation"
     end;
 
     local procedure TryGetBaseDeliveryFormula(ItemNo: Code[20]; Availability: Decimal; var DeliveryFormula: DateFormula): Boolean
-    var
-        Item: Record Item;
     begin
         // In-stock items can always be delivered. A configured STOCK formula is optional;
         // when it is not maintained, the country-specific delivery time is the complete lead time.
@@ -180,12 +177,33 @@ codeunit 60349 "CXW Availability Calculation"
         if not IsReplenishable(ItemNo) then
             exit(false);
 
-        if Item.Get(ItemNo) and (Format(Item."CXB Additional Delivery Time") <> '') then begin
-            DeliveryFormula := Item."CXB Additional Delivery Time";
-            exit(true);
-        end;
+        exit(TryGetDemandDeliveryFormula(ItemNo, DeliveryFormula));
+    end;
 
-        exit(TryGetSetupDeliveryFormula(DemandSetupCategoryLbl, DeliveryFormula));
+    local procedure TryGetDemandDeliveryFormula(ItemNo: Code[20]; var DeliveryFormula: DateFormula): Boolean
+    begin
+        if TryGetSetupDeliveryFormula(DemandSetupCategoryLbl, DeliveryFormula) then
+            exit(true);
+
+        Clear(DeliveryFormula);
+        exit(HasItemDeliveryTime(ItemNo));
+    end;
+
+    local procedure HasItemDeliveryTime(ItemNo: Code[20]): Boolean
+    var
+        Item: Record Item;
+    begin
+        exit(Item.Get(ItemNo) and (Format(Item."CXB Additional Delivery Time") <> ''));
+    end;
+
+    local procedure ApplyItemDeliveryTime(var DeliveryDate: Date; ItemNo: Code[20])
+    var
+        Item: Record Item;
+    begin
+        if not Item.Get(ItemNo) then
+            exit;
+
+        ApplyDeliveryFormula(DeliveryDate, Item."CXB Additional Delivery Time");
     end;
 
     local procedure ApplyCountryDeliveryTime(var DeliveryDate: Date; CountryRegionCode: Code[10])
@@ -283,7 +301,21 @@ codeunit 60349 "CXW Availability Calculation"
     end;
 
     local procedure GetAvailabilityLocationFilter(): Text
+    var
+        Location: Record Location;
+        MainLocationFilter: Text;
     begin
+        Location.SetRange("CXW Main Location", true);
+        if Location.FindSet() then begin
+            repeat
+                if MainLocationFilter <> '' then
+                    MainLocationFilter += '|';
+                MainLocationFilter += Location.Code;
+            until Location.Next() = 0;
+
+            exit(MainLocationFilter);
+        end;
+
         if CachedAvailabilityLocationFilter = '' then begin
             if not TryLoadAvailabilityLocationFilter(CachedAvailabilityLocationFilter) then
                 CachedAvailabilityLocationFilter := '';

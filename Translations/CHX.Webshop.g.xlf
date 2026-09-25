@@ -3,15 +3,40 @@
   <file datatype="xml" source-language="en-US" target-language="en-US" original="CHX.Webshop">
     <body>
       <group id="body">
+        <trans-unit id="PageExtension 2769419090 - NamedType 2912900361" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 2769419090">
+          <source>Webshop delivery times for country/region %1 have been refreshed.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = country/region code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - NamedType DeliveryTimesRefreshedMsg</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2769419090 - Action 1992595913 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
+          <source>Calculates the current delivery times for all items and variants for this active country/region.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Action CXWRefreshWebshopDeliveryTimes - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2769419090 - Action 1992595913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
+          <source>Refresh Webshop Delivery Times</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Action CXWRefreshWebshopDeliveryTimes - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2769419090 - Control 1170953503 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
+          <source>Specifies whether delivery times for this country/region are calculated and exported to the webshop.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Webshop Delivery Time Active - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="PageExtension 2769419090 - Control 1971448704 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
           <source>Specifies whether webshop sales prices are generated for this country/region by the action Add all Countries.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Activated - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PageExtension 2769419090 - Control 311270661 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
-          <source>Specifies the currency in which webshop sales prices are generated for this country/region. Leave blank to use the local currency (LCY).</source>
+          <source>Specifies whether webshop sales prices are generated for this country/region by the action Add all Countries.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 4079945439 - Control 25922190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3870787835">
+          <source>Specifies whether this location is included in the webshop availability calculation.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Location Card - Control CXW Main Location - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="TableExtension 3342327973 - Field 1971448704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Sales Price Activated</source>
@@ -22,6 +47,16 @@
           <source>Sales Price Currency Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country/Region - Field CXW Sales Price Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 4129007588 - Field 25922190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3891454143">
+          <source>Specifies whether this location is included in the webshop availability calculation.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Location Availability - Field CXW Main Location - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 4129007588 - Field 25922190 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3891454143">
+          <source>Main Location</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Location Availability - Field CXW Main Location - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Interface Setup</source>
@@ -2888,26 +2923,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort CXW Import Sales Price - Control SetPriceForAllCountries - Property Caption</note>
         </trans-unit>
-        <trans-unit id="PageExtension 4146270923 - NamedType 2912900361" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 4146270923">
-          <source>Webshop delivery times for country/region %1 have been refreshed.</source>
-          <note from="Developer" annotates="general" priority="2">%1 = country/region code</note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries Regions - NamedType DeliveryTimesRefreshedMsg</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 4146270923 - Action 1992595913 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
-          <source>Calculates the current delivery times for all items and variants for this active country/region.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries Regions - Action CXWRefreshWebshopDeliveryTimes - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 4146270923 - Action 1992595913 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
-          <source>Refresh Webshop Delivery Times</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries Regions - Action CXWRefreshWebshopDeliveryTimes - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 4146270923 - Control 1170953503 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
-          <source>Specifies whether delivery times for this country/region are calculated and exported to the webshop.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries Regions - Control CXW Webshop Delivery Time Active - Property ToolTip</note>
-        </trans-unit>
         <trans-unit id="PageExtension 3603935223 - NamedType 4114943979" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3603935223">
           <source>Item %1 has availability %2. Calculated delivery date: %3 (%4 day(s)).</source>
           <note from="Developer" annotates="general" priority="2">%1 = item no.; %2 = availability; %3 = delivery date; %4 = day count</note>
@@ -3133,12 +3148,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - Action CXW Send to Workshop - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 55795800 - Field 1170953503 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+        <trans-unit id="TableExtension 3342327973 - Field 1170953503 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Specifies whether delivery times for this country/region are calculated and exported to the webshop.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country Delivery Active - Field CXW Webshop Delivery Time Active - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="TableExtension 55795800 - Field 1170953503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+        <trans-unit id="TableExtension 3342327973 - Field 1170953503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Webshop Delivery Time Active</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country Delivery Active - Field CXW Webshop Delivery Time Active - Property Caption</note>

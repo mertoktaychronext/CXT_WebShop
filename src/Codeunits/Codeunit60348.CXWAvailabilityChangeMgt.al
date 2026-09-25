@@ -1,5 +1,17 @@
 codeunit 60348 "CXW Availability Change Mgt"
 {
+    [EventSubscriber(ObjectType::Table, Database::Item, 'OnAfterModifyEvent', '', false, false)]
+    local procedure OnAfterModifyItem(var Rec: Record Item; var xRec: Record Item; RunTrigger: Boolean)
+    begin
+        if Rec.IsTemporary() then
+            exit;
+
+        if Rec."CXB Additional Delivery Time" = xRec."CXB Additional Delivery Time" then
+            exit;
+
+        RefreshDeliveryTimesForItem(Rec."No.");
+    end;
+
     [EventSubscriber(ObjectType::Table, Database::"Item Ledger Entry", 'OnAfterInsertEvent', '', false, false)]
     local procedure OnAfterInsertItemLedgerEntry(var Rec: Record "Item Ledger Entry"; RunTrigger: Boolean)
     begin
@@ -231,6 +243,19 @@ codeunit 60348 "CXW Availability Change Mgt"
         until CountryRegion.Next() = 0;
     end;
 
+    local procedure RefreshDeliveryTimesForItem(ItemNo: Code[20])
+    var
+        ItemVariant: Record "Item Variant";
+    begin
+        ItemVariant.SetRange("Item No.", ItemNo);
+        if ItemVariant.FindSet() then
+            repeat
+                RefreshDeliveryTimes(ItemNo, ItemVariant.Code);
+            until ItemVariant.Next() = 0
+        else
+            RefreshDeliveryTimes(ItemNo, '');
+    end;
+
     procedure RefreshDeliveryTimesForCountry(CountryRegionCode: Code[10])
     var
         AvailabilityCalculation: Codeunit "CXW Availability Calculation";
@@ -385,7 +410,21 @@ codeunit 60348 "CXW Availability Change Mgt"
     end;
 
     local procedure GetAvailabilityLocationFilter(): Text
+    var
+        Location: Record Location;
+        MainLocationFilter: Text;
     begin
+        Location.SetRange("CXW Main Location", true);
+        if Location.FindSet() then begin
+            repeat
+                if MainLocationFilter <> '' then
+                    MainLocationFilter += '|';
+                MainLocationFilter += Location.Code;
+            until Location.Next() = 0;
+
+            exit(MainLocationFilter);
+        end;
+
         if CachedAvailabilityLocationFilter = '' then begin
             if not TryLoadAvailabilityLocationFilter(CachedAvailabilityLocationFilter) then
                 CachedAvailabilityLocationFilter := '';
