@@ -39,25 +39,25 @@ Diese Einstellungen **müssen** befüllt sein (Mindestmarge %, Schwellenwert Lag
 
 > Ohne eine aktive, vollständig konfigurierte Schnittstelle schlägt "Upload Sales Price" fehl bzw. markiert betroffene Preiszeilen mit "Export Status" = "Error".
 
-## Währungen für "Add all Currencies" freischalten
+## Länder für "Add all Countries" freischalten
 
-In den Stammdaten der **Währung** (Seite "Currencies") wurde folgendes Feld ergänzt:
+In den Stammdaten von **Land/Region** (Seite "Countries/Regions") wurden folgende Felder ergänzt:
 
 | Feld | Bedeutung |
 |---|---|
-| Verkaufspreis aktiviert | Muss gesetzt sein, damit für diese Währung automatisch eine Preiszeile erzeugt wird, wenn "Add all Currencies" ausgeführt wird. |
+| Verkaufspreis aktiviert | Muss gesetzt sein, damit für dieses Land automatisch eine Preiszeile erzeugt wird, wenn "Add all Countries" ausgeführt wird. |
+| Verkaufspreis-Währungscode | Währung, in der die Preiszeile für dieses Land erzeugt wird. Leer = Mandantenwährung (z. B. EUR). |
 
-> Ohne "Verkaufspreis aktiviert" wird eine Währung bei "Add all Currencies" nicht berücksichtigt.
+> Ohne "Verkaufspreis aktiviert" wird ein Land bei "Add all Countries" nicht berücksichtigt. Jedes aktivierte Land erhält eine eigene Zeile – auch wenn mehrere Länder dieselbe Währung nutzen (z. B. DE, AT, FR in EUR).
 
-> **Hinweis zur Währungs-/Länderfreischaltung:** Die Freischaltung für "Add all Currencies" erfolgt seit einer früheren Überarbeitung **ausschließlich** über das Feld "Verkaufspreis aktiviert" auf der **Währung**. Eine Erweiterung der Stammdaten von Land/Region ist in dieser App nicht (mehr) enthalten – frühere Angaben zu Feldern wie "Verkaufspreis-Währungscode", "Besteuerungsart" oder "Lieferzeit (Tage)" auf dem Land treffen auf den aktuellen Stand nicht zu.
-
+> **Umstellung von Währungs- auf Länderfreischaltung:** Bis zur Einführung von "Add all Countries" erfolgte die Freischaltung über das Feld "Verkaufspreis aktiviert" auf der **Währung** (Aktion "Add all Currencies"). Dieses Feld wurde entfernt. Notieren Sie vor dem Update die bisher aktivierten Währungen und richten Sie danach die entsprechenden Länder mit Verkaufspreis-Währungscode ein.
 ## Grundcode (Reason Code)
 
 Jeder Preisänderung kann ein Grund zugeordnet werden: **CatMan**, **Einkauf** oder **Marketing**. Dies dient der Nachvollziehbarkeit, warum ein Preis geändert wurde, wird aber aktuell nicht weiter ausgewertet. Ohne explizite Auswahl wird "CatMan" als Standardwert verwendet.
 
 ## Workflows und Prozesse
 
-Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Approve → (optional) Add all Currencies → Upload Sales Price**. Als Key User sind Sie zuständig für die Rahmenbedingungen (Grundeinstellungen, Währungsfreischaltung, API-Schnittstelle), nicht für den täglichen Ablauf selbst (siehe Benutzerhandbuch).
+Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Approve → (optional) Add all Countries → Upload Sales Price**. Als Key User sind Sie zuständig für die Rahmenbedingungen (Grundeinstellungen, Länderfreischaltung, API-Schnittstelle), nicht für den täglichen Ablauf selbst (siehe Benutzerhandbuch).
 
 Für SellWatch gibt es keinen von der Fachabteilung manuell ausgelösten Ablauf: Neue Ankaufsanfragen (Verkäufer-, Uhren- und Angebotsdaten) treffen automatisiert ein und werden automatisiert zu Lieferant und Einkaufsbestellung verarbeitet; die Fachabteilung sieht das Ergebnis nur lesend auf der Seite "SellWatch-Overview" (Benutzerhandbuch). Als Key User sind Sie hier zuständig für die Konfiguration der Online-Check-Schnittstelle (siehe unten) und für die Berechtigungsvergabe.
 
@@ -79,6 +79,8 @@ Der SellWatch-Online-Check (prüft, ob eine Uhr im SellWatch-Onlineshop sichtbar
 > Anders als beim Preisexport der Verkaufspreisverwaltung gibt es für den Online-Check kein Auswahlfeld für den Schnittstellencode in den Grundeinstellungen – der Code `WOA` ist im Code fest verdrahtet.
 
 > Fehlgeschlagene Aufrufe können Sie über die Seite **"Http Call Log"** nachvollziehen: Sie zeigt zu jedem Aufruf Erfolg/Fehlschlag, HTTP-Statuscode und Fehlermeldung, und erlaubt den Download des gesendeten Requests sowie der empfangenen Antwort als Textdatei (der API-Schlüssel wird im gespeicherten Request nicht im Klartext angezeigt). Seit dem HTTP-Logging-Update vom 2026-08-10 protokolliert diese Seite auch die Aufrufe des Verkaufspreis-Exports (siehe unten) – die Spalte "Quelltabellennr." zeigt, welcher Bereich den Eintrag erzeugt hat.
+
+> Seit Version 27.0.0.3 finden Sie jede übertragene Verkaufspreiszeile zusätzlich auf der Seite **"Data Export Entries"** (dieselbe Seite wie beim Verfügbarkeitsexport) – erkennbar am Zielcode `SALESPRICE`. Dort sehen Sie Status (Verarbeitet/Fehler), Dateiname, Fehlermeldung und im Infobereich die gesendeten JSON-Daten. **Wichtig:** Fehlgeschlagene Preisübertragungen wiederholen Sie ausschließlich über "Upload Sales Price" auf der Preisprüfliste, **nicht** über die Aktion "Export Data" auf "Data Export Entries" – diese kann Preiseinträge nicht senden und erzeugt nur einen Fehlerprotokolleintrag.
 
 ## Workshop-Ankaufsprüfung einrichten
 
@@ -180,11 +182,12 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 | Problem | Ursache / Lösung |
 |---|---|
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
-| "Add all Currencies" erzeugt keine Zeile für eine bestimmte Währung | Prüfen Sie, ob für die Währung (Seite "Currencies") "Verkaufspreis aktiviert" gesetzt ist. |
+| "Add all Countries" erzeugt keine Zeile für ein bestimmtes Land | Prüfen Sie, ob für das Land (Seite "Countries/Regions") "Verkaufspreis aktiviert" gesetzt ist. |
 | Ein Benutzer kann die Seiten der Verkaufspreisverwaltung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXWChronWSAll" zugewiesen ist. |
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
 | "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. Details zum konkreten Fehler (Statuscode, Fehlermeldung) finden Sie auf der Seite "Http Call Log". |
 | Einzelne Preiszeilen bleiben nach "Upload Sales Price" mit "Export Status" = "Error" stehen | Andere Zeilen im selben Lauf werden trotzdem weiterverarbeitet. Prüfen Sie die betroffene Zeile auf ungültige Werte (z. B. nicht existierender Währungscode) und lösen Sie den Upload für diese Zeile erneut aus. |
+| "Export Data" auf "Data Export Entries" meldet bei einem Eintrag mit Zielcode `SALESPRICE` einen Fehler | Das ist so vorgesehen: Preisübertragungen laufen nur über "Upload Sales Price". Setzen Sie die betroffene Preiszeile erneut hoch; legen Sie **keinen** Eintrag `SALESPRICE` unter "Data Export API Setup" an. Hinweis: Der Status des Eintrags wechselt dabei auf "Fehler" und die Anzahl Versuche wird erhöht – auch wenn der Preis zuvor erfolgreich übertragen wurde ("Verarbeitet"). Es wird dabei nichts gesendet. |
 | Ein Benutzer kann die SellWatch-Seiten nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXW SWChronWSAll" zugewiesen ist. |
 | Eine Uhr wird auf "SellWatch-Overview" nie als online markiert bzw. "Http Call Log" zeigt Fehlschläge | Prüfen Sie, ob unter "API Interface Setup" ein Eintrag mit Code `WOA` existiert, aktiv ist und Endpoint URL sowie API Key gesetzt sind. Details zum konkreten Fehler (Statuscode, Fehlermeldung) finden Sie auf der Seite "Http Call Log". |
 | Zu einer SellWatch-Anfrage wird kein Lieferant/keine Bestellung angelegt | Die Anlage erfolgt vollautomatisiert im Hintergrund; es gibt keine Aktion, mit der Sie dies als Key User manuell anstoßen können. Prüfen Sie zunächst, ob die Anfrage überhaupt vollständig eingegangen ist, und eskalieren Sie sonst an das Entwicklungsteam. |

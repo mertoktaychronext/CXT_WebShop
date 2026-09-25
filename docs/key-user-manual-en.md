@@ -39,25 +39,25 @@ The **"API Interface Setup"** navigation button on the "General Sales Price Setu
 
 > Without an active, fully configured interface, "Upload Sales Price" fails, or marks the affected price lines with "Export Status" = "Error".
 
-## Activating currencies for "Add all Currencies"
+## Activating countries for "Add all Countries"
 
-The following field was added to the **Currency** master data (the "Currencies" page):
+The following fields were added to the **Country/Region** master data (the "Countries/Regions" page):
 
 | Field | Meaning |
 |---|---|
-| Sales Price Activated | Must be enabled for this currency to receive an automatically generated price line when "Add all Currencies" is run. |
+| Sales Price Activated | Must be enabled for this country to receive an automatically generated price line when "Add all Countries" is run. |
+| Sales Price Currency Code | Currency in which the price line for this country is generated. Blank = local currency (e.g. EUR). |
 
-> A currency without "Sales Price Activated" is ignored by "Add all Currencies".
+> A country without "Sales Price Activated" is ignored by "Add all Countries". Every activated country receives its own line — even if several countries share the same currency (e.g. DE, AT, FR in EUR).
 
-> **Note on currency/country activation:** Since an earlier revision, activation for "Add all Currencies" happens **exclusively** through the "Sales Price Activated" field on the **currency**. This app no longer includes any Country/Region master data extension — earlier references to fields such as "Sales Price Currency Code", "Taxation Type", or "Delivery Time (Days)" on the country do not apply to the current state.
-
+> **Switch from currency to country activation:** Until "Add all Countries" was introduced, activation happened through the "Sales Price Activated" field on the **currency** (action "Add all Currencies"). That field has been removed. Before the update, note which currencies were activated, and afterwards set up the corresponding countries with a Sales Price Currency Code.
 ## Reason Code
 
 Every price change can be tagged with a reason: **CatMan**, **Purchasing**, or **Marketing**. This supports traceability of why a price changed but is not currently evaluated further by any automated logic. "CatMan" is used as the default value when none is explicitly selected.
 
 ## Workflows and processes
 
-The standard flow for the business department is: **Import → Validate → Approve → (optional) Add all Currencies → Upload Sales Price**. As a key user you are responsible for the framework (base settings, currency activation, API interface), not the day-to-day operation itself (see User Manual).
+The standard flow for the business department is: **Import → Validate → Approve → (optional) Add all Countries → Upload Sales Price**. As a key user you are responsible for the framework (base settings, country activation, API interface), not the day-to-day operation itself (see User Manual).
 
 For SellWatch there is no flow the business department triggers manually: new purchase requests (seller, watch, and offer data) arrive automatically and are automatically turned into a vendor and a purchase order; the business department only ever sees the result, read-only, on the "SellWatch-Overview" page (see User Manual). As a key user you are responsible here for configuring the online-check interface (see below) and for assigning permissions.
 
@@ -79,6 +79,8 @@ The SellWatch online check (verifies whether a watch should be visible in the Se
 > Unlike sales price management's price export, there is no field in the base settings to select the interface code for the online check — the code `WOA` is hard-coded.
 
 > You can trace failed calls on the **"Http Call Log"** page: it shows success/failure, HTTP status code, and error message for every call, and lets you download the sent request and the received response as text files (the API key is not shown in plain text in the stored request). Since the 2026-08-10 HTTP-logging update, this page also logs sales price export calls (see below) — the "Source Table No." column shows which area produced the entry.
+
+> Since version 27.0.0.3 every transmitted sales price line also appears on the **"Data Export Entries"** page (the same page the availability export uses), identified by the destination code `SALESPRICE`. It shows the status (Processed/Error), file name, error message and, in the FactBox, the JSON that was sent. **Important:** retry failed price transmissions only via "Upload Sales Price" on the price checking list, **not** via the "Export Data" action on "Data Export Entries" — that action cannot send price entries and only creates an error log entry.
 
 ## Setting up the Workshop authenticity check
 
@@ -180,11 +182,12 @@ Access to all sales price management objects is controlled through the **"CXWChr
 | Problem | Cause / Solution |
 |---|---|
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
-| "Add all Currencies" produces no line for a specific currency | Check that "Sales Price Activated" is enabled for that currency on the "Currencies" page. |
+| "Add all Countries" produces no line for a specific country | Check that "Sales Price Activated" is enabled for that country on the "Countries/Regions" page. |
 | A user cannot open the sales price management pages | Check whether the user has been assigned the "CXWChronWSAll" permission set. |
 | A price isn't calculated with margin X% despite correct input | The category-based non-stock price calculation is not currently wired into the live flow — escalate to the development team if this feature is needed. |
 | "Upload Sales Price" reports that no API interface is configured, or aborts | Check on the base settings that "Price Export Active" is enabled and an "API Interface Code" is selected, and that the corresponding interface under "API Interface Setup" is active and fully configured (Endpoint URL, API Key if required). Details on the specific failure (status code, error message) are on the "Http Call Log" page. |
 | Individual price lines are left with "Export Status" = "Error" after "Upload Sales Price" | Other lines in the same run are still processed. Check the affected line for invalid values (e.g. a currency code that doesn't exist) and trigger the upload for that line again. |
+| "Export Data" on "Data Export Entries" reports an error for an entry with destination code `SALESPRICE` | This is intended: price transmissions only run through "Upload Sales Price". Upload the affected price line again; do **not** create a `SALESPRICE` entry under "Data Export API Setup". Note: the entry's status then changes to "Error" and the attempt count increases — even if the price had been transmitted successfully before ("Processed"). Nothing is sent. |
 | A user cannot open the SellWatch pages | Check whether the user has been assigned the "CXW SWChronWSAll" permission set. |
 | A watch on "SellWatch-Overview" is never marked online, or "Http Call Log" shows failures | Check that an entry with code `WOA` exists under "API Interface Setup", is active, and has the Endpoint URL and API Key set. Details on the specific failure (status code, error message) are on the "Http Call Log" page. |
 | No vendor/order is created for a SellWatch request | Creation happens fully automatically in the background; there is no action you can trigger manually as a key user. First check whether the request actually arrived completely, then escalate to the development team if not. |

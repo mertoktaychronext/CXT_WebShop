@@ -24,6 +24,11 @@ page 60323 "CXW Sales Price Archive"
                 {
                     ApplicationArea = All;
                 }
+                field("CXW Country Code"; Rec."CXW Country Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the country/region of the archived sales price line. Blank for source lines without a country.';
+                }
                 field("CXW Stock Price"; Rec."CXW Stock Price")
                 {
                     ApplicationArea = All;

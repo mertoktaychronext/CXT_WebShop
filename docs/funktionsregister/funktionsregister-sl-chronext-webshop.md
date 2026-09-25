@@ -3,7 +3,7 @@
 **Version:** 27.0.0.2
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen)
 **Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
@@ -27,7 +27,7 @@ CHX.Webshop bündelt vier weitgehend eigenständige Funktionsbereiche unter eine
 | Enums | 9 |
 | Permission Sets | 5 |
 | **Gesamt Objekte** | **57** |
-| **Gesamt Prozeduren/Trigger/Events** | **122** |
+| **Gesamt Prozeduren/Trigger/Events** | **125** |
 
 ---
 
@@ -370,12 +370,14 @@ Arbeitsliste zur Prüfung, Validierung und Freigabe neuer Verkaufspreise inklusi
 | 2 | `Import CSV` | Aktion | – | Importiert eine CSV-Datei mit neuen Verkaufspreisen, sofern noch keine offenen Prüfzeilen vorhanden sind. |
 | 3 | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft alle offenen Zeilen auf Marge, Preisabweichung und Datumsplausibilität. |
 | 4 | `Approve` | Aktion | – | Gibt nach Bestätigung alle validierten Zeilen zur Übernahme frei und vermerkt den freigebenden Benutzer. |
-| 5 | `Add all Currencies` | Aktion | – | Legt für eine freigegebene Zeile automatisch die Preise in allen weiteren aktivierten Währungen anhand des aktuellen Wechselkurses an. |
+| 5 | `Add all Countries` | Aktion | – | Legt für jede importierte, freigegebene Basiszeile automatisch je für Verkaufspreise aktiviertem Land eine Preiszeile in der Währung dieses Landes an – bei gleicher Währung mit unverändertem Preis, sonst mit dem aktuellen Wechselkurs umgerechnet. |
 | 6 | `Upload Sales Price` | Aktion | – | Übernimmt alle freigegebenen Preiszeilen als Standard-Verkaufspreise, archiviert sie und sendet sie einzeln an die konfigurierte externe Schnittstelle; fragt bei bereits zuvor gesendeten Zeilen nach, ob diese erneut gesendet werden sollen, und meldet am Ende, wie viele von wie vielen Zeilen erfolgreich exportiert wurden. |
 | 7 | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur die zuletzt importierten Zeilen bearbeitet werden. |
 | 8 | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
 | 9 | `fnValidate` | Prozedur | Internal | Führt die eigentliche Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft die Mindestmarge und das Start-/Enddatum und trägt passende Hinweise ein. |
 | 10 | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
+| 11 | `fnAddAllCountries` | Prozedur | Internal | Durchläuft alle noch nicht verarbeiteten Basiszeilen ohne Land und alle aktivierten Länder, legt fehlende Länderzeilen an und markiert die Basiszeile als verarbeitet. |
+| 12 | `CreateCountryLine` | Prozedur | Internal | Legt eine Preiszeile für ein Land an: übernimmt Preise bei gleicher Währung unverändert oder rechnet sie mit dem aktuellen Wechselkurs um und kopiert Gültigkeit, Grund, Kommentar und Freigabe von der Basiszeile. |
 
 ### Seite: CXW General Sales Price Setup (ID: 60321)
 
@@ -408,18 +410,19 @@ Nur-Lese-Übersicht aller archivierten, historischen Verkaufspreis-Versionen.
 | 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Preis und die webshop-spezifischen Zusatzfelder von der Prüfzeile auf den Verkaufspreis. |
 | 3 | `ResolveUnitPriceLCY` | Prozedur | Internal | Ermittelt den Preis in Hauswährung anhand des hinterlegten oder des zuletzt bekannten Wechselkurses. |
 | 4 | `ArchiveCheckingLine` | Prozedur | Internal | Legt eine neue, fortlaufend nummerierte Archivversion der Prüfzeile an. |
-| 5 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis per Reflection in JSON um, legt ihn als Ausgangsdatei ab und sendet ihn an die konfigurierte externe Schnittstelle. |
+| 5 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis per Reflection in JSON um, ergänzt den Ländercode der Prüfzeile und sendet ihn an die konfigurierte externe Schnittstelle. |
 | 6 | `SendToApiInterface` | Prozedur | Internal | Baut die HTTP-Anfrage inklusive gewählter Authentifizierung auf, sendet sie an die konfigurierte Schnittstelle und protokolliert Erfolg oder Fehler. |
-| 7 | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die AWS-Signatur-Header für eine Anfrage nach dem AWS-Signature-V4-Verfahren. |
-| 8 | `SanitizeHeaderText` | Prozedur | Internal | Entfernt aus Zugangsdaten alle Zeichen, die von .NET als ungültiger HTTP-Header abgelehnt würden (z. B. versehentlich mitkopierte Sonderzeichen). |
-| 9 | `HexEncode` | Prozedur | Internal | Wandelt binäre Daten in eine hexadezimale Textdarstellung um, die für die Signaturberechnung benötigt wird. |
-| 10 | `Sha256HexLower` | Prozedur | Internal | Berechnet einen SHA-256-Hash für die AWS-Signaturberechnung. |
-| 11 | `HmacChainStep` | Prozedur | Internal | Führt einen einzelnen Schritt der AWS-Schlüsselableitung aus (HMAC-Verkettung). |
-| 12 | `DeriveSigningKey` | Prozedur | Internal | Leitet aus dem AWS-Geheimschlüssel den tagesgültigen Signaturschlüssel ab. |
-| 13 | `HmacSignatureHexLower` | Prozedur | Internal | Berechnet die endgültige AWS-Signatur einer Anfrage. |
-| 14 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei alle Zugangsdaten durch einen Platzhalter ersetzt werden. |
-| 15 | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Preis-Export-Aufruf (Erfolg wie Fehlschlag) in das gemeinsame HTTP-Aufrufprotokoll. |
-| 16 | `AddFieldToJson` | Prozedur | Internal | Fügt ein einzelnes Datenfeld typgerecht (Zahl, Kommazahl, Ja/Nein, Text) einem JSON-Objekt hinzu. |
+| 7 | `CreateDataExportEntry` | Prozedur | Internal | Hält jede Übertragung als Exporteintrag in der ChronextBC-Tabelle „Data Export Entry" fest (Ziel `SALESPRICE`, gesendete Daten, Dateiname, Ergebnis „Verarbeitet" oder „Fehler" samt Fehlermeldung), damit alle Webshop-Exporte an einer Stelle sichtbar sind. Der Eintrag entsteht erst nach dem Versand mit endgültigem Status, damit der ChronextBC-Exportjob ihn nicht ein zweites Mal sendet. |
+| 8 | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die AWS-Signatur-Header für eine Anfrage nach dem AWS-Signature-V4-Verfahren. |
+| 9 | `SanitizeHeaderText` | Prozedur | Internal | Entfernt aus Zugangsdaten alle Zeichen, die von .NET als ungültiger HTTP-Header abgelehnt würden (z. B. versehentlich mitkopierte Sonderzeichen). |
+| 10 | `HexEncode` | Prozedur | Internal | Wandelt binäre Daten in eine hexadezimale Textdarstellung um, die für die Signaturberechnung benötigt wird. |
+| 11 | `Sha256HexLower` | Prozedur | Internal | Berechnet einen SHA-256-Hash für die AWS-Signaturberechnung. |
+| 12 | `HmacChainStep` | Prozedur | Internal | Führt einen einzelnen Schritt der AWS-Schlüsselableitung aus (HMAC-Verkettung). |
+| 13 | `DeriveSigningKey` | Prozedur | Internal | Leitet aus dem AWS-Geheimschlüssel den tagesgültigen Signaturschlüssel ab. |
+| 14 | `HmacSignatureHexLower` | Prozedur | Internal | Berechnet die endgültige AWS-Signatur einer Anfrage. |
+| 15 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei alle Zugangsdaten durch einen Platzhalter ersetzt werden. |
+| 16 | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Preis-Export-Aufruf (Erfolg wie Fehlschlag) in das gemeinsame HTTP-Aufrufprotokoll. |
+| 17 | `AddFieldToJson` | Prozedur | Internal | Fügt ein einzelnes Datenfeld typgerecht (Zahl, Kommazahl, Ja/Nein, Text) einem JSON-Objekt hinzu. |
 
 ### Enum: CXW Sales Price Reason Code (ID: 60332)
 
@@ -435,9 +438,9 @@ Ergänzt den Standard-Verkaufspreis um webshop-spezifische Zusatzfelder: Änderu
 
 *Keine eigenen Trigger – reine Felderweiterung.*
 
-### Tabellenerweiterung: CXW Currency (ID: 60320)
+### Tabellenerweiterung: CXW Country/Region (ID: 60346)
 
-Ergänzt die Standard-Währung um ein Kennzeichen, ob diese Währung für Webshop-Verkaufspreise aktiviert ist.
+Ergänzt das Standard-Land um ein Kennzeichen, ob für dieses Land Webshop-Verkaufspreise erzeugt werden, sowie um die Währung, in der diese Preise angelegt werden (leer = Hauswährung).
 
 *Keine eigenen Trigger – reine Felderweiterung.*
 
@@ -445,9 +448,9 @@ Ergänzt die Standard-Währung um ein Kennzeichen, ob diese Währung für Websho
 
 Zeigt auf der Standard-Verkaufspreise-Seite zusätzlich die webshop-spezifischen Felder (Änderungsgrund, empfohlener Preis, Streichpreis, Preis in Hauswährung, Hinweis, Kommentar) an.
 
-### Seitenerweiterung: CXW Currencies (ID: 60327)
+### Seitenerweiterung: CXW Countries/Regions (ID: 60347)
 
-Zeigt auf der Standard-Währungsseite zusätzlich das Kennzeichen "Für Webshop-Verkaufspreise aktiviert" an.
+Zeigt auf der Standard-Seite "Länder/Regionen" zusätzlich das Kennzeichen "Für Webshop-Verkaufspreise aktiviert" und die Verkaufspreis-Währung an.
 
 ### Xmlport: CXW Import Sales Price (ID: 60328)
 
@@ -485,7 +488,7 @@ Definiert den Verarbeitungsstatus einer Import-/Export-Datei (neu, zu verarbeite
 
 ### Tabelle: CXW Sales Price Outbound File (ID: 60314)
 
-Speichert jede an die externe Schnittstelle gesendete Preisdatei inklusive Status und Antworttext.
+**Veraltet (seit Version 27.0.0.3 zur Entfernung vorgemerkt):** Speicherte bis Version 27.0.0.2 jede an die externe Schnittstelle gesendete Preisdatei inklusive Status und Antworttext. Wird nicht mehr beschrieben – neue Übertragungen stehen in der ChronextBC-Tabelle „Data Export Entry" (Ziel `SALESPRICE`). Bestehende Daten bleiben bis zur endgültigen Entfernung lesbar.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|

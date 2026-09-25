@@ -2,7 +2,7 @@
   "id": "5df32934-5708-418c-ba16-44b30feb51f4",
   "name": "CHX.Webshop",
   "publisher": "Salini Life",
-  "version": "27.0.0.2",
+  "version": "27.0.0.3",
   "brief": "CHX.Webshop",
   "description": "CHX.Webshop",
   "privacyStatement": "",
@@ -15,8 +15,14 @@
       "id": "5409da1c-726d-4b56-a383-e6f433d36d03",
       "name": "CHX.Base",
       "publisher": "Salini Life",
-      "version": "27.0.2.1"
+      "version": "27.0.3.4"
+    },
+    {  "id": "9699be36-20ce-4911-a988-5eb58385243f",
+      "name": "ChronextBC",
+      "publisher": "Default Publisher",
+      "version": "1.0.0.0"
     }
+
   ],
   "screenshots": [],
   "platform": "26.0.0.0",

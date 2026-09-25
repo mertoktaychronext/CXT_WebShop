@@ -28,11 +28,6 @@ table 60346 "CXW Availability Change Entry"
             TableRelation = Location;
             DataClassification = CustomerContent;
         }
-        field(5; "CXW Inserted At"; DateTime)
-        {
-            Caption = 'Inserted At';
-            DataClassification = SystemMetadata;
-        }
         field(6; "CXW Exported"; Boolean)
         {
             Caption = 'Exported';
@@ -42,6 +37,26 @@ table 60346 "CXW Availability Change Entry"
         {
             Caption = 'Exported At';
             DataClassification = SystemMetadata;
+        }
+        field(8; "CXW Item Ledger Entry No."; Integer)
+        {
+            Caption = 'Item Ledger Entry No.';
+            DataClassification = SystemMetadata;
+        }
+        field(10; "CXW Inventory Quantity"; Decimal)
+        {
+            Caption = 'Available Inventory Quantity';
+            DataClassification = CustomerContent;
+        }
+        field(16; "CXW Changed At"; DateTime)
+        {
+            Caption = 'Changed At';
+            DataClassification = SystemMetadata;
+        }
+        field(17; "CXW Differential Taxation Purchase"; Boolean)
+        {
+            Caption = 'Differential Taxation Purchase';
+            DataClassification = CustomerContent;
         }
     }
 
@@ -54,10 +69,13 @@ table 60346 "CXW Availability Change Entry"
         key(Exported; "CXW Exported")
         {
         }
+        key(ItemLedgerEntry; "CXW Item Ledger Entry No.", "CXW Exported")
+        {
+        }
     }
 
     trigger OnInsert()
     begin
-        "CXW Inserted At" := CurrentDateTime;
+        "CXW Changed At" := CurrentDateTime;
     end;
 }
