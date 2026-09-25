@@ -116,7 +116,8 @@
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `fnValidate` | Prozedur | Internal | Führt die Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft Mindestmarge und Datumsplausibilität. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `fnAddAllCountries` | Prozedur | Internal | Erzeugt für alle unverarbeiteten Basiszeilen die fehlenden Länderzeilen und markiert die Basiszeile als verarbeitet. |
-| CHX.Webshop | CXW Sales Price Checking List | Seite | `CreateCountryLine` | Prozedur | Internal | Legt eine Preiszeile für ein Land in dessen Währung an und übernimmt die Angaben der Basiszeile. |
+| CHX.Webshop | CXW Sales Price Checking List | Seite | `CreateCountryLine` | Prozedur | Internal | Legt eine Preiszeile für ein Land in dessen Währung an, rundet die Preise auf den nächsten vollen 10er auf und übernimmt die Angaben der Basiszeile. |
+| CHX.Webshop | CXW Sales Price Checking List | Seite | `RoundUpToTen` | Prozedur | Internal | Rundet einen Länderpreis immer auf den nächsten vollen 10er auf; 0 bleibt 0. |
 | CHX.Webshop | CXW Sales Price Checking List | Seite | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
 | CHX.Webshop | CXW Sales Price Archive | Tabelle | `OnInsert` | Trigger | – | Trägt beim Anlegen eines Archiveintrags automatisch Bearbeiter und Zeitpunkt ein. |
 | CHX.Webshop | CXW Sales Price Archive | Tabelle | `OnModify` | Trigger | – | Aktualisiert Bearbeiter und Zeitpunkt bei jeder nachträglichen Änderung eines Archiveintrags. |

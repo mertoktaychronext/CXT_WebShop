@@ -144,6 +144,8 @@ Table Extension 60346 "CXW Country/Region" (on standard table "Country/Region",
 expands every source line ("CXW Country Code" blank, "CXW Countries Processed" = false)
 into one line per activated country in that country's sales price currency. Same currency
 as the source line → prices copied 1:1, otherwise converted via GetLastestExchangeRate.
+Stock/Recom. Retail/Strike Price of the country line are then always rounded up to the
+next full ten (RoundUpToTen, change `round-country-sales-price-to-ten`).
 The former per-currency activation (table/page extension 60320/60327 on "Currency",
 action "Add all Currencies") was removed (change `add-all-countries-sales-price`). Enums 60331 "CXW Taxation Type" /
 60332 "CXW Sales Price Reason Code" exist, but 60331 is currently not referenced by any

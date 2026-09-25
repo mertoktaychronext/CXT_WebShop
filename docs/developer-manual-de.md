@@ -143,7 +143,9 @@ Table Extension 60346 "CXW Country/Region" (auf Standard-Tabelle "Country/Region
 "Add all Countries" (Page 60322, lokale Prozeduren fnAddAllCountries/CreateCountryLine)
 expandiert jede Quellzeile ("CXW Country Code" leer, "CXW Countries Processed" = false) in
 eine Zeile je aktiviertem Land mit dessen Verkaufspreiswährung. Gleiche Währung wie die
-Quellzeile → Preise 1:1, sonst Umrechnung über GetLastestExchangeRate. Die frühere
+Quellzeile → Preise 1:1, sonst Umrechnung über GetLastestExchangeRate. Stock/Recom.
+Retail/Strike Price der Länderzeile werden danach immer auf den nächsten vollen 10er
+aufgerundet (RoundUpToTen, Change `round-country-sales-price-to-ten`). Die frühere
 Aktivierung pro Währung (Table/Page Extension 60320/60327 auf "Currency", Aktion
 "Add all Currencies") wurde entfernt (Change `add-all-countries-sales-price`).
 Die Enums 60331 "CXW Taxation Type" / 60332 "CXW Sales Price Reason Code" existieren,
