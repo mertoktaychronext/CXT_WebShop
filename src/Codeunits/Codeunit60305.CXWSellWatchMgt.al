@@ -112,13 +112,15 @@ codeunit 60305 "CXW SellWatch Mgt"
             Error(NoItemTemplateSetUpErr);
         if not ItemTemplate.Get(PurchSetup."CXW SW Item Template Code") then
             Error(ItemTemplateNotFoundErr, PurchSetup."CXW SW Item Template Code");
+        Item.TransferFields(ItemTemplate, true);
+        // TransferFields maps Item Templ. Code (field 1) to Item."No." (field 1).
+        // Clear it so Item.OnInsert assigns the configured item number series.
         Item."No." := '';
         Item.Validate(Description, CopyStr(SellWatchVendorInfo."CXW Brand" + ' ' + SellWatchVendorInfo."CXW Model" + ' ' + SellWatchVendorInfo."CXW Construction Year", 1, MaxStrLen(Item.Description)));
         Item.Validate("Description 2", CopyStr(SellWatchVendorInfo."CXW Reference", 1, MaxStrLen(Item."Description 2")));
         if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
             Item.Validate("CXB Consignment Sales", true);
 
-        Item.TransferFields(ItemTemplate, true);
         Item.Insert(true);
         ItemUnitofMeasure.Init();
         ItemUnitofMeasure."Item No." := Item."No.";
