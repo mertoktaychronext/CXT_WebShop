@@ -39,6 +39,13 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Currency Code - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="PageExtension 4079945439 - Control 25922190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3870787835">
+          <source>Specifies whether this location is included in the webshop availability calculation.</source>
+          <target>Gibt an, ob dieser Standort in die Berechnung der Verfügbarkeit im Webshop einbezogen wird.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Translated with Xliff Editor</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Location Card - Control CXW Main Location - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="TableExtension 3342327973 - Field 1971448704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
           <source>Sales Price Activated</source>
           <target>Verkaufspreis aktiviert</target>
@@ -50,6 +57,20 @@
           <target>Verkaufspreis-Währungscode</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country/Region - Field CXW Sales Price Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 4129007588 - Field 25922190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3891454143">
+          <source>Specifies whether this location is included in the webshop availability calculation.</source>
+          <target>[NAB: SUGGESTION]Gibt an, ob dieser Standort in die Berechnung der Verfügbarkeit im Webshop einbezogen wird.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggestion added from 'PageExtension 4079945439 - Control 25922190 - Property 1295455071'</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Location Availability - Field CXW Main Location - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 4129007588 - Field 25922190 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3891454143">
+          <source>Main Location</source>
+          <target>[NAB: NOT TRANSLATED]</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Location Availability - Field CXW Main Location - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>API Interface Setup</source>
@@ -2645,7 +2666,7 @@
         </trans-unit>
         <trans-unit id="Page 4081239697 - Action 1315191579 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Create Purchase Order</source>
-          <target>Einkaufsbestellung erstellen</target>          
+          <target>Einkaufsbestellung erstellen</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lines - Action CreatePurchaseOrder - Property Caption</note>
         </trans-unit>
@@ -4003,6 +4024,7 @@
           <source> </source>
           <target>[NAB: REVIEW] </target>
           <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue   - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4148423094 - EnumValue 2554327257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -4045,6 +4067,7 @@
           <source> </source>
           <target>[NAB: REVIEW] </target>
           <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Taxation Type - EnumValue   - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3011355328 - EnumValue 1562294763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">

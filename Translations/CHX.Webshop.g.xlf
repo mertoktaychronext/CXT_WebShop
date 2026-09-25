@@ -29,7 +29,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Activated - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="PageExtension 2769419090 - Control 311270661 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 105737358">
-          <source>Specifies whether webshop sales prices are generated for this country/region by the action Add all Countries.</source>
+          <source>Specifies the currency in which webshop sales prices are generated for this country/region. Leave blank to use the local currency (LCY).</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Countries/Regions - Control CXW Sales Price Currency Code - Property ToolTip</note>
         </trans-unit>
