@@ -370,14 +370,15 @@ Arbeitsliste zur Prüfung, Validierung und Freigabe neuer Verkaufspreise inklusi
 | 2 | `Import CSV` | Aktion | – | Importiert eine CSV-Datei mit neuen Verkaufspreisen, sofern noch keine offenen Prüfzeilen vorhanden sind. |
 | 3 | `Validate` | Aktion | – | Rundet die eingegebenen Preise und prüft alle offenen Zeilen auf Marge, Preisabweichung und Datumsplausibilität. |
 | 4 | `Approve` | Aktion | – | Gibt nach Bestätigung alle validierten Zeilen zur Übernahme frei und vermerkt den freigebenden Benutzer. |
-| 5 | `Add all Countries` | Aktion | – | Legt für jede importierte, freigegebene Basiszeile automatisch je für Verkaufspreise aktiviertem Land eine Preiszeile in der Währung dieses Landes an – bei gleicher Währung mit unverändertem Preis, sonst mit dem aktuellen Wechselkurs umgerechnet. |
+| 5 | `Add all Countries` | Aktion | – | Legt für jede importierte, freigegebene Basiszeile automatisch je für Verkaufspreise aktiviertem Land eine Preiszeile in der Währung dieses Landes an – bei gleicher Währung mit unverändertem Preis, sonst mit dem aktuellen Wechselkurs umgerechnet; die Länderpreise werden immer auf den nächsten vollen 10er aufgerundet. |
 | 6 | `Upload Sales Price` | Aktion | – | Übernimmt alle freigegebenen Preiszeilen als Standard-Verkaufspreise, archiviert sie und sendet sie einzeln an die konfigurierte externe Schnittstelle; fragt bei bereits zuvor gesendeten Zeilen nach, ob diese erneut gesendet werden sollen, und meldet am Ende, wie viele von wie vielen Zeilen erfolgreich exportiert wurden. |
 | 7 | `OnOpenPage` | Trigger | – | Leert beim Öffnen die Arbeitsliste, damit nur die zuletzt importierten Zeilen bearbeitet werden. |
 | 8 | `OnModifyRecord` | Trigger | – | Verhindert nachträgliche Änderungen an bereits freigegebenen Preiszeilen. |
 | 9 | `fnValidate` | Prozedur | Internal | Führt die eigentliche Prüflogik aus: vergleicht mit dem bisherigen Preis, prüft die Mindestmarge und das Start-/Enddatum und trägt passende Hinweise ein. |
 | 10 | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
 | 11 | `fnAddAllCountries` | Prozedur | Internal | Durchläuft alle noch nicht verarbeiteten Basiszeilen ohne Land und alle aktivierten Länder, legt fehlende Länderzeilen an und markiert die Basiszeile als verarbeitet. |
-| 12 | `CreateCountryLine` | Prozedur | Internal | Legt eine Preiszeile für ein Land an: übernimmt Preise bei gleicher Währung unverändert oder rechnet sie mit dem aktuellen Wechselkurs um und kopiert Gültigkeit, Grund, Kommentar und Freigabe von der Basiszeile. |
+| 12 | `CreateCountryLine` | Prozedur | Internal | Legt eine Preiszeile für ein Land an: übernimmt Preise bei gleicher Währung oder rechnet sie mit dem aktuellen Wechselkurs um, rundet sie auf den nächsten vollen 10er auf und kopiert Gültigkeit, Grund, Kommentar und Freigabe von der Basiszeile. |
+| 13 | `RoundUpToTen` | Prozedur | Internal | Rundet einen Länderpreis immer auf den nächsten vollen 10er auf (z. B. 1.234,01 → 1.240); 0 bleibt 0. |
 
 ### Seite: CXW General Sales Price Setup (ID: 60321)
 

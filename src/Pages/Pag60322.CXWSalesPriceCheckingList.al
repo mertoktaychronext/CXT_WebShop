@@ -505,9 +505,9 @@ page 60322 "CXW Sales Price Checking List"
         g_recSalesPriceCheck2."CXW Currency Code" := p_recCountryRegion."CXW Sales Price Currency Code";
 
         if g_recSalesPriceCheck2."CXW Currency Code" = p_recSourceLine."CXW Currency Code" then begin
-            g_recSalesPriceCheck2."CXW Stock Price" := p_recSourceLine."CXW Stock Price";
-            g_recSalesPriceCheck2."CXW Recom. Retail Price" := p_recSourceLine."CXW Recom. Retail Price";
-            g_recSalesPriceCheck2."CXW Strike Price" := p_recSourceLine."CXW Strike Price";
+            g_recSalesPriceCheck2."CXW Stock Price" := RoundUpToTen(p_recSourceLine."CXW Stock Price");
+            g_recSalesPriceCheck2."CXW Recom. Retail Price" := RoundUpToTen(p_recSourceLine."CXW Recom. Retail Price");
+            g_recSalesPriceCheck2."CXW Strike Price" := RoundUpToTen(p_recSourceLine."CXW Strike Price");
             g_recSalesPriceCheck2."CXW Exchange Rate Amount" := p_recSourceLine."CXW Exchange Rate Amount";
             g_recSalesPriceCheck2."CXW Exchange Rate Date" := p_recSourceLine."CXW Exchange Rate Date";
         end else begin
@@ -515,9 +515,9 @@ page 60322 "CXW Sales Price Checking List"
             g_recCurrExcRate.SetRange("Currency Code", g_recSalesPriceCheck2."CXW Currency Code");
             if g_recCurrExcRate.FindLast() then begin
                 g_recCurrExcRate.GetLastestExchangeRate(g_recSalesPriceCheck2."CXW Currency Code", g_dateExchangeRateDate, g_decExchangeRateAmt);
-                g_recSalesPriceCheck2."CXW Stock Price" := p_recSourceLine."CXW Stock Price" * (1 / g_decExchangeRateAmt);
-                g_recSalesPriceCheck2."CXW Recom. Retail Price" := p_recSourceLine."CXW Recom. Retail Price" * (1 / g_decExchangeRateAmt);
-                g_recSalesPriceCheck2."CXW Strike Price" := p_recSourceLine."CXW Strike Price" * (1 / g_decExchangeRateAmt);
+                g_recSalesPriceCheck2."CXW Stock Price" := RoundUpToTen(p_recSourceLine."CXW Stock Price" * (1 / g_decExchangeRateAmt));
+                g_recSalesPriceCheck2."CXW Recom. Retail Price" := RoundUpToTen(p_recSourceLine."CXW Recom. Retail Price" * (1 / g_decExchangeRateAmt));
+                g_recSalesPriceCheck2."CXW Strike Price" := RoundUpToTen(p_recSourceLine."CXW Strike Price" * (1 / g_decExchangeRateAmt));
                 g_recSalesPriceCheck2."CXW Exchange Rate Amount" := 1 / g_decExchangeRateAmt;
                 g_recSalesPriceCheck2."CXW Exchange Rate Date" := g_dateExchangeRateDate;
             end;
@@ -533,6 +533,12 @@ page 60322 "CXW Sales Price Checking List"
         g_recSalesPriceCheck2."CXW Approved By" := p_recSourceLine."CXW Approved By";
         g_recSalesPriceCheck2."CXW Accept New Setup" := p_recSourceLine."CXW Accept New Setup";
         g_recSalesPriceCheck2.Insert(true);
+    end;
+
+    // Country prices are always rounded up to the next full ten (0 stays 0).
+    local procedure RoundUpToTen(p_decAmount: Decimal): Decimal
+    begin
+        exit(Round(p_decAmount, 10, '>'));
     end;
 
     procedure fnCalcNonStockPrice(p_decStockPriceFrom: Decimal; p_decStockPriceTo: Decimal; p_decNonStockPercent: Decimal)
