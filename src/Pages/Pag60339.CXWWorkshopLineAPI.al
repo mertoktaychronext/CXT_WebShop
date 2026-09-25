@@ -2,8 +2,8 @@ page 60339 "CXW Workshop Line API"
 {
     PageType = API;
     SourceTable = "CXW Workshop Line";
-    APIPublisher = 'saliniLife';
-    APIGroup = 'workshop';
+    APIPublisher = 'chronext';
+    APIGroup = 'CXTServices';
     APIVersion = 'v1.0';
     EntityName = 'workshopLine';
     EntitySetName = 'workshopLines';
