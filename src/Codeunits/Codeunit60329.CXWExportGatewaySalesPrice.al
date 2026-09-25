@@ -91,15 +91,17 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         FileName: Text[250];
         Index: Integer;
         ExportItemNo: Code[20];
+        ExportVariantCode: Code[20];
     begin
-        GetExportItemNo(SalesPrice."Item No.", ExportItemNo);
+        GetExportItemAndVariantCode(SalesPrice."Item No.", SalesPrice."Variant Code", ExportItemNo, ExportVariantCode);
         RecRef.GetTable(SalesPrice);
         for Index := 1 to RecRef.FieldCount do begin
             FldRef := RecRef.FieldIndex(Index);
-            if FldRef.Name <> 'Item No.' then
+            if (FldRef.Name <> 'Item No.') and (FldRef.Name <> 'Variant Code') then
                 AddFieldToJson(JsonObj, FldRef.Name, FldRef.Value);
         end;
         JsonObj.Add('Item No.', ExportItemNo);
+        JsonObj.Add('Variant Code', ExportVariantCode);
         // "Sales Price" has no country in its key - the country of the checking line is sent alongside.
         JsonObj.Add('CXW Country Code', pCountryCode);
         JsonObj.WriteTo(JsonText);
@@ -112,16 +114,23 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         exit(SendToApiInterface(JsonText, FileName, SalesPrice.RecordId()));
     end;
 
-    local procedure GetExportItemNo(ItemNo: Code[20]; var ExportItemNo: Code[20])
+    local procedure GetExportItemAndVariantCode(ItemNo: Code[20]; VariantCode: Code[10]; var ExportItemNo: Code[20]; var ExportVariantCode: Code[20])
     var
         Item: Record Item;
     begin
         ExportItemNo := ItemNo;
+        if VariantCode = '' then
+            ExportVariantCode := ItemNo
+        else
+            ExportVariantCode := VariantCode;
+
         if not Item.Get(ItemNo) then
             exit;
 
         if Item."Old Item No." <> '' then
             ExportItemNo := Item."Old Item No.";
+        if Item."Old Variant Code" <> '' then
+            ExportVariantCode := Item."Old Variant Code";
     end;
 
     local procedure SendToApiInterface(pJsonText: Text; pFileName: Text[250]; pSourceRecordId: RecordId): Boolean
