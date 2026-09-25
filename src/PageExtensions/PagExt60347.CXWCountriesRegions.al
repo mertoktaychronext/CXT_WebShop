@@ -23,13 +23,12 @@ pageextension 60347 "CXW Countries/Regions" extends "Countries/Regions"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies whether webshop sales prices are generated for this country/region by the action Add all Countries.';
-
             }
-            
+
             field("CXW Sales Price Currency Code"; Rec."CXW Sales Price Currency Code")
             {
                 ApplicationArea = All;
-                ToolTip = 'Specifies whether webshop sales prices are generated for this country/region by the action Add all Countries.';
+                ToolTip = 'Specifies the currency in which webshop sales prices are generated for this country/region. Leave blank to use the local currency (LCY).';
             }
         }
     }
@@ -39,7 +38,7 @@ pageextension 60347 "CXW Countries/Regions" extends "Countries/Regions"
         addlast(Processing)
         {
             action(CXWRefreshWebshopDeliveryTimes)
-            
+
             {
                 ApplicationArea = All;
 

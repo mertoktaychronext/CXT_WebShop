@@ -3,7 +3,7 @@
 **Version:** 27.0.0.2
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen)
 **Abhängigkeiten:** CHX.Base (27.0.1.1)
 
 ---
@@ -27,7 +27,7 @@ CHX.Webshop bündelt vier weitgehend eigenständige Funktionsbereiche unter eine
 | Enums | 9 |
 | Permission Sets | 5 |
 | **Gesamt Objekte** | **57** |
-| **Gesamt Prozeduren/Trigger/Events** | **124** |
+| **Gesamt Prozeduren/Trigger/Events** | **125** |
 
 ---
 
@@ -410,18 +410,19 @@ Nur-Lese-Übersicht aller archivierten, historischen Verkaufspreis-Versionen.
 | 2 | `UpdateSalesPriceFields` | Prozedur | Internal | Überträgt Währung, Preis und die webshop-spezifischen Zusatzfelder von der Prüfzeile auf den Verkaufspreis. |
 | 3 | `ResolveUnitPriceLCY` | Prozedur | Internal | Ermittelt den Preis in Hauswährung anhand des hinterlegten oder des zuletzt bekannten Wechselkurses. |
 | 4 | `ArchiveCheckingLine` | Prozedur | Internal | Legt eine neue, fortlaufend nummerierte Archivversion der Prüfzeile an. |
-| 5 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis per Reflection in JSON um, ergänzt den Ländercode der Prüfzeile, legt ihn als Ausgangsdatei ab und sendet ihn an die konfigurierte externe Schnittstelle. |
+| 5 | `CreateExternalInterfaceFile` | Prozedur | Public | Wandelt einen Verkaufspreis per Reflection in JSON um, ergänzt den Ländercode der Prüfzeile und sendet ihn an die konfigurierte externe Schnittstelle. |
 | 6 | `SendToApiInterface` | Prozedur | Internal | Baut die HTTP-Anfrage inklusive gewählter Authentifizierung auf, sendet sie an die konfigurierte Schnittstelle und protokolliert Erfolg oder Fehler. |
-| 7 | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die AWS-Signatur-Header für eine Anfrage nach dem AWS-Signature-V4-Verfahren. |
-| 8 | `SanitizeHeaderText` | Prozedur | Internal | Entfernt aus Zugangsdaten alle Zeichen, die von .NET als ungültiger HTTP-Header abgelehnt würden (z. B. versehentlich mitkopierte Sonderzeichen). |
-| 9 | `HexEncode` | Prozedur | Internal | Wandelt binäre Daten in eine hexadezimale Textdarstellung um, die für die Signaturberechnung benötigt wird. |
-| 10 | `Sha256HexLower` | Prozedur | Internal | Berechnet einen SHA-256-Hash für die AWS-Signaturberechnung. |
-| 11 | `HmacChainStep` | Prozedur | Internal | Führt einen einzelnen Schritt der AWS-Schlüsselableitung aus (HMAC-Verkettung). |
-| 12 | `DeriveSigningKey` | Prozedur | Internal | Leitet aus dem AWS-Geheimschlüssel den tagesgültigen Signaturschlüssel ab. |
-| 13 | `HmacSignatureHexLower` | Prozedur | Internal | Berechnet die endgültige AWS-Signatur einer Anfrage. |
-| 14 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei alle Zugangsdaten durch einen Platzhalter ersetzt werden. |
-| 15 | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Preis-Export-Aufruf (Erfolg wie Fehlschlag) in das gemeinsame HTTP-Aufrufprotokoll. |
-| 16 | `AddFieldToJson` | Prozedur | Internal | Fügt ein einzelnes Datenfeld typgerecht (Zahl, Kommazahl, Ja/Nein, Text) einem JSON-Objekt hinzu. |
+| 7 | `CreateDataExportEntry` | Prozedur | Internal | Hält jede Übertragung als Exporteintrag in der ChronextBC-Tabelle „Data Export Entry" fest (Ziel `SALESPRICE`, gesendete Daten, Dateiname, Ergebnis „Verarbeitet" oder „Fehler" samt Fehlermeldung), damit alle Webshop-Exporte an einer Stelle sichtbar sind. Der Eintrag entsteht erst nach dem Versand mit endgültigem Status, damit der ChronextBC-Exportjob ihn nicht ein zweites Mal sendet. |
+| 8 | `BuildSigV4Headers` | Prozedur | Internal | Berechnet die AWS-Signatur-Header für eine Anfrage nach dem AWS-Signature-V4-Verfahren. |
+| 9 | `SanitizeHeaderText` | Prozedur | Internal | Entfernt aus Zugangsdaten alle Zeichen, die von .NET als ungültiger HTTP-Header abgelehnt würden (z. B. versehentlich mitkopierte Sonderzeichen). |
+| 10 | `HexEncode` | Prozedur | Internal | Wandelt binäre Daten in eine hexadezimale Textdarstellung um, die für die Signaturberechnung benötigt wird. |
+| 11 | `Sha256HexLower` | Prozedur | Internal | Berechnet einen SHA-256-Hash für die AWS-Signaturberechnung. |
+| 12 | `HmacChainStep` | Prozedur | Internal | Führt einen einzelnen Schritt der AWS-Schlüsselableitung aus (HMAC-Verkettung). |
+| 13 | `DeriveSigningKey` | Prozedur | Internal | Leitet aus dem AWS-Geheimschlüssel den tagesgültigen Signaturschlüssel ab. |
+| 14 | `HmacSignatureHexLower` | Prozedur | Internal | Berechnet die endgültige AWS-Signatur einer Anfrage. |
+| 15 | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei alle Zugangsdaten durch einen Platzhalter ersetzt werden. |
+| 16 | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Preis-Export-Aufruf (Erfolg wie Fehlschlag) in das gemeinsame HTTP-Aufrufprotokoll. |
+| 17 | `AddFieldToJson` | Prozedur | Internal | Fügt ein einzelnes Datenfeld typgerecht (Zahl, Kommazahl, Ja/Nein, Text) einem JSON-Objekt hinzu. |
 
 ### Enum: CXW Sales Price Reason Code (ID: 60332)
 
@@ -487,7 +488,7 @@ Definiert den Verarbeitungsstatus einer Import-/Export-Datei (neu, zu verarbeite
 
 ### Tabelle: CXW Sales Price Outbound File (ID: 60314)
 
-Speichert jede an die externe Schnittstelle gesendete Preisdatei inklusive Status und Antworttext.
+**Veraltet (seit Version 27.0.0.3 zur Entfernung vorgemerkt):** Speicherte bis Version 27.0.0.2 jede an die externe Schnittstelle gesendete Preisdatei inklusive Status und Antworttext. Wird nicht mehr beschrieben – neue Übertragungen stehen in der ChronextBC-Tabelle „Data Export Entry" (Ziel `SALESPRICE`). Bestehende Daten bleiben bis zur endgültigen Entfernung lesbar.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|

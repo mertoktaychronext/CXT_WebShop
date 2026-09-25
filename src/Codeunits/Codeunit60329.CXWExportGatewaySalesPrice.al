@@ -83,12 +83,12 @@ codeunit 60329 "CXW Export Gateway Sales Price"
 
     procedure CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"; pCountryCode: Code[10]): Boolean
     var
-        OutboundFile: Record "CXW Sales Price Outbound File";
+        DataExportEntry: Record "Data Export Entry";
         RecRef: RecordRef;
         FldRef: FieldRef;
         JsonObj: JsonObject;
         JsonText: Text;
-        OutStr: OutStream;
+        FileName: Text[250];
         Index: Integer;
     begin
         RecRef.GetTable(SalesPrice);
@@ -100,20 +100,15 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         JsonObj.Add('CXW Country Code', pCountryCode);
         JsonObj.WriteTo(JsonText);
 
-        OutboundFile.Init();
-        OutboundFile."CXW Status" := OutboundFile."CXW Status"::New;
-        OutboundFile."CXW Filename" :=
+        FileName :=
             CopyStr(
                 StrSubstNo('SalesPrice_%1_%2_%3.json', SalesPrice."Item No.", SalesPrice."Currency Code", pCountryCode),
-                1, MaxStrLen(OutboundFile."CXW Filename"));
-        OutboundFile."CXW TargetFile".CreateOutStream(OutStr, TextEncoding::UTF8);
-        OutStr.WriteText(JsonText);
-        OutboundFile.Insert(true);
+                1, MaxStrLen(DataExportEntry.FileName));
 
-        exit(SendToApiInterface(OutboundFile, JsonText));
+        exit(SendToApiInterface(JsonText, FileName, SalesPrice.RecordId()));
     end;
 
-    local procedure SendToApiInterface(var vOutboundFile: Record "CXW Sales Price Outbound File"; pJsonText: Text): Boolean
+    local procedure SendToApiInterface(pJsonText: Text; pFileName: Text[250]; pSourceRecordId: RecordId): Boolean
     var
         GenSPSetup: Record "CXW General Sales Price Setup";
         ApiInterfaceSetup: Record "CXW API Interface Setup";
@@ -133,6 +128,7 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         ApiKeyValue: Text;
         HttpMethodTxt: Text;
         SoapActionValue: Text;
+        DataExportEntryNo: BigInteger;
         SendBody: Boolean;
         SendOk: Boolean;
     begin
@@ -213,29 +209,51 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         HttpClientObj.Timeout := 30000;
         SendOk := HttpClientObj.Send(HttpRequest, HttpResponse);
 
+        // The Data Export Entry is only created after the call, directly with its final status - an entry
+        // left in "Waiting to Process" would be picked up and resent by ChronextBC's "Data Export Mgt.".
         if SendOk and HttpResponse.IsSuccessStatusCode() then begin
             HttpResponse.Content().ReadAs(ResponseText);
-            LogHttpCall(vOutboundFile, ApiInterfaceSetup."CXW Endpoint URL", true, HttpResponse.HttpStatusCode(), '', RequestLogText, ResponseText);
-            vOutboundFile."CXW Status" := vOutboundFile."CXW Status"::Processed;
-            vOutboundFile."CXW Response Message" := '';
-            vOutboundFile.Modify();
+            DataExportEntryNo := CreateDataExportEntry(pJsonText, pFileName, pSourceRecordId, true, '');
+            LogHttpCall(DataExportEntryNo, ApiInterfaceSetup."CXW Endpoint URL", true, HttpResponse.HttpStatusCode(), '', RequestLogText, ResponseText);
             exit(true);
         end;
 
         if SendOk then begin
             HttpResponse.Content().ReadAs(ResponseText);
             FormattedErrorTxt := StrSubstNo('HTTP %1: %2', HttpResponse.HttpStatusCode(), ResponseText);
-            LogHttpCall(vOutboundFile, ApiInterfaceSetup."CXW Endpoint URL", false, HttpResponse.HttpStatusCode(), FormattedErrorTxt, RequestLogText, ResponseText);
-            ResponseText := FormattedErrorTxt;
+            DataExportEntryNo := CreateDataExportEntry(pJsonText, pFileName, pSourceRecordId, false, FormattedErrorTxt);
+            LogHttpCall(DataExportEntryNo, ApiInterfaceSetup."CXW Endpoint URL", false, HttpResponse.HttpStatusCode(), FormattedErrorTxt, RequestLogText, ResponseText);
         end else begin
-            LogHttpCall(vOutboundFile, ApiInterfaceSetup."CXW Endpoint URL", false, 0, NetworkErrorTxt, RequestLogText, '');
-            ResponseText := NetworkErrorTxt;
+            DataExportEntryNo := CreateDataExportEntry(pJsonText, pFileName, pSourceRecordId, false, NetworkErrorTxt);
+            LogHttpCall(DataExportEntryNo, ApiInterfaceSetup."CXW Endpoint URL", false, 0, NetworkErrorTxt, RequestLogText, '');
         end;
 
-        vOutboundFile."CXW Status" := vOutboundFile."CXW Status"::Error;
-        vOutboundFile."CXW Response Message" := CopyStr(ResponseText, 1, MaxStrLen(vOutboundFile."CXW Response Message"));
-        vOutboundFile.Modify();
         exit(false);
+    end;
+
+    local procedure CreateDataExportEntry(pJsonText: Text; pFileName: Text[250]; pSourceRecordId: RecordId; pSuccess: Boolean; pErrorMessage: Text): BigInteger
+    var
+        DataExportEntry: Record "Data Export Entry";
+    begin
+        DataExportEntry.Init();
+        DataExportEntry."Destination Code" := SalesPriceDestinationCodeLbl;
+        DataExportEntry."Payload Format" := DataExportEntry."Payload Format"::JSON;
+        DataExportEntry.FileName := pFileName;
+        DataExportEntry."Source Record ID" := pSourceRecordId;
+        DataExportEntry.Insert(true);
+        DataExportEntry.SetPayload(pJsonText);
+        // OnInsert of "Data Export Entry" sets "Created At" and always "Waiting to Process" - overwritten here with the final status.
+        if pSuccess then begin
+            DataExportEntry.Status := DataExportEntry.Status::Processed;
+            DataExportEntry."Processed At" := CurrentDateTime;
+        end else begin
+            DataExportEntry.Status := DataExportEntry.Status::Error;
+            DataExportEntry."Error Message" := CopyStr(pErrorMessage, 1, MaxStrLen(DataExportEntry."Error Message"));
+        end;
+        DataExportEntry."Attempt Count" := 1;
+        DataExportEntry."Last Attempt At" := CurrentDateTime;
+        DataExportEntry.Modify(true);
+        exit(DataExportEntry."Entry No.");
     end;
 
     local procedure BuildSigV4Headers(pApiInterfaceSetup: Record "CXW API Interface Setup"; pMethod: Text; pUrlPath: Text; pHost: Text; pHasBody: Boolean; pPayload: Text; var vAuthorizationHeader: Text; var vAmzDate: Text)
@@ -403,14 +421,14 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         exit(RequestText);
     end;
 
-    local procedure LogHttpCall(pOutboundFile: Record "CXW Sales Price Outbound File"; pEndpointUrl: Text; pSuccess: Boolean; pHttpStatusCode: Integer; pErrorMessage: Text; pRequestText: Text; pResponseText: Text)
+    local procedure LogHttpCall(pDataExportEntryNo: BigInteger; pEndpointUrl: Text; pSuccess: Boolean; pHttpStatusCode: Integer; pErrorMessage: Text; pRequestText: Text; pResponseText: Text)
     var
         HttpCallLog: Record "CXW Http Call Log";
         OutStr: OutStream;
     begin
         HttpCallLog.Init();
-        HttpCallLog."CXW Source Table No." := Database::"CXW Sales Price Outbound File";
-        HttpCallLog."CXW Source Entry No" := pOutboundFile."CXW Entry No.";
+        HttpCallLog."CXW Source Table No." := Database::"Data Export Entry";
+        HttpCallLog."CXW Source Entry No" := pDataExportEntryNo;
         HttpCallLog."CXW Endpoint URL" := CopyStr(pEndpointUrl, 1, MaxStrLen(HttpCallLog."CXW Endpoint URL"));
         HttpCallLog."CXW Success" := pSuccess;
         HttpCallLog."CXW HTTP Status Code" := pHttpStatusCode;
@@ -459,4 +477,6 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         ApiInterfaceNotFoundErr: Label 'API interface %1 (selected on the general sales price setup) no longer exists.', Comment = '%1 = API interface code';
         AuthRedactedTxt: Label '***redacted***', Locked = true;
         NetworkErrorTxt: Label 'The request could not be sent (network error).';
+        // Reserved: must not exist as "Data Export API Setup" code, so ChronextBC's "Export Data" cannot resend these entries without SigV4.
+        SalesPriceDestinationCodeLbl: Label 'SALESPRICE', Locked = true;
 }
