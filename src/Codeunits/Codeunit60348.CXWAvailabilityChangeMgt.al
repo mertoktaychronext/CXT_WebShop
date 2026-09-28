@@ -233,7 +233,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityCalculation: Codeunit "CXW Availability Calculation";
         CountryRegion: Record "Country/Region";
     begin
-        CountryRegion.SetRange("CXW Webshop Delivery Time Active", true);
+        CountryRegion.SetRange("CXW Webshop Deli. Time Active", true);
         if not CountryRegion.FindSet() then
             exit;
 
@@ -265,7 +265,7 @@ codeunit 60348 "CXW Availability Change Mgt"
     begin
         if not CountryRegion.Get(CountryRegionCode) then
             exit;
-        if not CountryRegion."CXW Webshop Delivery Time Active" then
+        if not CountryRegion."CXW Webshop Deli. Time Active" then
             exit;
 
         if not Item.FindSet() then
@@ -289,7 +289,7 @@ codeunit 60348 "CXW Availability Change Mgt"
     var
         CountryRegion: Record "Country/Region";
     begin
-        CountryRegion.SetRange("CXW Webshop Delivery Time Active", true);
+        CountryRegion.SetRange("CXW Webshop Deli. Time Active", true);
         if not CountryRegion.FindSet() then
             exit;
 
