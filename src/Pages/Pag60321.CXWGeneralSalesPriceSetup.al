@@ -21,6 +21,11 @@ page 60321 "CXW General Sales Price Setup"
                     ApplicationArea = All;
                     ToolTip = 'Watch will be deactivated on WebShop if the sales price is below min. margin';
                 }
+                field("CXW Prices Incl. VAT"; Rec."CXW Prices Incl. VAT")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the default value for Price Includes VAT on manually created and imported sales price checking lines.';
+                }
             }
             group("Non Stock Price Formula")
             {

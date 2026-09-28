@@ -51,6 +51,11 @@ page 60322 "CXW Sales Price Checking List"
                     ToolTip = 'Specifies the country/region the line was created for by Add all Countries. Blank for imported source lines.';
 
                 }
+                field("CXW Price Includes VAT"; Rec."CXW Price Includes VAT")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether the final price includes VAT. This value is copied to generated country lines and the final sales price.';
+                }
                 field("CXW Starting Date"; Rec."CXW Starting Date")
                 {
                     ApplicationArea = All;
@@ -364,6 +369,12 @@ page 60322 "CXW Sales Price Checking List"
         Rec.DeleteAll();
     end;
 
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        if g_recGenSPSetup.Get() then
+            Rec."CXW Price Includes VAT" := g_recGenSPSetup."CXW Prices Incl. VAT";
+    end;
+
     trigger OnModifyRecord(): Boolean
     begin
         if Rec."CXW Accept New Setup" then
@@ -396,6 +407,7 @@ page 60322 "CXW Sales Price Checking List"
         g_decNonStockPricePercentFromPrev: Decimal;
         g_recGenSPSetup: Record "CXW General Sales Price Setup";
         TXT009: Label 'Please delete existing entries to import new price';
+        FinalPriceMustBeGreaterThanZeroErr: Label 'Final price must be greater than zero to calculate margin.';
         UpdateSalesPriceCheck: Record "CXW Sales Price Checking";
         g_cuExportGatewaySalesPrice: Codeunit "CXW Export Gateway Sales Price";
         ExportResultMsg: Label '%1 of %2 approved lines exported. Lines already exported were skipped.', Comment = '%1 = number of lines actually exported, %2 = number of approved lines considered';
@@ -454,9 +466,12 @@ page 60322 "CXW Sales Price Checking List"
                     g_recILE.CalcFields("Cost Amount (Actual)");
                     g_decSPExclVAT := (g_recSalesPriceCheck."CXW Stock Price" * 100) / 119;
                     g_decProfit := g_decSPExclVAT - g_recILE."Cost Amount (Actual)";
-                    g_decProfitPercent := Round((g_decProfit / g_decSPExclVAT) * 100, 0.01, '=');
-                    if g_decProfitPercent < g_recGenSPSetup."CXW Minimum Margin %" then
-                        g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT003, g_decProfitPercent, g_recGenSPSetup."CXW Minimum Margin %");
+                    if g_decSPExclVAT <> 0 then begin
+                        g_decProfitPercent := Round((g_decProfit / g_decSPExclVAT) * 100, 0.01, '=');
+                        if g_decProfitPercent < g_recGenSPSetup."CXW Minimum Margin %" then
+                            g_recSalesPriceCheck."CXW Remark" := StrSubstNo(TXT003, g_decProfitPercent, g_recGenSPSetup."CXW Minimum Margin %");
+                    end else
+                        g_recSalesPriceCheck."CXW Remark" := FinalPriceMustBeGreaterThanZeroErr;
                 end;
 
                 if (g_recSalesPriceCheck."CXW Starting Date" > g_recSalesPriceCheck."CXW Ending Date") and (g_recSalesPriceCheck."CXW Ending Date" <> 0D) then
@@ -503,6 +518,7 @@ page 60322 "CXW Sales Price Checking List"
         g_recSalesPriceCheck2."CXW Item No." := p_recSourceLine."CXW Item No.";
         g_recSalesPriceCheck2."CXW Country Code" := p_recCountryRegion.Code;
         g_recSalesPriceCheck2."CXW Currency Code" := p_recCountryRegion."CXW Sales Price Currency Code";
+        g_recSalesPriceCheck2."CXW Price Includes VAT" := p_recSourceLine."CXW Price Includes VAT";
 
         if g_recSalesPriceCheck2."CXW Currency Code" = p_recSourceLine."CXW Currency Code" then begin
             g_recSalesPriceCheck2."CXW Stock Price" := RoundUpToTen(p_recSourceLine."CXW Stock Price");

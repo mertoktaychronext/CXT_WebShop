@@ -96,6 +96,12 @@ table 60311 "CXW General Sales Price Setup"
                 l_recApiInterfaceSetup.TestField("CXW Source Table No.", Database::"Sales Price");
             end;
         }
+        field(16; "CXW Prices Incl. VAT"; Boolean)
+        {
+            Caption = 'Prices Incl. VAT';
+            DataClassification = ToBeClassified;
+            InitValue = true;
+        }
     }
 
     keys

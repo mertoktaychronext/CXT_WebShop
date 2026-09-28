@@ -30,6 +30,7 @@ codeunit 60329 "CXW Export Gateway Sales Price"
     begin
         vSalesPrice.Validate("Currency Code", pSalesPriceChecking."CXW Currency Code");
         vSalesPrice.Validate("Unit Price", pSalesPriceChecking."CXW Stock Price");
+        vSalesPrice.Validate("Price Includes VAT", pSalesPriceChecking."CXW Price Includes VAT");
         vSalesPrice."CXW Unit Price (LCY)" := ResolveUnitPriceLCY(pSalesPriceChecking, vSalesPrice."Unit Price");
         vSalesPrice."CXW Strike-Price incl. VAT" := pSalesPriceChecking."CXW Strike Price";
         vSalesPrice."CXW Rec. Retail Price incl VAT" := pSalesPriceChecking."CXW Recom. Retail Price";
@@ -98,12 +99,12 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         for Index := 1 to RecRef.FieldCount do begin
             FldRef := RecRef.FieldIndex(Index);
             if (FldRef.Name <> 'Item No.') and (FldRef.Name <> 'Variant Code') then
-                AddFieldToJson(JsonObj, FldRef.Name, FldRef.Value);
+                AddFieldToJson(JsonObj, GetExportFieldName(FldRef.Name), FldRef.Value);
         end;
         JsonObj.Add('Item No.', ExportItemNo);
         JsonObj.Add('Variant Code', ExportVariantCode);
         // "Sales Price" has no country in its key - the country of the checking line is sent alongside.
-        JsonObj.Add('CXW Country Code', pCountryCode);
+        JsonObj.Add('Country Code', pCountryCode);
         JsonObj.WriteTo(JsonText);
 
         FileName :=
@@ -496,6 +497,14 @@ codeunit 60329 "CXW Export Gateway Sales Price"
             else
                 vJsonObj.Add(pFieldName, Format(pFieldValue, 0, 9));
         end;
+    end;
+
+    local procedure GetExportFieldName(pFieldName: Text): Text
+    begin
+        if CopyStr(pFieldName, 1, 4) = 'CXW ' then
+            exit(DelStr(pFieldName, 1, 4));
+
+        exit(pFieldName);
     end;
 
     var
