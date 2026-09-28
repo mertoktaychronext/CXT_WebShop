@@ -96,6 +96,20 @@ table 60311 "CXW General Sales Price Setup"
                 l_recApiInterfaceSetup.TestField("CXW Source Table No.", Database::"Sales Price");
             end;
         }
+        field(16; "CXW Max. Export Attempts"; Integer)
+        {
+            Caption = 'Max. Export Attempts';
+            DataClassification = ToBeClassified;
+            InitValue = 3;
+            MinValue = 1;
+        }
+        field(17; "CXW Archive Country Code"; Code[10])
+        {
+            Caption = 'Archive Country Code';
+            DataClassification = ToBeClassified;
+            InitValue = 'DE';
+            TableRelation = "Country/Region";
+        }
     }
 
     keys

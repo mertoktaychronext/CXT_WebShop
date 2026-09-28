@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Business Central (AL) extension covers webshop sales price management: CSV import into a staging table, business validation (margin, price swings), approval by a staff member, optionally expanding an approved price to all activated foreign currencies, and uploading approved prices to an external system. The "Upload Sales Price" action writes each approved price into the standard "Sales Price" table and a versioned "CXW Sales Price Archive" entry before sending it to a configurable API interface. A second, independent component for file-based price import (not yet live) rounds out the project. The project is a migration from a legacy, long-grown Dynamics NAV system into modern, SaaS-capable AL.
+This Business Central (AL) extension covers webshop sales price management: CSV import into a staging table, business validation (margin, price swings), approval by a staff member, optionally expanding an approved price to all activated foreign currencies, and uploading approved prices to an external system. The "Release Sales Prices" action writes each approved country price into the standard "Sales Price" table, archives the DE price as a versioned "CXW Sales Price Archive" entry, keeps the price of every country in "CXW Sales Price Export" and queues it as a "Data Export Entry"; a job queue job sends it to a configurable API interface. A second, independent component for file-based price import (not yet live) rounds out the project. The project is a migration from a legacy, long-grown Dynamics NAV system into modern, SaaS-capable AL.
 
 > **Update 2026-08-10:** All 26 objects in this extension (previously IDs 51000–51007, "SL" prefix) were moved, as a pure rename/renumber, into the registered idRange block 60311–60336 ("CXW" prefix), as were all fields they define ("CXW "/"CXW" prefix). Business logic, behavior, and field captions are unchanged. Two identifiers additionally had to be shortened due to AL's 30-character limit: Table 60316 "CXW Price Import Protocol" (no "Sales" in the identifier) and the field "CXW Non Stock Price Thresh %" on Table 60311 (caption still "Non Stock Price Threshold %"). This manual has been updated accordingly.
 
@@ -11,6 +11,14 @@ As a second, functionally independent component, the extension includes **SellWa
 As a third, likewise functionally independent component, the extension includes the **Workshop authenticity check** (Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Pages 60338–60340, Codeunit 60331, PermissionSets 60301/60302): once a purchased watch has arrived, it is handed over to an external workshop via the "Send to Workshop" action on the purchase order page (capturing the manufacturer serial number), and the workshop reports back authenticity and item attributes through a bidirectional custom API (Page 60339, OAuth2-S2S authenticated). A job-queue-driven codeunit (60331) processes checked lines: if authenticity is confirmed, only the goods receipt is posted and the reported attributes are written as standard item attributes; if authenticity is disproved, the purchase order is cancelled. See the "Workshop Authenticity Check" section below for details.
 
 As a fourth, new component, the extension includes **Consignment Sales** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): when a sales invoice is posted with a line for an item whose `"CXB Consignment Sales"` = true (a field supplied by the CHX.Base dependency), an event subscriber on `Codeunit "Sales-Post"` creates a consignment posting entry and automatically resolves the matching, received-but-not-yet-invoiced purchase order. A job-queue-driven codeunit posts due entries (due date = sales invoice posting date + a configurable delay in days) automatically as a purchase invoice. See the "Consignment Sales" section below for details.
+
+> **Update 2026-09-28 (sales price export via the job queue, version 27.0.0.6):** "Upload Sales Price" has been replaced by "Release Sales Prices". The action no longer sends; it writes back, archives **only the archive country** (new setup field "CXW Archive Country Code", default DE), stores the price of every country in the new Table 60320 "CXW Sales Price Export", and creates a "Data Export Entry" (`SALESPRICE`) in the new status **"CXW Pending"** (enumextension 60300 on "Data Export Statuses") that only points to Table 60320 via `Source Record ID`. Source lines without a country are skipped. Codeunit 60332 "CXW Export Sales Price Job" builds the JSON in the **NAV-compatible format** (29 camelCase keys, see below) and sends it; retries up to "CXW Max. Export Attempts", after that manually via "Requeue Sales Price" (PageExtension 60336). Details: `openspec/changes/sales-price-export-job-queue/`.
+>
+> Sample payload:
+> ```json
+> {"itemNo":"A61087","salesType":"2","salesCode":"","startingDate":"","currencyCode":"USD","countryRegionCode":"DM","unitOfMeasureCode":"","minimumQuantity":0,"unitPrice":2790,"priceIncludesVat":false,"allowInvoiceDisc":true,"vatBusPostingGrPrice":"","endingDate":"","allowLineDisc":true,"id":"{77BBD1E0-A4D4-451B-A55A-1395CC7230F7}","remark":"","nonStockPrice":0,"lastModifiedUserID":"","lastModifiedDate":"","reasonCode":"CatMan","comment":"","strikePriceInclVat":0,"recomRetailPriceInclVat":0,"unitPriceLcy":2446.72455,"startingTime":"","endingTime":"","profit":0,"unitCost":0,"vatProdPostingGroup":"MDE1900"}
+> ```
+> Sources: price, validity and text values from Table 60320; `salesType`, `salesCode`, `unitOfMeasureCode`, `minimumQuantity`, `priceIncludesVat`, `allowInvoiceDisc`, `vatBusPostingGrPrice`, `allowLineDisc` from "Sales Price"; `vatProdPostingGroup`, `unitCost` (`"Unit Cost"`) from Item; `profit` = margin in % (net LCY price via VAT Posting Setup); `reasonCode` = enum name (untranslated). Dropped compared to NAV: variant, promotion, set, DiVA and size/colour fields as well as `priceGroupId`, `fallBackPrice`, `documentUnitPrice`, `deliveryCostLimitCode`, `priceChangeSuggWriteOff`.
 
 > **Update 2026-09-24 (sales price export logs to "Data Export Entry"):** Codeunit 60329 no longer writes each transmission to Table 60314 "CXW Sales Price Outbound File"; like the availability export (Codeunit 60347) it now writes to ChronextBC table 50103 "Data Export Entry" (Destination Code `SALESPRICE`, payload, file name, status Processed/Error, error message). The entry is only created **after** the HTTP call, directly with its final status (`CreateDataExportEntry`), because ChronextBC's "Data Export Mgt." (50102) would resend every entry in status "Waiting to Process" through "Data Export API Sender". `SALESPRICE` is reserved and must **not** be created as a "Data Export API Setup" code — otherwise "Export Data" on Page 50108 would send without AWS SigV4. "CXW Http Call Log" now points to the "Data Export Entry" ("CXW Source Table No." = 50103). Table 60314 is `ObsoleteState = Pending` (tag 27.0.0.3). Configuration and authentication ("CXW API Interface Setup") are unchanged. Details: `openspec/changes/sales-price-export-data-export-entry/`.
 
@@ -96,22 +104,47 @@ Xmlport 60328 "CXW Import Sales Price"
    ▼
 Table 60312 "CXW Sales Price Checking"  ◄── Page 60322 "CXW Sales Price Checking List"
    │  (Item No./Currency Code/Country Code — blank       (Validate / Approve / Add all Countries /
-   │   country = imported source line; no variant code)  Upload Sales Price)
+   │   country = imported source line; no variant code)  Release Sales Prices)
    │
-   │  Action "Upload Sales Price" → Codeunit 60329 "CXW Export Gateway Sales Price"
+   │  Action "Release Sales Prices" — country lines only ("CXW Country Code" <> ''),
+   │  each via Codeunit.Run(Codeunit 60333 "CXW Release Sales Price Line")
+   │  in its own transaction (failure → line rolled back, Export Status = Error)
    │
-   ├─► WriteBackAndArchive: writes/updates standard table "Sales Price"
-   │      (Sales Type = All Customers) and inserts a new, incrementally
-   │      versioned row into Table 60313 "CXW Sales Price Archive"
-   │      (view via Page 60323, read-only)
+   ├─► Codeunit 60329.WriteBackAndArchive: writes/updates standard table
+   │      "Sales Price" (Sales Type = All Customers); only if the country equals
+   │      "CXW Archive Country Code" (Table 60311, default DE) also inserts a new,
+   │      incrementally versioned row into Table 60313 "CXW Sales Price Archive"
    │
-   └─► CreateExternalInterfaceFile: reflects the "Sales Price" record into
-          JSON and POSTs it via HttpClient to the endpoint configured on
+   ├─► Codeunit 60329.QueueExport: Table 60320 "CXW Sales Price Export"
+   │      (price of that country, Unit Price (LCY) calculated at release,
+   │      SystemId of the "Sales Price") + ChronextBC "Data Export Entry"
+   │      (Destination Code SALESPRICE, Source Record ID = Table 60320 record,
+   │      status "CXW Pending" from enumextension 60300 — Insert + Modify in the
+   │      same transaction, "Waiting to Process" is never committed)
+   │      → checking line Export Status = Queued
+   │
+   ▼
+Job queue: Codeunit 60332 "CXW Export Sales Price Job"
+   │  selects SALESPRICE entries with status "CXW Pending", or Error with
+   │  "Attempt Count" < "CXW Max. Export Attempts" (Table 60311, 0 → 3);
+   │  per entry Commit + Codeunit.Run(Codeunit 60334 "CXW Export Sales Price
+   │  Entry"), runtime error → SetAttemptResult(Error); the job run itself
+   │  never ends with an error
+   │
+   └─► Codeunit 60329.ExportEntry: builds the JSON on the first attempt
+          (BuildSalesPriceJson, 29 fixed camelCase keys from Table 60320,
+          "Sales Price" via GetBySystemId and Item; profit = margin % based on
+          VAT Posting Setup) and stores it as payload; retries send the stored
+          payload unchanged. SendToApiInterface POSTs via HttpClient to the endpoint configured on
           Table 60317 "CXW API Interface Setup" (overview: Page 60324; per-interface
           detail setup incl. HTTP method/SOAPAction/authentication: Page 60325
           "CXW API Interface Setup Card", reachable via drilldown on the code or
           the "Edit Details" action on Page 60324), using the
-          interface selected on Table 60311's "CXW API Interface Code" field.
+          interface selected on Table 60311's "CXW API Interface Code" field,
+          and sets status, Attempt Count, Last Attempt At, Processed At or
+          Error Message on the existing entry via SetAttemptResult.
+          PageExtension 60336 on ChronextBC Page 50108 offers "Requeue Sales
+          Price" (Error → CXW Pending, Attempt Count = 0, payload kept).
           Since the HTTP-logging update, SendToApiInterface logs every call
           (success, non-success status, network failure) into Table 60302
           "CXW Http Call Log" ("CXW Source Table No." = 50103), with the
@@ -365,8 +398,12 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 
 | Object | Element | Purpose |
 |---|---|---|
-| Codeunit 60329 | `WriteBackAndArchive(SalesPriceChecking: Record "CXW Sales Price Checking"; var SalesPrice: Record "Sales Price")` | Writes/updates a "Sales Price" record from an approved checking line (Sales Type = All Customers) and archives a new version. `[TryFunction]` — a failure is caught and reported as `false` instead of aborting the caller's whole batch. |
-| Codeunit 60329 | `CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"; pCountryCode: Code[10]): Boolean` | Reflects a "Sales Price" record into JSON, adds the checking line's `"CXW Country Code"` (file name `SalesPrice_<Item>_<Currency>_<Country>.json`), sends it to the configured API interface, records the result via `CreateDataExportEntry` as a ChronextBC "Data Export Entry" (Destination Code `SALESPRICE`), and logs the call in Table 60302 "CXW Http Call Log". |
+| Codeunit 60329 | `WriteBackAndArchive(SalesPriceChecking: Record "CXW Sales Price Checking"; var SalesPrice: Record "Sales Price")` | Writes/updates a "Sales Price" record from an approved checking line (Sales Type = All Customers) and archives a new version if the country equals "CXW Archive Country Code". No longer a TryFunction — isolation via Codeunit 60333 and `Codeunit.Run`. |
+| Codeunit 60329 | `QueueExport(SalesPriceChecking: Record "CXW Sales Price Checking"; SalesPrice: Record "Sales Price")` | Creates the Table 60320 record and the "Data Export Entry" (`SALESPRICE`, status "CXW Pending", file name `SalesPrice_<Item>_<Currency>_<Country>.json`). |
+| Codeunit 60329 | `ExportEntry(var DataExportEntry: Record "Data Export Entry")` | Builds the payload (29 keys) on the first attempt and sends it to the configured API interface; result via `SetAttemptResult`, log in Table 60302 "CXW Http Call Log". Runtime errors (missing record, setup) are passed on to the caller. |
+| Codeunit 60329 | `SetAttemptResult(var DataExportEntry; pSuccess: Boolean; pErrorMessage: Text)` / `GetDestinationCode(): Code[20]` | Records an attempt on the entry (Attempt Count +1, status, timestamps, error text) or returns the reserved destination code `SALESPRICE`. |
+| Codeunit 60332 | `OnRun` (TableNo = "Job Queue Entry") | Job queue job for the sales price export, see Architecture. |
+| Codeunit 60333 / 60334 | `OnRun` | Workers for `Codeunit.Run`: release of one checking line or export of one "Data Export Entry" in its own transaction. |
 | Page 60322 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Calculates the non-stock price for lines within a price range. Currently not called from any active code path. |
 | Codeunit 60330 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Raised when the automated file import changes an existing sales price. Currently has no subscriber. |
 | Table 60317 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Stores/reads the API key for an interface in Isolated Storage (module scope) rather than in a plain table field. |
@@ -391,7 +428,8 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 60302 CXW Http Call Log | Entry No | Shared log of every HTTP call made by `CreateEntryInexternalFile` (SellWatch) AND `SendToApiInterface` (sales price export) – success/failure, status code, redacted request, response as a blob; "CXW Source Table No." (60301, 50103 "Data Export Entry", or 60314 for legacy entries) + "CXW Source Entry No" identify the triggering record |
 | 60311 CXW General Sales Price Setup | Primary Key (singleton) | Base settings, incl. export toggle and selected API interface |
 | 60312 CXW Sales Price Checking | Item No., Currency Code, Country Code | Staging area for import/validation/approval |
-| 60313 CXW Sales Price Archive | + Version No. | History; populated automatically by "Upload Sales Price" (Page 60322) via Codeunit 60329, "Version No." incremented per Item No./Currency Code/Country Code |
+| 60313 CXW Sales Price Archive | + Version No. | History; populated by "Release Sales Prices" (Page 60322) via Codeunit 60329 **for the archive country only** ("CXW Archive Country Code", default DE), "Version No." incremented per Item No./Currency Code/Country Code |
+| 60320 CXW Sales Price Export | Entry No. (AutoIncrement) | Released price per country line (prices, Unit Price (LCY), validity, reason, comment, remark, modification info, SystemId of the "Sales Price", Data Export Entry No., FlowField Export Status); source of the JSON payload; view on Page 60320 "CXW Sales Price Export Entries" |
 | 60314 CXW Sales Price Outbound File | Entry No. | **Obsolete Pending since 27.0.0.3** — no longer written (replaced by ChronextBC "Data Export Entry", Destination Code `SALESPRICE`); only holds legacy data up to 27.0.0.2 |
 | 60315 CXW Sales Price Inbound File | Entry No. | For automated file import (not wired live) |
 | 60316 CXW Price Import Protocol | Entry No. | Error log for the automated import (still the sales price import protocol table; "Sales" dropped from the identifier due to AL's 30-character limit) |
@@ -401,7 +439,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 
 ## Permission Set
 
-The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. Since 27.0.0.3 the set also grants `RIM` on the ChronextBC table "Data Export Entry" that the price export writes to. The set still needs to be actively assigned to a user group.
+The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. Since 27.0.0.3 the set also grants `RIM` on the ChronextBC table "Data Export Entry" that the price export writes to. Since 27.0.0.6 it additionally covers `RIMD` on Table 60320, Page 60320 and Codeunits 60332–60334; the job queue entry's user needs this set. The set still needs to be actively assigned to a user group.
 
 For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the two SellWatch-only tables (60300–60301) plus the shared Table 60302 "CXW Http Call Log", along with execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309, where Page 60309 "CXW Http Call Log" is likewise shared). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
 
@@ -427,8 +465,10 @@ No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is 
 ## Known Limitations
 
 - **"Add all Countries" only converts correctly from a source line in local currency.** The conversion (`price * (1 / rate)` via `GetLastestExchangeRate`) assumes the imported source line is in LCY. A source line in a foreign currency (e.g. CHF) would be converted incorrectly for countries with a different currency. Countries sharing the source line's currency receive the price unchanged.
-- **"Sales Price" has no country.** For several countries sharing a currency, the same "Sales Price" record (key without country) is written several times with identical values; the country is kept only in the archive (Table 60313) and in the transmitted JSON (`"CXW Country Code"`).
-- **"Approve" itself does not carry prices into the standard "Sales Price" table or into "CXW Sales Price Archive".** The action only sets the approval flags on Table 60312. The carry-over happens in the downstream "Upload Sales Price" step (Page 60322, Codeunit 60329), which writes both "Sales Price" (Sales Type = All Customers) and "CXW Sales Price Archive" (with an incremented "Version No.") before the outbound file is generated.
+- **"Sales Price" has no country.** For several countries sharing a currency, the same "Sales Price" record (key without country) is written several times — the last released price wins. The country and the price per country are kept in Table 60320 and in the transmitted JSON (`countryRegionCode`); the job therefore reads prices from Table 60320, not from "Sales Price".
+- **Source lines without a country are not released.** Without an activated DE country line there is no EUR price in "Sales Price", no archive entry and no export.
+- **Table 60320 has no retention policy** and grows with every release.
+- **"Approve" itself does not carry prices into the standard "Sales Price" table or into "CXW Sales Price Archive".** The action only sets the approval flags on Table 60312. The carry-over happens in the downstream "Release Sales Prices" step (Page 60322, Codeunits 60333/60329).
 - **(Fixed 2026-08-10) `"CXW Unit Price (LCY)"` was never populated automatically** — `WriteBackAndArchive` used to write only the standard `"Unit Price"` field, while Page 60322's `fnValidate` divided by `"CXW Unit Price (LCY)"` when comparing against the previous price. Since that field stayed `0` on every automated write, every second "Validate" run against an item/currency that already had an uploaded price reliably crashed with `Attempted to divide by zero.` and aborted the whole batch. `Codeunit 60329`'s new `ResolveUnitPriceLCY` now populates the field on every write (converting via the exchange rate already captured on the checking line, or a fallback lookup); `fnValidate` also now skips the comparison instead of dividing when the previous record's value is still `0`. "Sales Price" records written before this fix stay at `0` until the next time they're written back through "Upload Sales Price" — no retroactive backfill (see `openspec/changes/archive/2026-08-10-sales-price-unit-price-lcy-autofill/design.md`).
 - **`Reason Code` as an enum with no true blank value**: the enum always has a default value (`CatMan`) — there is no "no reason given" state.
 - **The file-based import component (Codeunit 60330, Tables 60315–60316)** is fully implemented but not wired into any live process or scheduled anywhere (no job queue entry). `WriteSalesPrices`'s `SalesPrice.Get(...)` call now passes exactly the standard "Sales Price" table's 8 real primary-key segments (verified against the symbols in `.alpackages/Microsoft_Base Application_*.app`), with `''` for "Variant Code" — the previously-documented key mismatch here is resolved.
