@@ -47,7 +47,7 @@
         </trans-unit>
         <trans-unit id="TableExtension 4129007588 - Field 25922190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3891454143">
           <source>Specifies whether this location is included in the webshop availability calculation.</source>
-          <target>[NAB: SUGGESTION]Gibt an, ob dieser Standort in die Berechnung der Verfügbarkeit im Webshop einbezogen wird.</target>
+          <target>Gibt an, ob dieser Standort in die Berechnung der Verfügbarkeit im Webshop einbezogen wird.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggestion added from 'PageExtension 4079945439 - Control 25922190 - Property 1295455071'</note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Location Availability - Field CXW Main Location - Property ToolTip</note>
@@ -840,7 +840,7 @@
         </trans-unit>
         <trans-unit id="Table 2693214649 - Field 4027450871 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Price Includes VAT</source>
-          <target>[NAB: SUGGESTION]Preis inkl. MwSt.</target>
+          <target>Preis inkl. MwSt.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Price Includes VAT - Property Caption</note>
@@ -3877,7 +3877,7 @@
         </trans-unit>
         <trans-unit id="TableExtension 2485353633 - Field 863245005 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
           <source>Consignment Invoice Delay (Days)</source>
-          <target>[NAB: SUGGESTION]Verzögerung Kommissionsrechnung (Tage)</target>
+          <target>Verzögerung Kommissionsrechnung (Tage)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Consign.Inv.Delay(Days) - Property Caption</note>
