@@ -38,6 +38,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Location Card - Control CXW Main Location - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="TableExtension 3342327973 - Field 1971448704 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Sales Price Activated</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country/Region - Field CXW Sales Price Activated - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3342327973 - Field 311270661 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Sales Price Currency Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country/Region - Field CXW Sales Price Currency Code - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 4129007588 - Field 25922190 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3891454143">
           <source>Specifies whether this location is included in the webshop availability calculation.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -333,6 +343,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW General Sales Price Setup - Field CXW API Interface Code - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3250934196 - Field 2995900485 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Archive Country Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW General Sales Price Setup - Field CXW Archive Country Code - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3250934196 - Field 1463702699 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Cat 1 Non Stock %</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -378,6 +393,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW General Sales Price Setup - Field CXW If Stock Price To Cat 3 - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3250934196 - Field 751786392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Max. Export Attempts</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW General Sales Price Setup - Field CXW Max. Export Attempts - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3250934196 - Field 3588971011 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Minimum Margin %</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -392,11 +412,6 @@
           <source>Price Export Active</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW General Sales Price Setup - Field CXW Price Export Active - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Table 3250934196 - Field 2160839809 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Prices Incl. VAT</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW General Sales Price Setup - Field CXW Prices Incl. VAT - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 3250934196 - Field 304309729 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>CXW Primary Key</source>
@@ -698,11 +713,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Old Stock Price - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Table 2693214649 - Field 4027450871 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Price Includes VAT</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Price Includes VAT - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Table 2693214649 - Field 2935296151 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Reason Code</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -752,6 +762,126 @@
           <source>Version No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Checking - Field CXW Version No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Export</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 169060713 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Comment</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Comment - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1447630355 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Country Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Country Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 3842441922 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 2950866181 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Export Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Data Export Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1678837089 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Ending Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 4150152242 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Ending Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Ending Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1454455705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 2503353027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exchange Rate Amount</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Exchange Rate Amount - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 3149963419 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Exchange Rate Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Exchange Rate Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1994401728 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Export Status</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Export Status - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1887293546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 3554265373 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Modified Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Last Modified Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 708534573 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Modified UserID</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Last Modified UserID - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1663150634 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Non Stock Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Non Stock Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 2935296151 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reason Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Reason Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1166914034 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Recom. Retail Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Recom. Retail Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1371762194 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Remark</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Remark - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 3376770923 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price SystemId</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Sales Price SystemId - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 1944679428 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Starting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 24229123 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Starting Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Starting Time - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 2734975797 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Strike Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Strike Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 3587974337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Unit Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 910089223 - Field 27722772 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit Price (LCY)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Sales Price Export - Field CXW Unit Price (LCY) - Property Caption</note>
         </trans-unit>
         <trans-unit id="Table 622671054 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Inbound File</source>
@@ -1293,10 +1423,30 @@
           <note from="Developer" annotates="general" priority="2">%1 = API interface code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType ApiInterfaceNotFoundErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 1695587631 - NamedType 927512705" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The sales price export record of data export entry %1 no longer exists.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = data export entry no.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType ExportRecordNotFoundErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1695587631 - NamedType 2184892397" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Item %1 no longer exists.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = item no.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType ItemNotFoundErr</note>
+        </trans-unit>
         <trans-unit id="Codeunit 1695587631 - NamedType 2404273434" size-unit="char" translate="yes" xml:space="preserve">
           <source>The request could not be sent (network error).</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType NetworkErrorTxt</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 1695587631 - NamedType 3247827893" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The sales price of item %1 for country %2 no longer exists.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = item no., %2 = country code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Gateway Sales Price - NamedType SalesPriceNotFoundErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3715849062 - NamedType 2771744479" size-unit="char" translate="yes" xml:space="preserve">
+          <source>An unexpected error occurred while exporting the sales price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW Export Sales Price Job - NamedType UnexpectedErrorTxt</note>
         </trans-unit>
         <trans-unit id="Codeunit 621582641 - NamedType 234181524" size-unit="char" translate="yes" xml:space="preserve">
           <source>Expected %1 columns in the header row, but found %2.</source>
@@ -1753,6 +1903,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW General Sales Price Setup - Control CXW API Interface Code - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 3250934196 - Control 2995900485 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the country whose released sales prices are written to the sales price archive. Prices of all other countries are only kept in the sales price export entries.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW General Sales Price Setup - Control CXW Archive Country Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3250934196 - Control 751786392 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies how often the sales price export job tries to send a price. After that, the entry stays in status Error until it is requeued manually.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW General Sales Price Setup - Control CXW Max. Export Attempts - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 3250934196 - Control 1278700755 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies whether approved sales prices are sent to an external system via the selected API interface.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -1857,11 +2017,6 @@
           <source>Watch will be deactivated on WebShop if the sales price is below min. margin</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW General Sales Price Setup - Control CXW Minimum Margin % - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 3250934196 - Control 2160839809 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the default value for Price Includes VAT on manually created and imported sales price checking lines.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW General Sales Price Setup - Control CXW Prices Incl. VAT - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 3250934196 - Control 176142393 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Threshold</source>
@@ -2338,16 +2493,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType DoneMsg</note>
         </trans-unit>
-        <trans-unit id="Page 2641804079 - NamedType 2020946312" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 of %2 approved lines exported. Lines already exported were skipped.</source>
-          <note from="Developer" annotates="general" priority="2">%1 = number of lines actually exported, %2 = number of approved lines considered</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType ExportResultMsg</note>
-        </trans-unit>
-        <trans-unit id="Page 2641804079 - NamedType 2283399737" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Final price must be greater than zero to calculate margin.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType FinalPriceMustBeGreaterThanZeroErr</note>
-        </trans-unit>
         <trans-unit id="Page 2641804079 - NamedType 3659624548" size-unit="char" translate="yes" xml:space="preserve">
           <source>not possible</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2358,10 +2503,20 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType NothingToProcessErr</note>
         </trans-unit>
-        <trans-unit id="Page 2641804079 - NamedType 4266715801" size-unit="char" translate="yes" xml:space="preserve">
-          <source>%1 line(s) were already sent previously. Do you want to send them again?</source>
-          <note from="Developer" annotates="general" priority="2">%1 = number of previously sent lines</note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType ResendAlreadySentQst</note>
+        <trans-unit id="Page 2641804079 - NamedType 2203813651" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Only source lines without a country are approved. Run Add all Countries first.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType OnlySourceLinesErr</note>
+        </trans-unit>
+        <trans-unit id="Page 2641804079 - NamedType 2414038457" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 line(s) were already queued for transmission. Do you want to release them again?</source>
+          <note from="Developer" annotates="general" priority="2">%1 = number of already queued lines</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType ReleaseAgainQst</note>
+        </trans-unit>
+        <trans-unit id="Page 2641804079 - NamedType 2214090091" size-unit="char" translate="yes" xml:space="preserve">
+          <source>%1 of %2 prices queued for transmission.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = number of lines queued, %2 = number of approved country lines considered</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - NamedType ReleaseResultMsg</note>
         </trans-unit>
         <trans-unit id="Page 2641804079 - NamedType 2515162083" size-unit="char" translate="yes" xml:space="preserve">
           <source>New Final Price %1% less than existing Final Price %2</source>
@@ -2418,11 +2573,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Control CXW Country Code - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 2641804079 - Control 4027450871 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies whether the final price includes VAT. This value is copied to generated country lines and the final sales price.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Control CXW Price Includes VAT - Property ToolTip</note>
-        </trans-unit>
         <trans-unit id="Page 2641804079 - Control 3569840675 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>FinalPrice</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2448,20 +2598,30 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action SalesPriceArchiveNav - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2641804079 - Action 4097591310 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the released prices of all countries and the status of their transmission.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action SalesPriceExportEntriesNav - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2641804079 - Action 4097591310 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Export Entries</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action SalesPriceExportEntriesNav - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2641804079 - Action 36190024 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Export</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Export - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 2641804079 - Action 304293994 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Exports the approved sales prices to the outbound interface file.</source>
+        <trans-unit id="Page 2641804079 - Action 2726284497 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Writes the approved country prices to the sales prices and queues them for sending. The sales price export job sends them to the external system. Source lines without a country are skipped.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Upload Sales Price - Property ToolTip</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action ReleaseSalesPrices - Property ToolTip</note>
         </trans-unit>
-        <trans-unit id="Page 2641804079 - Action 304293994 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Upload Sales Price</source>
+        <trans-unit id="Page 2641804079 - Action 2726284497 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Release Sales Prices</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Upload Sales Price - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action ReleaseSalesPrices - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2641804079 - Action 3201496503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Import</source>
@@ -2492,6 +2652,151 @@
           <source>Validate</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Checking List - Action Validate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sales Price Export Entries</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 169060713 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the comment of the sales price line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Comment - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1447630355 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the country the price was released for.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Country Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 3842441922 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the currency of the released price. Blank means local currency.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 2950866181 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the data export entry that sends this price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Data Export Entry No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1678837089 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date until which the price is valid.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Ending Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 4150152242 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the time until which the price is valid.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Ending Time - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1454455705 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the number of the sales price export entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Entry No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 2503353027 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the exchange rate captured on the sales price line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Exchange Rate Amount - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 3149963419 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date of the exchange rate captured on the sales price line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Exchange Rate Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1994401728 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the current status of the related data export entry.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Export Status - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1887293546 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the item the price was released for.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Item No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 3554265373 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the sales price line was last changed before release.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Last Modified Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 708534573 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies who last changed the sales price line before release.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Last Modified UserID - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1663150634 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the released non-stock price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Non Stock Price - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 2935296151 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the reason for the price change.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Reason Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1166914034 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the released recommended retail price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Recom. Retail Price - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1371762194 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the remark of the sales price line.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Remark - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 1944679428 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the date from which the price is valid.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Starting Date - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 24229123 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the time from which the price is valid.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Starting Time - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 2734975797 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the released strike price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Strike Price - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 3587974337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the released final price in the currency of the country.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Unit Price - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 27722772 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the released final price converted to local currency at release time.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control CXW Unit Price (LCY) - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 577209412 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the price was released.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control SystemCreatedAt - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 577209412 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Released At</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control SystemCreatedAt - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 4000648066 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies who released the price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control SystemCreatedBy - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Control 4000648066 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Released By</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Control SystemCreatedBy - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Action 25878596 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Open the data export entry that sends this price.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Action DataExportEntry - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 3483905377 - Action 25878596 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Data Export Entry</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Sales Price Export Entries - Action DataExportEntry - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 62363589 - NamedType 3125803570" size-unit="char" translate="yes" xml:space="preserve">
           <source>A SellWatch Vendor Info entry with SRid '%1' already exists.</source>
@@ -2938,6 +3243,21 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">XmlPort CXW Import Sales Price - Control SetPriceForAllCountries - Property Caption</note>
         </trans-unit>
+        <trans-unit id="PageExtension 1105441254 - NamedType 2861378237" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 1105441254">
+          <source>%1 sales price entry(ies) set back to pending.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = number of requeued entries</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Data Export Entries - NamedType RequeuedMsg</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1105441254 - Action 4020295761 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 831122442">
+          <source>Sets the selected sales price entries with status Error back to pending, so that the sales price export job sends them again with the stored payload.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Data Export Entries - Action CXWRequeueSalesPrice - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 1105441254 - Action 4020295761 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 831122442">
+          <source>Requeue Sales Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Data Export Entries - Action CXWRequeueSalesPrice - Property Caption</note>
+        </trans-unit>
         <trans-unit id="PageExtension 3603935223 - NamedType 4114943979" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3603935223">
           <source>Item %1 has availability %2. Calculated delivery date: %3 (%4 day(s)).</source>
           <note from="Developer" annotates="general" priority="2">%1 = item no.; %2 = availability; %3 = delivery date; %4 = day count</note>
@@ -3163,6 +3483,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - Action CXW Send to Workshop - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 3342327973 - Field 1170953503 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Specifies whether delivery times for this country/region are calculated and exported to the webshop.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country Delivery Active - Field CXW Webshop Delivery Time Active - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 3342327973 - Field 1170953503 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 4148176377">
+          <source>Webshop Delivery Time Active</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Country Delivery Active - Field CXW Webshop Delivery Time Active - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 3660811184 - Field 2536215954 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2574427010">
           <source>Purchase Line No.</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -3228,10 +3558,10 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchase Line - Field CXW Used good - Property Caption</note>
         </trans-unit>
-        <trans-unit id="TableExtension 2485353633 - Field 863245005 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
+        <trans-unit id="TableExtension 2485353633 - Field 2072471027 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
           <source>Consignment Invoice Delay (Days)</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Consign.Inv.Delay(Days) - Property Caption</note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Consignment Invoice Delay (Days) - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2485353633 - Field 2393159316 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
           <source>SellWatch Item Template</source>
@@ -3333,6 +3663,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Sales Price Export Status - EnumValue Not Sent - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Enum 955253603 - EnumValue 749506527 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Queued</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Sales Price Export Status - EnumValue Queued - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Enum 955253603 - EnumValue 2561328176 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sent</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -3427,6 +3762,11 @@
           <source>WS checked</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Workshop Line Status - EnumValue WS checked - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="EnumExtension 3179618294 - EnumValue 1003506269 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Enum 3476488538">
+          <source>Pending (Sales Price)</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">EnumExtension CXW Data Export Statuses - EnumValue CXW Pending - Property Caption</note>
         </trans-unit>
         <trans-unit id="PermissionSet 2901653661 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>CXW Sell Watch API</source>

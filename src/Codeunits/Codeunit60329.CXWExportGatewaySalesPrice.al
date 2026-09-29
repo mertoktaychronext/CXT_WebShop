@@ -1,7 +1,8 @@
 codeunit 60329 "CXW Export Gateway Sales Price"
 {
-    [TryFunction]
     procedure WriteBackAndArchive(SalesPriceChecking: Record "CXW Sales Price Checking"; var SalesPrice: Record "Sales Price")
+    var
+        GenSPSetup: Record "CXW General Sales Price Setup";
     begin
         if not SalesPrice.Get(
              SalesPriceChecking."CXW Item No.", SalesPrice."Sales Type"::"All Customers", '',
@@ -23,15 +24,19 @@ codeunit 60329 "CXW Export Gateway Sales Price"
             SalesPrice.Modify(true);
         end;
 
-        ArchiveCheckingLine(SalesPriceChecking);
+        // Only the price of the archive country (DE) is archived; all countries are kept in "CXW Sales Price Export".
+        GenSPSetup.Get();
+        GenSPSetup.TestField("CXW Archive Country Code");
+        if SalesPriceChecking."CXW Country Code" = GenSPSetup."CXW Archive Country Code" then
+            ArchiveCheckingLine(SalesPriceChecking);
     end;
 
     local procedure UpdateSalesPriceFields(var vSalesPrice: Record "Sales Price"; pSalesPriceChecking: Record "CXW Sales Price Checking")
     begin
         vSalesPrice.Validate("Currency Code", pSalesPriceChecking."CXW Currency Code");
         vSalesPrice.Validate("Unit Price", pSalesPriceChecking."CXW Stock Price");
-        vSalesPrice.Validate("Price Includes VAT", pSalesPriceChecking."CXW Price Includes VAT");
-        vSalesPrice."CXW Unit Price (LCY)" := ResolveUnitPriceLCY(pSalesPriceChecking, vSalesPrice."Unit Price");
+        vSalesPrice."CXW Unit Price (LCY)" :=
+            ResolveUnitPriceLCY(pSalesPriceChecking."CXW Currency Code", pSalesPriceChecking."CXW Exchange Rate Amount", vSalesPrice."Unit Price");
         vSalesPrice."CXW Strike-Price incl. VAT" := pSalesPriceChecking."CXW Strike Price";
         vSalesPrice."CXW Rec. Retail Price incl VAT" := pSalesPriceChecking."CXW Recom. Retail Price";
         vSalesPrice."CXW Reason Code" := pSalesPriceChecking."CXW Reason Code";
@@ -39,23 +44,23 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         vSalesPrice."CXW Remark" := pSalesPriceChecking."CXW Remark";
     end;
 
-    local procedure ResolveUnitPriceLCY(pSalesPriceChecking: Record "CXW Sales Price Checking"; pUnitPrice: Decimal): Decimal
+    local procedure ResolveUnitPriceLCY(pCurrencyCode: Code[10]; pExchangeRateAmount: Decimal; pUnitPrice: Decimal): Decimal
     var
         CurrExchRate: Record "Currency Exchange Rate";
         ExchangeRateDate: Date;
         ExchangeRateAmt: Decimal;
     begin
-        if pSalesPriceChecking."CXW Currency Code" = '' then
+        if pCurrencyCode = '' then
             exit(pUnitPrice);
 
-        if pSalesPriceChecking."CXW Exchange Rate Amount" <> 0 then
-            exit(pUnitPrice / pSalesPriceChecking."CXW Exchange Rate Amount");
+        if pExchangeRateAmount <> 0 then
+            exit(pUnitPrice / pExchangeRateAmount);
 
-        CurrExchRate.SetRange("Currency Code", pSalesPriceChecking."CXW Currency Code");
+        CurrExchRate.SetRange("Currency Code", pCurrencyCode);
         if not CurrExchRate.FindLast() then
             exit(0);
 
-        CurrExchRate.GetLastestExchangeRate(pSalesPriceChecking."CXW Currency Code", ExchangeRateDate, ExchangeRateAmt);
+        CurrExchRate.GetLastestExchangeRate(pCurrencyCode, ExchangeRateDate, ExchangeRateAmt);
         if ExchangeRateAmt = 0 then
             exit(0);
         exit(pUnitPrice * ExchangeRateAmt);
@@ -82,59 +87,186 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         l_recSalesPriceArchive.Insert(true);
     end;
 
-    procedure CreateExternalInterfaceFile(SalesPrice: Record "Sales Price"; pCountryCode: Code[10]): Boolean
+    procedure QueueExport(SalesPriceChecking: Record "CXW Sales Price Checking"; SalesPrice: Record "Sales Price")
     var
+        SalesPriceExport: Record "CXW Sales Price Export";
         DataExportEntry: Record "Data Export Entry";
-        RecRef: RecordRef;
-        FldRef: FieldRef;
+    begin
+        SalesPriceExport.Init();
+        SalesPriceExport."CXW Item No." := SalesPriceChecking."CXW Item No.";
+        SalesPriceExport."CXW Country Code" := SalesPriceChecking."CXW Country Code";
+        SalesPriceExport."CXW Currency Code" := SalesPriceChecking."CXW Currency Code";
+        SalesPriceExport."CXW Starting Date" := SalesPriceChecking."CXW Starting Date";
+        SalesPriceExport."CXW Starting Time" := SalesPriceChecking."CXW Starting Time";
+        SalesPriceExport."CXW Ending Date" := SalesPriceChecking."CXW Ending Date";
+        SalesPriceExport."CXW Ending Time" := SalesPriceChecking."CXW Ending Time";
+        SalesPriceExport."CXW Unit Price" := SalesPriceChecking."CXW Stock Price";
+        SalesPriceExport."CXW Unit Price (LCY)" :=
+            ResolveUnitPriceLCY(SalesPriceChecking."CXW Currency Code", SalesPriceChecking."CXW Exchange Rate Amount", SalesPriceChecking."CXW Stock Price");
+        SalesPriceExport."CXW Non Stock Price" := SalesPriceChecking."CXW Non Stock Price";
+        SalesPriceExport."CXW Strike Price" := SalesPriceChecking."CXW Strike Price";
+        SalesPriceExport."CXW Recom. Retail Price" := SalesPriceChecking."CXW Recom. Retail Price";
+        SalesPriceExport."CXW Exchange Rate Amount" := SalesPriceChecking."CXW Exchange Rate Amount";
+        SalesPriceExport."CXW Exchange Rate Date" := SalesPriceChecking."CXW Exchange Rate Date";
+        SalesPriceExport."CXW Reason Code" := SalesPriceChecking."CXW Reason Code";
+        SalesPriceExport."CXW Comment" := SalesPriceChecking."CXW Comment";
+        SalesPriceExport."CXW Remark" := SalesPriceChecking."CXW Remark";
+        SalesPriceExport."CXW Last Modified UserID" := SalesPriceChecking."CXW Last Modified UserID";
+        SalesPriceExport."CXW Last Modified Date" := SalesPriceChecking."CXW Last Modified Date";
+        SalesPriceExport."CXW Sales Price SystemId" := SalesPrice.SystemId;
+        SalesPriceExport.Insert(true);
+
+        DataExportEntry.Init();
+        DataExportEntry."Destination Code" := SalesPriceDestinationCodeLbl;
+        DataExportEntry."Payload Format" := DataExportEntry."Payload Format"::JSON;
+        DataExportEntry.FileName :=
+            CopyStr(
+                StrSubstNo('SalesPrice_%1_%2_%3.json', SalesPriceExport."CXW Item No.", SalesPriceExport."CXW Currency Code", SalesPriceExport."CXW Country Code"),
+                1, MaxStrLen(DataExportEntry.FileName));
+        DataExportEntry."Source Record ID" := SalesPriceExport.RecordId();
+        DataExportEntry.Insert(true);
+        // OnInsert always sets "Waiting to Process", which ChronextBC's "Data Export Mgt." would pick up -
+        // overwritten in the same transaction so that status is never committed.
+        DataExportEntry.Status := DataExportEntry.Status::"CXW Pending";
+        DataExportEntry.Modify(true);
+
+        SalesPriceExport."CXW Data Export Entry No." := DataExportEntry."Entry No.";
+        SalesPriceExport.Modify(true);
+    end;
+
+    procedure GetDestinationCode(): Code[20]
+    begin
+        exit(SalesPriceDestinationCodeLbl);
+    end;
+
+    procedure ExportEntry(var DataExportEntry: Record "Data Export Entry")
+    var
+        JsonText: Text;
+        PayloadInStream: InStream;
+    begin
+        DataExportEntry.TestField("Destination Code", SalesPriceDestinationCodeLbl);
+
+        // The payload is built once; retries send exactly the same content.
+        DataExportEntry.CalcFields(Payload);
+        if not DataExportEntry.Payload.HasValue() then begin
+            DataExportEntry.SetPayload(BuildPayload(DataExportEntry));
+            DataExportEntry.Modify(true);
+            DataExportEntry.CalcFields(Payload);
+        end;
+
+        DataExportEntry.CreatePayloadInStream(PayloadInStream);
+        PayloadInStream.Read(JsonText);
+
+        SendToApiInterface(DataExportEntry, JsonText);
+    end;
+
+    local procedure BuildPayload(DataExportEntry: Record "Data Export Entry"): Text
+    var
+        SalesPriceExport: Record "CXW Sales Price Export";
+        SalesPrice: Record "Sales Price";
+        Item: Record Item;
+        SourceRecRef: RecordRef;
+    begin
+        if (DataExportEntry."Source Record ID".TableNo() <> Database::"CXW Sales Price Export") or
+           not SourceRecRef.Get(DataExportEntry."Source Record ID")
+        then
+            Error(ExportRecordNotFoundErr, DataExportEntry."Entry No.");
+        SourceRecRef.SetTable(SalesPriceExport);
+
+        if not SalesPrice.GetBySystemId(SalesPriceExport."CXW Sales Price SystemId") then
+            Error(SalesPriceNotFoundErr, SalesPriceExport."CXW Item No.", SalesPriceExport."CXW Country Code");
+        if not Item.Get(SalesPriceExport."CXW Item No.") then
+            Error(ItemNotFoundErr, SalesPriceExport."CXW Item No.");
+
+        exit(BuildSalesPriceJson(SalesPriceExport, SalesPrice, Item));
+    end;
+
+    local procedure BuildSalesPriceJson(pSalesPriceExport: Record "CXW Sales Price Export"; pSalesPrice: Record "Sales Price"; pItem: Record Item): Text
+    var
         JsonObj: JsonObject;
         JsonText: Text;
-        FileName: Text[250];
-        Index: Integer;
-        ExportItemNo: Code[20];
-        ExportVariantCode: Code[20];
     begin
-        GetExportItemAndVariantCode(SalesPrice."Item No.", SalesPrice."Variant Code", ExportItemNo, ExportVariantCode);
-        RecRef.GetTable(SalesPrice);
-        for Index := 1 to RecRef.FieldCount do begin
-            FldRef := RecRef.FieldIndex(Index);
-            if (FldRef.Name <> 'Item No.') and (FldRef.Name <> 'Variant Code') then
-                AddFieldToJson(JsonObj, GetExportFieldName(FldRef.Name), FldRef.Value);
-        end;
-        JsonObj.Add('Item No.', ExportItemNo);
-        JsonObj.Add('Variant Code', ExportVariantCode);
-        // "Sales Price" has no country in its key - the country of the checking line is sent alongside.
-        JsonObj.Add('Country Code', pCountryCode);
+        // Fixed key set and order agreed with the receiver (NAV "CHNX Sales Price Entity" format without
+        // variant, promotion and DiVA fields).
+        JsonObj.Add('itemNo', pSalesPriceExport."CXW Item No.");
+        JsonObj.Add('salesType', Format(pSalesPrice."Sales Type".AsInteger()));
+        JsonObj.Add('salesCode', pSalesPrice."Sales Code");
+        JsonObj.Add('startingDate', FormatDate(pSalesPriceExport."CXW Starting Date"));
+        JsonObj.Add('currencyCode', pSalesPriceExport."CXW Currency Code");
+        JsonObj.Add('countryRegionCode', pSalesPriceExport."CXW Country Code");
+        JsonObj.Add('unitOfMeasureCode', pSalesPrice."Unit of Measure Code");
+        JsonObj.Add('minimumQuantity', pSalesPrice."Minimum Quantity");
+        JsonObj.Add('unitPrice', pSalesPriceExport."CXW Unit Price");
+        JsonObj.Add('priceIncludesVat', pSalesPrice."Price Includes VAT");
+        JsonObj.Add('allowInvoiceDisc', pSalesPrice."Allow Invoice Disc.");
+        JsonObj.Add('vatBusPostingGrPrice', pSalesPrice."VAT Bus. Posting Gr. (Price)");
+        JsonObj.Add('endingDate', FormatDate(pSalesPriceExport."CXW Ending Date"));
+        JsonObj.Add('allowLineDisc', pSalesPrice."Allow Line Disc.");
+        JsonObj.Add('id', Format(pSalesPriceExport."CXW Sales Price SystemId"));
+        JsonObj.Add('remark', pSalesPriceExport."CXW Remark");
+        JsonObj.Add('nonStockPrice', pSalesPriceExport."CXW Non Stock Price");
+        JsonObj.Add('lastModifiedUserID', pSalesPriceExport."CXW Last Modified UserID");
+        JsonObj.Add('lastModifiedDate', FormatDateTime(pSalesPriceExport."CXW Last Modified Date"));
+        JsonObj.Add('reasonCode', GetReasonCodeName(pSalesPriceExport."CXW Reason Code"));
+        JsonObj.Add('comment', pSalesPriceExport."CXW Comment");
+        JsonObj.Add('strikePriceInclVat', pSalesPriceExport."CXW Strike Price");
+        JsonObj.Add('recomRetailPriceInclVat', pSalesPriceExport."CXW Recom. Retail Price");
+        JsonObj.Add('unitPriceLcy', pSalesPriceExport."CXW Unit Price (LCY)");
+        JsonObj.Add('startingTime', FormatTime(pSalesPriceExport."CXW Starting Time"));
+        JsonObj.Add('endingTime', FormatTime(pSalesPriceExport."CXW Ending Time"));
+        JsonObj.Add('profit',
+            CalcProfitPercent(
+                pSalesPriceExport."CXW Unit Price (LCY)", pSalesPrice."VAT Bus. Posting Gr. (Price)",
+                pItem."VAT Prod. Posting Group", pItem."Unit Cost"));
+        JsonObj.Add('unitCost', pItem."Unit Cost");
+        JsonObj.Add('vatProdPostingGroup', pItem."VAT Prod. Posting Group");
         JsonObj.WriteTo(JsonText);
-
-        FileName :=
-            CopyStr(
-                StrSubstNo('SalesPrice_%1_%2_%3.json', ExportItemNo, SalesPrice."Currency Code", pCountryCode),
-                1, MaxStrLen(DataExportEntry.FileName));
-
-        exit(SendToApiInterface(JsonText, FileName, SalesPrice.RecordId()));
+        exit(JsonText);
     end;
 
-    local procedure GetExportItemAndVariantCode(ItemNo: Code[20]; VariantCode: Code[10]; var ExportItemNo: Code[20]; var ExportVariantCode: Code[20])
+    local procedure CalcProfitPercent(pUnitPriceLcy: Decimal; pVatBusPostingGr: Code[20]; pVatProdPostingGr: Code[20]; pUnitCost: Decimal): Decimal
     var
-        Item: Record Item;
+        VATPostingSetup: Record "VAT Posting Setup";
+        VatPct: Decimal;
+        NetPriceLcy: Decimal;
     begin
-        ExportItemNo := ItemNo;
-        if VariantCode = '' then
-            ExportVariantCode := ItemNo
-        else
-            ExportVariantCode := VariantCode;
+        if VATPostingSetup.Get(pVatBusPostingGr, pVatProdPostingGr) then
+            VatPct := VATPostingSetup."VAT %";
 
-        if not Item.Get(ItemNo) then
-            exit;
-
-        if Item."Old Item No." <> '' then
-            ExportItemNo := Item."Old Item No.";
-        if Item."Old Variant Code" <> '' then
-            ExportVariantCode := Item."Old Variant Code";
+        NetPriceLcy := pUnitPriceLcy / (1 + VatPct / 100);
+        if NetPriceLcy = 0 then
+            exit(0);
+        exit(Round((NetPriceLcy - pUnitCost) / NetPriceLcy * 100, 0.01));
     end;
 
-    local procedure SendToApiInterface(pJsonText: Text; pFileName: Text[250]; pSourceRecordId: RecordId): Boolean
+    local procedure GetReasonCodeName(pReasonCode: Enum "CXW Sales Price Reason Code"): Text
+    begin
+        // The enum value name, not the (translated) caption - independent of the session language.
+        exit(pReasonCode.Names().Get(pReasonCode.Ordinals().IndexOf(pReasonCode.AsInteger())));
+    end;
+
+    local procedure FormatDate(pDate: Date): Text
+    begin
+        if pDate = 0D then
+            exit('');
+        exit(Format(pDate, 0, 9));
+    end;
+
+    local procedure FormatTime(pTime: Time): Text
+    begin
+        if pTime = 0T then
+            exit('');
+        exit(Format(pTime, 0, 9));
+    end;
+
+    local procedure FormatDateTime(pDateTime: DateTime): Text
+    begin
+        if pDateTime = 0DT then
+            exit('');
+        exit(Format(pDateTime, 0, 9));
+    end;
+
+    local procedure SendToApiInterface(var DataExportEntry: Record "Data Export Entry"; pJsonText: Text)
     var
         GenSPSetup: Record "CXW General Sales Price Setup";
         ApiInterfaceSetup: Record "CXW API Interface Setup";
@@ -154,16 +286,12 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         ApiKeyValue: Text;
         HttpMethodTxt: Text;
         SoapActionValue: Text;
-        DataExportEntryNo: BigInteger;
         SendBody: Boolean;
         SendOk: Boolean;
     begin
-        if not GenSPSetup.Get() then
-            exit(false);
-        if not GenSPSetup."CXW Price Export Active" then
-            exit(false);
-        if GenSPSetup."CXW API Interface Code" = '' then
-            exit(false);
+        GenSPSetup.Get();
+        GenSPSetup.TestField("CXW Price Export Active", true);
+        GenSPSetup.TestField("CXW API Interface Code");
 
         if not ApiInterfaceSetup.Get(GenSPSetup."CXW API Interface Code") then
             Error(ApiInterfaceNotFoundErr, GenSPSetup."CXW API Interface Code");
@@ -235,51 +363,37 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         HttpClientObj.Timeout := 30000;
         SendOk := HttpClientObj.Send(HttpRequest, HttpResponse);
 
-        // The Data Export Entry is only created after the call, directly with its final status - an entry
-        // left in "Waiting to Process" would be picked up and resent by ChronextBC's "Data Export Mgt.".
         if SendOk and HttpResponse.IsSuccessStatusCode() then begin
             HttpResponse.Content().ReadAs(ResponseText);
-            DataExportEntryNo := CreateDataExportEntry(pJsonText, pFileName, pSourceRecordId, true, '');
-            LogHttpCall(DataExportEntryNo, ApiInterfaceSetup."CXW Endpoint URL", true, HttpResponse.HttpStatusCode(), '', RequestLogText, ResponseText);
-            exit(true);
+            SetAttemptResult(DataExportEntry, true, '');
+            LogHttpCall(DataExportEntry."Entry No.", ApiInterfaceSetup."CXW Endpoint URL", true, HttpResponse.HttpStatusCode(), '', RequestLogText, ResponseText);
+            exit;
         end;
 
         if SendOk then begin
             HttpResponse.Content().ReadAs(ResponseText);
             FormattedErrorTxt := StrSubstNo('HTTP %1: %2', HttpResponse.HttpStatusCode(), ResponseText);
-            DataExportEntryNo := CreateDataExportEntry(pJsonText, pFileName, pSourceRecordId, false, FormattedErrorTxt);
-            LogHttpCall(DataExportEntryNo, ApiInterfaceSetup."CXW Endpoint URL", false, HttpResponse.HttpStatusCode(), FormattedErrorTxt, RequestLogText, ResponseText);
+            SetAttemptResult(DataExportEntry, false, FormattedErrorTxt);
+            LogHttpCall(DataExportEntry."Entry No.", ApiInterfaceSetup."CXW Endpoint URL", false, HttpResponse.HttpStatusCode(), FormattedErrorTxt, RequestLogText, ResponseText);
         end else begin
-            DataExportEntryNo := CreateDataExportEntry(pJsonText, pFileName, pSourceRecordId, false, NetworkErrorTxt);
-            LogHttpCall(DataExportEntryNo, ApiInterfaceSetup."CXW Endpoint URL", false, 0, NetworkErrorTxt, RequestLogText, '');
+            SetAttemptResult(DataExportEntry, false, NetworkErrorTxt);
+            LogHttpCall(DataExportEntry."Entry No.", ApiInterfaceSetup."CXW Endpoint URL", false, 0, NetworkErrorTxt, RequestLogText, '');
         end;
-
-        exit(false);
     end;
 
-    local procedure CreateDataExportEntry(pJsonText: Text; pFileName: Text[250]; pSourceRecordId: RecordId; pSuccess: Boolean; pErrorMessage: Text): BigInteger
-    var
-        DataExportEntry: Record "Data Export Entry";
+    procedure SetAttemptResult(var DataExportEntry: Record "Data Export Entry"; pSuccess: Boolean; pErrorMessage: Text)
     begin
-        DataExportEntry.Init();
-        DataExportEntry."Destination Code" := SalesPriceDestinationCodeLbl;
-        DataExportEntry."Payload Format" := DataExportEntry."Payload Format"::JSON;
-        DataExportEntry.FileName := pFileName;
-        DataExportEntry."Source Record ID" := pSourceRecordId;
-        DataExportEntry.Insert(true);
-        DataExportEntry.SetPayload(pJsonText);
-        // OnInsert of "Data Export Entry" sets "Created At" and always "Waiting to Process" - overwritten here with the final status.
+        DataExportEntry."Attempt Count" += 1;
+        DataExportEntry."Last Attempt At" := CurrentDateTime;
         if pSuccess then begin
             DataExportEntry.Status := DataExportEntry.Status::Processed;
             DataExportEntry."Processed At" := CurrentDateTime;
+            DataExportEntry."Error Message" := '';
         end else begin
             DataExportEntry.Status := DataExportEntry.Status::Error;
             DataExportEntry."Error Message" := CopyStr(pErrorMessage, 1, MaxStrLen(DataExportEntry."Error Message"));
         end;
-        DataExportEntry."Attempt Count" := 1;
-        DataExportEntry."Last Attempt At" := CurrentDateTime;
         DataExportEntry.Modify(true);
-        exit(DataExportEntry."Entry No.");
     end;
 
     local procedure BuildSigV4Headers(pApiInterfaceSetup: Record "CXW API Interface Setup"; pMethod: Text; pUrlPath: Text; pHost: Text; pHasBody: Boolean; pPayload: Text; var vAuthorizationHeader: Text; var vAmzDate: Text)
@@ -466,49 +580,11 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         HttpCallLog.Insert(true);
     end;
 
-    local procedure AddFieldToJson(var vJsonObj: JsonObject; pFieldName: Text; pFieldValue: Variant)
-    var
-        BoolValue: Boolean;
-        IntValue: Integer;
-        BigIntValue: BigInteger;
-        DecValue: Decimal;
-    begin
-        case true of
-            pFieldValue.IsBoolean():
-                begin
-                    BoolValue := pFieldValue;
-                    vJsonObj.Add(pFieldName, BoolValue);
-                end;
-            pFieldValue.IsInteger():
-                begin
-                    IntValue := pFieldValue;
-                    vJsonObj.Add(pFieldName, IntValue);
-                end;
-            pFieldValue.IsBigInteger():
-                begin
-                    BigIntValue := pFieldValue;
-                    vJsonObj.Add(pFieldName, BigIntValue);
-                end;
-            pFieldValue.IsDecimal():
-                begin
-                    DecValue := pFieldValue;
-                    vJsonObj.Add(pFieldName, DecValue);
-                end;
-            else
-                vJsonObj.Add(pFieldName, Format(pFieldValue, 0, 9));
-        end;
-    end;
-
-    local procedure GetExportFieldName(pFieldName: Text): Text
-    begin
-        if CopyStr(pFieldName, 1, 4) = 'CXW ' then
-            exit(DelStr(pFieldName, 1, 4));
-
-        exit(pFieldName);
-    end;
-
     var
         ApiInterfaceNotFoundErr: Label 'API interface %1 (selected on the general sales price setup) no longer exists.', Comment = '%1 = API interface code';
+        ExportRecordNotFoundErr: Label 'The sales price export record of data export entry %1 no longer exists.', Comment = '%1 = data export entry no.';
+        SalesPriceNotFoundErr: Label 'The sales price of item %1 for country %2 no longer exists.', Comment = '%1 = item no., %2 = country code';
+        ItemNotFoundErr: Label 'Item %1 no longer exists.', Comment = '%1 = item no.';
         AuthRedactedTxt: Label '***redacted***', Locked = true;
         NetworkErrorTxt: Label 'The request could not be sent (network error).';
         // Reserved: must not exist as "Data Export API Setup" code, so ChronextBC's "Export Data" cannot resend these entries without SigV4.

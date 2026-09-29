@@ -141,6 +141,14 @@ page 60322 "CXW Sales Price Checking List"
                 Image = History;
                 RunObject = page "CXW Sales Price Archive";
             }
+            action(SalesPriceExportEntriesNav)
+            {
+                ApplicationArea = All;
+                Caption = 'Sales Price Export Entries';
+                ToolTip = 'Open the released prices of all countries and the status of their transmission.';
+                Image = ExportFile;
+                RunObject = page "CXW Sales Price Export Entries";
+            }
         }
         area(Processing)
         {
@@ -305,11 +313,11 @@ page 60322 "CXW Sales Price Checking List"
                 Caption = 'Export';
                 Image = ExportFile;
 
-                action("Upload Sales Price")
+                action(ReleaseSalesPrices)
                 {
                     ApplicationArea = All;
-                    Caption = 'Upload Sales Price';
-                    ToolTip = 'Exports the approved sales prices to the outbound interface file.';
+                    Caption = 'Release Sales Prices';
+                    ToolTip = 'Writes the approved country prices to the sales prices and queues them for sending. The sales price export job sends them to the external system. Source lines without a country are skipped.';
                     Image = SendConfirmation;
                     Promoted = true;
                     PromotedCategory = Process;
@@ -318,46 +326,45 @@ page 60322 "CXW Sales Price Checking List"
                     trigger OnAction()
                     var
                         l_recSalesPriceCheck: Record "CXW Sales Price Checking";
-                        l_recSP: Record "Sales Price";
                         l_intTotal: Integer;
-                        l_intExported: Integer;
-                        l_intAlreadySent: Integer;
-                        l_boolResendAlreadySent: Boolean;
+                        l_intQueued: Integer;
+                        l_intAlreadyQueued: Integer;
+                        l_boolReleaseAgain: Boolean;
                     begin
                         g_recGenSPSetup.Get();
                         g_recGenSPSetup.TestField("CXW Price Export Active", true);
                         g_recGenSPSetup.TestField("CXW API Interface Code");
+                        g_recGenSPSetup.TestField("CXW Archive Country Code");
 
                         l_recSalesPriceCheck.Reset();
                         l_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
-                        if not l_recSalesPriceCheck.FindSet() then
+                        if l_recSalesPriceCheck.IsEmpty() then
                             Error(NothingToProcessErr);
 
-                        l_recSalesPriceCheck.Reset();
-                        l_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
-                        l_recSalesPriceCheck.SetRange("CXW Export Status", l_recSalesPriceCheck."CXW Export Status"::Sent);
-                        l_intAlreadySent := l_recSalesPriceCheck.Count();
-                        if l_intAlreadySent > 0 then
-                            l_boolResendAlreadySent := Confirm(StrSubstNo(ResendAlreadySentQst, l_intAlreadySent), false);
+                        // Source lines (without a country) are never released - only the country lines are.
+                        l_recSalesPriceCheck.SetFilter("CXW Country Code", '<>%1', '');
+                        if l_recSalesPriceCheck.IsEmpty() then
+                            Error(OnlySourceLinesErr);
 
-                        l_recSalesPriceCheck.Reset();
-                        l_recSalesPriceCheck.SetRange("CXW Accept New Setup", true);
+                        l_recSalesPriceCheck.SetFilter("CXW Export Status", '%1|%2',
+                            l_recSalesPriceCheck."CXW Export Status"::Queued, l_recSalesPriceCheck."CXW Export Status"::Sent);
+                        l_intAlreadyQueued := l_recSalesPriceCheck.Count();
+                        if l_intAlreadyQueued > 0 then
+                            l_boolReleaseAgain := Confirm(StrSubstNo(ReleaseAgainQst, l_intAlreadyQueued), false);
+
+                        l_recSalesPriceCheck.SetRange("CXW Export Status");
                         if l_recSalesPriceCheck.FindSet() then
                             repeat
-                                if (l_recSalesPriceCheck."CXW Export Status" <> l_recSalesPriceCheck."CXW Export Status"::Sent) or l_boolResendAlreadySent then begin
+                                if l_boolReleaseAgain or not (l_recSalesPriceCheck."CXW Export Status" in
+                                     [l_recSalesPriceCheck."CXW Export Status"::Queued, l_recSalesPriceCheck."CXW Export Status"::Sent])
+                                then begin
                                     l_intTotal += 1;
-                                    if g_cuExportGatewaySalesPrice.WriteBackAndArchive(l_recSalesPriceCheck, l_recSP) and
-                                       g_cuExportGatewaySalesPrice.CreateExternalInterfaceFile(l_recSP, l_recSalesPriceCheck."CXW Country Code")
-                                    then begin
-                                        l_recSalesPriceCheck."CXW Export Status" := l_recSalesPriceCheck."CXW Export Status"::Sent;
-                                        l_intExported += 1;
-                                    end else
-                                        l_recSalesPriceCheck."CXW Export Status" := l_recSalesPriceCheck."CXW Export Status"::Error;
-                                    l_recSalesPriceCheck.Modify();
+                                    if ReleaseLine(l_recSalesPriceCheck) then
+                                        l_intQueued += 1;
                                 end;
                             until l_recSalesPriceCheck.Next() = 0;
 
-                        Message(ExportResultMsg, l_intExported, l_intTotal);
+                        Message(ReleaseResultMsg, l_intQueued, l_intTotal);
                     end;
                 }
             }
@@ -409,15 +416,32 @@ page 60322 "CXW Sales Price Checking List"
         TXT009: Label 'Please delete existing entries to import new price';
         FinalPriceMustBeGreaterThanZeroErr: Label 'Final price must be greater than zero to calculate margin.';
         UpdateSalesPriceCheck: Record "CXW Sales Price Checking";
-        g_cuExportGatewaySalesPrice: Codeunit "CXW Export Gateway Sales Price";
-        ExportResultMsg: Label '%1 of %2 approved lines exported. Lines already exported were skipped.', Comment = '%1 = number of lines actually exported, %2 = number of approved lines considered';
-        ResendAlreadySentQst: Label '%1 line(s) were already sent previously. Do you want to send them again?', Comment = '%1 = number of previously sent lines';
+        ReleaseResultMsg: Label '%1 of %2 prices queued for transmission.', Comment = '%1 = number of lines queued, %2 = number of approved country lines considered';
+        ReleaseAgainQst: Label '%1 line(s) were already queued for transmission. Do you want to release them again?', Comment = '%1 = number of already queued lines';
+        OnlySourceLinesErr: Label 'Only source lines without a country are approved. Run Add all Countries first.';
         NothingToProcessErr: Label 'Nothing to process';
         ValidateDoneMsg: Label 'validate data is done';
         AcceptNewPriceSetupQst: Label 'Are you sure want to Accept New Price Setup?';
         DoneMsg: Label 'done';
         ModifyNotAllowedErr: Label 'not possible';
         ValidatingProgressMsg: Label 'Validating Sales Price @1@@@@@@@@@@@@@@@';
+
+    // Releases one line in its own transaction: a failure rolls back the write-back, archive and export
+    // records of that line only and marks the line as Error.
+    local procedure ReleaseLine(p_recSalesPriceCheck: Record "CXW Sales Price Checking"): Boolean
+    var
+        l_recSalesPriceCheck: Record "CXW Sales Price Checking";
+    begin
+        Commit();
+        l_recSalesPriceCheck := p_recSalesPriceCheck;
+        if Codeunit.Run(Codeunit::"CXW Release Sales Price Line", l_recSalesPriceCheck) then
+            exit(true);
+
+        l_recSalesPriceCheck.Get(p_recSalesPriceCheck."CXW Item No.", p_recSalesPriceCheck."CXW Currency Code", p_recSalesPriceCheck."CXW Country Code");
+        l_recSalesPriceCheck."CXW Export Status" := l_recSalesPriceCheck."CXW Export Status"::Error;
+        l_recSalesPriceCheck.Modify();
+        exit(false);
+    end;
 
     local procedure fnValidate()
     begin

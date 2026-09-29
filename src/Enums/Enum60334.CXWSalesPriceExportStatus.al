@@ -14,4 +14,8 @@ enum 60334 "CXW Sales Price Export Status"
     {
         Caption = 'Error';
     }
+    value(3; Queued)
+    {
+        Caption = 'Queued';
+    }
 }
