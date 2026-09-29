@@ -121,6 +121,14 @@ Dieser Ablauf ist **vollständig automatisiert**: Sobald Sie eine Verkaufsrechnu
 
 > Die Einrichtung der Verzögerung, die Überwachung der Einträge und die Nachbearbeitung fehlgeschlagener Fälle (Seite "CXW Cons. Posting Entries", Aktion "Retry") übernimmt ein Key User – siehe Key-User-Handbuch.
 
+## Verkaufsaufträge anhalten ("Auftrag halten")
+
+Mit dem Feld **"Auftrag halten"** im Register **Allgemein** des Verkaufsauftrags kennzeichnen Sie einen Auftrag, der vorerst nicht weiterbearbeitet werden soll. In der **Verkaufsauftragsliste** steht das Feld als Spalte zur Verfügung; über den Filter "Auftrag halten = Ja" sehen Sie alle angehaltenen Aufträge auf einen Blick.
+
+- Das Feld setzen und entfernen Sie **manuell**. Es wird nie automatisch geändert.
+- Änderbar ist es nur, solange der Auftrag **offen** ist. Bei einem freigegebenen Auftrag ist es ausgegraut; um es zu ändern, öffnen Sie den Auftrag erneut ("Erneut öffnen"), ändern das Feld und geben ihn wieder frei.
+- Das Feld ist **nur ein Hinweis**: Freigeben, Liefern und Fakturieren sind trotz gesetztem Haken weiterhin möglich.
+
 ## Häufige Fragen (FAQ)
 
 **"Nothing to process" beim Klick auf Validate/Approve/Add all Countries**

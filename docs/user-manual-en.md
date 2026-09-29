@@ -121,6 +121,14 @@ This workflow is **fully automated**: as soon as you post a sales invoice for a 
 
 > Configuring the delay, monitoring the entries, and reprocessing failed cases ("CXW Cons. Posting Entries" page, "Retry" action) is handled by a key user — see the Key User Manual.
 
+## Holding sales orders ("Hold Order")
+
+Use the **"Hold Order"** field on the **General** tab of the sales order to flag an order that should not be processed further for now. The field is also available as a column in the **Sales Order List**; filter on "Hold Order = Yes" to see all held orders at a glance.
+
+- You set and clear the field **manually**. It is never changed automatically.
+- You can only change it while the order is **open**. On a released order it is greyed out; to change it, reopen the order ("Reopen"), change the field and release the order again.
+- The field is **for information only**: releasing, shipping and invoicing are still possible when it is set.
+
 ## Frequently Asked Questions (FAQ)
 
 **"Nothing to process" when clicking Validate/Approve/Add all Countries**
