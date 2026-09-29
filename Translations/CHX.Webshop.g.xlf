@@ -498,6 +498,111 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Price Import Protocol - Field CXW Source Entry No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2851225259 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Realtime Inventory</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 3254682113 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Brand</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Brand - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 168580315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Certificate</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Certificate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 955160496 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Company Name</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Company Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 91893897 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Condition</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Condition - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 140371103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Differential Taxation</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Differential Taxation - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 1454455705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Entry No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 1887293546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Item No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 1386201392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Location Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Location Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 244065445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Model</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Model - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2317240796 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Posting Date</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Posting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 330495498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Purchase Order No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Purchase Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2053784478 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Purchase Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Purchase Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 4216905753 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Quantity</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Quantity - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 749414337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Reference</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Reference - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2827071395 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Sales Price</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Sales Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2773132357 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Serial No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Serial No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2241783837 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Variant Category</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Variant Category - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 329903938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Variant Code</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 200014473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Vendor No.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Vendor No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 3868036390 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Visibility</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Visibility - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1583426037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Archive</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -2557,6 +2662,31 @@
           <source>Specifies the customer on the sales order.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Sell-to Customer No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Realtime Inventory</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - NamedType 447304736" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Realtime inventory has been refreshed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - NamedType RefreshDoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - NamedType 35830405" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to refresh the realtime inventory for the current company?</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - NamedType RefreshQst</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - Action 2026913255 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rebuilds the realtime inventory for the current company from open item ledger entries.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - Action Refresh - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - Action 2026913255 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - Action Refresh - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1583426037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Archive</source>

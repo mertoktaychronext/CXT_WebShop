@@ -597,6 +597,153 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Price Import Protocol - Field CXW Source Entry No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 2851225259 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Realtime Inventory</source>
+          <target>Realtime Inventory</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 3254682113 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Brand</source>
+          <target>CXW Brand</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Brand - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 168580315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Certificate</source>
+          <target>CXW Certificate</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Certificate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 955160496 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Company Name</source>
+          <target>CXW Company Name</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Company Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 91893897 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Condition</source>
+          <target>CXW Condition</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Condition - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 140371103 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Differential Taxation</source>
+          <target>CXW Differential Taxation</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Differential Taxation - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 1454455705 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Entry No.</source>
+          <target>CXW Entry No.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Entry No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 1887293546 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Item No.</source>
+          <target>CXW Item No.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Item No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 1386201392 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Location Code</source>
+          <target>CXW Location Code</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Location Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 244065445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Model</source>
+          <target>CXW Model</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Model - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2317240796 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Posting Date</source>
+          <target>CXW Posting Date</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Posting Date - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 330495498 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Purchase Order No.</source>
+          <target>CXW Purchase Order No.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Purchase Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2053784478 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Purchase Price</source>
+          <target>CXW Purchase Price</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Purchase Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 4216905753 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Quantity</source>
+          <target>CXW Quantity</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Quantity - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 749414337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Reference</source>
+          <target>CXW Reference</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Reference - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2827071395 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Sales Price</source>
+          <target>CXW Sales Price</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Sales Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2773132357 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Serial No.</source>
+          <target>CXW Serial No.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Serial No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 2241783837 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Variant Category</source>
+          <target>CXW Variant Category</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Variant Category - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 329903938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Variant Code</source>
+          <target>CXW Variant Code</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 200014473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Vendor No.</source>
+          <target>CXW Vendor No.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Vendor No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 2851225259 - Field 3868036390 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Visibility</source>
+          <target>CXW Visibility</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Realtime Inventory - Field CXW Visibility - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 1583426037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Archive</source>
           <target>Verkaufspreisarchiv</target>
@@ -3069,6 +3216,41 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW On Demand Sales Lookup - Control Sell-to Customer No. - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 2851225259 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Realtime Inventory</source>
+          <target>Realtime Inventory</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - NamedType 447304736" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Realtime inventory has been refreshed.</source>
+          <target>Realtime inventory has been refreshed.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - NamedType RefreshDoneMsg</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - NamedType 35830405" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Do you want to refresh the realtime inventory for the current company?</source>
+          <target>Do you want to refresh the realtime inventory for the current company?</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - NamedType RefreshQst</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - Action 2026913255 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Rebuilds the realtime inventory for the current company from open item ledger entries.</source>
+          <target>Rebuilds the realtime inventory for the current company from open item ledger entries.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">New translation.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - Action Refresh - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2851225259 - Action 2026913255 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Refresh</source>
+          <target>Aktualisieren</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Suggested translation inserted.</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Realtime Inventory - Action Refresh - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 1583426037 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Sales Price Archive</source>
           <target>Verkaufspreisarchiv</target>
@@ -4693,6 +4875,7 @@
           <source> </source>
           <target> </target>
           <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue   - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 4148423094 - EnumValue 2554327257 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
@@ -4735,6 +4918,7 @@
           <source> </source>
           <target> </target>
           <note from="Developer" annotates="general" priority="2"></note>
+          <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Taxation Type - EnumValue   - Property Caption</note>
         </trans-unit>
         <trans-unit id="Enum 3011355328 - EnumValue 1562294763 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
