@@ -185,10 +185,14 @@ codeunit 60329 "CXW Export Gateway Sales Price"
     var
         JsonObj: JsonObject;
         JsonText: Text;
+        ExportItemNo: Code[20];
+        ExportVariantCode: Code[20];
     begin
         // Fixed key set and order agreed with the receiver (NAV "CHNX Sales Price Entity" format without
-        // variant, promotion and DiVA fields).
-        JsonObj.Add('itemNo', pSalesPriceExport."CXW Item No.");
+        // promotion and DiVA fields).
+        GetExportItemAndVariantCode(pItem, pSalesPrice."Variant Code", ExportItemNo, ExportVariantCode);
+        JsonObj.Add('itemNo', ExportItemNo);
+        JsonObj.Add('variantCode', ExportVariantCode);
         JsonObj.Add('salesType', Format(pSalesPrice."Sales Type".AsInteger()));
         JsonObj.Add('salesCode', pSalesPrice."Sales Code");
         JsonObj.Add('startingDate', FormatDate(pSalesPriceExport."CXW Starting Date"));
@@ -222,6 +226,22 @@ codeunit 60329 "CXW Export Gateway Sales Price"
         JsonObj.Add('vatProdPostingGroup', pItem."VAT Prod. Posting Group");
         JsonObj.WriteTo(JsonText);
         exit(JsonText);
+    end;
+
+    local procedure GetExportItemAndVariantCode(pItem: Record Item; pVariantCode: Code[10]; var vExportItemNo: Code[20]; var vExportVariantCode: Code[20])
+    begin
+        // The receiver still identifies items by their NAV numbers: "Old Item No."/"Old Variant Code" win
+        // when maintained; without a variant the item number doubles as variant code.
+        vExportItemNo := pItem."No.";
+        if pVariantCode = '' then
+            vExportVariantCode := pItem."No."
+        else
+            vExportVariantCode := pVariantCode;
+
+        if pItem."Old Item No." <> '' then
+            vExportItemNo := pItem."Old Item No.";
+        if pItem."Old Variant Code" <> '' then
+            vExportVariantCode := pItem."Old Variant Code";
     end;
 
     local procedure CalcProfitPercent(pUnitPriceLcy: Decimal; pVatBusPostingGr: Code[20]; pVatProdPostingGr: Code[20]; pUnitCost: Decimal): Decimal

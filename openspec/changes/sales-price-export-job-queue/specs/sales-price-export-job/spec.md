@@ -79,11 +79,11 @@ The job SHALL process each entry in isolation and commit its result before conti
 - **THEN** the first and third entries end as Processed, the second ends as Error, and the Job Queue Entry finishes successfully
 
 ### Requirement: Sales price payload format
-The payload built for a `SALESPRICE` entry SHALL be a JSON object containing exactly the following keys, in this order: `itemNo`, `salesType`, `salesCode`, `startingDate`, `currencyCode`, `countryRegionCode`, `unitOfMeasureCode`, `minimumQuantity`, `unitPrice`, `priceIncludesVat`, `allowInvoiceDisc`, `vatBusPostingGrPrice`, `endingDate`, `allowLineDisc`, `id`, `remark`, `nonStockPrice`, `lastModifiedUserID`, `lastModifiedDate`, `reasonCode`, `comment`, `strikePriceInclVat`, `recomRetailPriceInclVat`, `unitPriceLcy`, `startingTime`, `endingTime`, `profit`, `unitCost`, `vatProdPostingGroup`. The keys `variantCode`, `promotionMediumNo`, `promMedTarGrpNo`, `setNo`, `sizeCodeDiva`, `colorCodeDiva`, `colorDescriptionDiva`, `sizeDescriptionDiva`, `systemValueSizeCodes`, `systemValueColorCodes`, `sizeToEnterCode`, `priceGroupId`, `fallBackPrice`, `documentUnitPrice`, `deliveryCostLimitCode` and `priceChangeSuggWriteOff` SHALL NOT be included.
+The payload built for a `SALESPRICE` entry SHALL be a JSON object containing exactly the following keys, in this order: `itemNo`, `variantCode`, `salesType`, `salesCode`, `startingDate`, `currencyCode`, `countryRegionCode`, `unitOfMeasureCode`, `minimumQuantity`, `unitPrice`, `priceIncludesVat`, `allowInvoiceDisc`, `vatBusPostingGrPrice`, `endingDate`, `allowLineDisc`, `id`, `remark`, `nonStockPrice`, `lastModifiedUserID`, `lastModifiedDate`, `reasonCode`, `comment`, `strikePriceInclVat`, `recomRetailPriceInclVat`, `unitPriceLcy`, `startingTime`, `endingTime`, `profit`, `unitCost`, `vatProdPostingGroup`. The keys `promotionMediumNo`, `promMedTarGrpNo`, `setNo`, `sizeCodeDiva`, `colorCodeDiva`, `colorDescriptionDiva`, `sizeDescriptionDiva`, `systemValueSizeCodes`, `systemValueColorCodes`, `sizeToEnterCode`, `priceGroupId`, `fallBackPrice`, `documentUnitPrice`, `deliveryCostLimitCode` and `priceChangeSuggWriteOff` SHALL NOT be included.
 
 #### Scenario: Complete key set
 - **WHEN** the job builds the payload for any entry
-- **THEN** the JSON contains all 29 listed keys, in the listed order, and none of the excluded keys
+- **THEN** the JSON contains all 30 listed keys, in the listed order, and none of the excluded keys
 
 #### Scenario: Value types
 - **WHEN** the job builds the payload
@@ -98,7 +98,7 @@ The payload built for a `SALESPRICE` entry SHALL be a JSON object containing exa
 - **THEN** `salesType` is `"2"` and `id` is the "Sales Price" `SystemId` in the form `{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}` in upper case
 
 ### Requirement: Payload values are taken from the export record, the sales price and the item
-The payload SHALL take `itemNo`, `currencyCode`, `countryRegionCode`, `startingDate`, `endingDate`, `startingTime`, `endingTime`, `unitPrice`, `unitPriceLcy`, `nonStockPrice`, `strikePriceInclVat`, `recomRetailPriceInclVat`, `remark`, `comment`, `reasonCode`, `lastModifiedUserID`, `lastModifiedDate` and `id` from the "CXW Sales Price Export" record. The keys `salesType`, `salesCode`, `unitOfMeasureCode`, `minimumQuantity`, `priceIncludesVat`, `allowInvoiceDisc`, `vatBusPostingGrPrice` and `allowLineDisc` SHALL come from the "Sales Price" record identified by the stored `SystemId`. `vatProdPostingGroup` and `unitCost` (`"Unit Cost"`) SHALL come from the item.
+The payload SHALL take `currencyCode`, `countryRegionCode`, `startingDate`, `endingDate`, `startingTime`, `endingTime`, `unitPrice`, `unitPriceLcy`, `nonStockPrice`, `strikePriceInclVat`, `recomRetailPriceInclVat`, `remark`, `comment`, `reasonCode`, `lastModifiedUserID`, `lastModifiedDate` and `id` from the "CXW Sales Price Export" record. The keys `salesType`, `salesCode`, `unitOfMeasureCode`, `minimumQuantity`, `priceIncludesVat`, `allowInvoiceDisc`, `vatBusPostingGrPrice` and `allowLineDisc` SHALL come from the "Sales Price" record identified by the stored `SystemId`. `vatProdPostingGroup` and `unitCost` (`"Unit Cost"`) SHALL come from the item. `itemNo` and `variantCode` SHALL be derived from the item as described in "Item number and variant code use the old NAV numbers".
 
 #### Scenario: Two countries sharing a currency
 - **WHEN** DE is released with a price of 1000 and afterwards AT with a price of 1100, both with blank currency, and the job then exports both entries
@@ -107,6 +107,21 @@ The payload SHALL take `itemNo`, `currencyCode`, `countryRegionCode`, `startingD
 #### Scenario: Sales Price record missing
 - **WHEN** no "Sales Price" record exists for the stored `SystemId`
 - **THEN** the entry is set to `Status` = Error and no HTTP request is sent
+
+### Requirement: Item number and variant code use the old NAV numbers
+`itemNo` SHALL contain the item's "Old Item No." if it is not blank, otherwise the item number. `variantCode` SHALL contain the item's "Old Variant Code" if it is not blank; otherwise the "Variant Code" of the "Sales Price" record, and if that is blank as well, the item number (the same rule as the availability export).
+
+#### Scenario: Old numbers maintained
+- **WHEN** item 1000123 has "Old Item No." A61087 and "Old Variant Code" A61087-01
+- **THEN** the payload contains `"itemNo": "A61087"` and `"variantCode": "A61087-01"`
+
+#### Scenario: No old numbers maintained
+- **WHEN** item 1000123 has neither "Old Item No." nor "Old Variant Code" and the "Sales Price" record has no variant code
+- **THEN** the payload contains `"itemNo": "1000123"` and `"variantCode": "1000123"`
+
+#### Scenario: Only the old item number maintained
+- **WHEN** item 1000123 has "Old Item No." A61087 but no "Old Variant Code", and the "Sales Price" record has no variant code
+- **THEN** the payload contains `"itemNo": "A61087"` and `"variantCode": "1000123"`
 
 ### Requirement: Reason code is never empty
 The `reasonCode` key SHALL contain the (untranslated) name of the "CXW Sales Price Reason Code" value of the export record, i.e. `CatMan`, `Purchasing` or `Marketing`, and SHALL never be an empty string.

@@ -15,7 +15,7 @@
 **Goals:**
 - Preisstand jedes Landes zum Zeitpunkt der Freigabe dauerhaft in einer eigenen Tabelle.
 - Versand entkoppelt über die Aufgabenwarteschlange, mit dem "Data Export Entry" als Warteschlange (nur Schlüssel und Status).
-- JSON im vereinbarten Format (29 Schlüssel, feste Reihenfolge).
+- JSON im vereinbarten Format (30 Schlüssel, feste Reihenfolge).
 - Automatische Wiederholung bis zu einem einstellbaren Maximum, danach Stillstand bis zum manuellen Eingriff.
 - Kein Versand und keine Statusänderung durch den ChronextBC-Job.
 
@@ -81,7 +81,8 @@ Der Job holt über `Source Record ID` (RecordRef → `SetTable`) den Exportdaten
 
 | Schlüssel | Quelle | Format |
 |---|---|---|
-| `itemNo`, `currencyCode`, `countryRegionCode` | Export | Text |
+| `itemNo`, `variantCode` | Artikel: "Old Item No." bzw. "Old Variant Code", sonst Artikelnr. bzw. Variantencode des "Sales Price", ohne Variante die Artikelnr. (wie Verfügbarkeitsexport, Codeunit 60347 `GetStockKeys`) | Text |
+| `currencyCode`, `countryRegionCode` | Export | Text |
 | `salesType`, `salesCode` | "Sales Price" | Ordinalzahl als Text (`"2"`) / Text |
 | `startingDate`, `endingDate` | Export | `Format(…, 0, 9)`, `""` bei `0D` |
 | `unitOfMeasureCode`, `minimumQuantity` | "Sales Price" | Text / Dezimal |
