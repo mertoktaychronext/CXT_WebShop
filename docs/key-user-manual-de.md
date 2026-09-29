@@ -192,6 +192,14 @@ Ein Eintrag steht auf Status "Fehler", wenn entweder
 
 > Eine reine Lieferung ohne Fakturierung sowie der Verkauf eines Artikels ohne das Kennzeichen "Kommissionsverkauf" erzeugen keinen Eintrag.
 
+## Kennzeichen "Auftrag halten" am Verkaufsauftrag
+
+Das Feld **"Auftrag halten"** (Verkaufsauftrag, Register Allgemein; Spalte in der Verkaufsauftragsliste) braucht keine Einrichtung. Wichtig für Rückfragen:
+
+- Es ist ein **reines Kennzeichen** und sperrt keinen Prozess – Freigabe, Buchung, Lager und Versand laufen unverändert.
+- Es ist nur im Status **Offen** änderbar. Auch "Genehmigung ausstehend" und "Vorauszahlung ausstehend" sperren das Feld, wie die übrigen Kopffelder des Auftrags. Eine Änderung aus Code, Konfigurationspaket oder Excel-Bearbeitung bricht bei nicht offenen Aufträgen mit der Meldung "Status muss gleich Offen sein" ab.
+- Beim **Kopieren** eines Auftrags und beim **Umwandeln eines Angebots** in einen Auftrag wird das Kennzeichen mit übernommen. In Archive und gebuchte Belege wird es nicht übertragen.
+
 ## Datenmanagement
 
 - **Sales Price / Archiv / Export-Posten**: Bei jedem Ausführen von "Release Sales Prices" wird jede freigegebene Länderzeile automatisch in die produktive Verkaufspreis-Tabelle (immer gültig für alle Kunden) übernommen und als eigener Eintrag in "Sales Price Export Entries" gespeichert. Nur die Zeile des Archivlandes (DE) wird zusätzlich als neue, fortlaufend nummerierte Version in "Sales Price Archive" abgelegt. Das gilt auch bei einer erneuten Freigabe bereits eingeplanter Zeilen. Archiveinträge anderer Länder aus der Zeit vor Version 27.0.0.6 bleiben erhalten. Eine manuelle Pflege dieser Tabellen ist nicht vorgesehen und nicht nötig; "Sales Price Export Entries" wächst dauerhaft (eine Aufbewahrungsregel ist noch nicht eingerichtet).
