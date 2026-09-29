@@ -3028,10 +3028,25 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Final Offer Price - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="Page 280635287 - Control 3353708157 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the gender of the vendor, as sent by SellWatch.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Gender - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 280635287 - Control 4086195717 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the language of the vendor, as sent by SellWatch.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW LanguageCode - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="Page 280635287 - Control 244065445 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the model of the offered watch.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Model - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 280635287 - Control 1455299867 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the Nuvei account code of the vendor, as sent by SellWatch.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW NuveiAccountCode - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 280635287 - Control 4180890352 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the type of offer (for example commission, direct, or exchange).</source>

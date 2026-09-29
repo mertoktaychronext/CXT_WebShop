@@ -164,49 +164,41 @@ page 60338 "CXW Workshop Lines"
                 field("CXW Brand"; Rec."CXW Brand")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the brand of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Model"; Rec."CXW Model")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the model of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Sub Model"; Rec."CXW Sub Model")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the sub model of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Reference"; Rec."CXW Reference")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the reference of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Year"; Rec."CXW Year")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the year of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Condition"; Rec."CXW Condition")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the condition of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Box"; Rec."CXW Box")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the box information of the watch from the item attributes, as sent to the workshop.';
                 }
                 field("CXW Certificate"; Rec."CXW Certificate")
                 {
                     ApplicationArea = All;
-                    Visible = false;
                     ToolTip = 'Specifies the certificate information of the watch from the item attributes, as sent to the workshop.';
                 }
             }

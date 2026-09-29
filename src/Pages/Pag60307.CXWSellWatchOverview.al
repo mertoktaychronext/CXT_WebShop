@@ -152,6 +152,21 @@ page 60307 "CXW SellWatch-Overview"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the sales price the watch is planned to be sold for.';
                 }
+                field("CXW Gender"; Rec."CXW Gender")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the gender of the vendor, as sent by SellWatch.';
+                }
+                field("CXW LanguageCode"; Rec."CXW LanguageCode")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the language of the vendor, as sent by SellWatch.';
+                }
+                field("CXW NuveiAccountCode"; Rec."CXW NuveiAccountCode")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the Nuvei account code of the vendor, as sent by SellWatch.';
+                }
             }
         }
     }
