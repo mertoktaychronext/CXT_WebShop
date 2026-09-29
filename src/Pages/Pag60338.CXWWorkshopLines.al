@@ -116,6 +116,99 @@ page 60338 "CXW Workshop Lines"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the last error encountered while processing this workshop line.';
                 }
+                field("CXW Vendor No."; Rec."CXW Vendor No.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the vendor of the purchase order, as sent to the workshop.';
+                }
+                field("CXW Vendor Name"; Rec."CXW Vendor Name")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the name of the vendor of the purchase order, as sent to the workshop.';
+                }
+                field("CXW Vendor Order No."; Rec."CXW Vendor Order No.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the vendor order number of the purchase order, as sent to the workshop.';
+                }
+                field("CXW Variant Code"; Rec."CXW Variant Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the variant of the purchase order line, as sent to the workshop.';
+                }
+                field("CXW Description"; Rec."CXW Description")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the description of the purchase order line, as sent to the workshop.';
+                }
+                field("CXW Quantity"; Rec."CXW Quantity")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the quantity of the purchase order line, as sent to the workshop.';
+                }
+                field("CXW Unit Price"; Rec."CXW Unit Price")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the direct unit cost of the purchase order line, as sent to the workshop.';
+                }
+                field("CXW Currency Code"; Rec."CXW Currency Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the currency of the purchase order (local currency code if the order has none), as sent to the workshop.';
+                }
+                field("CXW Used Goods"; Rec."CXW Used Goods")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether the purchase order line is used goods, as sent to the workshop.';
+                }
+                field("CXW Brand"; Rec."CXW Brand")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the brand of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Model"; Rec."CXW Model")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the model of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Sub Model"; Rec."CXW Sub Model")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the sub model of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Reference"; Rec."CXW Reference")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the reference of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Year"; Rec."CXW Year")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the year of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Condition"; Rec."CXW Condition")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the condition of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Box"; Rec."CXW Box")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the box information of the watch from the item attributes, as sent to the workshop.';
+                }
+                field("CXW Certificate"; Rec."CXW Certificate")
+                {
+                    ApplicationArea = All;
+                    Visible = false;
+                    ToolTip = 'Specifies the certificate information of the watch from the item attributes, as sent to the workshop.';
+                }
             }
         }
     }

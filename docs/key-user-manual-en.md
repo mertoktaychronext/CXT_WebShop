@@ -92,8 +92,12 @@ The custom API (endpoint pattern `.../api/saliniLife/workshop/v1.0/companies({co
 
 1. Create an app registration for the workshop service in Microsoft Entra ID (client credentials flow, no interactive login).
 2. Grant the app registration access to the Business Central API (Business Central Admin Center → API access, or the Azure AD app permission "Dynamics 365 Business Central").
-3. In Business Central, create a dedicated user for the workshop service and assign it **only** the **"CXW Workshop API"** permission set (no access to Purchase Line, Item, or other tables).
+3. In Business Central, create a dedicated user for the workshop service and assign it **only** the **"CXW Workshop API"** permission set (apart from read access to the purchases & payables setup, no access to Purchase Line, Item, or other tables).
 4. Hand the Client ID, Client Secret, and Tenant ID to the workshop service operator.
+
+> **Which data the workshop receives (from version 27.0.0.7):** Besides item and serial number, the API returns vendor, vendor order no., variant, description, quantity, unit cost, currency (`seller_currency`; the local currency for orders without a currency) and used-goods flag of the purchase order as well as, from the item's **item attributes**: brand (attribute ID 1), model (2), sub model (3), reference (5), year (8, as a number), condition (10), box (11) and certificate (13). The values are taken over when "Send to Workshop" is clicked — later changes to the order or the item do not reach the workshop. Therefore maintain the item attributes **before** "Send to Workshop"; if they are missing, the workshop receives empty values (year = 0). For condition the workshop expects the values **NEW, AAA, AA, A, VINT**, for box and certificate "ja"/"nein". If the year is not a plain number (e.g. a range), 0 is sent.
+
+> **Tenant identifier (`tenant`):** On the **Purchases & Payables Setup** (group "Workshop"), enter **GmbH** in the field **"Workshop Tenant"**. The API returns it with every request. For this, the workshop user additionally has read access to the purchases & payables setup; purchase orders, vendors and items remain blocked for them. Users running "Send to Workshop" need the "CXW Workshop All" permission set.
 
 ### 2. Setting up the job queue entry for processing
 

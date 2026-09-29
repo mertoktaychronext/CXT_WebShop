@@ -92,8 +92,12 @@ Die Custom API (Endpunkt-Muster `.../api/saliniLife/workshop/v1.0/companies({com
 
 1. In Microsoft Entra ID eine App-Registrierung für den Workshop-Dienst anlegen (Client Credentials Flow, kein interaktiver Login).
 2. Der App-Registrierung Zugriff auf die Business-Central-API erteilen (Business Central Admin Center → API-Zugriff, bzw. Azure-AD-App-Berechtigung "Dynamics 365 Business Central").
-3. In Business Central einen dedizierten Benutzer für den Workshop-Dienst anlegen und ihm **ausschließlich** das Permission Set **"CXW Workshop API"** zuweisen (kein Zugriff auf Purchase Line, Item oder andere Tabellen).
+3. In Business Central einen dedizierten Benutzer für den Workshop-Dienst anlegen und ihm **ausschließlich** das Permission Set **"CXW Workshop API"** zuweisen (außer Lesezugriff auf die Einkaufseinrichtung kein Zugriff auf Purchase Line, Item oder andere Tabellen).
 4. Client-ID, Client-Secret und Tenant-ID an den Workshop-Dienstbetreiber übergeben.
+
+> **Welche Daten die Werkstatt erhält (ab Version 27.0.0.7):** Neben Artikel- und Seriennummer liefert die API Kreditor, Kreditorenauftragsnr., Variante, Beschreibung, Menge, EK-Preis, Währung (`seller_currency`; bei Bestellungen ohne Währung die Mandantenwährung) und Gebrauchtware-Kennzeichen der Bestellung sowie aus den **Artikelattributen** des Artikels: Marke (Attribut-ID 1), Modell (2), Submodell (3), Referenz (5), Jahr (8, als Zahl), Zustand (10), Box (11) und Zertifikat (13). Die Werte werden beim Klick auf "Send to Workshop" übernommen – spätere Änderungen an Bestellung oder Artikel erreichen die Werkstatt nicht. Pflegen Sie die Artikelattribute daher **vor** "Send to Workshop"; fehlen sie, erhält die Werkstatt leere Werte (Jahr = 0). Für den Zustand erwartet die Werkstatt die Werte **NEW, AAA, AA, A, VINT**, für Box und Zertifikat "ja"/"nein". Ist das Jahr kein reiner Zahlenwert (z. B. ein Bereich), wird 0 gesendet.
+
+> **Mandantenkennung (`tenant`):** Tragen Sie in der **Einkaufseinrichtung** (Gruppe "Werkstatt") im Feld **"Workshop Tenant"** den Wert **GmbH** ein. Die API liefert ihn bei jeder Abfrage mit. Der Werkstatt-Benutzer hat dafür zusätzlich Lesezugriff auf die Einkaufseinrichtung; Bestellungen, Kreditoren und Artikel bleiben für ihn gesperrt. Die Benutzer, die "Send to Workshop" ausführen, benötigen das Permission Set "CXW Workshop All".
 
 ### 2. Job-Queue-Eintrag für die Verarbeitung anlegen
 

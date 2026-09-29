@@ -4130,6 +4130,228 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PermissionSet CXW Workshop API - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 3396255587 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Box</source>
+          <target>Box</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Box - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 3254682113 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Brand</source>
+          <target>Marke</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Brand - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 168580315 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Certificate</source>
+          <target>Zertifikat</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Certificate - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 91893897 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Condition</source>
+          <target>Zustand</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Condition - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 2036091238 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Description</source>
+          <target>Beschreibung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Description - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 244065445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Model</source>
+          <target>Modell</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Model - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 4216905753 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Quantity</source>
+          <target>Menge</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Quantity - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 749414337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Reference</source>
+          <target>Referenz</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Reference - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 257041481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Sub Model</source>
+          <target>Submodell</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Sub Model - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 3587974337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Unit Price</source>
+          <target>EK-Preis</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Unit Price - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 3789347821 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Used Goods</source>
+          <target>Gebrauchtware</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Used Goods - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 329903938 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Variant Code</source>
+          <target>Variantencode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Variant Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 3635351337 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Vendor Name</source>
+          <target>Kreditorenname</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Vendor Name - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 200014473 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Vendor No.</source>
+          <target>Kreditorennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Vendor No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 1302896251 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Vendor Order No.</source>
+          <target>Kreditorenauftragsnr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Vendor Order No. - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 1892788397 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Year</source>
+          <target>Jahr</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Year - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 3396255587 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the box information of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt die Box-Angabe der Uhr aus den Artikelattributen an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Box - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 3254682113 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the brand of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt die Marke der Uhr aus den Artikelattributen an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Brand - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 168580315 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the certificate information of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt die Zertifikatsangabe der Uhr aus den Artikelattributen an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Certificate - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 91893897 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the condition of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt den Zustand der Uhr aus den Artikelattributen an, wie er an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Condition - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 2036091238 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the description of the purchase order line, as sent to the workshop.</source>
+          <target>Gibt die Beschreibung der Bestellzeile an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Description - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 244065445 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the model of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt das Modell der Uhr aus den Artikelattributen an, wie es an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Model - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 4216905753 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the quantity of the purchase order line, as sent to the workshop.</source>
+          <target>Gibt die Menge der Bestellzeile an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Quantity - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 749414337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the reference of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt die Referenz der Uhr aus den Artikelattributen an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Reference - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 257041481 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the sub model of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt das Submodell der Uhr aus den Artikelattributen an, wie es an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Sub Model - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 3587974337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the direct unit cost of the purchase order line, as sent to the workshop.</source>
+          <target>Gibt den EK-Preis der Bestellzeile an, wie er an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Unit Price - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 3789347821 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies whether the purchase order line is used goods, as sent to the workshop.</source>
+          <target>Gibt an, ob die Bestellzeile Gebrauchtware ist, wie an die Werkstatt übergeben.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Used Goods - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 329903938 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the variant of the purchase order line, as sent to the workshop.</source>
+          <target>Gibt die Variante der Bestellzeile an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Variant Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 3635351337 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the name of the vendor of the purchase order, as sent to the workshop.</source>
+          <target>Gibt den Namen des Kreditors der Bestellung an, wie er an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Vendor Name - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 200014473 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the vendor of the purchase order, as sent to the workshop.</source>
+          <target>Gibt den Kreditor der Bestellung an, wie er an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Vendor No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 1302896251 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the vendor order number of the purchase order, as sent to the workshop.</source>
+          <target>Gibt die Kreditorenauftragsnummer der Bestellung an, wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Vendor Order No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 1892788397 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the year of the watch from the item attributes, as sent to the workshop.</source>
+          <target>Gibt das Jahr der Uhr aus den Artikelattributen an, wie es an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Year - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 3842441922 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Currency Code</source>
+          <target>Währungscode</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Currency Code - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 3842441922 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the currency of the purchase order (local currency code if the order has none), as sent to the workshop.</source>
+          <target>Gibt die Währung der Bestellung an (Mandantenwährungscode, falls die Bestellung keine hat), wie sie an die Werkstatt übergeben wurde.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Currency Code - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2485353633 - Control 2532025618 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
+          <source>Workshop</source>
+          <target>Werkstatt</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW Workshop Setup - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 2485353633 - Control 2811504679 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
+          <source>Specifies the value the workshop API returns as tenant, so that the workshop can identify this company (e.g. GmbH).</source>
+          <target>Gibt den Wert an, den die Werkstatt-API als tenant liefert, damit die Werkstatt diesen Mandanten erkennt (z. B. GmbH).</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW Workshop Tenant - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="TableExtension 2485353633 - Field 2811504679 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
+          <source>Workshop Tenant</source>
+          <target>Werkstatt-Mandantenkennung</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW Workshop Tenant - Property Caption</note>
+        </trans-unit>
       </group>
     </body>
   </file>
