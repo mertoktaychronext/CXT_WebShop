@@ -289,7 +289,7 @@ codeunit 60347 "CXW Export Availability Change"
         JsonObj.Add('variantKey', VariantKey);
         JsonObj.Add('channel', StockChannelLbl);
         JsonObj.Add('amount_full', AvailabilityChangeEntry."CXW Inventory Quantity");
-        if AvailabilityChangeEntry."CXW Differential Taxation Purchase" then
+        if AvailabilityChangeEntry."CXW Diff. Taxation Purchase" then
             JsonObj.Add('_type', 'diff')
         else
             JsonObj.Add('_type', 'full');

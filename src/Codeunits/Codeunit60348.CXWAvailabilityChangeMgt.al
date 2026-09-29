@@ -112,7 +112,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityChangeEntry.SetRange("CXW Variant Code", VariantCode);
         AvailabilityChangeEntry.SetRange("CXW Location Code", LocationCode);
         AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", ItemLedgerEntryNo);
-        AvailabilityChangeEntry.SetRange("CXW Differential Taxation Purchase", DifferentialTaxationPurchase);
+        AvailabilityChangeEntry.SetRange("CXW Diff. Taxation Purchase", DifferentialTaxationPurchase);
         AvailabilityChangeEntry.SetRange("CXW Exported", false);
         if AvailabilityChangeEntry.FindFirst() then begin
             AvailabilityChangeEntry.Modify(true);
@@ -138,7 +138,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityChangeEntry."CXW Variant Code" := VariantCode;
         AvailabilityChangeEntry."CXW Location Code" := LocationCode;
         AvailabilityChangeEntry."CXW Item Ledger Entry No." := ItemLedgerEntryNo;
-        AvailabilityChangeEntry."CXW Differential Taxation Purchase" := DifferentialTaxationPurchase;
+        AvailabilityChangeEntry."CXW Diff. Taxation Purchase" := DifferentialTaxationPurchase;
         AvailabilityChangeEntry.Insert();
         RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
     end;
@@ -189,17 +189,17 @@ codeunit 60348 "CXW Availability Change Mgt"
         ItemLedgerEntry: Record "Item Ledger Entry";
     begin
         if AvailabilityChangeEntry."CXW Item Ledger Entry No." <> 0 then begin
-            Clear(AvailabilityChangeEntry."CXW Differential Taxation Purchase");
+            Clear(AvailabilityChangeEntry."CXW Diff. Taxation Purchase");
 
             if ItemLedgerEntry.Get(AvailabilityChangeEntry."CXW Item Ledger Entry No.") then
-                AvailabilityChangeEntry."CXW Differential Taxation Purchase" := ItemLedgerEntry."CXB Margin Taxation";
+                AvailabilityChangeEntry."CXW Diff. Taxation Purchase" := ItemLedgerEntry."CXB Margin Taxation";
         end;
 
         AvailabilityChangeEntry."CXW Inventory Quantity" := GetAvailableInventoryQuantity(
             AvailabilityChangeEntry."CXW Item No.",
             AvailabilityChangeEntry."CXW Variant Code",
             AvailabilityChangeEntry."CXW Location Code",
-            AvailabilityChangeEntry."CXW Differential Taxation Purchase");
+            AvailabilityChangeEntry."CXW Diff. Taxation Purchase");
 
         AvailabilityChangeEntry."CXW Changed At" := CurrentDateTime;
         AvailabilityChangeEntry.Modify(true);

@@ -46,7 +46,7 @@ page 60347 "CXWAvailabilityChange Entries"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the available inventory quantity after all reservations have been deducted.';
                 }
-                field("CXW Differential Taxation Purchase"; Rec."CXW Differential Taxation Purchase")
+                field("CXW Differential Taxation Purchase"; Rec."CXW Diff. Taxation Purchase")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies whether the triggering item ledger entry is subject to differential taxation.';
