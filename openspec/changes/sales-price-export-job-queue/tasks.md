@@ -14,7 +14,7 @@
 - [x] 2.3 Neue Prozedur `QueueExport(pSalesPriceChecking; pSalesPrice)`: "CXW Sales Price Export"-Datensatz aus Prüfzeile anlegen (inkl. `"CXW Unit Price (LCY)"` per `ResolveUnitPriceLCY` und `"CXW Sales Price SystemId"`), danach "Data Export Entry" mit `SALESPRICE`, JSON, `FileName` und `Source Record ID` = RecordId des Exportdatensatzes; `Insert(true)` und in derselben Transaktion `Status := "CXW Pending"` und `Modify(true)`; Rückverweis `"CXW Data Export Entry No."` setzen
 - [x] 2.4 `CreateExternalInterfaceFile`, `CreateDataExportEntry` und die RecordRef-basierte JSON-Erzeugung (`AddFieldToJson`, `"CXW Country Code"`-Anhang) entfernen
 - [x] 2.5 `SendToApiInterface` auf `var DataExportEntry` umstellen: `Status`, `Attempt Count += 1`, `Last Attempt At`, `Processed At` bzw. `Error Message` am übergebenen Eintrag setzen; `LogHttpCall` weiter mit `Entry No.`
-- [x] 2.6 Neue Prozedur `BuildSalesPriceJson(pExport; pSalesPrice; pItem): Text` mit den 29 Schlüsseln in fester Reihenfolge laut Spec und design.md, Entscheidung 5
+- [x] 2.6 Neue Prozedur `BuildSalesPriceJson(pExport; pSalesPrice; pItem): Text` mit den 30 Schlüsseln in fester Reihenfolge laut Spec und design.md, Entscheidung 5
 - [x] 2.7 Hilfsprozedur `CalcProfitPercent(pUnitPriceLcy, pVatBusPostingGr, pVatProdPostingGr, pUnitCost)` gemäß design.md, Entscheidung 6
 
 ## 3. Freigabe
@@ -47,7 +47,7 @@
 
 - [x] 7.1 Kompilieren ohne neue Fehler oder Warnungen (außer den bekannten Obsolete-Warnungen zu 60314)
 - [ ] 7.2 Test: Freigabe von DE, AT (gleiche Währung, unterschiedlicher Preis) und US → drei Exportdatensätze und drei `CXW Pending`-Einträge; nur DE erhält eine Archivzeile; nach dem Joblauf enthalten die Payloads je den eigenen Preis und das eigene Land
-- [ ] 7.3 Test: Payload enthält genau 29 Schlüssel in der vorgegebenen Reihenfolge, keine entfallenen Schlüssel, `reasonCode` nie leer, `profit`/`unitCost` gemäß Beispielrechnung
+- [ ] 7.3 Test: Payload enthält genau 30 Schlüssel in der vorgegebenen Reihenfolge, keine entfallenen Schlüssel, `reasonCode` nie leer, `profit`/`unitCost` gemäß Beispielrechnung
 - [ ] 7.4 Test: "Data Export Mgt." (ChronextBC) laufen lassen → SALESPRICE-Einträge bleiben unverändert
 - [ ] 7.5 Test: Endpoint liefert Fehler → Wiederholung bis `Max`, danach keine Auswahl mehr; "Requeue Sales Price" setzt zurück und der nächste Lauf sendet dieselbe Payload
 - [ ] 7.6 Test: gelöschter Exportdatensatz → nur dieser Eintrag `Error`, die übrigen werden verarbeitet, der Joblauf endet erfolgreich

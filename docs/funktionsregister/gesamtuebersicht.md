@@ -2,7 +2,7 @@
 
 **Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten und Kennzeichen "Auftrag halten" ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen). Frühere Stände siehe Git-Historie dieser Datei.
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 325
+**Gesamtanzahl Funktionen:** 326
 
 ---
 
@@ -10,15 +10,15 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Aktionen | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.8 | 92 | 211 | 68 | 10 | 36 | 325 |
-| **Gesamt** | – | **92** | **211** | **68** | **10** | **36** | **325** |
+| CHX.Webshop | 27.0.0.8 | 92 | 212 | 68 | 10 | 36 | 326 |
+| **Gesamt** | – | **92** | **212** | **68** | **10** | **36** | **326** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt sieben Funktionsbereiche:
 >
 > | Funktionsbereich | Funktionen |
 > |---|---|
 > | Webshop-Verfügbarkeit & Lieferzeiten | 96 |
-> | Verkaufspreisverwaltung (inkl. Export über Aufgabenwarteschlange) | 74 |
+> | Verkaufspreisverwaltung (inkl. Export über Aufgabenwarteschlange) | 75 |
 > | On-Demand-Beschaffung | 62 |
 > | Workshop-Ankaufsprüfung | 41 |
 > | SellWatch (Uhren-Ankauf) | 22 |
@@ -151,7 +151,7 @@
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `GetDestinationCode` | Prozedur | Public | Liefert das Exportziel `SALESPRICE`, an dem Job, Seiten und Aktionen die Verkaufspreis-Einträge erkennen. |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `ExportEntry` | Prozedur | Public | Versendet einen Exporteintrag: baut die JSON-Daten beim ersten Versuch einmalig auf und speichert sie, sodass jeder Wiederholungsversuch exakt denselben Inhalt sendet. |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `BuildPayload` | Prozedur | Internal | Sucht zum Exporteintrag den Preisstand, den Standard-Verkaufspreis und den Artikel zusammen; fehlt einer davon, bricht der Versuch mit einer verständlichen Meldung ab. |
-| CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `BuildSalesPriceJson` | Prozedur | Internal | Erstellt die JSON-Nachricht mit dem mit dem Empfänger vereinbarten, festen Feldumfang (Preise, Gültigkeit, Land, Währung, Grund, Kommentar, Einstandspreis, Gewinn in Prozent usw.). |
+| CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `BuildSalesPriceJson` | Prozedur | Internal | Erstellt die JSON-Nachricht mit dem mit dem Empfänger vereinbarten, festen Feldumfang (Artikel- und Variantenschlüssel mit den alten NAV-Nummern, Preise, Gültigkeit, Land, Währung, Grund, Kommentar, Einstandspreis, Gewinn in Prozent usw.). |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `CalcProfitPercent` | Prozedur | Internal | Berechnet den Gewinn in Prozent aus dem Nettopreis in Hauswährung (Preis abzüglich MwSt.) und dem Einstandspreis des Artikels. |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `GetReasonCodeName` | Prozedur | Internal | Liefert den Änderungsgrund als festen technischen Namen, unabhängig von der Sprache des Benutzers. |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `FormatDate`, `FormatTime`, `FormatDateTime` | Prozedur | Internal | [3 interne Hilfsfunktionen] Wandeln Datum, Uhrzeit und Zeitstempel in das standardisierte Textformat der Nachricht um; leere Werte werden als leerer Text gesendet. |
@@ -166,6 +166,7 @@
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `HmacSignatureHexLower` | Prozedur | Internal | Berechnet die endgültige AWS-Signatur einer Anfrage. |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `BuildRedactedRequestText` | Prozedur | Internal | Erstellt den protokollierten Anfragetext, wobei alle Zugangsdaten durch einen Platzhalter ersetzt werden. |
 | CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `LogHttpCall` | Prozedur | Internal | Schreibt jeden Preis-Export-Aufruf (Erfolg wie Fehlschlag) mit Bezug auf den Exporteintrag in das gemeinsame HTTP-Aufrufprotokoll. |
+| CHX.Webshop | CXW Export Gateway Sales Price (60329) | Codeunit | `GetExportItemAndVariantCode` | Prozedur | Internal | Ermittelt Artikelnummer und Variantencode für die Nachricht: die alte NAV-Artikelnummer bzw. den alten Variantencode des Artikels, falls gepflegt, sonst die BC-Artikelnummer bzw. den Variantencode des Preises (ohne Variante die Artikelnummer). |
 | CHX.Webshop | CXW Sales Price Export Entries (60320) | Seite | `CXW Data Export Entry No. – OnDrillDown` | Trigger | – | Öffnet per Klick auf die Nummer den zugehörigen Exporteintrag. |
 | CHX.Webshop | CXW Sales Price Export Entries (60320) | Seite | `Data Export Entry` | Aktion | – | Öffnet den Exporteintrag, der diesen Preis sendet. |
 | CHX.Webshop | CXW Sales Price Export Entries (60320) | Seite | `OnAfterGetRecord` | Trigger | – | Ermittelt für jede Zeile den Benutzernamen, der den Preis freigegeben hat. |
