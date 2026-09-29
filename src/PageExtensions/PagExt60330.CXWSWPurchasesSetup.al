@@ -19,6 +19,16 @@ pageextension 60330 "CXW SW Purchases Setup" extends "Purchases & Payables Setup
                     ToolTip = 'Specifies the number of days between posting the sales invoice for a consignment item and automatically posting the related purchase invoice.';
                 }
             }
+            group("CXW Workshop Setup")
+            {
+                Caption = 'Workshop';
+
+                field("CXW Workshop Tenant"; Rec."CXW Workshop Tenant")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value the workshop API returns as tenant, so that the workshop can identify this company (e.g. GmbH).';
+                }
+            }
         }
     }
 }

@@ -14,5 +14,10 @@ tableextension 60322 "CXW SW Purchases Setup" extends "Purchases & Payables Setu
             MinValue = 0;
             DataClassification = ToBeClassified;
         }
+        field(60302; "CXW Workshop Tenant"; Text[30])
+        {
+            Caption = 'Workshop Tenant';
+            DataClassification = ToBeClassified;
+        }
     }
 }

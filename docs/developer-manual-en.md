@@ -24,6 +24,8 @@ As a fourth, new component, the extension includes **Consignment Sales** (Enum 6
 
 > **Update 2026-09-23 (Add all Countries):** Action "Add all Currencies" replaced by "Add all Countries" – activation and sales price currency now per country (table/page extension 60346/60347 on "Country/Region"), table/page extension 60320/60327 on "Currency" removed, new key field "CXW Country Code" on Table 60312/60313, country code in the export JSON. Details: `openspec/changes/add-all-countries-sales-price/`.
 
+> **Update 2026-09-28 (Workshop API: purchase and watch data, version 27.0.0.7):** The `workshopLines` API additionally returns purchase and watch data (see Architecture, Workshop authenticity check section). They are copied as a snapshot onto Table 60318 by Codeunit 60335 on "Send to Workshop", so the workshop user needs no rights on purchase documents, vendors or items. Watch data comes from the standard item attributes with the IDs named by the workshop (1, 2, 3, 5, 8, 10, 11, 13), `seller_currency` from the order currency (blank → local currency), `tenant` from the new field "CXW Workshop Tenant" on the purchases & payables setup (TabExt 60322, field 60302); for that, "CXW Workshop API" additionally reads "Purchases & Payables Setup" (`InherentPermissions` on pages cannot cover other tables). Upgrade Codeunit 60336 fills existing lines in status New/WS checked once (upgrade tag `CXW-WORKSHOPLINE-PURCHASEDATA-20260928`). Details: `openspec/changes/workshop-line-api-purchase-data/`.
+
 > **Update 2026-09-02 (Full re-verification):** All 57 AL objects were reconciled line by line against the current code (branch `03-FEAT/Workshop`). Corrected: the architecture sketch still referred to a "Country/Region" table/page extension that does not (any longer) exist in this extension — activation for "Add all Currencies" lives exclusively on "Currency". Clarified: `CreateSellWatchItem` reads the item template from `Purchases & Payables Setup."CXW SW Item Template Code"`. No code changes.
 
 > **Update 2026-08-14 (Consignment Sales added):** New objects 60341/60342/60343/60344/60345, new setup field `"CXW SW Consignment Invoice Delay (Days)"` on `TableExtension 60322 "CXW SW Purchases Setup"`. This also restored the SellWatch item-template configuration that a previous version of this manual documented as "lost before commit" (see Known Limitations, prior wording) — it is now present in production code, and the note below has been corrected. Also corrected the previously wrong "no dependencies" claim: `app.json` has depended on **CHX.Base** since the item-template configuration was added.
@@ -284,7 +286,15 @@ On valid input:
    Purchase Line (TableExtension 60321 "CXW Workshop Purchase Line")
    ▼
 Table 60318 "CXW Workshop Line" created (PK: Document Type/No./Line No.),
-Status = New, Item No. copied from the purchase line
+Status = New, Item No. copied from the purchase line;
+Codeunit 60335 "CXW Workshop Line Mgt.".FillPurchaseData copies a snapshot
+of the purchase header (Vendor Order No., Buy-from Vendor No./Name,
+Currency Code — blank → GL Setup "LCY Code"), the purchase line (Variant
+Code, Description, Quantity, Direct Unit Cost, ChronextBC "Used Good") and
+the item's standard item attributes ("Item Attribute Value Mapping",
+attribute IDs 1 brand, 2 model, 3 sub model, 5 reference, 8 year via
+Evaluate → Integer, 10 condition, 11 box, 13 certificate — a missing value
+leaves the field empty or 0) into fields 30–38/40–47 of the Workshop Line
    │
    │  PageExtension 60329 "CXW Workshop Purch Order Subf" locks the
    │  standard line fields (Editable = false) once "Sent to Workshop" = true
@@ -293,6 +303,13 @@ External workshop reads/writes via
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
    endpoint pattern .../api/saliniLife/workshop/v1.0/companies({companyId})/
    workshopLines; Insert/Delete blocked, status regressions blocked)
+   │  workshop additionally reads (read-only, PATCH changes rejected):
+   │  tenant (at runtime from "Purchases & Payables Setup"."CXW Workshop
+   │  Tenant", e.g. "GmbH"), vendorOrderNo, vendorNo, vendorName,
+   │  variantCode, description, quantity, unitPrice, seller_currency,
+   │  usedGoods, brand, model, subModel, ref, year, condition, box,
+   │  certificate — everything except tenant from the Workshop Line itself;
+   │  "CXW Workshop API" = Workshop Line RM + Purchases & Payables Setup R
    │  workshop sets: isAuthentic, Attribute 1-10, Status = "WS checked"
    ▼
 Codeunit 60331 "CXW Process Workshop Lines" (job-queue driven, OnRun

@@ -79,6 +79,7 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
     local procedure CreateWorkshopLine(PurchLine: Record "Purchase Line")
     var
         WorkshopLine: Record "CXW Workshop Line";
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
     begin
         WorkshopLine.Init();
         WorkshopLine."CXW Document Type" := PurchLine."Document Type";
@@ -87,6 +88,7 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         WorkshopLine."CXW Item No." := PurchLine."No.";
         WorkshopLine."CXW Manufacturer Serial No." := PurchLine."CXW Manufacturer Serial No.";
         WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"new";
+        WorkshopLineMgt.FillPurchaseData(WorkshopLine, PurchLine);
         WorkshopLine.Insert(true);
     end;
 

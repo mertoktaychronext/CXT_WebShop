@@ -51,6 +51,78 @@ page 60339 "CXW Workshop Line API"
                 field(features; Rec."CXW Features") { }
                 field(attribute9; Rec."CXW Attribute 9") { }
                 field(attribute10; Rec."CXW Attribute 10") { }
+                field(tenant; TenantName)
+                {
+                    Editable = false;
+                }
+                field(vendorOrderNo; Rec."CXW Vendor Order No.")
+                {
+                    Editable = false;
+                }
+                field(vendorNo; Rec."CXW Vendor No.")
+                {
+                    Editable = false;
+                }
+                field(vendorName; Rec."CXW Vendor Name")
+                {
+                    Editable = false;
+                }
+                field(variantCode; Rec."CXW Variant Code")
+                {
+                    Editable = false;
+                }
+                field(description; Rec."CXW Description")
+                {
+                    Editable = false;
+                }
+                field(brand; Rec."CXW Brand")
+                {
+                    Editable = false;
+                }
+                field(model; Rec."CXW Model")
+                {
+                    Editable = false;
+                }
+                field(subModel; Rec."CXW Sub Model")
+                {
+                    Editable = false;
+                }
+                field(ref; Rec."CXW Reference")
+                {
+                    Editable = false;
+                }
+                field(year; Rec."CXW Year")
+                {
+                    Editable = false;
+                }
+                field(box; Rec."CXW Box")
+                {
+                    Editable = false;
+                }
+                field(certificate; Rec."CXW Certificate")
+                {
+                    Editable = false;
+                }
+                field(condition; Rec."CXW Condition")
+                {
+                    Editable = false;
+                }
+                field(quantity; Rec."CXW Quantity")
+                {
+                    Editable = false;
+                }
+                field(unitPrice; Rec."CXW Unit Price")
+                {
+                    Editable = false;
+                }
+                field(seller_currency; Rec."CXW Currency Code")
+                {
+                    Editable = false;
+                }
+                field(usedGoods; Rec."CXW Used Goods")
+                {
+                    Editable = false;
+                }
                 field(systemId; Rec.SystemId)
                 {
                     Editable = false;
@@ -71,9 +143,58 @@ page 60339 "CXW Workshop Line API"
             Error(FieldNotEditableErr, Rec.FieldCaption("CXW Item No."));
         if Rec."CXW Manufacturer Serial No." <> xRec."CXW Manufacturer Serial No." then
             Error(FieldNotEditableErr, Rec.FieldCaption("CXW Manufacturer Serial No."));
+        CheckPurchaseDataUnchanged();
         exit(true);
     end;
 
+    trigger OnOpenPage()
     var
+        PurchasesSetup: Record "Purchases & Payables Setup";
+    begin
+        // Read at runtime, not stored on the line, so a corrected value applies to all lines.
+        if PurchasesSetup.Get() then
+            TenantName := PurchasesSetup."CXW Workshop Tenant";
+    end;
+
+    local procedure CheckPurchaseDataUnchanged()
+    begin
+        if Rec."CXW Vendor Order No." <> xRec."CXW Vendor Order No." then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Vendor Order No."));
+        if Rec."CXW Vendor No." <> xRec."CXW Vendor No." then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Vendor No."));
+        if Rec."CXW Vendor Name" <> xRec."CXW Vendor Name" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Vendor Name"));
+        if Rec."CXW Variant Code" <> xRec."CXW Variant Code" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Variant Code"));
+        if Rec."CXW Description" <> xRec."CXW Description" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Description"));
+        if Rec."CXW Quantity" <> xRec."CXW Quantity" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Quantity"));
+        if Rec."CXW Unit Price" <> xRec."CXW Unit Price" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Unit Price"));
+        if Rec."CXW Currency Code" <> xRec."CXW Currency Code" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Currency Code"));
+        if Rec."CXW Used Goods" <> xRec."CXW Used Goods" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Used Goods"));
+        if Rec."CXW Brand" <> xRec."CXW Brand" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Brand"));
+        if Rec."CXW Model" <> xRec."CXW Model" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Model"));
+        if Rec."CXW Sub Model" <> xRec."CXW Sub Model" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Sub Model"));
+        if Rec."CXW Reference" <> xRec."CXW Reference" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Reference"));
+        if Rec."CXW Year" <> xRec."CXW Year" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Year"));
+        if Rec."CXW Condition" <> xRec."CXW Condition" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Condition"));
+        if Rec."CXW Box" <> xRec."CXW Box" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Box"));
+        if Rec."CXW Certificate" <> xRec."CXW Certificate" then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Certificate"));
+    end;
+
+    var
+        TenantName: Text;
         FieldNotEditableErr: Label '%1 cannot be changed through this API.', Comment = '%1 = field caption';
 }

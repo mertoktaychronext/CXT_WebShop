@@ -24,6 +24,8 @@ Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** 
 
 > **Update 2026-09-23 (Add all Countries):** Aktion "Add all Currencies" durch "Add all Countries" ersetzt – Aktivierung und Verkaufspreiswährung jetzt pro Land (Table/Page Extension 60346/60347 auf "Country/Region"), Table/Page Extension 60320/60327 auf "Currency" entfernt, neues Schlüsselfeld "CXW Country Code" auf Table 60312/60313, Ländercode im Export-JSON. Details: `openspec/changes/add-all-countries-sales-price/`.
 
+> **Update 2026-09-28 (Workshop-API: Bestell- und Uhrendaten, Version 27.0.0.7):** Die API `workshopLines` liefert zusätzlich Bestell- und Uhrendaten (siehe Architektur, Abschnitt Workshop-Ankaufsprüfung). Sie werden bei "Send to Workshop" über Codeunit 60335 als Momentaufnahme auf Table 60318 kopiert, damit der Werkstatt-Benutzer keine Rechte auf Bestellung, Kreditor oder Artikel braucht. Uhrendaten kommen aus den Standard-Artikelattributen mit den von der Werkstatt benannten IDs (1, 2, 3, 5, 8, 10, 11, 13), `seller_currency` aus der Bestellwährung (leer → Mandantenwährung), `tenant` aus dem neuen Feld "CXW Workshop Tenant" der Einkaufseinrichtung (TabExt 60322, Feld 60302); dafür hat "CXW Workshop API" zusätzlich Lesezugriff auf "Purchases & Payables Setup" (`InherentPermissions` ist auf Pages für fremde Tabellen nicht möglich). Die Upgrade-Codeunit 60336 befüllt bestehende Zeilen im Status New/WS checked einmalig (Upgrade-Tag `CXW-WORKSHOPLINE-PURCHASEDATA-20260928`). Details: `openspec/changes/workshop-line-api-purchase-data/`.
+
 > **Update 2026-09-02 (Vollständige Neuverifikation):** Alle 57 AL-Objekte wurden Zeile für Zeile gegen den aktuellen Code (Branch `03-FEAT/Workshop`) abgeglichen. Korrigiert: die Architektur-Skizze verwies noch auf eine "Country/Region"-Table-/Page-Erweiterung, die in dieser Erweiterung nicht (mehr) existiert – die Aktivierung für "Add all Currencies" liegt ausschließlich auf der "Currency". Präzisiert: `CreateSellWatchItem` liest die Artikelvorlage aus `Purchases & Payables Setup."CXW SW Item Template Code"`. Keine Code-Änderungen.
 
 > **Update 2026-08-14 (Kommissionsverkauf ergänzt):** Neue Objekte 60341/60342/60343/60344/60345, neues Setup-Feld `"CXW SW Consignment Invoice Delay (Days)"` auf `TableExtension 60322 "CXW SW Purchases Setup"`. Dabei wurde auch die zuvor als "verloren gegangen" dokumentierte SellWatch-Artikelvorlagen-Konfiguration (siehe Bekannte Einschränkungen, alter Stand) tatsächlich wiederhergestellt und ist seither produktiv im Code vorhanden – der entsprechende Hinweis unten wurde korrigiert. Zusätzlich wurde die bislang falsche Aussage "keine Dependencies" korrigiert: `app.json` hängt seit der Artikelvorlagen-Konfiguration von **CHX.Base** ab.
@@ -284,7 +286,15 @@ Bei gültiger Eingabe:
    Purchase Line (TableExtension 60321 "CXW Workshop Purchase Line")
    ▼
 Table 60318 "CXW Workshop Line" neu angelegt (PK: Document Type/No./
-Line No.), Status = New, Item No. aus der Purchase Line übernommen
+Line No.), Status = New, Item No. aus der Purchase Line übernommen;
+Codeunit 60335 "CXW Workshop Line Mgt.".FillPurchaseData kopiert als
+Momentaufnahme Bestellkopf (Vendor Order No., Buy-from Vendor No./Name,
+Currency Code – leer → GL Setup "LCY Code"), Bestellzeile (Variant Code,
+Description, Quantity, Direct Unit Cost, ChronextBC "Used Good") und die
+Standard-Artikelattribute des Artikels ("Item Attribute Value Mapping",
+Attribut-IDs 1 Marke, 2 Modell, 3 Submodell, 5 Referenz, 8 Jahr per
+Evaluate → Integer, 10 Zustand, 11 Box, 13 Zertifikat – fehlt ein Wert,
+bleibt das Feld leer bzw. 0) auf Felder 30–38/40–47 der Workshop Line
    │
    │  PageExtension 60329 "CXW Workshop Purch Order Subf" sperrt ab
    │  "Sent to Workshop" = true die Standardfelder der Zeile (Editable = false)
@@ -293,6 +303,13 @@ Externe Werkstatt liest/schreibt über
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
    Endpunkt-Muster .../api/saliniLife/workshop/v1.0/companies({companyId})/
    workshopLines; Insert/Delete gesperrt, Statusrückschritte gesperrt)
+   │  Werkstatt liest zusätzlich (nur lesend, PATCH-Änderungen abgelehnt):
+   │  tenant (zur Laufzeit aus "Purchases & Payables Setup"."CXW Workshop
+   │  Tenant", z. B. "GmbH"), vendorOrderNo, vendorNo, vendorName,
+   │  variantCode, description, quantity, unitPrice, seller_currency,
+   │  usedGoods, brand, model, subModel, ref, year, condition, box,
+   │  certificate – alles außer tenant aus der Workshop Line selbst;
+   │  "CXW Workshop API" = Workshop Line RM + Purchases & Payables Setup R
    │  Werkstatt setzt: isAuthentic, Attribute 1-10, Status = "WS checked"
    ▼
 Codeunit 60331 "CXW Process Workshop Lines" (job-queue-gesteuert, OnRun
