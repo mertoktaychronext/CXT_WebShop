@@ -153,7 +153,7 @@ table 60318 "CXW Workshop Line"
         }
         field(36; "CXW Unit Price"; Decimal)
         {
-            Caption = 'Unit Price';
+            Caption = 'Direct Unit Cost';
             Editable = false;
             DataClassification = ToBeClassified;
             AutoFormatType = 2;

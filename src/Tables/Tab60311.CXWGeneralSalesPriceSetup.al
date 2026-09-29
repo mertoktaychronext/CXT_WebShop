@@ -110,6 +110,11 @@ table 60311 "CXW General Sales Price Setup"
             InitValue = 'DE';
             TableRelation = "Country/Region";
         }
+        field(18; "CXW Prices Incl. VAT"; Boolean)
+        {
+            Caption = 'Prices Incl. VAT';
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys
