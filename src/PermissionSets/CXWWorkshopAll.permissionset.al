@@ -23,7 +23,10 @@ permissionset 60301 "CXW Workshop All"
         tabledata "CXW Http Call Log" = RIMD,
         tabledata "Data Export Entry" = RIMD,
         tabledata "Sales Line" = R,
-        tabledata "Reservation Entry" = R,
+        tabledata "Reservation Entry" = RIM,
+        tabledata "Serial No. Information" = RIM,
+        tabledata "No. Series Line" = RM,
+        tabledata "Item Tracking Code" = R,
         tabledata "Item Ledger Entry" = R,
         tabledata "Transfer Line" = R,
         tabledata "General Ledger Setup" = R,
@@ -48,7 +51,6 @@ permissionset 60301 "CXW Workshop All"
         page "CXW Availability Inv. Times" = X,
         page "CXW Workshop Lines" = X,
         page "CXW Workshop Line API" = X,
-        page "CXW Serial No. Input" = X,
         page "CXW Cons. Posting Entries" = X,
         page "CXWAvailabilityChange Entries" = X;
 }

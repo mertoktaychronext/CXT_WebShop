@@ -94,7 +94,10 @@ For purchased watches that need to be checked for authenticity by an external wo
 Open the relevant **purchase order** and click **"Send to Workshop"**. The system asks you, one line at a time, for every line not yet transmitted (type Item, quantity not 0):
 
 1. **"Is item {item no.} {description} really arrived?"** – Confirm with "Yes" if the item has physically arrived. On "No" the line is marked "Not Arrived" and skipped; you can run the action again later once the item has arrived.
-2. On "Yes", an input dialog opens for the **manufacturer serial number**. This entry is mandatory — without a valid serial number the line is skipped and listed in a summary message at the end of the action, while the remaining lines are still processed normally.
+2. On "Yes", the watch's **Serial No. Information Card** opens. If the purchase line has no serial number yet, the system automatically assigns the next available number and shows it on the card. Enter the **manufacturer serial number** there and — if required for the item — the **box** and **papers** details, then close the card.
+3. If the manufacturer serial number or a required detail is still missing, the line is skipped and listed with the reason in a summary message at the end of the action, while the remaining lines are still processed normally. The next time you run the action, the same serial number appears again.
+
+> Lines with a quantity greater than 1 or items without serial number tracking cannot be sent to the workshop; they also appear in the summary message. In that case, contact a key user.
 
 Once entered successfully, the line is marked "Sent to Workshop" and its fields on the purchase line become **read-only** (item, quantity, price, etc.) — this prevents a line already handed over to the workshop from being changed afterwards while the check is still in progress.
 
@@ -147,8 +150,8 @@ The price export has not been set up or is disabled. Contact a key user (see the
 **A SellWatch request shows no order number.**
 The order hasn't been created for this request automatically yet.
 
-**"Send to Workshop" asks for the manufacturer serial number even though I wanted to cancel.**
-The dialog is mandatory for items marked as arrived. Choose "No" in the preceding confirmation dialog if the item hasn't actually arrived yet — the line is then skipped without cancelling the rest of the action.
+**"Send to Workshop" opens the Serial No. Information Card even though I wanted to cancel.**
+The card is mandatory for items marked as arrived. If you close it without a manufacturer serial number, the line is skipped (the assigned serial number is kept for the next attempt). Choose "No" in the preceding confirmation dialog if the item hasn't actually arrived yet — the line is then skipped without cancelling the rest of the action.
 
 **A Workshop line stays on status "Error" permanently.**
 Automatic processing failed for this line. This isn't something you can fix yourself as an end user — contact a key user (see the Key User Manual).

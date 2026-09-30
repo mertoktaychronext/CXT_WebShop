@@ -192,6 +192,76 @@ codeunit 60335 "CXW Workshop Line Mgt."
         exit(0);
     end;
 
+    // Serial number handling for "Send to Workshop": the watch is identified by its BC serial number,
+    // the manufacturer serial number is maintained on the Serial No. Information card (CHX.Base).
+    internal procedure IsSerialNoTracked(pItemNo: Code[20]): Boolean
+    var
+        Item: Record Item;
+        ItemTrackingCode: Record "Item Tracking Code";
+    begin
+        Item.SetLoadFields("Item Tracking Code");
+        if not Item.Get(pItemNo) then
+            exit(false);
+        if Item."Item Tracking Code" = '' then
+            exit(false);
+        if not ItemTrackingCode.Get(Item."Item Tracking Code") then
+            exit(false);
+        exit(ItemTrackingCode."SN Purchase Inbound Tracking");
+    end;
+
+    internal procedure FindPurchLineSerialNo(PurchLine: Record "Purchase Line"): Code[50]
+    var
+        ReservationEntry: Record "Reservation Entry";
+    begin
+        ReservationEntry.SetRange("Source Type", Database::"Purchase Line");
+        ReservationEntry.SetRange("Source Subtype", PurchLine."Document Type".AsInteger());
+        ReservationEntry.SetRange("Source ID", PurchLine."Document No.");
+        ReservationEntry.SetRange("Source Ref. No.", PurchLine."Line No.");
+        ReservationEntry.SetFilter("Serial No.", '<>%1', '');
+        ReservationEntry.SetLoadFields("Serial No.");
+        if ReservationEntry.FindFirst() then
+            exit(ReservationEntry."Serial No.");
+        exit('');
+    end;
+
+    // Draws the next number from the item's serial no. series and assigns it as item tracking
+    // (quantity 1) to the purchase line, so the later receipt (Codeunit 60331) can be posted.
+    // Returns '' if the item has no serial no. series.
+    internal procedure AssignNextSerialNo(PurchLine: Record "Purchase Line"): Code[50]
+    var
+        Item: Record Item;
+        ForReservEntry: Record "Reservation Entry";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        NoSeries: Codeunit "No. Series";
+        SerialNo: Code[50];
+    begin
+        Item.SetLoadFields("Serial Nos.");
+        Item.Get(PurchLine."No.");
+        if Item."Serial Nos." = '' then
+            exit('');
+
+        SerialNo := NoSeries.GetNextNo(Item."Serial Nos.");
+        ForReservEntry."Serial No." := SerialNo;
+        CreateReservEntry.CreateReservEntryFor(
+            Database::"Purchase Line", PurchLine."Document Type".AsInteger(), PurchLine."Document No.", '', 0, PurchLine."Line No.",
+            PurchLine."Qty. per Unit of Measure", PurchLine.Quantity, PurchLine."Quantity (Base)", ForReservEntry);
+        CreateReservEntry.CreateEntry(
+            PurchLine."No.", PurchLine."Variant Code", PurchLine."Location Code", PurchLine.Description,
+            PurchLine."Expected Receipt Date", 0D, 0, "Reservation Status"::Surplus);
+        exit(SerialNo);
+    end;
+
+    internal procedure GetOrCreateSerialNoInformation(pItemNo: Code[20]; pVariantCode: Code[10]; pSerialNo: Code[50]; var SerialNoInformation: Record "Serial No. Information")
+    begin
+        if SerialNoInformation.Get(pItemNo, pVariantCode, pSerialNo) then
+            exit;
+        SerialNoInformation.Init();
+        SerialNoInformation."Item No." := pItemNo;
+        SerialNoInformation."Variant Code" := pVariantCode;
+        SerialNoInformation."Serial No." := pSerialNo;
+        SerialNoInformation.Insert(true);
+    end;
+
     local procedure GetCurrencyCode(pCurrencyCode: Code[10]): Code[10]
     var
         GLSetup: Record "General Ledger Setup";

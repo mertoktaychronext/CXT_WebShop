@@ -1,8 +1,8 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei. Aktualisiert am 2026-09-30: SellWatch: Artikelvorlage je Angebotsart, neue Prozedur `GetSellWatchItemTemplateCode`; SellWatch-Einzelverarbeitung je Angebot mit Fehlerprotokoll (Codeunit 60351, `ProcessOffer`, `ProcessOfferWithErrorHandling`, `OnAfterGetRecord` auf Page 60307).
+**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei. Aktualisiert am 2026-09-30: SellWatch: Artikelvorlage je Angebotsart, neue Prozedur `GetSellWatchItemTemplateCode`; SellWatch-Einzelverarbeitung je Angebot mit Fehlerprotokoll (Codeunit 60351, `ProcessOffer`, `ProcessOfferWithErrorHandling`, `OnAfterGetRecord` auf Page 60307). Send to Workshop: Seriennr.-Informationskarte (Page 6504) statt Page 60340, neue Seriennummer-Prozeduren in Codeunit 60335 und `TryCheckPresenceMandatory` in PageExtension 60328.
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 330
+**Gesamtanzahl Funktionen:** 334
 
 ---
 
@@ -10,8 +10,8 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Aktionen | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.10 | 91 | 215 | 69 | 10 | 36 | 330 |
-| **Gesamt** | – | **91** | **215** | **69** | **10** | **36** | **330** |
+| CHX.Webshop | 27.0.0.10 | 90 | 219 | 69 | 10 | 36 | 334 |
+| **Gesamt** | – | **90** | **219** | **69** | **10** | **36** | **334** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt sieben Funktionsbereiche (das Kennzeichen "Auftrag halten" liegt seit 27.0.0.10 in CHX.Base):
 >
@@ -20,7 +20,7 @@
 > | Webshop-Verfügbarkeit & Lieferzeiten | 96 |
 > | Verkaufspreisverwaltung (inkl. Export über Aufgabenwarteschlange) | 75 |
 > | On-Demand-Beschaffung | 62 |
-> | Workshop-Ankaufsprüfung | 41 |
+> | Workshop-Ankaufsprüfung | 45 |
 > | SellWatch (Uhren-Ankauf) | 27 |
 > | Gemeinsame HTTP-Infrastruktur | 21 |
 > | Kommissionsverkauf (verzögerte EK-Faktura) | 8 |
@@ -63,9 +63,10 @@
 | CHX.Webshop | CXW Workshop Line (60318) | Tabelle | `OnInsert` | Trigger | – | Trägt beim Anlegen einer Werkstattzeile automatisch den Erstellungszeitpunkt ein. |
 | CHX.Webshop | CXW Workshop Line (60318) | Tabelle | `OnModify` | Trigger | – | Verhindert einen Rückschritt des Prüfstatus (von "WS geprüft" zurück auf "Neu" oder weg von "Verarbeitet") sowie einen Wechsel auf "Fehler" aus einem anderen Status als "WS geprüft" heraus, unabhängig davon, ob die Änderung über die API oder intern erfolgt; trägt beim Wechsel auf "WS geprüft" automatisch den Prüfzeitpunkt ein. |
 | CHX.Webshop | CXW Workshop Purchase Line (60321) | Tabellenerweiterung | `OnDelete` | Trigger | – | Löscht beim Löschen einer Einkaufszeile die zugehörige Werkstattzeile automatisch mit, sofern diese noch nicht abschließend verarbeitet wurde; bereits verarbeitete Werkstattzeilen bleiben als Prüfnachweis bestehen. |
-| CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `CXW Send to Workshop` | Aktion | – | Fragt für jede offene, noch nicht übertragene Bestellzeile die Ankunft ab, erfasst bei Bestätigung die Herstellerseriennummer über einen Eingabedialog und legt daraus eine Werkstattzeile an; nicht angekommene oder abgebrochene Zeilen werden übersprungen, ohne die übrigen Zeilen zu blockieren. |
+| CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `CXW Send to Workshop` | Aktion | – | Fragt je offener Bestellzeile die Ankunft ab, vergibt bei Bedarf die nächste Seriennummer, öffnet die Seriennr.-Informationskarte zur Erfassung von Herstellerseriennummer, Box und Papieren und legt daraus eine Werkstattzeile an; unvollständige Zeilen werden übersprungen. |
 | CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `SendLinesToWorkshop` | Prozedur | Internal | Ermittelt alle offenen, noch nicht an die Werkstatt gesendeten Bestellzeilen und verarbeitet sie nacheinander; zeigt am Ende eine Sammelmeldung zu nicht übertragenen Zeilen an. |
-| CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `ProcessLine` | Prozedur | Internal | Führt für eine einzelne Bestellzeile die Ankunfts- und Seriennummer-Abfrage aus und legt bei Erfolg die Werkstattzeile an. |
+| CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `ProcessLine` | Prozedur | Internal | Prüft Menge 1 und Seriennummernverfolgung, ermittelt oder vergibt die Seriennummer, öffnet die Seriennr.-Informationskarte und legt bei vollständigen Angaben die Werkstattzeile an. |
+| CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `TryCheckPresenceMandatory` | Prozedur | Internal | Prüft über CHX.Base die Pflichtangaben (Herstellerseriennummer, Box, Papiere) und meldet Fehlendes als Zeilenfehler. |
 | CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `AddErrorLine` | Prozedur | Internal | Trägt eine nicht übertragene Zeile mit Grund in die Sammelmeldung ein. |
 | CHX.Webshop | CXW Workshop Purchase Order (60328) | Seitenerweiterung | `CreateWorkshopLine` | Prozedur | Internal | Legt zu einer erfolgreich erfassten Bestellzeile die zugehörige Werkstattzeile mit Status "Neu" an und übernimmt dabei die Bestell- und Uhrendaten (über Codeunit 60335). |
 | CHX.Webshop | CXW Workshop Purch Order Subf (60329) | Seitenerweiterung | `OnAfterGetRecord` | Trigger | – | Sperrt die Standardfelder einer Zeile (Artikel, Menge, Preis u. a.) für die Bearbeitung, sobald diese bereits an die Werkstatt gesendet wurde. |
@@ -73,7 +74,6 @@
 | CHX.Webshop | CXW Workshop Line API (60339) | Seite | `OnModifyRecord` | Trigger | – | Lehnt einen Änderungsversuch über die API ab, wenn die Werkstatt versucht, Schlüssel-, Artikel-, Seriennummern- oder Bestelldatenfelder zu verändern; erlaubt bleiben nur Attribute, Echtheits-Kennzeichen und Status. |
 | CHX.Webshop | CXW Workshop Line API (60339) | Seite | `OnOpenPage` | Trigger | – | Liest beim Aufruf den Mandantennamen aus der Einkaufseinrichtung ("Workshop Tenant"), der in jeder Zeile als `tenant` mitgeliefert wird; eine Korrektur wirkt so sofort auf alle Zeilen. |
 | CHX.Webshop | CXW Workshop Line API (60339) | Seite | `CheckPurchaseDataUnchanged` | Prozedur | Internal | Prüft, dass die Werkstatt keine der übergebenen Bestell- und Uhrendaten (Kreditor, Preis, Währung, Marke, Modell usw.) verändert, und bricht sonst mit einem Hinweis ab. |
-| CHX.Webshop | CXW Serial No. Input (60340) | Seite | `GetSerialNo` | Prozedur | Public | Gibt die im Dialog eingegebene Herstellerseriennummer an den Aufrufer zurück. |
 | CHX.Webshop | CXW Process Workshop Lines (60331) | Codeunit | `OnRun` | Trigger | – | Startet die Verarbeitung aller Werkstattzeilen im Status "WS geprüft". |
 | CHX.Webshop | CXW Process Workshop Lines (60331) | Codeunit | `ProcessCheckedLines` | Prozedur | Internal | Ermittelt alle geprüften Werkstattzeilen und übergibt sie einzeln zur Verarbeitung. |
 | CHX.Webshop | CXW Process Workshop Lines (60331) | Codeunit | `ProcessLineWithErrorHandling` | Prozedur | Internal | Verarbeitet eine Zeile fehlerisoliert: bei Fehlschlag werden der Fehlertext und der Status "Fehler" auf der Zeile vermerkt, ohne die Verarbeitung der übrigen Zeilen zu blockieren. |
@@ -90,6 +90,10 @@
 | CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `GetItemAttributeValue` | Prozedur | Internal | Liest den Text eines bestimmten Artikelattributs des Artikels; leer, wenn kein Wert zugeordnet ist. |
 | CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `GetItemAttributeInteger` | Prozedur | Internal | Liest ein Artikelattribut als Zahl (für das Baujahr); ein nicht ganzzahliger Wert ergibt 0. |
 | CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `BrandAttributeId` … `CertificateAttributeId` | Prozedur | Internal | [8 interne Hilfsfunktionen] Liefern die mit der Werkstatt vereinbarten Artikelattribut-IDs (1, 2, 3, 5, 8, 10, 11, 13) für Marke, Modell, Untermodell, Referenz, Baujahr, Zustand, Box und Zertifikat. |
+| CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `IsSerialNoTracked` | Prozedur | Protected | Prüft, ob der Artikel im Einkauf mit Seriennummern verfolgt wird. |
+| CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `FindPurchLineSerialNo` | Prozedur | Protected | Liefert die der Bestellzeile bereits zugeordnete Seriennummer. |
+| CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `AssignNextSerialNo` | Prozedur | Protected | Zieht die nächste Seriennummer aus der Artikel-Nummernserie und ordnet sie der Bestellzeile als Artikelverfolgung zu. |
+| CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `GetOrCreateSerialNoInformation` | Prozedur | Protected | Liest oder legt die Seriennr.-Information zu Artikel, Variante und Seriennummer an. |
 | CHX.Webshop | CXW Workshop Upgrade (60336) | Codeunit | `OnUpgradePerCompany` | Trigger | – | Führt je Mandant einmalig die Nachbefüllung aus und merkt sich per Upgrade-Kennzeichen, dass sie erledigt ist. |
 | CHX.Webshop | CXW Workshop Upgrade (60336) | Codeunit | `FillPurchaseDataOnOpenLines` | Prozedur | Internal | Ergänzt bei allen noch nicht abgeschlossenen Werkstattzeilen (Status "Neu" und "WS geprüft") mit vorhandener Bestellzeile die Bestell- und Uhrendaten. |
 | CHX.Webshop | CXW Workshop Upgrade (60336) | Codeunit | `GetWorkshopLinePurchaseDataTag` | Prozedur | Internal | Liefert den Namen des Upgrade-Kennzeichens für diese Nachbefüllung. |
@@ -314,7 +318,7 @@
 |---|---|---|
 | Webshop-Verfügbarkeit & Lieferzeiten zu ChronextBC verlagern | Table 60346–60348, Codeunit 60343/60347/60348/60349, Page 60346–60349, PageExtension 60331/60348, TableExtension 60348, anteilig PageExtension 60347 | Größter Bereich der App (96 Funktionen) und fachlich eng mit ChronextBC verzahnt (Exporteinstellungen, Exporteinträge, Einrichtungswerte, Länderfelder liegen bereits dort). Vorher die doppelte Lagerort- und Wiederbeschaffbarkeitslogik zusammenführen und einen eigenen Berechtigungssatz anlegen – die Tabellen stecken heute nur im Workshop-Set 60301. |
 | SellWatch als eigenständige Extension | Table 60300/60301, TableExtension 60303 (SellWatch-Feld)/60304, Codeunit 60305/60351, Page 60307/60308/60337, PermissionSet 60300/60310 | Fachlich vollständig unabhängig; Auslagerung wäre überwiegend eine Verschiebe-Operation. Achtung: TableExtension 60303 enthält inzwischen auch die On-Demand-Verknüpfungsfelder und müsste aufgeteilt werden. |
-| Workshop-Ankaufsprüfung als eigenständige Extension | Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Page 60338/60339/60340, Codeunit 60331/60335/60336, PermissionSet 60301/60302 | Fachlich unabhängig mit eigenem Datenmodell und eigener API. Kopplung nur über Einkaufszeile/-bestellung und das Einrichtungsfeld "Workshop Tenant". Eine eigene Extension bräuchte einen eigenen `idRanges`-Block, da 60300–60349 bei Tabellen, Codeunits und Seiten am oberen Ende vollständig belegt ist. |
+| Workshop-Ankaufsprüfung als eigenständige Extension | Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Page 60338/60339, Codeunit 60331/60335/60336, PermissionSet 60301/60302 | Fachlich unabhängig mit eigenem Datenmodell und eigener API. Kopplung nur über Einkaufszeile/-bestellung und das Einrichtungsfeld "Workshop Tenant". Eine eigene Extension bräuchte einen eigenen `idRanges`-Block, da 60300–60349 bei Tabellen, Codeunits und Seiten am oberen Ende vollständig belegt ist. |
 
 ### Mittlere Priorität
 | Funktionsbereich | Betroffene Objekte | Empfehlung |
