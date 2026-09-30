@@ -194,11 +194,7 @@ Ein Eintrag steht auf Status "Fehler", wenn entweder
 
 ## Kennzeichen "Auftrag halten" am Verkaufsauftrag
 
-Das Feld **"Auftrag halten"** (Verkaufsauftrag, Register Allgemein; Spalte in der Verkaufsauftragsliste) braucht keine Einrichtung. Wichtig für Rückfragen:
-
-- Es ist ein **reines Kennzeichen** und sperrt keinen Prozess – Freigabe, Buchung, Lager und Versand laufen unverändert.
-- Es ist nur im Status **Offen** änderbar. Auch "Genehmigung ausstehend" und "Vorauszahlung ausstehend" sperren das Feld, wie die übrigen Kopffelder des Auftrags. Eine Änderung aus Code, Konfigurationspaket oder Excel-Bearbeitung bricht bei nicht offenen Aufträgen mit der Meldung "Status muss gleich Offen sein" ab.
-- Beim **Kopieren** eines Auftrags und beim **Umwandeln eines Angebots** in einen Auftrag wird das Kennzeichen mit übernommen. In Archive und gebuchte Belege wird es nicht übertragen.
+Das Feld "Auftrag halten" liegt seit CHX.Webshop 27.0.0.10 in der Basis-Extension **CHX.Base** (ab 27.0.3.5, Feld "CXB Hold Order") – siehe Key-User-Handbuch von CHX.Base. Werte aus CHX.Webshop 27.0.0.8/27.0.0.9 wurden nicht übernommen.
 
 ## Datenmanagement
 

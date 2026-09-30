@@ -194,11 +194,7 @@ An entry shows status "Error" when either
 
 ## "Hold Order" flag on sales orders
 
-The **"Hold Order"** field (sales order, General tab; column in the Sales Order List) needs no setup. Useful to know for support questions:
-
-- It is **for information only** and blocks no process — releasing, posting, warehouse and shipping work as before.
-- It can only be changed while the order has status **Open**. "Pending Approval" and "Pending Prepayment" also lock the field, like the other header fields of the order. A change from code, a configuration package or Edit in Excel on an order that is not open fails with the message "Status must be equal to Open".
-- When an order is **copied** or a **quote is converted** to an order, the flag is carried over. It is not transferred to archives or posted documents.
+Since CHX.Webshop 27.0.0.10 the "Hold Order" field lives in the base extension **CHX.Base** (from 27.0.3.5, field "CXB Hold Order") – see the CHX.Base key user manual. Values from CHX.Webshop 27.0.0.8/27.0.0.9 were not migrated.
 
 ## Data management
 

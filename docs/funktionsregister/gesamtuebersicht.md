@@ -1,8 +1,8 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten und Kennzeichen "Auftrag halten" ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen). Frühere Stände siehe Git-Historie dieser Datei.
+**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei.
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 326
+**Gesamtanzahl Funktionen:** 325
 
 ---
 
@@ -10,10 +10,10 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Aktionen | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.8 | 92 | 212 | 68 | 10 | 36 | 326 |
-| **Gesamt** | – | **92** | **212** | **68** | **10** | **36** | **326** |
+| CHX.Webshop | 27.0.0.10 | 90 | 212 | 67 | 10 | 36 | 325 |
+| **Gesamt** | – | **90** | **212** | **67** | **10** | **36** | **325** |
 
-> Nur ein AL-Projekt vorhanden. Es bündelt sieben Funktionsbereiche:
+> Nur ein AL-Projekt vorhanden. Es bündelt sieben Funktionsbereiche (das Kennzeichen "Auftrag halten" liegt seit 27.0.0.10 in CHX.Base):
 >
 > | Funktionsbereich | Funktionen |
 > |---|---|
@@ -24,7 +24,6 @@
 > | SellWatch (Uhren-Ankauf) | 22 |
 > | Gemeinsame HTTP-Infrastruktur | 21 |
 > | Kommissionsverkauf (verzögerte EK-Faktura) | 8 |
-> | Kennzeichen "Auftrag halten" | 1 |
 >
 > "Aktionen" sind Seitenaktionen mit eigener Logik (`OnAction`); reine Navigationsverknüpfungen ohne Logik sind nicht mitgezählt. "Events" umfasst 9 Event-Subscriber und 1 Event-Publisher. Zusammengehörige interne Hilfsfunktionen stehen in der Tabelle unten in einer Sammelzeile (z. B. "[8 interne Hilfsfunktionen]"), sind in den Zahlen aber einzeln gezählt.
 
@@ -283,9 +282,8 @@
 | CHX.Webshop | CXW Availability Check Dialog (60348) | Seite | `GetCountryRegionCode`, `GetZoneCode`, `GetBinCode` | Prozedur | Public | Geben die im Dialog eingegebenen Werte an den Aufrufer zurück. |
 | CHX.Webshop | CXW Item Card (60331) | Seitenerweiterung | `Export Availability` | Aktion | – | Bereitet den Artikel samt Varianten, Liefer- und Lagerzeiten vollständig vor, sendet alles sofort und meldet Erfolge und Fehlschläge. |
 | CHX.Webshop | CXW Item Card (60331) | Seitenerweiterung | `Check Availability Date` | Aktion | – | Fragt Land, Zone und Lagerplatz ab und zeigt Verfügbarkeit und berechnetes Lieferdatum des Artikels an bzw. dass er derzeit nicht lieferbar ist. |
-| CHX.Webshop | CXW Sales Header (60300) | Tabellenerweiterung | `CXW Hold Order – OnValidate` | Trigger | – | Erlaubt eine Änderung des Kennzeichens nur, solange der Auftrag offen ist; erneutes Setzen desselben Werts bleibt auch bei freigegebenen Aufträgen möglich. |
 
-> Die Tabelle ist nach Funktionsbereich (SellWatch → Workshop-Ankaufsprüfung → Kommissionsverkauf → gemeinsame HTTP-Infrastruktur → Verkaufspreisverwaltung → On-Demand-Beschaffung → Webshop-Verfügbarkeit → "Auftrag halten") und darin wie in der Einzeldatei sortiert. Reine Datentabellen und Erweiterungen ohne eigene Prozeduren (z. B. Table 60300/60320/60348, TableExtension 60304/60319/60348, alle Enums, Enum-Erweiterung 60300, alle Permission Sets) sind nur in der Einzeldatei `funktionsregister-sl-chronext-webshop.md` beschrieben.
+> Die Tabelle ist nach Funktionsbereich (SellWatch → Workshop-Ankaufsprüfung → Kommissionsverkauf → gemeinsame HTTP-Infrastruktur → Verkaufspreisverwaltung → On-Demand-Beschaffung → Webshop-Verfügbarkeit) und darin wie in der Einzeldatei sortiert. Reine Datentabellen und Erweiterungen ohne eigene Prozeduren (z. B. Table 60300/60320/60348, TableExtension 60304/60319/60348, alle Enums, Enum-Erweiterung 60300, alle Permission Sets) sind nur in der Einzeldatei `funktionsregister-sl-chronext-webshop.md` beschrieben.
 
 ---
 

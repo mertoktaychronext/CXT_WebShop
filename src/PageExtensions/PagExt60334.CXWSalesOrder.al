@@ -1,18 +1,5 @@
 pageextension 60334 "CXW Sales Order" extends "Sales Order"
 {
-    layout
-    {
-        addlast(General)
-        {
-            field("CXW Hold Order"; Rec."CXW Hold Order")
-            {
-                ApplicationArea = All;
-                Editable = Rec.Status = Rec.Status::Open;
-                ToolTip = 'Specifies that the order is on hold. This is for information only and does not block releasing, posting or shipping. You can only change it while the order is open.';
-            }
-        }
-    }
-
     actions
     {
         addlast(Processing)
