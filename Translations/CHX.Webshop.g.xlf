@@ -1198,6 +1198,16 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW LanguageCode - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 350045171 - Field 190970234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Error</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Last Error - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 350045171 - Field 2013574481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Error Date/Time</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Last Error DateTime - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 350045171 - Field 244065445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Model</source>
           <note from="Developer" annotates="general" priority="2"></note>
@@ -3177,6 +3187,16 @@
           <source>Specifies the language of the vendor, as sent by SellWatch.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW LanguageCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 280635287 - Control 190970234 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies why the last automatic processing of this offer failed. The offer is retried on the next run; the field is cleared once the offer has been processed successfully.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Last Error - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 280635287 - Control 2013574481 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the last automatic processing of this offer failed.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Last Error DateTime - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 280635287 - Control 244065445 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the model of the offered watch.</source>

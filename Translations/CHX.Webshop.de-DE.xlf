@@ -1476,6 +1476,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW NuveiAccountCode - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 350045171 - Field 190970234 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Error</source>
+          <target>Letzter Fehler</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Last Error - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Table 350045171 - Field 2013574481 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Last Error Date/Time</source>
+          <target>Zeitpunkt letzter Fehler</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW SellWatch Vendor Info - Field CXW Last Error DateTime - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 350045171 - Field 4180890352 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Offer Type</source>
           <target>Angebotsart</target>
@@ -3850,6 +3862,18 @@
           <target>Gibt den Nuvei-Kontocode des Verkäufers an, wie von SellWatch übermittelt.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW NuveiAccountCode - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 280635287 - Control 190970234 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies why the last automatic processing of this offer failed. The offer is retried on the next run; the field is cleared once the offer has been processed successfully.</source>
+          <target>Gibt an, warum die letzte automatische Verarbeitung dieses Angebots fehlgeschlagen ist. Das Angebot wird beim nächsten Lauf erneut verarbeitet; das Feld wird geleert, sobald die Verarbeitung erfolgreich war.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Last Error - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 280635287 - Control 2013574481 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies when the last automatic processing of this offer failed.</source>
+          <target>Gibt an, wann die letzte automatische Verarbeitung dieses Angebots fehlgeschlagen ist.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Control CXW Last Error DateTime - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 280635287 - Control 4180890352 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the type of offer (for example commission, direct, or exchange).</source>

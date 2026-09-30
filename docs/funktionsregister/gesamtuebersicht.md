@@ -1,8 +1,8 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei. Aktualisiert am 2026-09-30: SellWatch: Artikelvorlage je Angebotsart, neue Prozedur `GetSellWatchItemTemplateCode`.
+**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei. Aktualisiert am 2026-09-30: SellWatch: Artikelvorlage je Angebotsart, neue Prozedur `GetSellWatchItemTemplateCode`; SellWatch-Einzelverarbeitung je Angebot mit Fehlerprotokoll (Codeunit 60351, `ProcessOffer`, `ProcessOfferWithErrorHandling`, `OnAfterGetRecord` auf Page 60307).
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 326
+**Gesamtanzahl Funktionen:** 330
 
 ---
 
@@ -10,8 +10,8 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Aktionen | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.10 | 90 | 213 | 67 | 10 | 36 | 326 |
-| **Gesamt** | – | **90** | **213** | **67** | **10** | **36** | **326** |
+| CHX.Webshop | 27.0.0.10 | 91 | 215 | 69 | 10 | 36 | 330 |
+| **Gesamt** | – | **91** | **215** | **69** | **10** | **36** | **330** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt sieben Funktionsbereiche (das Kennzeichen "Auftrag halten" liegt seit 27.0.0.10 in CHX.Base):
 >
@@ -21,7 +21,7 @@
 > | Verkaufspreisverwaltung (inkl. Export über Aufgabenwarteschlange) | 75 |
 > | On-Demand-Beschaffung | 62 |
 > | Workshop-Ankaufsprüfung | 41 |
-> | SellWatch (Uhren-Ankauf) | 23 |
+> | SellWatch (Uhren-Ankauf) | 27 |
 > | Gemeinsame HTTP-Infrastruktur | 21 |
 > | Kommissionsverkauf (verzögerte EK-Faktura) | 8 |
 >
@@ -42,7 +42,9 @@
 | CHX.Webshop | CXW Watch Online Approval (60301) | Tabelle | `LogHttpCallFailureTelemetry` | Prozedur | Internal | Meldet einen fehlgeschlagenen Sichtbarkeits-Aufruf zusätzlich an die technische Telemetrie, damit Ausfälle zentral auffallen. |
 | CHX.Webshop | CXW SW Purchase Line (60303) | Tabellenerweiterung | `OnDelete` | Trigger | – | Entfernt beim Löschen einer Einkaufszeile die Verknüpfung auf der zugeordneten On-Demand-Verkaufszeile, damit diese wieder neu beschafft werden kann. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `OnRun` | Trigger | – | Startet die Verarbeitung aller noch nicht angelegten SellWatch-Anfragen. |
-| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `ValidateAndCreateVendor` | Prozedur | Internal | Sucht für jede noch offene Anfrage einen passenden Lieferanten anhand von Name/Adresse/Telefon/E-Mail oder legt einen neuen Lieferanten samt Bankverbindung an. |
+| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `ValidateAndCreateVendor` | Prozedur | Internal | Ermittelt alle noch offenen Anfragen und verarbeitet sie nacheinander einzeln, sodass eine fehlerhafte Anfrage die übrigen nicht blockiert. |
+| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `ProcessOfferWithErrorHandling` | Prozedur | Internal | Verarbeitet eine Anfrage abgeschlossen für sich; scheitert sie, wird alles für diese Anfrage Angelegte verworfen und die Fehlermeldung samt Zeitpunkt an der Anfrage gespeichert. |
+| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `ProcessOffer` | Prozedur | Protected | Sucht oder legt für eine Anfrage den Lieferanten samt Bankverbindung an und erzeugt die Einkaufsbestellung. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`) und gibt die Bestellung sofort frei. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
@@ -52,6 +54,8 @@
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
 | CHX.Webshop | CXW SellWatch-Overview (60307) | Seite | `ShowDocument` | Aktion | – | Öffnet die zur Anfrage gehörende Einkaufsbestellung. |
 | CHX.Webshop | CXW SellWatch-Overview (60307) | Seite | `OnOpenPage` | Trigger | – | Zeigt beim Öffnen nur Anfragen mit einer gültigen SellWatch-Referenznummer. |
+| CHX.Webshop | CXW SellWatch-Overview (60307) | Seite | `OnAfterGetRecord` | Trigger | – | Hebt Anfragen mit gespeichertem Verarbeitungsfehler rot hervor. |
+| CHX.Webshop | CXW SellWatch Process Offer (60351) | Codeunit | `OnRun` | Trigger | – | Legt für genau eine Anfrage Lieferant, Einkaufsbestellung und Artikel als abgeschlossene Einheit an. |
 | CHX.Webshop | CXW SellWatch API (60337) | Seite | `OnInsertRecord` | Trigger | – | Setzt beim Anlegen über die API das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer zurück, prüft die Pflichtfelder und lehnt doppelte SellWatch-Referenznummern ab. |
 | CHX.Webshop | CXW SellWatch API (60337) | Seite | `OnModifyRecord` | Trigger | – | Verhindert bei Änderungen über die API, dass das Erstellt-Kennzeichen sowie Bestell- und Lieferantennummer überschrieben werden, prüft weiterhin die Pflichtfelder und lehnt eine Änderung der Referenznummer auf einen bereits vergebenen Wert ab. |
 | CHX.Webshop | CXW SellWatch API (60337) | Seite | `ValidateRequiredFields` | Prozedur | Internal | Stellt sicher, dass Referenznummer, Marke, Modell und Angebotspreis beim Anlegen oder Ändern über die API ausgefüllt sind. |
@@ -309,7 +313,7 @@
 | Funktionsbereich | Betroffene Objekte | Empfehlung |
 |---|---|---|
 | Webshop-Verfügbarkeit & Lieferzeiten zu ChronextBC verlagern | Table 60346–60348, Codeunit 60343/60347/60348/60349, Page 60346–60349, PageExtension 60331/60348, TableExtension 60348, anteilig PageExtension 60347 | Größter Bereich der App (96 Funktionen) und fachlich eng mit ChronextBC verzahnt (Exporteinstellungen, Exporteinträge, Einrichtungswerte, Länderfelder liegen bereits dort). Vorher die doppelte Lagerort- und Wiederbeschaffbarkeitslogik zusammenführen und einen eigenen Berechtigungssatz anlegen – die Tabellen stecken heute nur im Workshop-Set 60301. |
-| SellWatch als eigenständige Extension | Table 60300/60301, TableExtension 60303 (SellWatch-Feld)/60304, Codeunit 60305, Page 60307/60308/60337, PermissionSet 60300/60310 | Fachlich vollständig unabhängig; Auslagerung wäre überwiegend eine Verschiebe-Operation. Achtung: TableExtension 60303 enthält inzwischen auch die On-Demand-Verknüpfungsfelder und müsste aufgeteilt werden. |
+| SellWatch als eigenständige Extension | Table 60300/60301, TableExtension 60303 (SellWatch-Feld)/60304, Codeunit 60305/60351, Page 60307/60308/60337, PermissionSet 60300/60310 | Fachlich vollständig unabhängig; Auslagerung wäre überwiegend eine Verschiebe-Operation. Achtung: TableExtension 60303 enthält inzwischen auch die On-Demand-Verknüpfungsfelder und müsste aufgeteilt werden. |
 | Workshop-Ankaufsprüfung als eigenständige Extension | Enum 60337, Table 60318, TableExtension 60321, PageExtension 60328/60329, Page 60338/60339/60340, Codeunit 60331/60335/60336, PermissionSet 60301/60302 | Fachlich unabhängig mit eigenem Datenmodell und eigener API. Kopplung nur über Einkaufszeile/-bestellung und das Einrichtungsfeld "Workshop Tenant". Eine eigene Extension bräuchte einen eigenen `idRanges`-Block, da 60300–60349 bei Tabellen, Codeunits und Seiten am oberen Ende vollständig belegt ist. |
 
 ### Mittlere Priorität
