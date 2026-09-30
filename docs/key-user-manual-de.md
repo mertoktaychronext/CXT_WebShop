@@ -105,6 +105,31 @@ Der SellWatch-Online-Check (prüft, ob eine Uhr im SellWatch-Onlineshop sichtbar
 
 > Jede eingeplante Verkaufspreiszeile finden Sie auf der Seite **"Data Export Entries"** (dieselbe Seite wie beim Verfügbarkeitsexport) – erkennbar am Zielcode `SALESPRICE`. Dort sehen Sie Status (Pending (Sales Price)/Verarbeitet/Fehler), Anzahl Versuche, Dateiname, Fehlermeldung und im Infobereich die gesendeten JSON-Daten. **Wichtig:** Fehlgeschlagene Preisübertragungen wiederholt der Verkaufspreisexport-Job automatisch; nach Erreichen der Höchstzahl verwenden Sie **"Requeue Sales Price"**, **nicht** die Aktion "Export Data" – diese kann Preiseinträge nicht senden, verbraucht aber einen Versuch.
 
+## SellWatch – Artikelvorlagen einrichten
+
+Für jedes eingehende SellWatch-Angebot legt Business Central automatisch einen neuen Artikel an. Welche Artikelvorlage dafür verwendet wird, hängt von der Angebotsart ab. Beide Vorlagen hinterlegen Sie auf der Seite **"Purchases & Payables Setup"** (Einkaufseinrichtung) im Bereich "SellWatch":
+
+| Feld | Bedeutung |
+|---|---|
+| SellWatch-Artikelvorlage (Standard) | Vorlage für alle Angebotsarten außer Kommission (z. B. Ankauf, Tausch). |
+| SellWatch-Artikelvorlage (Kommission) | Vorlage für Angebote der Angebotsart Kommission. Der Artikel wird zusätzlich automatisch als Kommissionsware gekennzeichnet. |
+
+Aus der Vorlage übernimmt der neue Artikel alle dort gepflegten Werte (z. B. Buchungsgruppen, Basiseinheit, Artikelkategorie) sowie die **Standarddimensionen** der Vorlage. Beschreibung (Marke, Modell, Baujahr) und Beschreibung 2 (Referenz) kommen immer aus dem SellWatch-Angebot.
+
+**Artikelnummern:** Ist an der Vorlage im Feld **"Nummernserie"** eine Serie hinterlegt, erhält der Artikel seine Nummer aus dieser Serie – so können Kommissions- und Standardartikel eigene Nummernkreise bekommen. Ist dort nichts hinterlegt, gilt die Artikelnummernserie der Lagereinrichtung. Die Serie muss Standardnummern erlauben.
+
+> **Wichtig:** Beide Felder müssen gefüllt sein, bevor die SellWatch-Verarbeitung läuft. Fehlt die Vorlage für Kommission, wird **nicht** auf die Standardvorlage ausgewichen – das Angebot bleibt mit einer Fehlermeldung unverarbeitet. Tipp: Testen Sie jede Vorlage einmal über „Artikel → Neu“ mit Auswahl der Vorlage; lässt sich dort ein Artikel anlegen, funktioniert sie auch für SellWatch.
+
+## SellWatch – Fehler bei der automatischen Verarbeitung
+
+Die Hintergrundverarbeitung verarbeitet jedes SellWatch-Angebot für sich. Scheitert ein Angebot (z. B. weil eine Artikelvorlage fehlt oder eine Einrichtung unvollständig ist), passiert Folgendes:
+
+- Für dieses Angebot wird **nichts** angelegt – kein Kreditor, keine Bestellung, kein Artikel. Alle anderen Angebote werden normal weiterverarbeitet.
+- In der **SellWatch-Übersicht** ist die Zeile rot hervorgehoben; die Spalten **"Letzter Fehler"** und **"Zeitpunkt letzter Fehler"** zeigen, was schiefgegangen ist und wann.
+- Das Angebot bleibt offen und wird beim **nächsten Lauf automatisch erneut versucht**. Sie müssen nur die Ursache beheben – am Angebot selbst ist nichts zu tun. Nach erfolgreicher Verarbeitung sind die Fehlerspalten wieder leer.
+
+> **Tipp:** Filtern Sie in der SellWatch-Übersicht auf "Letzter Fehler" ungleich leer (`<>''`), um alle offenen Problemfälle auf einen Blick zu sehen. Der Job-Queue-Eintrag selbst endet auch dann erfolgreich, wenn einzelne Angebote scheitern – kontrollieren Sie Fehler deshalb über die Übersicht.
+
 ## Workshop-Ankaufsprüfung einrichten
 
 Die Werkstatt prüft angekaufte Uhren extern auf Echtheit und liefert das Ergebnis über eine eigene, bidirektionale API zurück. Nach der Erstinstallation der Erweiterung sind drei Schritte einmalig einzurichten:
@@ -214,6 +239,8 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 
 | Problem | Ursache / Lösung |
 |---|---|
+| SellWatch-Angebot wird nicht verarbeitet, in der SellWatch-Übersicht steht unter "Letzter Fehler" „keine Artikelvorlage … eingerichtet“ oder „Artikelvorlage … existiert nicht mehr“ | In der Einkaufseinrichtung (Bereich "SellWatch") die zur Angebotsart passende Vorlage hinterlegen bzw. korrigieren – Kommission → "SellWatch-Artikelvorlage (Kommission)", alle anderen → "SellWatch-Artikelvorlage (Standard)". Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet. |
+| SellWatch-Angebot bleibt offen, "Letzter Fehler" zeigt eine andere Meldung | Meldung lesen und die genannte Einrichtung korrigieren (z. B. Buchungsgruppen der Artikelvorlage, Zahlungsformen `C2C`/`RG`, Lagerort `HL`). Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet; andere Angebote sind nicht blockiert. |
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
 | "Add all Countries" erzeugt keine Zeile für ein bestimmtes Land | Prüfen Sie, ob für das Land (Seite "Countries/Regions") "Verkaufspreis aktiviert" gesetzt ist. |
 | Ein Benutzer kann die Seiten der Verkaufspreisverwaltung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXWChronWSAll" zugewiesen ist. |

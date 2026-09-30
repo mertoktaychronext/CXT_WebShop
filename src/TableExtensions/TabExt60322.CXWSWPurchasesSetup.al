@@ -4,7 +4,7 @@ tableextension 60322 "CXW SW Purchases Setup" extends "Purchases & Payables Setu
     {
         field(60300; "CXW SW Item Template Code"; Code[20])
         {
-            Caption = 'SellWatch Item Template';
+            Caption = 'SellWatch Item Template (Standard)';
             TableRelation = "Item Templ.";
             DataClassification = ToBeClassified;
         }
@@ -17,6 +17,12 @@ tableextension 60322 "CXW SW Purchases Setup" extends "Purchases & Payables Setu
         field(60302; "CXW Workshop Tenant"; Text[30])
         {
             Caption = 'Workshop Tenant';
+            DataClassification = ToBeClassified;
+        }
+        field(60303; "CXW SW Consign. Item Templ."; Code[20])
+        {
+            Caption = 'SellWatch Item Template (Commission)';
+            TableRelation = "Item Templ.";
             DataClassification = ToBeClassified;
         }
     }

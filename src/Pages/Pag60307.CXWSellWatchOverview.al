@@ -26,6 +26,7 @@ page 60307 "CXW SellWatch-Overview"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the SellWatch request ID this entry originated from.';
+                    StyleExpr = ErrorStyleTxt;
                 }
                 field("CXW Vendor Name"; Rec."CXW Vendor Name")
                 {
@@ -132,6 +133,17 @@ page 60307 "CXW SellWatch-Overview"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the number of the vendor created for this offer.';
                 }
+                field("CXW Last Error"; Rec."CXW Last Error")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies why the last automatic processing of this offer failed. The offer is retried on the next run; the field is cleared once the offer has been processed successfully.';
+                    StyleExpr = ErrorStyleTxt;
+                }
+                field("CXW Last Error DateTime"; Rec."CXW Last Error DateTime")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies when the last automatic processing of this offer failed.';
+                }
                 field("CXW Tracking Number"; Rec."CXW Tracking Number")
                 {
                     ApplicationArea = All;
@@ -202,4 +214,15 @@ page 60307 "CXW SellWatch-Overview"
     begin
         Rec.SetFilter("CXW SRid", '<>%1', '');
     end;
+
+    trigger OnAfterGetRecord()
+    begin
+        if Rec."CXW Last Error" <> '' then
+            ErrorStyleTxt := 'Unfavorable'
+        else
+            ErrorStyleTxt := 'Standard';
+    end;
+
+    var
+        ErrorStyleTxt: Text;
 }

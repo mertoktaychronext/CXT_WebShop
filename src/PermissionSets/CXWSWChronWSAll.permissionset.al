@@ -9,6 +9,7 @@ permissionset 60310 "CXW SWChronWSAll"
         table "CXW Watch Online Approval" = X,
         table "CXW Http Call Log" = X,
         codeunit "CXW SellWatch Mgt" = X,
+        codeunit "CXW SellWatch Process Offer" = X,
         page "CXW SellWatch-Overview" = X,
         page "CXW SellWatch info" = X,
         page "CXW SellWatch API" = X,

@@ -3,7 +3,7 @@
 **Version:** 27.0.0.10
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen), vollständig gegengeprüft und nachgezogen am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; 35 bisher fehlende Objekte ergänzt – neue Bereiche **On-Demand-Beschaffung**, **Webshop-Verfügbarkeit & Lieferzeiten** und **Kennzeichen "Auftrag halten"**, dazu SalesPrice-Export über Aufgabenwarteschlange [Table/Page 60320, Codeunit 60332–60334, EnumExt 60300, PageExt 60336] und Workshop-Bestelldaten [Codeunit 60335/60336]; Codeunit 60329 und Aktion "Release Sales Prices" auf Page 60322 neu beschrieben; TableExtension 60346 entfernt [Länderfelder liegen jetzt in ChronextBC]; API-Pfad von Page 60339 korrigiert – Version 27.0.0.8, 92 Objekte / 326 Funktionen), aktualisiert am 2026-09-30 (Kennzeichen "Auftrag halten" nach CHX.Base verschoben: TableExtension 60300 und PageExtension 60337 entfernt, Feld aus PageExtension 60334 entfernt – Version 27.0.0.10, 90 Objekte / 325 Funktionen; seit 29.09. neu hinzugekommene Objekte anderer Entwickler, z. B. Codeunit 60350, sind noch nicht erfasst)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen), vollständig gegengeprüft und nachgezogen am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; 35 bisher fehlende Objekte ergänzt – neue Bereiche **On-Demand-Beschaffung**, **Webshop-Verfügbarkeit & Lieferzeiten** und **Kennzeichen "Auftrag halten"**, dazu SalesPrice-Export über Aufgabenwarteschlange [Table/Page 60320, Codeunit 60332–60334, EnumExt 60300, PageExt 60336] und Workshop-Bestelldaten [Codeunit 60335/60336]; Codeunit 60329 und Aktion "Release Sales Prices" auf Page 60322 neu beschrieben; TableExtension 60346 entfernt [Länderfelder liegen jetzt in ChronextBC]; API-Pfad von Page 60339 korrigiert – Version 27.0.0.8, 92 Objekte / 326 Funktionen), aktualisiert am 2026-09-30 (Kennzeichen "Auftrag halten" nach CHX.Base verschoben: TableExtension 60300 und PageExtension 60337 entfernt, Feld aus PageExtension 60334 entfernt – Version 27.0.0.10, 90 Objekte / 325 Funktionen; seit 29.09. neu hinzugekommene Objekte anderer Entwickler, z. B. Codeunit 60350, sind noch nicht erfasst), aktualisiert am 2026-09-30 (SellWatch: zwei Artikelvorlagen je Angebotsart, Artikelanlage über Standard "Item Templ. Mgt.", neue Prozedur `GetSellWatchItemTemplateCode` – 326 Funktionen), aktualisiert am 2026-09-30 (SellWatch: Einzelverarbeitung je Angebot mit Fehlerprotokoll – neuer Codeunit 60351, Prozeduren `ProcessOffer`/`ProcessOfferWithErrorHandling`, Trigger `OnAfterGetRecord` auf Page 60307 – 91 Objekte / 330 Funktionen)
 **Abhängigkeiten:** CHX.Base (27.0.3.4), ChronextBC (liefert "Data Export Entry"/"Data Export API Setup" sowie die Länderfelder für Verkaufspreise und Lieferzeiten)
 
 ---
@@ -20,7 +20,7 @@ Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **
 
 | Objekttyp | Anzahl |
 |---|---|
-| Codeunits | 16 |
+| Codeunits | 17 |
 | Tabellen | 16 |
 | Tabellenerweiterungen | 7 |
 | Seiten | 22 |
@@ -29,8 +29,8 @@ Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **
 | Enums | 9 |
 | Enum-Erweiterungen | 1 |
 | Permission Sets | 6 |
-| **Gesamt Objekte** | **90** |
-| **Gesamt Prozeduren/Trigger/Events** | **325** |
+| **Gesamt Objekte** | **91** |
+| **Gesamt Prozeduren/Trigger/Events** | **330** |
 
 ---
 
@@ -40,7 +40,7 @@ Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **
 
 ### Tabelle: CXW SellWatch Vendor Info (ID: 60300)
 
-Speichert eine eingehende SellWatch-Ankaufsanfrage mit allen Lieferanten-, Uhren- und Angebotsdaten. Wird sowohl manuell als auch – seit der neuen API-Page 60337 – von externen Systemen per HTTP befüllt. Besitzt neben dem Primärschlüssel einen zweiten Schlüssel auf die SellWatch-Referenznummer (SRid) für die Dubletten-Prüfung.
+Speichert eine eingehende SellWatch-Ankaufsanfrage mit allen Lieferanten-, Uhren- und Angebotsdaten. Wird sowohl manuell als auch – seit der neuen API-Page 60337 – von externen Systemen per HTTP befüllt. Besitzt neben dem Primärschlüssel einen zweiten Schlüssel auf die SellWatch-Referenznummer (SRid) für die Dubletten-Prüfung. Seit 2026-09-30 zusätzlich die nicht bearbeitbaren Felder "Letzter Fehler" und "Zeitpunkt letzter Fehler", die die automatische Verarbeitung bei einem gescheiterten Angebot befüllt und bei Erfolg wieder leert.
 
 *Keine eigenen Prozeduren oder Trigger – reine Datentabelle.*
 
@@ -79,23 +79,34 @@ Legt aus eingehenden SellWatch-Verkaufsanfragen automatisch Lieferanten und Eink
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `OnRun` | Trigger | – | Startet die Verarbeitung aller noch nicht angelegten SellWatch-Anfragen. |
-| 2 | `ValidateAndCreateVendor` | Prozedur | Internal | Sucht für jede noch offene Anfrage einen passenden Lieferanten anhand von Name/Adresse/Telefon/E-Mail oder legt einen neuen Lieferanten samt Bankverbindung an. |
-| 3 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`) und gibt die Bestellung sofort frei. |
-| 4 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
-| 5 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
-| 6 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand der in der Einkaufseinrichtung hinterlegten Artikelvorlage ("SellWatch Item Template") an (Beschreibung aus Marke/Modell/Baujahr, zweite Beschreibungszeile aus der Referenz) inklusive passender Basis-Mengeneinheit; bricht kontrolliert ab, wenn keine Vorlage eingerichtet ist oder die eingerichtete Vorlage nicht mehr existiert. |
-| 7 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
-| 8 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
+| 2 | `ValidateAndCreateVendor` | Prozedur | Internal | Ermittelt alle noch offenen Anfragen und verarbeitet sie nacheinander einzeln, sodass eine fehlerhafte Anfrage die übrigen nicht blockiert. |
+| 3 | `ProcessOfferWithErrorHandling` | Prozedur | Internal | Verarbeitet eine einzelne Anfrage abgeschlossen für sich; scheitert sie, wird alles für diese Anfrage Angelegte verworfen und die Fehlermeldung samt Zeitpunkt an der Anfrage gespeichert. Die Anfrage wird beim nächsten Lauf erneut versucht. |
+| 4 | `ProcessOffer` | Prozedur | Protected | Sucht für eine Anfrage einen passenden Lieferanten anhand von Name/Adresse/Telefon/E-Mail oder legt einen neuen Lieferanten samt Bankverbindung an und erzeugt anschließend die Einkaufsbestellung (siehe `CreatePurchaseOrder`). |
+| 5 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`), gibt die Bestellung sofort frei, markiert die Anfrage als angelegt und leert eventuelle Fehlerangaben. |
+| 6 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
+| 7 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
+| 8 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile über die Standard-Artikelanlage aus Vorlage einen neuen Artikel an; übernimmt dabei Werte, Standarddimensionen, Basis-Mengeneinheit und – falls an der Vorlage hinterlegt – die Nummernserie der Vorlage. Setzt danach Beschreibung (Marke/Modell/Baujahr), zweite Beschreibungszeile (Referenz) und bei Kommission das Kennzeichen Kommissionsware. |
+| 9 | `GetSellWatchItemTemplateCode` | Prozedur | Internal | Wählt je nach Angebotsart die passende Artikelvorlage aus der Einkaufseinrichtung (Kommission oder Standard) und bricht kontrolliert ab, wenn die benötigte Vorlage nicht eingerichtet ist oder nicht mehr existiert – ohne Ausweichen auf die jeweils andere Vorlage. |
+| 10 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
+| 11 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
+
+### Codeunit: CXW SellWatch Process Offer (ID: 60351)
+
+Verarbeitet genau eine SellWatch-Anfrage als abgeschlossene Einheit – wird von Codeunit 60305 je Anfrage aufgerufen, damit ein Fehler nur diese eine Anfrage zurücksetzt.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `OnRun` | Trigger | – | Legt für die übergebene Anfrage Lieferant, Einkaufsbestellung und Artikel an (über `ProcessOffer` in Codeunit 60305). |
 
 ### Tabellenerweiterung: CXW SW Purchases Setup (ID: 60322)
 
-Ergänzt die Standard-Einkaufseinrichtung um drei Einstellungen: die für die automatische SellWatch-Artikelanlage zu verwendende Artikelvorlage (siehe `CreateSellWatchItem` in Codeunit 60305), die Anzahl Tage, um die die automatische EK-Faktura für auf Kommission verkaufte Artikel nach der VK-Rechnungsbuchung verzögert wird (siehe Codeunit 60344/60345), sowie den Mandantennamen "Workshop Tenant", den die Werkstatt-API im Feld `tenant` mitliefert (siehe Page 60339).
+Ergänzt die Standard-Einkaufseinrichtung um vier Einstellungen: zwei Artikelvorlagen für die automatische SellWatch-Artikelanlage – „Standard“ für alle Angebotsarten außer Kommission und „Kommission“ (siehe `GetSellWatchItemTemplateCode`/`CreateSellWatchItem` in Codeunit 60305), die Anzahl Tage, um die die automatische EK-Faktura für auf Kommission verkaufte Artikel nach der VK-Rechnungsbuchung verzögert wird (siehe Codeunit 60344/60345), sowie den Mandantennamen "Workshop Tenant", den die Werkstatt-API im Feld `tenant` mitliefert (siehe Page 60339).
 
 *Keine eigenen Trigger – reine Felderweiterung.*
 
 ### Seitenerweiterung: CXW SW Purchases Setup (ID: 60330)
 
-Zeigt auf der Standard-Einkaufseinrichtung die drei Einstellungsfelder (Artikelvorlage, Verzögerung Kommissionsrechnung, Workshop Tenant) an.
+Zeigt auf der Standard-Einkaufseinrichtung die vier Einstellungsfelder (Artikelvorlage Standard, Artikelvorlage Kommission, Verzögerung Kommissionsrechnung, Workshop Tenant) an.
 
 *Keine eigenen Trigger – reine Seitenerweiterung.*
 
@@ -105,12 +116,13 @@ Definiert die Bestellstatus-Werte (Uhr eingetroffen, online, reserviert, verkauf
 
 ### Seite: CXW SellWatch-Overview (ID: 60307)
 
-Nur-Lese-Übersicht aller eingehenden SellWatch-Ankaufsanfragen – die einzige Anzeige-Seite für diese Daten; zeigt auch die über die API gelieferten Felder Geschlecht, Sprache und Nuvei-Kontocode.
+Nur-Lese-Übersicht aller eingehenden SellWatch-Ankaufsanfragen – die einzige Anzeige-Seite für diese Daten; zeigt auch die über die API gelieferten Felder Geschlecht, Sprache und Nuvei-Kontocode. Zeigt außerdem den letzten Verarbeitungsfehler je Anfrage und hebt fehlerhafte Anfragen rot hervor.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `ShowDocument` | Aktion | – | Öffnet die zur Anfrage gehörende Einkaufsbestellung. |
 | 2 | `OnOpenPage` | Trigger | – | Zeigt beim Öffnen nur Anfragen mit einer gültigen SellWatch-Referenznummer. |
+| 3 | `OnAfterGetRecord` | Trigger | – | Hebt beim Anzeigen jeder Zeile Anfragen mit gespeichertem Verarbeitungsfehler rot hervor. |
 
 ### Seite: CXW SellWatch info (ID: 60308)
 
@@ -873,7 +885,7 @@ Zeigt auf der Lagerortkarte das Kennzeichen "Hauptlagerort" an. *Keine eigenen T
 
 | Kandidat | Objekte | Begründung |
 |---|---|---|
-| SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305; Page 60307, 60308, 60337; PermissionSet 60300, 60310 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell und jetzt auch eigener API-Schreibschnittstelle. Bereits heute im ID-Bereich 60300–60310 (plus 60337 für die API) sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. |
+| SellWatch als eigenständige Extension | Table 60300, 60301; TableExtension 60303, 60304; Codeunit 60305, 60351; Page 60307, 60308, 60337; PermissionSet 60300, 60310 (+ anteilig 60302/60309/60317) | Fachlich klar abgegrenzter Bereich (Uhren-Ankauf über den Partner SellWatch) mit eigenem Datenmodell und jetzt auch eigener API-Schreibschnittstelle. Bereits heute im ID-Bereich 60300–60310 (plus 60337 für die API) sauber getrennt von der Verkaufspreisverwaltung (60311–60336) — die Trennung ist im Code bereits angelegt, nur noch nicht als eigenes Deployment-Artefakt umgesetzt. |
 | Workshop-Ankaufsprüfung als eigenständige Extension | Enum 60337; Table 60318; TableExtension 60321; PageExtension 60328, 60329; Page 60338, 60339, 60340; Codeunit 60331; PermissionSet 60301, 60302 | Fachlich ebenso klar abgegrenzt wie SellWatch (eigenes Datenmodell, eigene bidirektionale API, eigene Hintergrundverarbeitung) und folgt bewusst demselben Architekturmuster. Einzige Kopplung an den Rest der Extension ist die Erweiterung der Standard-Einkaufszeile/-bestellung. Seit Version 27.0.0.7 hängen zusätzlich Codeunit 60335/60336 (Bestelldaten, Upgrade) dazu. Vor einer Auslagerung klären: der App-ID-Bereich 60300–60349 ist inzwischen bei Tabellen, Codeunits und Seiten am oberen Ende vollständig belegt (u. a. 60341–60349 durch On-Demand und Verfügbarkeit), eine eigenständige Extension bräuchte einen eigenen `idRanges`-Block. |
 | Kommissionsverkauf (verzögerte EK-Faktura) als eigenständige Extension | Enum 60343; Table 60341; Codeunit 60344, 60345; Page 60342; anteilig PermissionSet 60301 | Fachlich klar abgegrenzter, neuer Prozess mit eigenem Datenmodell und eigener Job-Queue-Verarbeitung. Anders als SellWatch/Workshop aber **nicht sauber isolierbar**: setzt zwingend das Artikel-Kennzeichen "Kommissionsverkauf" aus der Dependency CHX.Base voraus und reagiert auf die Standard-Verkaufsrechnungsbuchung (Subscriber auf `Sales-Post`) statt nur auf eigene Bestellobjekte – eine Auslagerung müsste diese Abhängigkeit und den Subscriber mitnehmen. |
 | Webshop-Verfügbarkeit & Lieferzeiten als eigenständige Extension | Table 60346, 60347, 60348; Codeunit 60343, 60347, 60348, 60349; Page 60346–60349; PageExtension 60331, 60348; TableExtension 60348; anteilig PageExtension 60347 und PermissionSet 60301 | Mit knapp 100 Funktionen der größte Bereich der App, fachlich klar abgegrenzt (eigene Tabellen, eigener Job, eigene Schnittstellen `UPDSTOFILE`/`UPDDLT`/`UPDIN`). Hängt aber stark an ChronextBC (Exporteinstellungen, Exporteinträge, Einrichtungswerte, Länderfelder) und CHX.Base (Zusatzlieferzeiten, Differenzbesteuerung) – fachlich passt der Bereich eher **zu ChronextBC** als zu einer weiteren Einzel-Extension. Zudem ist Logik doppelt vorhanden: die Ermittlung der Webshop-Lagerorte (samt Einrichtungswert-Lesen) steht nahezu gleich in Codeunit 60348 und 60349, die Wiederbeschaffbarkeitsprüfung über das Artikelattribut in Codeunit 60349 (`IsReplenishable`) und 60346 (`IsOnDemandItem`) – vor einer Auslagerung in eine gemeinsame Hilfs-Codeunit zusammenführen. Eigene Berechtigungen fehlen: die Tabellen sind nur im Workshop-Set 60301 enthalten. |

@@ -237,6 +237,18 @@ table 60300 "CXW SellWatch Vendor Info"
             Caption = 'Nuvei Account Code';
             DataClassification = ToBeClassified;
         }
+        field(46; "CXW Last Error"; Text[250])
+        {
+            Caption = 'Last Error';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(47; "CXW Last Error DateTime"; DateTime)
+        {
+            Caption = 'Last Error Date/Time';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

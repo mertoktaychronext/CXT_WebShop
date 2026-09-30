@@ -11,7 +11,12 @@ pageextension 60330 "CXW SW Purchases Setup" extends "Purchases & Payables Setup
                 field("CXW SW Item Template Code"; Rec."CXW SW Item Template Code")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the item template used to automatically create items for incoming SellWatch offers.';
+                    ToolTip = 'Specifies the item template used to automatically create items for incoming SellWatch offers of all offer types except commission.';
+                }
+                field("CXW SW Consign. Item Templ."; Rec."CXW SW Consign. Item Templ.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the item template used to automatically create items for incoming SellWatch offers with offer type commission.';
                 }
                 field("CXW SW Consignment Invoice Delay (Days)"; Rec."CXW SW Consign.Inv.Delay(Days)")
                 {
