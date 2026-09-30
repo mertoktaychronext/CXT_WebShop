@@ -101,34 +101,44 @@ codeunit 60305 "CXW SellWatch Mgt"
     local procedure CreateSellWatchItem(): Code[20]
     var
         Item: Record Item;
-        ItemTemplate: Record "Item Templ.";
-        ItemUnitofMeasure: Record "Item Unit of Measure";
-        PurchSetup: Record "Purchases & Payables Setup";
+        ItemTemplMgt: Codeunit "Item Templ. Mgt.";
+        ItemTemplCode: Code[20];
+        IsHandled: Boolean;
     begin
-        Item.Init();
-        // TODO: Nummernserie für SellWatch-Artikel einrichten
-        PurchSetup.Get();
-        if PurchSetup."CXW SW Item Template Code" = '' then
-            Error(NoItemTemplateSetUpErr);
-        if not ItemTemplate.Get(PurchSetup."CXW SW Item Template Code") then
-            Error(ItemTemplateNotFoundErr, PurchSetup."CXW SW Item Template Code");
-        Item.TransferFields(ItemTemplate, true);
-        // TransferFields maps Item Templ. Code (field 1) to Item."No." (field 1).
-        // Clear it so Item.OnInsert assigns the configured item number series.
-        Item."No." := '';
+        ItemTemplCode := GetSellWatchItemTemplateCode();
+        // Standard creates the item incl. number (No. Series of the template, else Inventory Setup),
+        // validated template fields, base unit of measure and default dimensions.
+        if not ItemTemplMgt.CreateItemFromTemplate(Item, IsHandled, ItemTemplCode) then
+            Error(ItemNotCreatedFromTemplateErr, ItemTemplCode);
+
+        // Set SellWatch values after the template so template values cannot overwrite them.
         Item.Validate(Description, CopyStr(SellWatchVendorInfo."CXW Brand" + ' ' + SellWatchVendorInfo."CXW Model" + ' ' + SellWatchVendorInfo."CXW Construction Year", 1, MaxStrLen(Item.Description)));
         Item.Validate("Description 2", CopyStr(SellWatchVendorInfo."CXW Reference", 1, MaxStrLen(Item."Description 2")));
         if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
             Item.Validate("CXB Consignment Sales", true);
-
-        Item.Insert(true);
-        ItemUnitofMeasure.Init();
-        ItemUnitofMeasure."Item No." := Item."No.";
-        ItemUnitofMeasure.Validate("Code", Item."Base Unit of Measure");
-        ItemUnitofMeasure.Validate("Qty. per Unit of Measure", 1);
-        ItemUnitofMeasure.Validate("Qty. Rounding Precision", 1);
-        ItemUnitofMeasure.Insert();
+        Item.Modify(true);
         exit(Item."No.");
+    end;
+
+    local procedure GetSellWatchItemTemplateCode(): Code[20]
+    var
+        ItemTempl: Record "Item Templ.";
+        PurchSetup: Record "Purchases & Payables Setup";
+        ItemTemplCode: Code[20];
+    begin
+        PurchSetup.Get();
+        if SellWatchVendorInfo."CXW Offer Type" = 'commission' then begin
+            ItemTemplCode := PurchSetup."CXW SW Consign. Item Templ.";
+            if ItemTemplCode = '' then
+                Error(NoConsignItemTemplateSetUpErr);
+        end else begin
+            ItemTemplCode := PurchSetup."CXW SW Item Template Code";
+            if ItemTemplCode = '' then
+                Error(NoStdItemTemplateSetUpErr);
+        end;
+        if not ItemTempl.Get(ItemTemplCode) then
+            Error(ItemTemplateNotFoundErr, ItemTemplCode);
+        exit(ItemTemplCode);
     end;
 
     local procedure CreatePurchaseOrderinBV()
@@ -227,6 +237,8 @@ codeunit 60305 "CXW SellWatch Mgt"
         ReleasePurchDoc: Codeunit "Release Purchase Document";
         WOA: Record "CXW Watch Online Approval";
         VendorAndPOCreatedMsg: Label 'Vendor and PO created';
-        NoItemTemplateSetUpErr: Label 'No item template is set up for SellWatch item creation. Please set the SellWatch Item Template field on the Purchases & Payables Setup page.';
+        NoStdItemTemplateSetUpErr: Label 'No standard item template is set up for SellWatch item creation. Please set the SellWatch Item Template (Standard) field on the Purchases & Payables Setup page.';
+        NoConsignItemTemplateSetUpErr: Label 'No commission item template is set up for SellWatch item creation. Please set the SellWatch Item Template (Commission) field on the Purchases & Payables Setup page.';
+        ItemNotCreatedFromTemplateErr: Label 'The item for the SellWatch offer could not be created from item template %1.', Comment = '%1 = item template code';
         ItemTemplateNotFoundErr: Label 'The item template %1 set up on the Purchases & Payables Setup page no longer exists. Cannot create an item for the SellWatch offer.', Comment = '%1 = item template code';
 }

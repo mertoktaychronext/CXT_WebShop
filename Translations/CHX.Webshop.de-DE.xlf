@@ -2106,11 +2106,23 @@
           <note from="Developer" annotates="general" priority="2">%1 = item template code</note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType ItemTemplateNotFoundErr</note>
         </trans-unit>
-        <trans-unit id="Codeunit 3674014615 - NamedType 2056351298" size-unit="char" translate="yes" xml:space="preserve">
-          <source>No item template is set up for SellWatch item creation. Please set the SellWatch Item Template field on the Purchases &amp; Payables Setup page.</source>
-          <target>Für die SellWatch-Artikelanlage ist keine Artikelvorlage eingerichtet. Bitte das Feld "SellWatch-Artikelvorlage" in der Einkaufseinrichtung befüllen.</target>
+        <trans-unit id="Codeunit 3674014615 - NamedType 2357492757" size-unit="char" translate="yes" xml:space="preserve">
+          <source>The item for the SellWatch offer could not be created from item template %1.</source>
+          <target>Der Artikel für das SellWatch-Angebot konnte nicht aus der Artikelvorlage %1 angelegt werden.</target>
+          <note from="Developer" annotates="general" priority="2">%1 = item template code</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType ItemNotCreatedFromTemplateErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3674014615 - NamedType 482311537" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No commission item template is set up for SellWatch item creation. Please set the SellWatch Item Template (Commission) field on the Purchases &amp; Payables Setup page.</source>
+          <target>Für die SellWatch-Artikelanlage ist keine Artikelvorlage für Kommission eingerichtet. Bitte das Feld "SellWatch-Artikelvorlage (Kommission)" in der Einkaufseinrichtung befüllen.</target>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType NoItemTemplateSetUpErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType NoConsignItemTemplateSetUpErr</note>
+        </trans-unit>
+        <trans-unit id="Codeunit 3674014615 - NamedType 101415687" size-unit="char" translate="yes" xml:space="preserve">
+          <source>No standard item template is set up for SellWatch item creation. Please set the SellWatch Item Template (Standard) field on the Purchases &amp; Payables Setup page.</source>
+          <target>Für die SellWatch-Artikelanlage ist keine Standard-Artikelvorlage eingerichtet. Bitte das Feld "SellWatch-Artikelvorlage (Standard)" in der Einkaufseinrichtung befüllen.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW SellWatch Mgt - NamedType NoStdItemTemplateSetUpErr</note>
         </trans-unit>
         <trans-unit id="Codeunit 3674014615 - NamedType 2564218875" size-unit="char" translate="yes" xml:space="preserve">
           <source>Vendor and PO created</source>
@@ -4541,9 +4553,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SW Consignment Invoice Delay (Days) - Property ToolTip</note>
         </trans-unit>
+        <trans-unit id="PageExtension 2485353633 - Control 3419380296 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
+          <source>Specifies the item template used to automatically create items for incoming SellWatch offers with offer type commission.</source>
+          <target>Gibt die Artikelvorlage an, mit der für eingehende SellWatch-Angebote der Angebotsart Kommission automatisch Artikel angelegt werden.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SW Consign. Item Templ. - Property ToolTip</note>
+        </trans-unit>
         <trans-unit id="PageExtension 2485353633 - Control 2393159316 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3921990236">
-          <source>Specifies the item template used to automatically create items for incoming SellWatch offers.</source>
-          <target>Gibt die Artikelvorlage an, mit der für eingehende SellWatch-Angebote automatisch Artikel angelegt werden.</target>
+          <source>Specifies the item template used to automatically create items for incoming SellWatch offers of all offer types except commission.</source>
+          <target>Gibt die Artikelvorlage an, mit der für eingehende SellWatch-Angebote aller Angebotsarten außer Kommission automatisch Artikel angelegt werden.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW SW Purchases Setup - Control CXW SW Item Template Code - Property ToolTip</note>
         </trans-unit>
@@ -4697,9 +4715,15 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Consign.Inv.Delay(Days) - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 2485353633 - Field 3419380296 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
+          <source>SellWatch Item Template (Commission)</source>
+          <target>SellWatch-Artikelvorlage (Kommission)</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Consign. Item Templ. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 2485353633 - Field 2393159316 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 3921990236">
-          <source>SellWatch Item Template</source>
-          <target>SellWatch-Artikelvorlage</target>
+          <source>SellWatch Item Template (Standard)</source>
+          <target>SellWatch-Artikelvorlage (Standard)</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW SW Purchases Setup - Field CXW SW Item Template Code - Property Caption</note>
         </trans-unit>

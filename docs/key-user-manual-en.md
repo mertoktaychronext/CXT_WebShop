@@ -105,6 +105,21 @@ The SellWatch online check (verifies whether a watch should be visible in the Se
 
 > Every queued sales price line appears on the **"Data Export Entries"** page (the same page the availability export uses), identified by the destination code `SALESPRICE`. It shows the status (Pending (Sales Price)/Processed/Error), attempt count, file name, error message and, in the FactBox, the JSON that was sent. **Important:** failed price transmissions are retried automatically by the sales price export job; once the maximum is reached, use **"Requeue Sales Price"**, **not** the "Export Data" action — that action cannot send price entries but uses up an attempt.
 
+## SellWatch – Setting up item templates
+
+For every incoming SellWatch offer, Business Central automatically creates a new item. Which item template is used depends on the offer type. You set up both templates on the **"Purchases & Payables Setup"** page in the "SellWatch" section:
+
+| Field | Meaning |
+|---|---|
+| SellWatch Item Template (Standard) | Template for all offer types except commission (e.g. purchase, exchange). |
+| SellWatch Item Template (Commission) | Template for offers with offer type commission. The item is also automatically flagged as consignment goods. |
+
+The new item takes over all values maintained on the template (e.g. posting groups, base unit of measure, item category) as well as the template's **default dimensions**. Description (brand, model, construction year) and Description 2 (reference) always come from the SellWatch offer.
+
+**Item numbers:** If a series is set in the template's **"No. Series"** field, the item gets its number from that series — this lets commission and standard items have their own number ranges. If none is set, the item number series from the inventory setup applies. The series must allow default numbers.
+
+> **Important:** Both fields must be filled in before SellWatch processing runs. If the commission template is missing, processing does **not** fall back to the standard template — the offer stays unprocessed with an error message. Tip: test each template once via "Items → New" by selecting the template; if an item can be created there, it will also work for SellWatch.
+
 ## Setting up the Workshop authenticity check
 
 The workshop checks purchased watches externally for authenticity and reports the result back via its own bidirectional API. Three one-time setup steps are needed after initial installation of the extension:
@@ -214,6 +229,7 @@ Access to all sales price management objects is controlled through the **"CXWChr
 
 | Problem | Cause / Solution |
 |---|---|
+| SellWatch offer is not processed, error "No … item template is set up" or "The item template … no longer exists" | On the purchases & payables setup ("SellWatch" section), set or correct the template matching the offer type — commission → "SellWatch Item Template (Commission)", all others → "SellWatch Item Template (Standard)". Then restart the job queue entry. |
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
 | "Add all Countries" produces no line for a specific country | Check that "Sales Price Activated" is enabled for that country on the "Countries/Regions" page. |
 | A user cannot open the sales price management pages | Check whether the user has been assigned the "CXWChronWSAll" permission set. |
