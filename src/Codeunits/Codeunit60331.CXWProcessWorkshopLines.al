@@ -42,6 +42,7 @@ codeunit 60331 "CXW Process Workshop Lines"
     var
         PurchLine: Record "Purchase Line";
         PurchHeader: Record "Purchase Header";
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
         AttributeIndex: Integer;
         AttributeValue: Text[250];
     begin
@@ -57,10 +58,14 @@ codeunit 60331 "CXW Process Workshop Lines"
         if not Codeunit.Run(Codeunit::"Purch.-Post", PurchHeader) then
             Error(GetLastErrorText());
 
-        for AttributeIndex := 1 to 10 do begin
-            AttributeValue := GetWorkshopLineAttributeValue(WorkshopLine, AttributeIndex);
-            if AttributeValue <> '' then
-                SetItemAttributeValue(WorkshopLine."CXW Item No.", GetAttributeMapping(AttributeIndex), AttributeValue);
+        // Same mapping as the prefill in "CXW Workshop Line Mgt.". Values are written to the named attribute;
+        // a value prefilled from the ChronextBC fallback and left unchanged by the workshop is skipped.
+        for AttributeIndex := 1 to WorkshopLineMgt.WorkshopAttributeCount() do begin
+            AttributeValue := WorkshopLineMgt.GetWorkshopAttributeValue(WorkshopLine, AttributeIndex);
+            if (AttributeValue <> '') and
+               not WorkshopLineMgt.IsUnchangedFallbackValue(WorkshopLine."CXW Item No.", AttributeIndex, AttributeValue)
+            then
+                SetItemAttributeValue(WorkshopLine."CXW Item No.", WorkshopLineMgt.GetWorkshopAttributeName(AttributeIndex), AttributeValue);
         end;
 
         WorkshopLine."CXW Last Error" := '';
@@ -88,59 +93,6 @@ codeunit 60331 "CXW Process Workshop Lines"
         if PurchHeader.Status <> PurchHeader.Status::Open then
             ReleasePurchDoc.PerformManualReopen(PurchHeader);
         PurchHeader.Delete(true);
-    end;
-
-    local procedure GetWorkshopLineAttributeValue(WorkshopLine: Record "CXW Workshop Line"; AttributeIndex: Integer): Text[250]
-    begin
-        case AttributeIndex of
-            1:
-                exit(WorkshopLine."CXW Dial Color");
-            2:
-                exit(WorkshopLine."CXW Case Diameter");
-            3:
-                exit(WorkshopLine."CXW Bracelet Material");
-            4:
-                exit(WorkshopLine."CXW Case Material");
-            5:
-                exit(WorkshopLine."CXW Movement");
-            6:
-                exit(WorkshopLine."CXW Gender");
-            7:
-                exit(WorkshopLine."CXW Crystal");
-            8:
-                exit(WorkshopLine."CXW Features");
-            9:
-                exit(WorkshopLine."CXW Attribute 9");
-            10:
-                exit(WorkshopLine."CXW Attribute 10");
-        end;
-    end;
-
-    // TODO: Attributnamen für Attribut 9/10 final klären (Platzhalter!) - zentrale Zuordnung WL-Feld -> Item-Attribute-Name.
-    local procedure GetAttributeMapping(AttributeIndex: Integer): Text[250]
-    begin
-        case AttributeIndex of
-            1:
-                exit('Dial Color');
-            2:
-                exit('Case Diameter');
-            3:
-                exit('Bracelet Material');
-            4:
-                exit('Case Material');
-            5:
-                exit('Movement');
-            6:
-                exit('Gender');
-            7:
-                exit('Crystal');
-            8:
-                exit('Features');
-            9:
-                exit('Attribut 9');
-            10:
-                exit('Attribut 10');
-        end;
     end;
 
     local procedure SetItemAttributeValue(ItemNo: Code[20]; AttributeName: Text[250]; Value: Text[250])

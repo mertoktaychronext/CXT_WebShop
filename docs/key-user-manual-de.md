@@ -149,6 +149,8 @@ Die Werkstatt meldet je Uhr bis zu zehn Attribute zurück. Acht davon sind fachl
 
 > Fehlende Standard-Artikelattribute legt das System bei Bedarf automatisch an (Typ Text) – keine manuelle Voreinrichtung nötig.
 
+> **Vorbefüllung:** Beim "Send to Workshop" werden diese zehn Felder mit den aktuellen Werten der gleichnamigen Artikelattribute des Artikels vorbefüllt (z. B. Artikelattribut "Dial Color"). Ist dieses Attribut am Artikel nicht gepflegt, wird das entsprechende deutsche Attribut verwendet (z. B. "Zifferblatt Farbe 1", "Gehäuse Größe", "Armband Material", "Gehäuse Material", "Werk", "Geschlecht", "Glas"); gibt es auch dort keinen Wert, bleibt das Feld leer. Korrigiert die Werkstatt einen solchen Wert, wird die Korrektur im englisch benannten Attribut gespeichert. Bestätigt die Werkstatt einen Wert aus dem deutschen Attribut unverändert, wird nichts zurückgeschrieben. Die Werkstatt prüft die Werte und korrigiert sie bei Bedarf; die korrigierten Werte gehen bei der Verarbeitung zurück an den Artikel. Pflegen Sie die Attribute daher möglichst vor dem "Send to Workshop". Ein von der Werkstatt geleertes Feld entfernt den Wert am Artikel nicht.
+
 ## Status und Fehlerbehandlung der Workshop-Zeilen
 
 Eine Workshop-Zeile durchläuft die Status **Neu → WS geprüft → Verarbeitet**. Schlägt die automatische Verarbeitung fehl (z. B. gesperrte Buchungsperiode, fehlende Lagerortangabe), wechselt die Zeile stattdessen auf Status **Fehler**, und der Fehlertext wird im Feld "Last Error" auf der Zeile vermerkt (sichtbar auf Seite "CXW Workshop Lines").

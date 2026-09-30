@@ -3966,14 +3966,14 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3028312195 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 10 as reported by the workshop.</source>
-          <target>Gibt Attribut 10 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Attribut 10". It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the item when the line is processed.</source>
+          <target>Gibt den Wert des Artikelattributs "Attribut 10" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt, kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in den Artikel zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Attribute 10 - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3477796635 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 9 as reported by the workshop.</source>
-          <target>Gibt Attribut 9 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Attribut 9". It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the item when the line is processed.</source>
+          <target>Gibt den Wert des Artikelattributs "Attribut 9" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt, kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in den Artikel zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Attribute 9 - Property ToolTip</note>
         </trans-unit>
@@ -3984,8 +3984,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Box - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 4047899055 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 3 as reported by the workshop.</source>
-          <target>Gibt Attribut 3 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Bracelet Material". It is prefilled from the item when the line is sent to the workshop (from "Armband Material" if "Bracelet Material" is not maintained), may be corrected by the workshop, and is written back to "Bracelet Material" when the line is processed. A value taken from "Armband Material" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Bracelet Material" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Armband Material", wenn "Bracelet Material" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Bracelet Material" zurückgeschrieben. Ein unveränderter Wert aus "Armband Material" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Bracelet Material - Property ToolTip</note>
         </trans-unit>
@@ -3996,14 +3996,14 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Brand - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 1037952385 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 2 as reported by the workshop.</source>
-          <target>Gibt Attribut 2 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Case Diameter". It is prefilled from the item when the line is sent to the workshop (from "Gehäuse Größe" if "Case Diameter" is not maintained), may be corrected by the workshop, and is written back to "Case Diameter" when the line is processed. A value taken from "Gehäuse Größe" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Case Diameter" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Gehäuse Größe", wenn "Case Diameter" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Case Diameter" zurückgeschrieben. Ein unveränderter Wert aus "Gehäuse Größe" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Case Diameter - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3063232181 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 4 as reported by the workshop.</source>
-          <target>Gibt Attribut 4 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Case Material". It is prefilled from the item when the line is sent to the workshop (from "Gehäuse Material" if "Case Material" is not maintained), may be corrected by the workshop, and is written back to "Case Material" when the line is processed. A value taken from "Gehäuse Material" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Case Material" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Gehäuse Material", wenn "Case Material" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Case Material" zurückgeschrieben. Ein unveränderter Wert aus "Gehäuse Material" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Case Material - Property ToolTip</note>
         </trans-unit>
@@ -4032,8 +4032,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Created At - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 791528034 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 7 as reported by the workshop.</source>
-          <target>Gibt Attribut 7 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Crystal". It is prefilled from the item when the line is sent to the workshop (from "Glas" if "Crystal" is not maintained), may be corrected by the workshop, and is written back to "Crystal" when the line is processed. A value taken from "Glas" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Crystal" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Glas", wenn "Crystal" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Crystal" zurückgeschrieben. Ein unveränderter Wert aus "Glas" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Crystal - Property ToolTip</note>
         </trans-unit>
@@ -4050,8 +4050,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Description - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 2865328915 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 1 as reported by the workshop.</source>
-          <target>Gibt Attribut 1 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Dial Color". It is prefilled from the item when the line is sent to the workshop (from "Zifferblatt Farbe 1" if "Dial Color" is not maintained), may be corrected by the workshop, and is written back to "Dial Color" when the line is processed. A value taken from "Zifferblatt Farbe 1" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Dial Color" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Zifferblatt Farbe 1", wenn "Dial Color" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Dial Color" zurückgeschrieben. Ein unveränderter Wert aus "Zifferblatt Farbe 1" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Dial Color - Property ToolTip</note>
         </trans-unit>
@@ -4068,14 +4068,14 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Document Type - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 826900317 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 8 as reported by the workshop.</source>
-          <target>Gibt Attribut 8 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Features". It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the item when the line is processed.</source>
+          <target>Gibt den Wert des Artikelattributs "Features" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt, kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in den Artikel zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Features - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3353708157 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 6 as reported by the workshop.</source>
-          <target>Gibt Attribut 6 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Gender". It is prefilled from the item when the line is sent to the workshop (from "Geschlecht" if "Gender" is not maintained), may be corrected by the workshop, and is written back to "Gender" when the line is processed. A value taken from "Geschlecht" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Gender" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Geschlecht", wenn "Gender" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Gender" zurückgeschrieben. Ein unveränderter Wert aus "Geschlecht" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Gender - Property ToolTip</note>
         </trans-unit>
@@ -4116,8 +4116,8 @@
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Model - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 3554682641 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies attribute 5 as reported by the workshop.</source>
-          <target>Gibt Attribut 5 an, wie von der Werkstatt gemeldet.</target>
+          <source>Specifies the value of the item attribute "Movement". It is prefilled from the item when the line is sent to the workshop (from "Werk" if "Movement" is not maintained), may be corrected by the workshop, and is written back to "Movement" when the line is processed. A value taken from "Werk" and left unchanged is not written back.</source>
+          <target>Gibt den Wert des Artikelattributs "Movement" an. Er wird beim Senden an die Werkstatt aus dem Artikel vorbefüllt (aus "Werk", wenn "Movement" nicht gepflegt ist), kann von der Werkstatt korrigiert werden und wird bei der Verarbeitung in "Movement" zurückgeschrieben. Ein unveränderter Wert aus "Werk" wird nicht zurückgeschrieben.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Movement - Property ToolTip</note>
         </trans-unit>

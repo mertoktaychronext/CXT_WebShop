@@ -149,6 +149,8 @@ The workshop reports back up to ten attributes per watch. Eight of them have a d
 
 > Missing standard item attributes are created automatically as needed (type Text) — no manual pre-setup required.
 
+> **Prefill:** On "Send to Workshop", these ten fields are prefilled with the current values of the item attributes of the same name (e.g. item attribute "Dial Color"). If that attribute is not maintained on the item, the corresponding German attribute is used (e.g. "Zifferblatt Farbe 1", "Gehäuse Größe", "Armband Material", "Gehäuse Material", "Werk", "Geschlecht", "Glas"); if that has no value either, the field stays empty. If the workshop corrects such a value, the correction is stored in the English-named attribute. If the workshop confirms a value from the German attribute unchanged, nothing is written back. The workshop checks the values and corrects them if needed; the corrected values are written back to the item on processing. Therefore maintain the attributes before "Send to Workshop" where possible. A field cleared by the workshop does not remove the value from the item.
+
 ## Status and error handling of Workshop lines
 
 A Workshop line moves through the statuses **New → WS checked → Processed**. If automatic processing fails (e.g. a closed posting period, missing location), the line instead moves to status **Error**, and the error text is recorded in the "Last Error" field on the line (visible on the "CXW Workshop Lines" page).
