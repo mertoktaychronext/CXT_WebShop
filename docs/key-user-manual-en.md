@@ -134,6 +134,12 @@ Background processing handles each SellWatch offer on its own. If an offer fails
 
 The workshop checks purchased watches externally for authenticity and reports the result back via its own bidirectional API. Three one-time setup steps are needed after initial installation of the extension:
 
+> **Serial number prerequisite:** "Send to Workshop" identifies each watch by its BC serial number and captures the manufacturer serial number on the **Serial No. Information Card**. For a line to be sent, the item must have
+> - an **item tracking code** with **SN purchase inbound tracking**, and
+> - a **serial no. series** (item card, field "Serial Nos.") — the next number is drawn from it automatically if the purchase line has no serial number yet.
+>
+> For SellWatch items, the easiest way is to set both up in the **SellWatch item templates**. Which details are mandatory on the card (manufacturer serial no., box, papers) is controlled by the flags on the item tracking code from CHX.Base. Lines with a quantity other than 1 are not supported.
+
 ### 1. OAuth2 S2S (Entra) for the Workshop API
 
 The custom API (endpoint pattern `.../api/saliniLife/workshop/v1.0/companies({companyId})/workshopLines`) uses standard BC API authentication — no custom auth logic:

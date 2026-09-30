@@ -3288,21 +3288,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW SellWatch-Overview - Action ShowDocument - Property Caption</note>
         </trans-unit>
-        <trans-unit id="Page 4255372727 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Manufacturer Serial No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Serial No. Input - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="Page 4255372727 - Control 2164308859 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Specifies the manufacturer serial number of the arrived item.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Serial No. Input - Control SerialNo - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="Page 4255372727 - Control 2164308859 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Manufacturer Serial No.</source>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Serial No. Input - Control SerialNo - Property Caption</note>
-        </trans-unit>
         <trans-unit id="Page 3266518217 - NamedType 2870538072" size-unit="char" translate="yes" xml:space="preserve">
           <source>%1 cannot be changed through this API.</source>
           <note from="Developer" annotates="general" priority="2">%1 = field caption</note>
@@ -3838,10 +3823,20 @@
           <note from="Developer" annotates="general" priority="2">%1 = list of line errors</note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - NamedType LinesNotSentMsg</note>
         </trans-unit>
-        <trans-unit id="PageExtension 3145489792 - NamedType 1587914379" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3145489792">
-          <source>The serial number input was cancelled.</source>
+        <trans-unit id="PageExtension 3145489792 - NamedType 1654041562" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3145489792">
+          <source>No serial number is assigned and the item has no serial no. series.</source>
           <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - NamedType SerialNoInputCancelledErr</note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - NamedType NoSerialNosErr</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3145489792 - NamedType 2708410814" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3145489792">
+          <source>The item is not set up for serial number tracking on purchases.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - NamedType NoSerialNoTrackingErr</note>
+        </trans-unit>
+        <trans-unit id="PageExtension 3145489792 - NamedType 1558013433" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3145489792">
+          <source>Only lines with a quantity of 1 can be sent to the workshop.</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - NamedType QuantityNotOneErr</note>
         </trans-unit>
         <trans-unit id="PageExtension 3145489792 - NamedType 3859765167" size-unit="char" translate="yes" xml:space="preserve" al-object-target="PageExtension 3145489792">
           <source>The manufacturer serial number is required.</source>
@@ -3849,7 +3844,7 @@
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - NamedType SerialNoRequiredErr</note>
         </trans-unit>
         <trans-unit id="PageExtension 3145489792 - Action 2248793346 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 387971303">
-          <source>Confirms arrival per line, captures the manufacturer serial number, and creates a workshop line for each arrived item.</source>
+          <source>Confirms arrival per line, assigns a serial number if none is assigned yet, opens the serial no. information card to capture the manufacturer serial number, and creates a workshop line for each arrived item.</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Workshop Purchase Order - Action CXW Send to Workshop - Property ToolTip</note>
         </trans-unit>

@@ -94,7 +94,10 @@ Für angekaufte Uhren, die vor der Einlagerung von einer externen Werkstatt auf 
 Öffnen Sie die betreffende **Einkaufsbestellung** und klicken Sie auf **"Send to Workshop"**. Das System fragt Sie für jede noch nicht übertragene Zeile (Typ Artikel, Menge ungleich 0) einzeln:
 
 1. **"Ist Artikel {Artikelnummer} {Beschreibung} wirklich angekommen?"** – Bestätigen Sie mit "Ja", wenn der Artikel physisch eingetroffen ist. Bei "Nein" wird die Zeile als "Nicht angekommen" markiert und übersprungen; Sie können die Aktion später erneut ausführen, sobald der Artikel angekommen ist.
-2. Bei "Ja" öffnet sich ein Eingabedialog für die **Herstellerseriennummer**. Diese Eingabe ist Pflicht – ohne gültige Seriennummer wird die Zeile übersprungen und am Ende der Aktion in einer Sammelmeldung aufgeführt, während die übrigen Zeilen normal weiterverarbeitet werden.
+2. Bei "Ja" öffnet sich die **Seriennr.-Informationskarte** der Uhr. Hat die Bestellzeile noch keine Seriennummer, vergibt das System automatisch die nächste freie Nummer und zeigt sie auf der Karte an. Tragen Sie dort die **Herstellerseriennummer** ein und – falls für den Artikel verlangt – die Angaben zu **Box** und **Papieren**, und schließen Sie die Karte.
+3. Fehlt danach die Herstellerseriennummer oder eine verlangte Angabe, wird die Zeile übersprungen und am Ende der Aktion in einer Sammelmeldung mit Grund aufgeführt, während die übrigen Zeilen normal weiterverarbeitet werden. Beim nächsten Ausführen erscheint wieder dieselbe Seriennummer.
+
+> Zeilen mit einer Menge größer 1 oder Artikel ohne Seriennummernverfolgung können nicht an die Werkstatt gesendet werden; sie erscheinen ebenfalls in der Sammelmeldung. Wenden Sie sich in diesem Fall an einen Key User.
 
 Nach erfolgreicher Eingabe wird die Zeile als "An Werkstatt gesendet" markiert und ist auf der Bestellzeile **nicht mehr editierbar** (Artikel, Menge, Preis etc.) – so wird verhindert, dass eine bereits an die Werkstatt übergebene Zeile nachträglich verändert wird, während die Prüfung noch läuft.
 
@@ -147,8 +150,8 @@ Der Preisexport ist nicht eingerichtet oder deaktiviert. Wenden Sie sich an eine
 **Eine SellWatch-Anfrage zeigt keine Bestellnummer.**
 Die Bestellung wurde für diese Anfrage noch nicht automatisiert angelegt.
 
-**"Send to Workshop" fragt nach der Herstellerseriennummer, obwohl ich abbrechen wollte.**
-Der Dialog ist für angekommene Artikel verpflichtend. Wählen Sie im vorherigen Bestätigungsdialog "Nein", wenn der Artikel tatsächlich noch nicht angekommen ist – die Zeile wird dann übersprungen, ohne die restliche Aktion abzubrechen.
+**"Send to Workshop" öffnet die Seriennr.-Informationskarte, obwohl ich abbrechen wollte.**
+Die Karte ist für angekommene Artikel verpflichtend. Schließen Sie sie ohne Herstellerseriennummer, wird die Zeile übersprungen (die vergebene Seriennummer bleibt für den nächsten Versuch erhalten). Wählen Sie im vorherigen Bestätigungsdialog "Nein", wenn der Artikel tatsächlich noch nicht angekommen ist – die Zeile wird dann übersprungen, ohne die restliche Aktion abzubrechen.
 
 **Eine Workshop-Zeile bleibt dauerhaft auf Status "Fehler" stehen.**
 Die automatische Verarbeitung ist bei dieser Zeile fehlgeschlagen. Das ist keine Aktion, die Sie als Endnutzer selbst beheben können – wenden Sie sich an einen Key User (siehe Key-User-Handbuch).

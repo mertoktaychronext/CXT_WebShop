@@ -134,6 +134,12 @@ Die Hintergrundverarbeitung verarbeitet jedes SellWatch-Angebot für sich. Schei
 
 Die Werkstatt prüft angekaufte Uhren extern auf Echtheit und liefert das Ergebnis über eine eigene, bidirektionale API zurück. Nach der Erstinstallation der Erweiterung sind drei Schritte einmalig einzurichten:
 
+> **Voraussetzung Seriennummern:** "Send to Workshop" identifiziert jede Uhr über ihre BC-Seriennummer und erfasst die Herstellerseriennummer auf der **Seriennr.-Informationskarte**. Damit eine Zeile gesendet werden kann, muss der Artikel
+> - einen **Artikelverfolgungscode** mit **Seriennr.-Verfolgung im Einkauf** haben und
+> - eine **Seriennr.-Nummernserie** (Artikelkarte, Feld "Seriennummern") haben – daraus wird automatisch die nächste Nummer gezogen, wenn die Bestellzeile noch keine Seriennummer hat.
+>
+> Für SellWatch-Artikel richten Sie beides am einfachsten in den **SellWatch-Artikelvorlagen** ein. Welche Angaben auf der Karte Pflicht sind (Herstellerseriennummer, Box, Papiere), steuern die Kennzeichen am Artikelverfolgungscode aus CHX.Base. Zeilen mit Menge ungleich 1 werden nicht unterstützt.
+
 ### 1. OAuth2 S2S (Entra) für die Workshop-API
 
 Die Custom API (Endpunkt-Muster `.../api/saliniLife/workshop/v1.0/companies({companyId})/workshopLines`) verwendet die Standard-BC-API-Authentifizierung, keine eigene Auth-Logik:
