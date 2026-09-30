@@ -14,10 +14,14 @@ Dieses Handbuch richtet sich an Key User, die die Grundeinstellungen der Verkauf
 | Schwellenwert Lagerpreis % | Ab welcher prozentualen Preiserhöhung gegenüber dem letzten Preis eine Bemerkung erzeugt wird. |
 | Schwellenwert Nicht-Lagerpreis % | Analog für Nicht-Lagerartikel (aktuell nicht aktiv genutzt, siehe Entwicklerhandbuch). |
 | Kat. 1–3 Nicht-Lager % / Lagerpreis von/bis | Vorbereitet für eine automatische Berechnung des Nicht-Lagerpreises je Preiskategorie. Diese Berechnung ist im laufenden Freigabe-Ablauf aktuell nicht automatisch eingebunden. |
-| Preisexport aktiv | Muss aktiviert sein, damit die Aktion "Upload Sales Price" (Benutzerhandbuch) Preise an ein externes System senden kann. |
+| Preisexport aktiv | Muss aktiviert sein, damit die Aktion "Release Sales Prices" (Benutzerhandbuch) Preise einplanen und der Verkaufspreisexport-Job sie an ein externes System senden kann. Ist es aus, lässt der Job eingeplante Preise unverändert liegen. |
 | API-Schnittstellencode | Legt fest, welche der unter "API Interface Setup" hinterlegten Schnittstellen für den Preisexport verwendet wird. |
+| Max. Exportversuche | Wie oft der Verkaufspreisexport-Job einen fehlgeschlagenen Preis erneut sendet (Standard 3). Danach bleibt der Eintrag auf "Fehler" stehen, bis Sie ihn manuell erneut einplanen (siehe unten). |
+| Archiv-Ländercode | Nur Preiszeilen dieses Landes werden in "Sales Price Archive" archiviert (Standard **DE**). Die Preise aller Länder stehen unabhängig davon in "Sales Price Export Entries". |
 
-Diese Einstellungen **müssen** befüllt sein (Mindestmarge %, Schwellenwert Lagerpreis %), sonst lassen sich Import, Prüfung und Freigabe nicht ausführen. Für "Upload Sales Price" müssen zusätzlich "Preisexport aktiv" und "API-Schnittstellencode" gesetzt sein.
+Diese Einstellungen **müssen** befüllt sein (Mindestmarge %, Schwellenwert Lagerpreis %), sonst lassen sich Import, Prüfung und Freigabe nicht ausführen. Für "Release Sales Prices" müssen zusätzlich "Preisexport aktiv", "API-Schnittstellencode" und "Archiv-Ländercode" gesetzt sein.
+
+> **Nach dem Update auf Version 27.0.0.6:** Im bestehenden Einrichtungsdatensatz ist "Archiv-Ländercode" leer. Tragen Sie **DE** ein, sonst bricht "Release Sales Prices" mit einer Meldung ab.
 
 ## Externe Schnittstelle einrichten (API Interface Setup)
 
@@ -37,7 +41,24 @@ Diese Einstellungen **müssen** befüllt sein (Mindestmarge %, Schwellenwert Lag
 | Source Table No. | Die Tabelle, für die diese Schnittstelle Daten überträgt (für den Preisexport: die Tabellennummer von "Sales Price"). |
 | Active | Muss gesetzt sein, damit die Schnittstelle in den Grundeinstellungen auswählbar ist. Beim Aktivieren prüft das System automatisch, dass Endpoint URL und – je nach Auth Type – API Key bzw. die AWS-Felder vollständig hinterlegt sind. |
 
-> Ohne eine aktive, vollständig konfigurierte Schnittstelle schlägt "Upload Sales Price" fehl bzw. markiert betroffene Preiszeilen mit "Export Status" = "Error".
+> Ohne eine aktive, vollständig konfigurierte Schnittstelle schlägt die Übertragung durch den Verkaufspreisexport-Job fehl; die betroffenen Einträge gehen auf "Fehler" und werden bis zur Höchstzahl der Versuche erneut gesendet.
+
+## Verkaufspreisexport-Job einrichten (Aufgabenwarteschlange)
+
+Seit Version 27.0.0.6 sendet nicht mehr die Aktion auf der Preisprüfliste, sondern ein Job in der Aufgabenwarteschlange die freigegebenen Preise. Legen Sie dafür einmalig einen **Aufgabenwarteschlangenposten** an:
+
+| Feld | Wert |
+|---|---|
+| Auszuführender Objekttyp | Codeunit |
+| Auszuführende Objekt-ID | **60332** ("CXW Export Sales Price Job") |
+| Wiederkehrender Auftrag | Ja, z. B. alle 5–15 Minuten |
+| Status | Bereit |
+
+Der ausführende Benutzer benötigt das Permission Set "CXWChronWSAll".
+
+**Ablauf:** "Release Sales Prices" legt je Länderzeile einen Eintrag in **"Sales Price Export Entries"** (Preisstand des Landes) und einen Eintrag in **"Data Export Entries"** mit Zielcode `SALESPRICE` und Status **"Pending (Sales Price)"** an. Der Job sendet alle ausstehenden Einträge sowie fehlgeschlagene Einträge, deren Versuchsanzahl unter "Max. Exportversuche" liegt. Ein Fehler bei einem Preis hält die übrigen nicht auf, und der Job selbst läuft auch bei einzelnen Fehlschlägen weiter.
+
+**Manuell erneut einplanen:** Hat ein Eintrag die Höchstzahl der Versuche erreicht, bleibt er auf "Fehler" stehen. Beheben Sie die Ursache (Fehlermeldung am Eintrag bzw. "Http Call Log"), markieren Sie den Eintrag auf "Data Export Entries" und führen Sie **"Requeue Sales Price"** aus. Der Eintrag wird mit unveränderten Daten beim nächsten Joblauf erneut gesendet. Sollen die Preisdaten neu erzeugt werden, geben Sie die Preiszeile stattdessen erneut frei.
 
 ## Länder für "Add all Countries" freischalten
 
@@ -50,6 +71,8 @@ In den Stammdaten von **Land/Region** (Seite "Countries/Regions") wurden folgend
 
 > Ohne "Verkaufspreis aktiviert" wird ein Land bei "Add all Countries" nicht berücksichtigt. Jedes aktivierte Land erhält eine eigene Zeile – auch wenn mehrere Länder dieselbe Währung nutzen (z. B. DE, AT, FR in EUR).
 
+> **DE muss aktiviert sein.** Die importierte Basiszeile ohne Land wird seit Version 27.0.0.6 weder in die Verkaufspreise geschrieben noch übertragen. Ohne aktivierte DE-Zeile gibt es daher keinen EUR-Preis mehr und keinen Archiveintrag.
+
 > **Umstellung von Währungs- auf Länderfreischaltung:** Bis zur Einführung von "Add all Countries" erfolgte die Freischaltung über das Feld "Verkaufspreis aktiviert" auf der **Währung** (Aktion "Add all Currencies"). Dieses Feld wurde entfernt. Notieren Sie vor dem Update die bisher aktivierten Währungen und richten Sie danach die entsprechenden Länder mit Verkaufspreis-Währungscode ein.
 ## Grundcode (Reason Code)
 
@@ -57,7 +80,7 @@ Jeder Preisänderung kann ein Grund zugeordnet werden: **CatMan**, **Einkauf** o
 
 ## Workflows und Prozesse
 
-Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Approve → (optional) Add all Countries → Upload Sales Price**. Als Key User sind Sie zuständig für die Rahmenbedingungen (Grundeinstellungen, Länderfreischaltung, API-Schnittstelle), nicht für den täglichen Ablauf selbst (siehe Benutzerhandbuch).
+Der reguläre Ablauf für die Fachabteilung ist: **Import → Validate → Approve → Add all Countries → Release Sales Prices**; die Übertragung übernimmt danach der Verkaufspreisexport-Job. Als Key User sind Sie zuständig für die Rahmenbedingungen (Grundeinstellungen, Länderfreischaltung, API-Schnittstelle, Aufgabenwarteschlangenposten), nicht für den täglichen Ablauf selbst (siehe Benutzerhandbuch).
 
 Für SellWatch gibt es keinen von der Fachabteilung manuell ausgelösten Ablauf: Neue Ankaufsanfragen (Verkäufer-, Uhren- und Angebotsdaten) treffen automatisiert ein und werden automatisiert zu Lieferant und Einkaufsbestellung verarbeitet; die Fachabteilung sieht das Ergebnis nur lesend auf der Seite "SellWatch-Overview" (Benutzerhandbuch). Als Key User sind Sie hier zuständig für die Konfiguration der Online-Check-Schnittstelle (siehe unten) und für die Berechtigungsvergabe.
 
@@ -80,11 +103,42 @@ Der SellWatch-Online-Check (prüft, ob eine Uhr im SellWatch-Onlineshop sichtbar
 
 > Fehlgeschlagene Aufrufe können Sie über die Seite **"Http Call Log"** nachvollziehen: Sie zeigt zu jedem Aufruf Erfolg/Fehlschlag, HTTP-Statuscode und Fehlermeldung, und erlaubt den Download des gesendeten Requests sowie der empfangenen Antwort als Textdatei (der API-Schlüssel wird im gespeicherten Request nicht im Klartext angezeigt). Seit dem HTTP-Logging-Update vom 2026-08-10 protokolliert diese Seite auch die Aufrufe des Verkaufspreis-Exports (siehe unten) – die Spalte "Quelltabellennr." zeigt, welcher Bereich den Eintrag erzeugt hat.
 
-> Seit Version 27.0.0.3 finden Sie jede übertragene Verkaufspreiszeile zusätzlich auf der Seite **"Data Export Entries"** (dieselbe Seite wie beim Verfügbarkeitsexport) – erkennbar am Zielcode `SALESPRICE`. Dort sehen Sie Status (Verarbeitet/Fehler), Dateiname, Fehlermeldung und im Infobereich die gesendeten JSON-Daten. **Wichtig:** Fehlgeschlagene Preisübertragungen wiederholen Sie ausschließlich über "Upload Sales Price" auf der Preisprüfliste, **nicht** über die Aktion "Export Data" auf "Data Export Entries" – diese kann Preiseinträge nicht senden und erzeugt nur einen Fehlerprotokolleintrag.
+> Jede eingeplante Verkaufspreiszeile finden Sie auf der Seite **"Data Export Entries"** (dieselbe Seite wie beim Verfügbarkeitsexport) – erkennbar am Zielcode `SALESPRICE`. Dort sehen Sie Status (Pending (Sales Price)/Verarbeitet/Fehler), Anzahl Versuche, Dateiname, Fehlermeldung und im Infobereich die gesendeten JSON-Daten. **Wichtig:** Fehlgeschlagene Preisübertragungen wiederholt der Verkaufspreisexport-Job automatisch; nach Erreichen der Höchstzahl verwenden Sie **"Requeue Sales Price"**, **nicht** die Aktion "Export Data" – diese kann Preiseinträge nicht senden, verbraucht aber einen Versuch.
+
+## SellWatch – Artikelvorlagen einrichten
+
+Für jedes eingehende SellWatch-Angebot legt Business Central automatisch einen neuen Artikel an. Welche Artikelvorlage dafür verwendet wird, hängt von der Angebotsart ab. Beide Vorlagen hinterlegen Sie auf der Seite **"Purchases & Payables Setup"** (Einkaufseinrichtung) im Bereich "SellWatch":
+
+| Feld | Bedeutung |
+|---|---|
+| SellWatch-Artikelvorlage (Standard) | Vorlage für alle Angebotsarten außer Kommission (z. B. Ankauf, Tausch). |
+| SellWatch-Artikelvorlage (Kommission) | Vorlage für Angebote der Angebotsart Kommission. Der Artikel wird zusätzlich automatisch als Kommissionsware gekennzeichnet. |
+
+Aus der Vorlage übernimmt der neue Artikel alle dort gepflegten Werte (z. B. Buchungsgruppen, Basiseinheit, Artikelkategorie) sowie die **Standarddimensionen** der Vorlage. Beschreibung (Marke, Modell, Baujahr) und Beschreibung 2 (Referenz) kommen immer aus dem SellWatch-Angebot.
+
+**Artikelnummern:** Ist an der Vorlage im Feld **"Nummernserie"** eine Serie hinterlegt, erhält der Artikel seine Nummer aus dieser Serie – so können Kommissions- und Standardartikel eigene Nummernkreise bekommen. Ist dort nichts hinterlegt, gilt die Artikelnummernserie der Lagereinrichtung. Die Serie muss Standardnummern erlauben.
+
+> **Wichtig:** Beide Felder müssen gefüllt sein, bevor die SellWatch-Verarbeitung läuft. Fehlt die Vorlage für Kommission, wird **nicht** auf die Standardvorlage ausgewichen – das Angebot bleibt mit einer Fehlermeldung unverarbeitet. Tipp: Testen Sie jede Vorlage einmal über „Artikel → Neu“ mit Auswahl der Vorlage; lässt sich dort ein Artikel anlegen, funktioniert sie auch für SellWatch.
+
+## SellWatch – Fehler bei der automatischen Verarbeitung
+
+Die Hintergrundverarbeitung verarbeitet jedes SellWatch-Angebot für sich. Scheitert ein Angebot (z. B. weil eine Artikelvorlage fehlt oder eine Einrichtung unvollständig ist), passiert Folgendes:
+
+- Für dieses Angebot wird **nichts** angelegt – kein Kreditor, keine Bestellung, kein Artikel. Alle anderen Angebote werden normal weiterverarbeitet.
+- In der **SellWatch-Übersicht** ist die Zeile rot hervorgehoben; die Spalten **"Letzter Fehler"** und **"Zeitpunkt letzter Fehler"** zeigen, was schiefgegangen ist und wann.
+- Das Angebot bleibt offen und wird beim **nächsten Lauf automatisch erneut versucht**. Sie müssen nur die Ursache beheben – am Angebot selbst ist nichts zu tun. Nach erfolgreicher Verarbeitung sind die Fehlerspalten wieder leer.
+
+> **Tipp:** Filtern Sie in der SellWatch-Übersicht auf "Letzter Fehler" ungleich leer (`<>''`), um alle offenen Problemfälle auf einen Blick zu sehen. Der Job-Queue-Eintrag selbst endet auch dann erfolgreich, wenn einzelne Angebote scheitern – kontrollieren Sie Fehler deshalb über die Übersicht.
 
 ## Workshop-Ankaufsprüfung einrichten
 
 Die Werkstatt prüft angekaufte Uhren extern auf Echtheit und liefert das Ergebnis über eine eigene, bidirektionale API zurück. Nach der Erstinstallation der Erweiterung sind drei Schritte einmalig einzurichten:
+
+> **Voraussetzung Seriennummern:** "Send to Workshop" identifiziert jede Uhr über ihre BC-Seriennummer und erfasst die Herstellerseriennummer auf der **Seriennr.-Informationskarte**. Damit eine Zeile gesendet werden kann, muss der Artikel
+> - einen **Artikelverfolgungscode** mit **Seriennr.-Verfolgung im Einkauf** haben und
+> - eine **Seriennr.-Nummernserie** (Artikelkarte, Feld "Seriennummern") haben – daraus wird automatisch die nächste Nummer gezogen, wenn die Bestellzeile noch keine Seriennummer hat.
+>
+> Für SellWatch-Artikel richten Sie beides am einfachsten in den **SellWatch-Artikelvorlagen** ein. Welche Angaben auf der Karte Pflicht sind (Herstellerseriennummer, Box, Papiere), steuern die Kennzeichen am Artikelverfolgungscode aus CHX.Base. Zeilen mit Menge ungleich 1 werden nicht unterstützt.
 
 ### 1. OAuth2 S2S (Entra) für die Workshop-API
 
@@ -92,8 +146,12 @@ Die Custom API (Endpunkt-Muster `.../api/saliniLife/workshop/v1.0/companies({com
 
 1. In Microsoft Entra ID eine App-Registrierung für den Workshop-Dienst anlegen (Client Credentials Flow, kein interaktiver Login).
 2. Der App-Registrierung Zugriff auf die Business-Central-API erteilen (Business Central Admin Center → API-Zugriff, bzw. Azure-AD-App-Berechtigung "Dynamics 365 Business Central").
-3. In Business Central einen dedizierten Benutzer für den Workshop-Dienst anlegen und ihm **ausschließlich** das Permission Set **"CXW Workshop API"** zuweisen (kein Zugriff auf Purchase Line, Item oder andere Tabellen).
+3. In Business Central einen dedizierten Benutzer für den Workshop-Dienst anlegen und ihm **ausschließlich** das Permission Set **"CXW Workshop API"** zuweisen (außer Lesezugriff auf die Einkaufseinrichtung kein Zugriff auf Purchase Line, Item oder andere Tabellen).
 4. Client-ID, Client-Secret und Tenant-ID an den Workshop-Dienstbetreiber übergeben.
+
+> **Welche Daten die Werkstatt erhält (ab Version 27.0.0.7):** Neben Artikel- und Seriennummer liefert die API Kreditor, Kreditorenauftragsnr., Variante, Beschreibung, Menge, EK-Preis, Währung (`seller_currency`; bei Bestellungen ohne Währung die Mandantenwährung) und Gebrauchtware-Kennzeichen der Bestellung sowie aus den **Artikelattributen** des Artikels: Marke (Attribut-ID 1), Modell (2), Submodell (3), Referenz (5), Jahr (8, als Zahl), Zustand (10), Box (11) und Zertifikat (13). Die Werte werden beim Klick auf "Send to Workshop" übernommen – spätere Änderungen an Bestellung oder Artikel erreichen die Werkstatt nicht. Pflegen Sie die Artikelattribute daher **vor** "Send to Workshop"; fehlen sie, erhält die Werkstatt leere Werte (Jahr = 0). Für den Zustand erwartet die Werkstatt die Werte **NEW, AAA, AA, A, VINT**, für Box und Zertifikat "ja"/"nein". Ist das Jahr kein reiner Zahlenwert (z. B. ein Bereich), wird 0 gesendet.
+
+> **Mandantenkennung (`tenant`):** Tragen Sie in der **Einkaufseinrichtung** (Gruppe "Werkstatt") im Feld **"Workshop Tenant"** den Wert **GmbH** ein. Die API liefert ihn bei jeder Abfrage mit. Der Werkstatt-Benutzer hat dafür zusätzlich Lesezugriff auf die Einkaufseinrichtung; Bestellungen, Kreditoren und Artikel bleiben für ihn gesperrt. Die Benutzer, die "Send to Workshop" ausführen, benötigen das Permission Set "CXW Workshop All".
 
 ### 2. Job-Queue-Eintrag für die Verarbeitung anlegen
 
@@ -121,6 +179,8 @@ Die Werkstatt meldet je Uhr bis zu zehn Attribute zurück. Acht davon sind fachl
 | 9–10 | Noch ohne fachliche Bezeichnung (Platzhalter) |
 
 > Fehlende Standard-Artikelattribute legt das System bei Bedarf automatisch an (Typ Text) – keine manuelle Voreinrichtung nötig.
+
+> **Vorbefüllung:** Beim "Send to Workshop" werden diese zehn Felder mit den aktuellen Werten der gleichnamigen Artikelattribute des Artikels vorbefüllt (z. B. Artikelattribut "Dial Color"). Ist dieses Attribut am Artikel nicht gepflegt, wird das entsprechende deutsche Attribut verwendet (z. B. "Zifferblatt Farbe 1", "Gehäuse Größe", "Armband Material", "Gehäuse Material", "Werk", "Geschlecht", "Glas"); gibt es auch dort keinen Wert, bleibt das Feld leer. Korrigiert die Werkstatt einen solchen Wert, wird die Korrektur im englisch benannten Attribut gespeichert. Bestätigt die Werkstatt einen Wert aus dem deutschen Attribut unverändert, wird nichts zurückgeschrieben. Die Werkstatt prüft die Werte und korrigiert sie bei Bedarf; die korrigierten Werte gehen bei der Verarbeitung zurück an den Artikel. Pflegen Sie die Attribute daher möglichst vor dem "Send to Workshop". Ein von der Werkstatt geleertes Feld entfernt den Wert am Artikel nicht.
 
 ## Status und Fehlerbehandlung der Workshop-Zeilen
 
@@ -165,9 +225,13 @@ Ein Eintrag steht auf Status "Fehler", wenn entweder
 
 > Eine reine Lieferung ohne Fakturierung sowie der Verkauf eines Artikels ohne das Kennzeichen "Kommissionsverkauf" erzeugen keinen Eintrag.
 
+## Kennzeichen "Auftrag halten" am Verkaufsauftrag
+
+Das Feld "Auftrag halten" liegt seit CHX.Webshop 27.0.0.10 in der Basis-Extension **CHX.Base** (ab 27.0.3.5, Feld "CXB Hold Order") – siehe Key-User-Handbuch von CHX.Base. Werte aus CHX.Webshop 27.0.0.8/27.0.0.9 wurden nicht übernommen.
+
 ## Datenmanagement
 
-- **Sales Price / Archiv**: Bei jedem Ausführen von "Upload Sales Price" wird die freigegebene Preiszeile automatisch in die produktive Verkaufspreis-Tabelle (immer gültig für alle Kunden) sowie als neue, fortlaufend nummerierte Version in "Sales Price Archive" übernommen – auch bei einem erneuten Senden bereits übertragener Zeilen. Eine manuelle Pflege dieser beiden Tabellen ist nicht vorgesehen und nicht nötig.
+- **Sales Price / Archiv / Export-Posten**: Bei jedem Ausführen von "Release Sales Prices" wird jede freigegebene Länderzeile automatisch in die produktive Verkaufspreis-Tabelle (immer gültig für alle Kunden) übernommen und als eigener Eintrag in "Sales Price Export Entries" gespeichert. Nur die Zeile des Archivlandes (DE) wird zusätzlich als neue, fortlaufend nummerierte Version in "Sales Price Archive" abgelegt. Das gilt auch bei einer erneuten Freigabe bereits eingeplanter Zeilen. Archiveinträge anderer Länder aus der Zeit vor Version 27.0.0.6 bleiben erhalten. Eine manuelle Pflege dieser Tabellen ist nicht vorgesehen und nicht nötig; "Sales Price Export Entries" wächst dauerhaft (eine Aufbewahrungsregel ist noch nicht eingerichtet).
 - **Import/Export über Dateien**: Es existiert ein vorbereiteter, aber noch nicht angebundener Baustein für einen automatisierten, dateibasierten Preisimport. Dieser ist aktuell nicht Teil des produktiven Ablaufs (kein Job-Queue-Eintrag).
 - **SellWatch-Ankaufsanfragen**: Die Tabellen hinter "SellWatch-Overview" sowie das Protokoll des Online-Checks ("Http Call Log") werden ausschließlich automatisiert befüllt; eine manuelle Pflege ist nicht vorgesehen und über die Seiten der Erweiterung auch nicht möglich (alle SellWatch-Seiten sind schreibgeschützt).
 - **Workshop-Zeilen**: Werden ausschließlich über die Aktion "Send to Workshop" (Fachabteilung) sowie über die externe Workshop-API angelegt bzw. geändert. Die interne Übersichtsseite "CXW Workshop Lines" ist schreibgeschützt. Eine bereits verarbeitete Workshop-Zeile (Status "Verarbeitet") bleibt auch dann als Prüfnachweis bestehen, wenn die zugehörige Einkaufsbestellung storniert (gelöscht) wird.
@@ -181,13 +245,17 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 
 | Problem | Ursache / Lösung |
 |---|---|
+| SellWatch-Angebot wird nicht verarbeitet, in der SellWatch-Übersicht steht unter "Letzter Fehler" „keine Artikelvorlage … eingerichtet“ oder „Artikelvorlage … existiert nicht mehr“ | In der Einkaufseinrichtung (Bereich "SellWatch") die zur Angebotsart passende Vorlage hinterlegen bzw. korrigieren – Kommission → "SellWatch-Artikelvorlage (Kommission)", alle anderen → "SellWatch-Artikelvorlage (Standard)". Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet. |
+| SellWatch-Angebot bleibt offen, "Letzter Fehler" zeigt eine andere Meldung | Meldung lesen und die genannte Einrichtung korrigieren (z. B. Buchungsgruppen der Artikelvorlage, Zahlungsformen `C2C`/`RG`, Lagerort `HL`). Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet; andere Angebote sind nicht blockiert. |
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
 | "Add all Countries" erzeugt keine Zeile für ein bestimmtes Land | Prüfen Sie, ob für das Land (Seite "Countries/Regions") "Verkaufspreis aktiviert" gesetzt ist. |
 | Ein Benutzer kann die Seiten der Verkaufspreisverwaltung nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXWChronWSAll" zugewiesen ist. |
 | Ein Preis wird trotz korrekter Eingabe nicht mit Marge X% berechnet | Die kategoriebasierte Nicht-Lagerpreis-Berechnung ist aktuell nicht automatisch eingebunden – bitte an das Entwicklungsteam eskalieren, falls diese Funktion benötigt wird. |
-| "Upload Sales Price" meldet, dass keine API-Schnittstelle hinterlegt ist bzw. bricht ab | Prüfen Sie in den Grundeinstellungen, ob "Preisexport aktiv" gesetzt und ein "API-Schnittstellencode" ausgewählt ist, und ob die zugehörige Schnittstelle unter "API Interface Setup" aktiv sowie vollständig konfiguriert (Endpoint URL, ggf. API Key) ist. Details zum konkreten Fehler (Statuscode, Fehlermeldung) finden Sie auf der Seite "Http Call Log". |
-| Einzelne Preiszeilen bleiben nach "Upload Sales Price" mit "Export Status" = "Error" stehen | Andere Zeilen im selben Lauf werden trotzdem weiterverarbeitet. Prüfen Sie die betroffene Zeile auf ungültige Werte (z. B. nicht existierender Währungscode) und lösen Sie den Upload für diese Zeile erneut aus. |
-| "Export Data" auf "Data Export Entries" meldet bei einem Eintrag mit Zielcode `SALESPRICE` einen Fehler | Das ist so vorgesehen: Preisübertragungen laufen nur über "Upload Sales Price". Setzen Sie die betroffene Preiszeile erneut hoch; legen Sie **keinen** Eintrag `SALESPRICE` unter "Data Export API Setup" an. Hinweis: Der Status des Eintrags wechselt dabei auf "Fehler" und die Anzahl Versuche wird erhöht – auch wenn der Preis zuvor erfolgreich übertragen wurde ("Verarbeitet"). Es wird dabei nichts gesendet. |
+| "Release Sales Prices" meldet, dass keine API-Schnittstelle bzw. kein Archiv-Ländercode hinterlegt ist | Prüfen Sie in den Grundeinstellungen "Preisexport aktiv", "API-Schnittstellencode" und "Archiv-Ländercode". |
+| Einzelne Preiszeilen bleiben nach "Release Sales Prices" mit "Export Status" = "Error" stehen | Die Freigabe dieser Zeile ist fehlgeschlagen (z. B. nicht existierender Währungscode); es wurde nichts eingeplant. Andere Zeilen werden trotzdem weiterverarbeitet. Beheben Sie die Ursache und geben Sie die Zeile erneut frei. |
+| Preise bleiben in "Data Export Entries" dauerhaft auf "Pending (Sales Price)" | Der Verkaufspreisexport-Job läuft nicht: Prüfen Sie den Aufgabenwarteschlangenposten für Codeunit 60332 (vorhanden, Status "Bereit", nicht fehlerhaft) und ob "Preisexport aktiv" gesetzt ist. |
+| Ein `SALESPRICE`-Eintrag steht dauerhaft auf "Fehler" | Die Höchstzahl der Versuche ist erreicht. Fehlermeldung am Eintrag bzw. auf "Http Call Log" prüfen (Schnittstelle, Zugangsdaten, Endpunkt). Nach Behebung **"Requeue Sales Price"** ausführen. Lautet die Meldung, dass Export-Datensatz, Verkaufspreis oder Artikel nicht mehr existieren, geben Sie die Preiszeile neu frei. |
+| "Export Data" auf "Data Export Entries" meldet bei einem Eintrag mit Zielcode `SALESPRICE` einen Fehler | Das ist so vorgesehen: Preisübertragungen laufen nur über den Verkaufspreisexport-Job. Legen Sie **keinen** Eintrag `SALESPRICE` unter "Data Export API Setup" an. Der Eintrag geht dabei auf "Fehler" und die Anzahl Versuche wird erhöht, es wird aber nichts gesendet. Liegt die Anzahl danach unter "Max. Exportversuche", sendet der Job ihn beim nächsten Lauf erneut; sonst "Requeue Sales Price" ausführen. |
 | Ein Benutzer kann die SellWatch-Seiten nicht öffnen | Prüfen Sie, ob dem Benutzer das Permission Set "CXW SWChronWSAll" zugewiesen ist. |
 | Eine Uhr wird auf "SellWatch-Overview" nie als online markiert bzw. "Http Call Log" zeigt Fehlschläge | Prüfen Sie, ob unter "API Interface Setup" ein Eintrag mit Code `WOA` existiert, aktiv ist und Endpoint URL sowie API Key gesetzt sind. Details zum konkreten Fehler (Statuscode, Fehlermeldung) finden Sie auf der Seite "Http Call Log". |
 | Zu einer SellWatch-Anfrage wird kein Lieferant/keine Bestellung angelegt | Die Anlage erfolgt vollautomatisiert im Hintergrund; es gibt keine Aktion, mit der Sie dies als Key User manuell anstoßen können. Prüfen Sie zunächst, ob die Anfrage überhaupt vollständig eingegangen ist, und eskalieren Sie sonst an das Entwicklungsteam. |

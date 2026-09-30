@@ -10,7 +10,7 @@ pageextension 60347 "CXW Countries/Regions" extends "Countries/Regions"
 
         addlast(Control1)
         {
-            field("CXW Webshop Delivery Time Active"; Rec."CXW Webshop Delivery Time Active")
+            field("CXW Webshop Delivery Time Active"; Rec."CXW Webshop Deli. Time Active")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies whether delivery times for this country/region are calculated and exported to the webshop.';
@@ -50,7 +50,7 @@ pageextension 60347 "CXW Countries/Regions" extends "Countries/Regions"
                 var
                     AvailabilityChangeMgt: Codeunit "CXW Availability Change Mgt";
                 begin
-                    Rec.TestField("CXW Webshop Delivery Time Active", true);
+                    Rec.TestField("CXW Webshop Deli. Time Active", true);
                     AvailabilityChangeMgt.RefreshDeliveryTimesForCountry(Rec.Code);
                     Message(DeliveryTimesRefreshedMsg, Rec.Code);
                 end;

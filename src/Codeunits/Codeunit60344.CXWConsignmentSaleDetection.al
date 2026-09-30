@@ -35,7 +35,7 @@ codeunit 60344 "CXW Consignment Sale Detection"
         ConsignmentPostingEntry."CXW Item No." := SalesInvoiceLine."No.";
         ConsignmentPostingEntry."CXW Sales Invoice No." := SalesInvHdrNo;
         ConsignmentPostingEntry."CXW Sales Posting Date" := SalesInvoiceHeader."Posting Date";
-        ConsignmentPostingEntry."CXW Due Date" := SalesInvoiceHeader."Posting Date" + PurchSetup."CXW SW Consignment Invoice Delay (Days)";
+        ConsignmentPostingEntry."CXW Due Date" := SalesInvoiceHeader."Posting Date" + PurchSetup."CXW SW Consign.Inv.Delay(Days)";
         SetPurchaseOrder(ConsignmentPostingEntry, SalesInvoiceLine."No.");
         ConsignmentPostingEntry.Insert();
     end;

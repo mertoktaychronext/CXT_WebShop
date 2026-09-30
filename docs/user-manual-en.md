@@ -13,7 +13,7 @@ This extension for Microsoft Dynamics 365 Business Central covers four largely i
 
 - Access to Business Central with a role that includes the "Sales Price Checking List" page (permission set `SLChronWSAll`) or the "SellWatch-Overview" page (permission set `CXW SWChronWSAll`).
 - The base settings (minimum margin, thresholds) must already be configured by a key user (see the Key User Manual).
-- For "Upload Sales Price", a key user must have enabled the price export and configured an API interface (see the Key User Manual).
+- For "Release Sales Prices", a key user must have enabled the price export, configured an API interface and the archive country, and set up the sales price export job in the job queue (see the Key User Manual).
 - A prepared CSV file with the new prices.
 
 ## Getting Started
@@ -24,7 +24,8 @@ Open the **"Sales Price Checking List"** page in Business Central. The list is a
 
 The navigation buttons at the top of the page also give you direct access to:
 - **"General Sales Price Setup"** – the base settings (see the Key User Manual)
-- **"Sales Price Archive"** – the archive of previously processed prices
+- **"Sales Price Archive"** – the archive of released DE prices
+- **"Sales Price Export Entries"** – the released prices of all countries and the state of their transmission
 
 ## Main Features
 
@@ -54,21 +55,27 @@ Click **"Approve"** to release the checked prices. You will be asked to confirm.
 
 Once you have imported, validated, and approved a base price, use **"Add all Countries"** to automatically generate one price line per activated country. The system considers every country a key user has enabled (see the Key User Manual) and creates **one** line per country — in the currency set up for that country. If the country uses the same currency as the base price, the price is copied unchanged; otherwise it is converted with the latest exchange rate. The **"Country Code"** column shows which country a line applies to; the imported base line has no country.
 
-### 5. Upload prices ("Upload Sales Price")
+### 5. Release prices and queue them for transmission ("Release Sales Prices")
 
-Click **"Upload Sales Price"** to transmit all approved price lines to the external system (e.g. the webshop). For each line, the system automatically:
+Click **"Release Sales Prices"** to queue all approved **country lines** for transmission to the external system (e.g. the webshop). For each line, the system automatically:
 
 1. Writes the price into the live sales price table (creating it or updating an existing one) — valid for **all customers**.
-2. Also stores a copy of the price in the **price archive**, with a running version number per item/currency/country.
-3. Sends the price — including the country code — to the external system via the configured interface.
+2. For the archive country only (**DE** by default), also stores a copy in the **price archive**, with a running version number.
+3. Stores the price of the country as a **sales price export entry** and queues it for transmission. The line gets "Export Status" = "Queued".
 
-At the end you get a message showing how many of the approved lines were transmitted successfully. Lines that were already sent successfully before ("Export Status" = "Sent") are **not** resent automatically when you click again — you are asked first whether you really want to resend them.
+The actual transmission happens **later, in the background**, through a job in the job queue. Nothing else is required from you.
 
-> If the transmission fails for a single line (e.g. due to an invalid value), only that line is marked "Export Status" = "Error"; all other lines are still processed.
+> The imported base line without a country is **not** released and not transmitted. Always run "Add all Countries" before releasing. If only base lines are approved, the action stops with a corresponding message.
 
-### 6. Viewing the archive
+At the end you get a message showing how many prices were queued for transmission. Lines that were already queued ("Export Status" = "Queued") are **not** released again automatically when you click again — you are asked first whether you really want to do so.
 
-Use the **"Sales Price Archive"** page to look up previously uploaded prices (read-only, no changes possible). Every version of an uploaded price line appears here as its own, sequentially numbered entry.
+> If the release fails for a single line (e.g. due to an invalid value), only that line is marked "Export Status" = "Error" and is not queued; all other lines are still processed.
+
+### 6. Viewing the transmission and the archive
+
+The **"Sales Price Export Entries"** page shows every released price per country, who released it and when, and in the **"Export Status"** column whether it has already been transmitted ("Processed"), is still pending ("Pending (Sales Price)"), or failed ("Error"). Failed transmissions are retried automatically; if an entry stays on "Error" permanently, contact a key user.
+
+Use the **"Sales Price Archive"** page to look up the released DE prices (read-only). Every version appears here as its own, sequentially numbered entry. Prices of other countries are only available in the "Sales Price Export Entries".
 
 ## Viewing SellWatch purchase requests
 
@@ -87,7 +94,10 @@ For purchased watches that need to be checked for authenticity by an external wo
 Open the relevant **purchase order** and click **"Send to Workshop"**. The system asks you, one line at a time, for every line not yet transmitted (type Item, quantity not 0):
 
 1. **"Is item {item no.} {description} really arrived?"** – Confirm with "Yes" if the item has physically arrived. On "No" the line is marked "Not Arrived" and skipped; you can run the action again later once the item has arrived.
-2. On "Yes", an input dialog opens for the **manufacturer serial number**. This entry is mandatory — without a valid serial number the line is skipped and listed in a summary message at the end of the action, while the remaining lines are still processed normally.
+2. On "Yes", the watch's **Serial No. Information Card** opens. If the purchase line has no serial number yet, the system automatically assigns the next available number and shows it on the card. Enter the **manufacturer serial number** there and — if required for the item — the **box** and **papers** details, then close the card.
+3. If the manufacturer serial number or a required detail is still missing, the line is skipped and listed with the reason in a summary message at the end of the action, while the remaining lines are still processed normally. The next time you run the action, the same serial number appears again.
+
+> Lines with a quantity greater than 1 or items without serial number tracking cannot be sent to the workshop; they also appear in the summary message. In that case, contact a key user.
 
 Once entered successfully, the line is marked "Sent to Workshop" and its fields on the purchase line become **read-only** (item, quantity, price, etc.) — this prevents a line already handed over to the workshop from being changed afterwards while the check is still in progress.
 
@@ -125,8 +135,14 @@ You tried to approve a price line directly without running "Validate" first. Run
 **"not possible" when editing a price line**
 An already accepted/approved price line can no longer be changed afterwards.
 
-**"Nothing to process" when clicking "Upload Sales Price"**
+**"Nothing to process" when clicking "Release Sales Prices"**
 There are no approved (accepted) price lines. Run "Approve" first.
+
+**"Only source lines without a country are approved" when clicking "Release Sales Prices"**
+Only base lines without a country are approved. Run "Add all Countries" first.
+
+**A price stays on "Pending (Sales Price)" in "Sales Price Export Entries" for a long time**
+Transmission runs through a job in the job queue. If the entry stays pending longer than usual, the job may not be set up or may be on hold — contact a key user.
 
 **Message that the interface is not active or no API interface is configured**
 The price export has not been set up or is disabled. Contact a key user (see the Key User Manual).
@@ -134,8 +150,8 @@ The price export has not been set up or is disabled. Contact a key user (see the
 **A SellWatch request shows no order number.**
 The order hasn't been created for this request automatically yet.
 
-**"Send to Workshop" asks for the manufacturer serial number even though I wanted to cancel.**
-The dialog is mandatory for items marked as arrived. Choose "No" in the preceding confirmation dialog if the item hasn't actually arrived yet — the line is then skipped without cancelling the rest of the action.
+**"Send to Workshop" opens the Serial No. Information Card even though I wanted to cancel.**
+The card is mandatory for items marked as arrived. If you close it without a manufacturer serial number, the line is skipped (the assigned serial number is kept for the next attempt). Choose "No" in the preceding confirmation dialog if the item hasn't actually arrived yet — the line is then skipped without cancelling the rest of the action.
 
 **A Workshop line stays on status "Error" permanently.**
 Automatic processing failed for this line. This isn't something you can fix yourself as an end user — contact a key user (see the Key User Manual).

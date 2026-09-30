@@ -42,6 +42,9 @@ xmlport 60328 "CXW Import Sales Price"
 
                 trigger OnAfterInitRecord()
                 begin
+                    if GenSalesPriceSetup.Get() then
+                        SalesPriceChecking."CXW Price Includes VAT" := GenSalesPriceSetup."CXW Prices Incl. VAT";
+
                     if g_booCaptionRow then begin
                         g_booCaptionRow := false;
                         CurrXmlPort.Skip();
@@ -94,5 +97,6 @@ xmlport 60328 "CXW Import Sales Price"
     var
         g_booCaptionRow: Boolean;
         g_booAllCountries: Boolean;
+        GenSalesPriceSetup: Record "CXW General Sales Price Setup";
         ImportDoneMsg: Label 'done';
 }

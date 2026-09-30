@@ -53,7 +53,7 @@ table 60346 "CXW Availability Change Entry"
             Caption = 'Changed At';
             DataClassification = SystemMetadata;
         }
-        field(17; "CXW Differential Taxation Purchase"; Boolean)
+        field(17; "CXW Diff. Taxation Purchase"; Boolean)
         {
             Caption = 'Differential Taxation Purchase';
             DataClassification = CustomerContent;

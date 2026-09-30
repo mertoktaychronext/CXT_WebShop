@@ -52,15 +52,13 @@ codeunit 60349 "CXW Availability Calculation"
     procedure TryGetStockDeliveryDays(ItemNo: Code[20]; CountryRegionCode: Code[10]; var DeliveryDays: Integer): Boolean
     var
         DeliveryDate: Date;
-        DeliveryFormula: DateFormula;
     begin
-        // STOCK is optional. Without it, country delivery time is the complete stock lead time.
-        Clear(DeliveryFormula);
-        TryGetSetupDeliveryFormula(StockSetupCategoryLbl, DeliveryFormula);
+        // A STOCK delivery time only applies to articles that are currently available.
+        if GetArticleAvailability(ItemNo) <= 0 then
+            exit(false);
 
         DeliveryDate := Today;
-        ApplyDeliveryFormula(DeliveryDate, DeliveryFormula);
-        ApplyItemDeliveryTime(DeliveryDate, ItemNo);
+        // Available articles use only the country-specific delivery time.
         ApplyCountryDeliveryTime(DeliveryDate, CountryRegionCode);
         DeliveryDays := DeliveryDate - Today;
         exit(true);

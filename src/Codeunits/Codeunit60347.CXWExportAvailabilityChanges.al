@@ -253,13 +253,16 @@ codeunit 60347 "CXW Export Availability Change"
     local procedure BuildInventoryTimeJson(AvailabilityInventoryTime: Record "CXW Availability Inv. Time"; var JsonText: Text)
     var
         JsonObj: JsonObject;
+        ProductKey: Code[20];
+        VariantKey: Code[20];
     begin
-        JsonObj.Add('productKey', AvailabilityInventoryTime."CXW Item No.");
-        JsonObj.Add('variantKey', GetStockVariantKey(AvailabilityInventoryTime."CXW Item No.", AvailabilityInventoryTime."CXW Variant Code"));
+        GetStockKeys(AvailabilityInventoryTime."CXW Item No.", AvailabilityInventoryTime."CXW Variant Code", ProductKey, VariantKey);
+        JsonObj.Add('productKey', ProductKey);
+        JsonObj.Add('variantKey', VariantKey);
         JsonObj.Add('countryRegionCode', AvailabilityInventoryTime."CXW Country/Region Code");
         JsonObj.Add('channel', StockChannelLbl);
-        JsonObj.Add(AvailabilityInventoryTime."CXW Inventory Type", AvailabilityInventoryTime."CXW Delivery Days");
-        JsonObj.Add('_type', AvailabilityInventoryTime."CXW Inventory Type");
+        JsonObj.Add(LowerCase(AvailabilityInventoryTime."CXW Inventory Type"), AvailabilityInventoryTime."CXW Delivery Days");
+        JsonObj.Add('_type', LowerCase(AvailabilityInventoryTime."CXW Inventory Type"));
         JsonObj.WriteTo(JsonText);
     end;
 
@@ -278,12 +281,15 @@ codeunit 60347 "CXW Export Availability Change"
         ErrorMessage: Text;
         HttpMethodTxt: Text;
         SendBody: Boolean;
+        ProductKey: Code[20];
+        VariantKey: Code[20];
     begin
-        JsonObj.Add('productKey', AvailabilityChangeEntry."CXW Item No.");
-        JsonObj.Add('variantKey', GetStockVariantKey(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code"));
+        GetStockKeys(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code", ProductKey, VariantKey);
+        JsonObj.Add('productKey', ProductKey);
+        JsonObj.Add('variantKey', VariantKey);
         JsonObj.Add('channel', StockChannelLbl);
         JsonObj.Add('amount_full', AvailabilityChangeEntry."CXW Inventory Quantity");
-        if AvailabilityChangeEntry."CXW Differential Taxation Purchase" then
+        if AvailabilityChangeEntry."CXW Diff. Taxation Purchase" then
             JsonObj.Add('_type', 'diff')
         else
             JsonObj.Add('_type', 'full');
@@ -326,7 +332,10 @@ codeunit 60347 "CXW Export Availability Change"
     local procedure CreateProcessedDataExportEntry(AvailabilityChangeEntry: Record "CXW Availability Change Entry"; JsonText: Text)
     var
         DataExportEntry: Record "Data Export Entry";
+        ProductKey: Code[20];
+        VariantKey: Code[20];
     begin
+        GetStockKeys(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code", ProductKey, VariantKey);
         DataExportEntry.Init();
         DataExportEntry."Payload Format" := DataExportEntry."Payload Format"::JSON;
         DataExportEntry."Destination Code" := AvailabilityExportSetupCodeLbl;
@@ -334,8 +343,8 @@ codeunit 60347 "CXW Export Availability Change"
         DataExportEntry.FileName := CopyStr(
             StrSubstNo(
                 'productKey=%1&variantKey=%2&itemLedgerEntryNo=%3',
-                AvailabilityChangeEntry."CXW Item No.",
-                GetStockVariantKey(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code"),
+                ProductKey,
+                VariantKey,
                 AvailabilityChangeEntry."CXW Item Ledger Entry No."),
             1,
             MaxStrLen(DataExportEntry.FileName));
@@ -376,7 +385,10 @@ codeunit 60347 "CXW Export Availability Change"
     local procedure CreateProcessedInventoryTimeDataExportEntry(AvailabilityInventoryTime: Record "CXW Availability Inv. Time"; JsonText: Text)
     var
         DataExportEntry: Record "Data Export Entry";
+        ProductKey: Code[20];
+        VariantKey: Code[20];
     begin
+        GetStockKeys(AvailabilityInventoryTime."CXW Item No.", AvailabilityInventoryTime."CXW Variant Code", ProductKey, VariantKey);
         DataExportEntry.Init();
         DataExportEntry."Payload Format" := DataExportEntry."Payload Format"::JSON;
         DataExportEntry."Destination Code" := InventoryTimeExportSetupCodeLbl;
@@ -384,8 +396,8 @@ codeunit 60347 "CXW Export Availability Change"
         DataExportEntry.FileName := CopyStr(
             StrSubstNo(
                 'productKey=%1&variantKey=%2&countryRegionCode=%3&type=%4',
-                AvailabilityInventoryTime."CXW Item No.",
-                GetStockVariantKey(AvailabilityInventoryTime."CXW Item No.", AvailabilityInventoryTime."CXW Variant Code"),
+                ProductKey,
+                VariantKey,
                 AvailabilityInventoryTime."CXW Country/Region Code",
                 AvailabilityInventoryTime."CXW Inventory Type"),
             1,
@@ -399,12 +411,23 @@ codeunit 60347 "CXW Export Availability Change"
         DataExportEntry.Modify(true);
     end;
 
-    local procedure GetStockVariantKey(ItemNo: Code[20]; VariantCode: Code[20]): Code[20]
+    local procedure GetStockKeys(ItemNo: Code[20]; VariantCode: Code[20]; var ProductKey: Code[20]; var VariantKey: Code[20])
+    var
+        Item: Record Item;
     begin
+        ProductKey := ItemNo;
         if VariantCode = '' then
-            exit(ItemNo);
+            VariantKey := ItemNo
+        else
+            VariantKey := VariantCode;
 
-        exit(VariantCode);
+        if not Item.Get(ItemNo) then
+            exit;
+
+        if Item."Old Item No." <> '' then
+            ProductKey := Item."Old Item No.";
+        if Item."Old Variant Code" <> '' then
+            VariantKey := Item."Old Variant Code";
     end;
 
     local procedure AddAuthenticationHeaders(var HttpRequest: HttpRequestMessage; DataExportApiSetup: Record "Data Export API Setup"; Base64Convert: Codeunit "Base64 Convert")
@@ -517,7 +540,7 @@ codeunit 60347 "CXW Export Availability Change"
         AvailabilityExportSetupCodeLbl: Label 'UPDSTOFILE', Locked = true;
         DeliveryTimeExportSetupCodeLbl: Label 'UPDDLT', Locked = true;
         InventoryTimeExportSetupCodeLbl: Label 'UPDIN', Locked = true;
-        StockChannelLbl: Label 'cxt', Locked = true;
+        StockChannelLbl: Label 'CXT', Locked = true;
         ApiInterfaceNotFoundErr: Label 'Data export API setup %1 for availability exports does not exist.', Comment = '%1 = data export API setup code';
         UnsupportedAuthTypeErr: Label 'Authentication type %1 is not supported for availability exports.', Comment = '%1 = authentication type';
         HttpErrorTxt: Label 'HTTP %1: %2', Comment = '%1 = HTTP status code, %2 = response text';

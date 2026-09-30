@@ -20,10 +20,10 @@ table 60302 "CXW Http Call Log"
         {
             Caption = 'Source Entry No';
             TableRelation = if ("CXW Source Table No." = const(60301)) "CXW Watch Online Approval"."CXW Entry No"
-                             else
-                             if ("CXW Source Table No." = const(60314)) "CXW Sales Price Outbound File"."CXW Entry No."
-                             else
-                             if ("CXW Source Table No." = const(50103)) "Data Export Entry"."Entry No.";
+            else
+            if ("CXW Source Table No." = const(60314)) "CXW Sales Price Out. File"."CXW Entry No."
+            else
+            if ("CXW Source Table No." = const(50103)) "Data Export Entry"."Entry No.";
             DataClassification = SystemMetadata;
         }
         field(4; "CXW Endpoint URL"; Text[250])

@@ -2,9 +2,9 @@ page 60337 "CXW SellWatch API"
 {
     PageType = API;
     SourceTable = "CXW SellWatch Vendor Info";
-    APIPublisher = 'saliniLife';
-    APIGroup = 'sellWatch';
-    APIVersion = 'v2.0';
+    APIPublisher = 'chronext';
+    APIGroup = 'CXTServices';
+    APIVersion = 'v1.0';
     EntityName = 'sellWatchVendorInfo';
     EntitySetName = 'sellWatchVendorInfos';
     DelayedInsert = true;

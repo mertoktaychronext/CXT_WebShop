@@ -14,10 +14,14 @@ The **"General Sales Price Setup"** page holds the rules every imported price is
 | Stock Price Threshold % | The percentage price increase (vs. the last price) above which a remark is generated. |
 | Non Stock Price Threshold % | Same idea for non-stock items (currently not actively used, see Developer Manual). |
 | Cat 1–3 Non Stock % / Stock Price From/To | Prepared for automatic calculation of the non-stock price per price category. This calculation is not currently wired into the live approval flow. |
-| Price Export Active | Must be enabled for the "Upload Sales Price" action (User Manual) to be able to send prices to an external system. |
+| Price Export Active | Must be enabled for the "Release Sales Prices" action (User Manual) to queue prices and for the sales price export job to send them to an external system. When disabled, the job leaves queued prices untouched. |
 | API Interface Code | Selects which of the interfaces configured under "API Interface Setup" is used for the price export. |
+| Max. Export Attempts | How often the sales price export job resends a failed price (default 3). After that the entry stays on "Error" until you requeue it manually (see below). |
+| Archive Country Code | Only price lines of this country are archived in "Sales Price Archive" (default **DE**). The prices of all countries are kept in "Sales Price Export Entries" regardless. |
 
-These settings **must** be filled in (Minimum Margin %, Stock Price Threshold %), otherwise import, validation, and approval cannot be run. "Upload Sales Price" additionally requires "Price Export Active" and "API Interface Code" to be set.
+These settings **must** be filled in (Minimum Margin %, Stock Price Threshold %), otherwise import, validation, and approval cannot be run. "Release Sales Prices" additionally requires "Price Export Active", "API Interface Code" and "Archive Country Code" to be set.
+
+> **After updating to version 27.0.0.6:** "Archive Country Code" is blank on the existing setup record. Enter **DE**, otherwise "Release Sales Prices" stops with a message.
 
 ## Setting up an external interface (API Interface Setup)
 
@@ -37,7 +41,24 @@ The **"API Interface Setup"** navigation button on the "General Sales Price Setu
 | Source Table No. | The table this interface transmits data for (for the price export: the table number of "Sales Price"). |
 | Active | Must be enabled for the interface to be selectable on the base settings. Activating it automatically checks that the Endpoint URL and — depending on the Auth Type — the API Key or the AWS fields are fully set. |
 
-> Without an active, fully configured interface, "Upload Sales Price" fails, or marks the affected price lines with "Export Status" = "Error".
+> Without an active, fully configured interface, transmission by the sales price export job fails; the affected entries go to "Error" and are resent up to the maximum number of attempts.
+
+## Setting up the sales price export job (job queue)
+
+Since version 27.0.0.6, released prices are no longer sent by the action on the price checking list but by a job in the job queue. Create a **job queue entry** once:
+
+| Field | Value |
+|---|---|
+| Object Type to Run | Codeunit |
+| Object ID to Run | **60332** ("CXW Export Sales Price Job") |
+| Recurring Job | Yes, e.g. every 5–15 minutes |
+| Status | Ready |
+
+The user running the job needs the permission set "CXWChronWSAll".
+
+**How it works:** "Release Sales Prices" creates, per country line, one entry in **"Sales Price Export Entries"** (the price of that country) and one entry in **"Data Export Entries"** with destination code `SALESPRICE` and status **"Pending (Sales Price)"**. The job sends all pending entries plus failed entries whose attempt count is below "Max. Export Attempts". A failure on one price does not hold up the others, and the job itself keeps running even if single prices fail.
+
+**Requeue manually:** Once an entry has reached the maximum number of attempts, it stays on "Error". Fix the cause (error message on the entry or on "Http Call Log"), select the entry on "Data Export Entries" and run **"Requeue Sales Price"**. The entry is resent with unchanged data on the next job run. If the price data should be regenerated instead, release the price line again.
 
 ## Activating countries for "Add all Countries"
 
@@ -50,6 +71,8 @@ The following fields were added to the **Country/Region** master data (the "Coun
 
 > A country without "Sales Price Activated" is ignored by "Add all Countries". Every activated country receives its own line — even if several countries share the same currency (e.g. DE, AT, FR in EUR).
 
+> **DE must be activated.** Since version 27.0.0.6 the imported base line without a country is neither written to the sales prices nor transmitted. Without an activated DE line there is therefore no EUR price and no archive entry.
+
 > **Switch from currency to country activation:** Until "Add all Countries" was introduced, activation happened through the "Sales Price Activated" field on the **currency** (action "Add all Currencies"). That field has been removed. Before the update, note which currencies were activated, and afterwards set up the corresponding countries with a Sales Price Currency Code.
 ## Reason Code
 
@@ -57,7 +80,7 @@ Every price change can be tagged with a reason: **CatMan**, **Purchasing**, or *
 
 ## Workflows and processes
 
-The standard flow for the business department is: **Import → Validate → Approve → (optional) Add all Countries → Upload Sales Price**. As a key user you are responsible for the framework (base settings, country activation, API interface), not the day-to-day operation itself (see User Manual).
+The standard flow for the business department is: **Import → Validate → Approve → Add all Countries → Release Sales Prices**; the sales price export job then takes care of the transmission. As a key user you are responsible for the framework (base settings, country activation, API interface, job queue entry), not the day-to-day operation itself (see User Manual).
 
 For SellWatch there is no flow the business department triggers manually: new purchase requests (seller, watch, and offer data) arrive automatically and are automatically turned into a vendor and a purchase order; the business department only ever sees the result, read-only, on the "SellWatch-Overview" page (see User Manual). As a key user you are responsible here for configuring the online-check interface (see below) and for assigning permissions.
 
@@ -80,11 +103,42 @@ The SellWatch online check (verifies whether a watch should be visible in the Se
 
 > You can trace failed calls on the **"Http Call Log"** page: it shows success/failure, HTTP status code, and error message for every call, and lets you download the sent request and the received response as text files (the API key is not shown in plain text in the stored request). Since the 2026-08-10 HTTP-logging update, this page also logs sales price export calls (see below) — the "Source Table No." column shows which area produced the entry.
 
-> Since version 27.0.0.3 every transmitted sales price line also appears on the **"Data Export Entries"** page (the same page the availability export uses), identified by the destination code `SALESPRICE`. It shows the status (Processed/Error), file name, error message and, in the FactBox, the JSON that was sent. **Important:** retry failed price transmissions only via "Upload Sales Price" on the price checking list, **not** via the "Export Data" action on "Data Export Entries" — that action cannot send price entries and only creates an error log entry.
+> Every queued sales price line appears on the **"Data Export Entries"** page (the same page the availability export uses), identified by the destination code `SALESPRICE`. It shows the status (Pending (Sales Price)/Processed/Error), attempt count, file name, error message and, in the FactBox, the JSON that was sent. **Important:** failed price transmissions are retried automatically by the sales price export job; once the maximum is reached, use **"Requeue Sales Price"**, **not** the "Export Data" action — that action cannot send price entries but uses up an attempt.
+
+## SellWatch – Setting up item templates
+
+For every incoming SellWatch offer, Business Central automatically creates a new item. Which item template is used depends on the offer type. You set up both templates on the **"Purchases & Payables Setup"** page in the "SellWatch" section:
+
+| Field | Meaning |
+|---|---|
+| SellWatch Item Template (Standard) | Template for all offer types except commission (e.g. purchase, exchange). |
+| SellWatch Item Template (Commission) | Template for offers with offer type commission. The item is also automatically flagged as consignment goods. |
+
+The new item takes over all values maintained on the template (e.g. posting groups, base unit of measure, item category) as well as the template's **default dimensions**. Description (brand, model, construction year) and Description 2 (reference) always come from the SellWatch offer.
+
+**Item numbers:** If a series is set in the template's **"No. Series"** field, the item gets its number from that series — this lets commission and standard items have their own number ranges. If none is set, the item number series from the inventory setup applies. The series must allow default numbers.
+
+> **Important:** Both fields must be filled in before SellWatch processing runs. If the commission template is missing, processing does **not** fall back to the standard template — the offer stays unprocessed with an error message. Tip: test each template once via "Items → New" by selecting the template; if an item can be created there, it will also work for SellWatch.
+
+## SellWatch – Errors during automatic processing
+
+Background processing handles each SellWatch offer on its own. If an offer fails (e.g. because an item template is missing or a setup is incomplete), the following happens:
+
+- **Nothing** is created for that offer — no vendor, no purchase order, no item. All other offers are processed as usual.
+- On the **SellWatch Overview**, the row is highlighted in red; the columns **"Last Error"** and **"Last Error Date/Time"** show what went wrong and when.
+- The offer stays open and is **retried automatically on the next run**. You only need to fix the cause — nothing needs to be done on the offer itself. Once processed successfully, the error columns are empty again.
+
+> **Tip:** On the SellWatch Overview, filter "Last Error" to not blank (`<>''`) to see all open problem cases at a glance. The job queue entry itself finishes successfully even when individual offers fail — so check for errors on the overview.
 
 ## Setting up the Workshop authenticity check
 
 The workshop checks purchased watches externally for authenticity and reports the result back via its own bidirectional API. Three one-time setup steps are needed after initial installation of the extension:
+
+> **Serial number prerequisite:** "Send to Workshop" identifies each watch by its BC serial number and captures the manufacturer serial number on the **Serial No. Information Card**. For a line to be sent, the item must have
+> - an **item tracking code** with **SN purchase inbound tracking**, and
+> - a **serial no. series** (item card, field "Serial Nos.") — the next number is drawn from it automatically if the purchase line has no serial number yet.
+>
+> For SellWatch items, the easiest way is to set both up in the **SellWatch item templates**. Which details are mandatory on the card (manufacturer serial no., box, papers) is controlled by the flags on the item tracking code from CHX.Base. Lines with a quantity other than 1 are not supported.
 
 ### 1. OAuth2 S2S (Entra) for the Workshop API
 
@@ -92,8 +146,12 @@ The custom API (endpoint pattern `.../api/saliniLife/workshop/v1.0/companies({co
 
 1. Create an app registration for the workshop service in Microsoft Entra ID (client credentials flow, no interactive login).
 2. Grant the app registration access to the Business Central API (Business Central Admin Center → API access, or the Azure AD app permission "Dynamics 365 Business Central").
-3. In Business Central, create a dedicated user for the workshop service and assign it **only** the **"CXW Workshop API"** permission set (no access to Purchase Line, Item, or other tables).
+3. In Business Central, create a dedicated user for the workshop service and assign it **only** the **"CXW Workshop API"** permission set (apart from read access to the purchases & payables setup, no access to Purchase Line, Item, or other tables).
 4. Hand the Client ID, Client Secret, and Tenant ID to the workshop service operator.
+
+> **Which data the workshop receives (from version 27.0.0.7):** Besides item and serial number, the API returns vendor, vendor order no., variant, description, quantity, unit cost, currency (`seller_currency`; the local currency for orders without a currency) and used-goods flag of the purchase order as well as, from the item's **item attributes**: brand (attribute ID 1), model (2), sub model (3), reference (5), year (8, as a number), condition (10), box (11) and certificate (13). The values are taken over when "Send to Workshop" is clicked — later changes to the order or the item do not reach the workshop. Therefore maintain the item attributes **before** "Send to Workshop"; if they are missing, the workshop receives empty values (year = 0). For condition the workshop expects the values **NEW, AAA, AA, A, VINT**, for box and certificate "ja"/"nein". If the year is not a plain number (e.g. a range), 0 is sent.
+
+> **Tenant identifier (`tenant`):** On the **Purchases & Payables Setup** (group "Workshop"), enter **GmbH** in the field **"Workshop Tenant"**. The API returns it with every request. For this, the workshop user additionally has read access to the purchases & payables setup; purchase orders, vendors and items remain blocked for them. Users running "Send to Workshop" need the "CXW Workshop All" permission set.
 
 ### 2. Setting up the job queue entry for processing
 
@@ -121,6 +179,8 @@ The workshop reports back up to ten attributes per watch. Eight of them have a d
 | 9–10 | Not yet assigned a business meaning (placeholder) |
 
 > Missing standard item attributes are created automatically as needed (type Text) — no manual pre-setup required.
+
+> **Prefill:** On "Send to Workshop", these ten fields are prefilled with the current values of the item attributes of the same name (e.g. item attribute "Dial Color"). If that attribute is not maintained on the item, the corresponding German attribute is used (e.g. "Zifferblatt Farbe 1", "Gehäuse Größe", "Armband Material", "Gehäuse Material", "Werk", "Geschlecht", "Glas"); if that has no value either, the field stays empty. If the workshop corrects such a value, the correction is stored in the English-named attribute. If the workshop confirms a value from the German attribute unchanged, nothing is written back. The workshop checks the values and corrects them if needed; the corrected values are written back to the item on processing. Therefore maintain the attributes before "Send to Workshop" where possible. A field cleared by the workshop does not remove the value from the item.
 
 ## Status and error handling of Workshop lines
 
@@ -165,9 +225,13 @@ An entry shows status "Error" when either
 
 > A pure delivery without invoicing, and selling an item without the "Consignment Sales" flag, do not create an entry.
 
+## "Hold Order" flag on sales orders
+
+Since CHX.Webshop 27.0.0.10 the "Hold Order" field lives in the base extension **CHX.Base** (from 27.0.3.5, field "CXB Hold Order") – see the CHX.Base key user manual. Values from CHX.Webshop 27.0.0.8/27.0.0.9 were not migrated.
+
 ## Data management
 
-- **Sales Price / Archive**: Every time "Upload Sales Price" runs, the approved price line is automatically written into the live sales price table (always valid for all customers) and stored as a new, sequentially numbered version in "Sales Price Archive" — including when an already-transmitted line is resent. These two tables are not meant to be maintained manually.
+- **Sales Price / Archive / Export Entries**: Every time "Release Sales Prices" runs, each approved country line is automatically written into the live sales price table (always valid for all customers) and stored as its own entry in "Sales Price Export Entries". Only the line of the archive country (DE) is additionally stored as a new, sequentially numbered version in "Sales Price Archive" — including when an already-queued line is released again. Archive entries of other countries from before version 27.0.0.6 are kept. These tables are not meant to be maintained manually; "Sales Price Export Entries" keeps growing (no retention policy is set up yet).
 - **File-based import**: A prepared but not yet connected component exists for automated, file-based price import. It is currently not part of the live process (no job queue entry).
 - **SellWatch purchase requests**: The tables behind "SellWatch-Overview" and the online-check log ("Http Call Log") are populated exclusively by automation; manual maintenance is not intended and isn't possible via the extension's pages either (all SellWatch pages are read-only).
 - **Workshop lines**: Created or changed exclusively via the "Send to Workshop" action (business department) and the external Workshop API. The internal overview page "CXW Workshop Lines" is read-only. An already-processed Workshop line (status "Processed") remains as an audit record even if the associated purchase order is cancelled (deleted).
@@ -181,13 +245,17 @@ Access to all sales price management objects is controlled through the **"CXWChr
 
 | Problem | Cause / Solution |
 |---|---|
+| SellWatch offer is not processed; on the SellWatch Overview, "Last Error" says "No … item template is set up" or "The item template … no longer exists" | On the purchases & payables setup ("SellWatch" section), set or correct the template matching the offer type — commission → "SellWatch Item Template (Commission)", all others → "SellWatch Item Template (Standard)". The offer is processed again automatically on the next run. |
+| SellWatch offer stays open, "Last Error" shows a different message | Read the message and fix the setup it names (e.g. posting groups of the item template, payment methods `C2C`/`RG`, location `HL`). The offer is processed again automatically on the next run; other offers are not blocked. |
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
 | "Add all Countries" produces no line for a specific country | Check that "Sales Price Activated" is enabled for that country on the "Countries/Regions" page. |
 | A user cannot open the sales price management pages | Check whether the user has been assigned the "CXWChronWSAll" permission set. |
 | A price isn't calculated with margin X% despite correct input | The category-based non-stock price calculation is not currently wired into the live flow — escalate to the development team if this feature is needed. |
-| "Upload Sales Price" reports that no API interface is configured, or aborts | Check on the base settings that "Price Export Active" is enabled and an "API Interface Code" is selected, and that the corresponding interface under "API Interface Setup" is active and fully configured (Endpoint URL, API Key if required). Details on the specific failure (status code, error message) are on the "Http Call Log" page. |
-| Individual price lines are left with "Export Status" = "Error" after "Upload Sales Price" | Other lines in the same run are still processed. Check the affected line for invalid values (e.g. a currency code that doesn't exist) and trigger the upload for that line again. |
-| "Export Data" on "Data Export Entries" reports an error for an entry with destination code `SALESPRICE` | This is intended: price transmissions only run through "Upload Sales Price". Upload the affected price line again; do **not** create a `SALESPRICE` entry under "Data Export API Setup". Note: the entry's status then changes to "Error" and the attempt count increases — even if the price had been transmitted successfully before ("Processed"). Nothing is sent. |
+| "Release Sales Prices" reports that no API interface or no archive country code is configured | Check "Price Export Active", "API Interface Code" and "Archive Country Code" on the base settings. |
+| Individual price lines are left with "Export Status" = "Error" after "Release Sales Prices" | Releasing that line failed (e.g. a currency code that doesn't exist); nothing was queued. Other lines are still processed. Fix the cause and release the line again. |
+| Prices stay on "Pending (Sales Price)" in "Data Export Entries" permanently | The sales price export job is not running: check the job queue entry for codeunit 60332 (exists, status "Ready", not in error) and that "Price Export Active" is enabled. |
+| A `SALESPRICE` entry stays on "Error" permanently | The maximum number of attempts has been reached. Check the error message on the entry or on "Http Call Log" (interface, credentials, endpoint). After fixing it, run **"Requeue Sales Price"**. If the message says that the export record, sales price or item no longer exists, release the price line again. |
+| "Export Data" on "Data Export Entries" reports an error for an entry with destination code `SALESPRICE` | This is intended: price transmissions only run through the sales price export job. Do **not** create a `SALESPRICE` entry under "Data Export API Setup". The entry goes to "Error" and the attempt count increases, but nothing is sent. If the count is still below "Max. Export Attempts", the job resends it on the next run; otherwise run "Requeue Sales Price". |
 | A user cannot open the SellWatch pages | Check whether the user has been assigned the "CXW SWChronWSAll" permission set. |
 | A watch on "SellWatch-Overview" is never marked online, or "Http Call Log" shows failures | Check that an entry with code `WOA` exists under "API Interface Setup", is active, and has the Endpoint URL and API Key set. Details on the specific failure (status code, error message) are on the "Http Call Log" page. |
 | No vendor/order is created for a SellWatch request | Creation happens fully automatically in the background; there is no action you can trigger manually as a key user. First check whether the request actually arrived completely, then escalate to the development team if not. |

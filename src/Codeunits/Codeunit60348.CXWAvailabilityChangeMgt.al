@@ -112,7 +112,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityChangeEntry.SetRange("CXW Variant Code", VariantCode);
         AvailabilityChangeEntry.SetRange("CXW Location Code", LocationCode);
         AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", ItemLedgerEntryNo);
-        AvailabilityChangeEntry.SetRange("CXW Differential Taxation Purchase", DifferentialTaxationPurchase);
+        AvailabilityChangeEntry.SetRange("CXW Diff. Taxation Purchase", DifferentialTaxationPurchase);
         AvailabilityChangeEntry.SetRange("CXW Exported", false);
         if AvailabilityChangeEntry.FindFirst() then begin
             AvailabilityChangeEntry.Modify(true);
@@ -138,7 +138,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityChangeEntry."CXW Variant Code" := VariantCode;
         AvailabilityChangeEntry."CXW Location Code" := LocationCode;
         AvailabilityChangeEntry."CXW Item Ledger Entry No." := ItemLedgerEntryNo;
-        AvailabilityChangeEntry."CXW Differential Taxation Purchase" := DifferentialTaxationPurchase;
+        AvailabilityChangeEntry."CXW Diff. Taxation Purchase" := DifferentialTaxationPurchase;
         AvailabilityChangeEntry.Insert();
         RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
     end;
@@ -189,17 +189,17 @@ codeunit 60348 "CXW Availability Change Mgt"
         ItemLedgerEntry: Record "Item Ledger Entry";
     begin
         if AvailabilityChangeEntry."CXW Item Ledger Entry No." <> 0 then begin
-            Clear(AvailabilityChangeEntry."CXW Differential Taxation Purchase");
+            Clear(AvailabilityChangeEntry."CXW Diff. Taxation Purchase");
 
             if ItemLedgerEntry.Get(AvailabilityChangeEntry."CXW Item Ledger Entry No.") then
-                AvailabilityChangeEntry."CXW Differential Taxation Purchase" := ItemLedgerEntry."CXB Margin Taxation";
+                AvailabilityChangeEntry."CXW Diff. Taxation Purchase" := ItemLedgerEntry."CXB Margin Taxation";
         end;
 
         AvailabilityChangeEntry."CXW Inventory Quantity" := GetAvailableInventoryQuantity(
             AvailabilityChangeEntry."CXW Item No.",
             AvailabilityChangeEntry."CXW Variant Code",
             AvailabilityChangeEntry."CXW Location Code",
-            AvailabilityChangeEntry."CXW Differential Taxation Purchase");
+            AvailabilityChangeEntry."CXW Diff. Taxation Purchase");
 
         AvailabilityChangeEntry."CXW Changed At" := CurrentDateTime;
         AvailabilityChangeEntry.Modify(true);
@@ -233,7 +233,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityCalculation: Codeunit "CXW Availability Calculation";
         CountryRegion: Record "Country/Region";
     begin
-        CountryRegion.SetRange("CXW Webshop Delivery Time Active", true);
+        CountryRegion.SetRange("CXW Webshop Deli. Time Active", true);
         if not CountryRegion.FindSet() then
             exit;
 
@@ -265,7 +265,7 @@ codeunit 60348 "CXW Availability Change Mgt"
     begin
         if not CountryRegion.Get(CountryRegionCode) then
             exit;
-        if not CountryRegion."CXW Webshop Delivery Time Active" then
+        if not CountryRegion."CXW Webshop Deli. Time Active" then
             exit;
 
         if not Item.FindSet() then
@@ -289,7 +289,7 @@ codeunit 60348 "CXW Availability Change Mgt"
     var
         CountryRegion: Record "Country/Region";
     begin
-        CountryRegion.SetRange("CXW Webshop Delivery Time Active", true);
+        CountryRegion.SetRange("CXW Webshop Deli. Time Active", true);
         if not CountryRegion.FindSet() then
             exit;
 
@@ -324,17 +324,18 @@ codeunit 60348 "CXW Availability Change Mgt"
 
     local procedure RefreshInventoryTimesForCountry(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; AvailabilityCalculation: Codeunit "CXW Availability Calculation")
     var
+        NonStockDeliveryDays: Integer;
         DeliveryDays: Integer;
     begin
-        if AvailabilityCalculation.TryGetStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, DeliveryDays)
-        else
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, 0);
+        if not AvailabilityCalculation.TryGetNonStockDeliveryDays(ItemNo, CountryRegionCode, NonStockDeliveryDays) then
+            NonStockDeliveryDays := 0;
 
-        if AvailabilityCalculation.TryGetNonStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, DeliveryDays)
-        else
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, 0);
+        // If the article is not available, STOCK must use the same delivery time as NON-STOCK.
+        if not AvailabilityCalculation.TryGetStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
+            DeliveryDays := NonStockDeliveryDays;
+
+        UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, DeliveryDays);
+        UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, NonStockDeliveryDays);
     end;
 
     local procedure UpsertInventoryTime(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; InventoryType: Code[10]; DeliveryDays: Integer)

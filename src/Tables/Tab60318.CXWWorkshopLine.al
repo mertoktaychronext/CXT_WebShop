@@ -112,6 +112,114 @@ table 60318 "CXW Workshop Line"
             Editable = false;
             DataClassification = ToBeClassified;
         }
+        // Snapshot of the purchase order and the watch data at the time the line was sent to the workshop,
+        // so that the workshop API user needs no access to purchase documents, vendors or items.
+        field(30; "CXW Vendor Order No."; Code[35])
+        {
+            Caption = 'Vendor Order No.';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(31; "CXW Vendor No."; Code[20])
+        {
+            Caption = 'Vendor No.';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(32; "CXW Vendor Name"; Text[100])
+        {
+            Caption = 'Vendor Name';
+            Editable = false;
+            DataClassification = CustomerContent;
+        }
+        field(33; "CXW Variant Code"; Code[10])
+        {
+            Caption = 'Variant Code';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(34; "CXW Description"; Text[100])
+        {
+            Caption = 'Description';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(35; "CXW Quantity"; Decimal)
+        {
+            Caption = 'Quantity';
+            Editable = false;
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
+        }
+        field(36; "CXW Unit Price"; Decimal)
+        {
+            Caption = 'Direct Unit Cost';
+            Editable = false;
+            DataClassification = ToBeClassified;
+            AutoFormatType = 2;
+            AutoFormatExpression = "CXW Currency Code";
+        }
+        field(37; "CXW Used Goods"; Boolean)
+        {
+            Caption = 'Used Goods';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(38; "CXW Currency Code"; Code[10])
+        {
+            Caption = 'Currency Code';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(40; "CXW Brand"; Text[250])
+        {
+            Caption = 'Brand';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(41; "CXW Model"; Text[250])
+        {
+            Caption = 'Model';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(42; "CXW Sub Model"; Text[250])
+        {
+            Caption = 'Sub Model';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(43; "CXW Reference"; Text[250])
+        {
+            Caption = 'Reference';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(44; "CXW Year"; Integer)
+        {
+            Caption = 'Year';
+            Editable = false;
+            DataClassification = ToBeClassified;
+            BlankZero = true;
+        }
+        field(45; "CXW Condition"; Text[250])
+        {
+            Caption = 'Condition';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(46; "CXW Box"; Text[250])
+        {
+            Caption = 'Box';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
+        field(47; "CXW Certificate"; Text[250])
+        {
+            Caption = 'Certificate';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

@@ -1,4 +1,4 @@
-table 60314 "CXW Sales Price Outbound File"
+table 60314 "CXW Sales Price Out. File"
 {
     Caption = 'Sales Price Outbound File';
     DataClassification = ToBeClassified;

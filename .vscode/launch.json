@@ -14,12 +14,26 @@
             "enableSqlInformationDebugger": true,
             "schemaUpdateMode": "ForceSync"
         },
-        {
-            "name": "ChronextDatenübernahme",
+         {
+            "name": "ChronextDataMigr",
             "request": "launch",
             "type": "al",
             "environmentType": "Sandbox",
-            "environmentName": "ChronextDUE",
+            "environmentName": "ChronextDataMigr",
+            "tenant": "74ff9c49-a646-4700-b15b-077aec2f2600",
+            "breakOnError": "All",
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true,
+            "schemaUpdateMode": "ForceSync"
+        },
+       
+         {
+            "name": "ChronextTest",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "Sandbox",
+            "environmentName": "ChronextTest",
             "tenant": "74ff9c49-a646-4700-b15b-077aec2f2600",
             "breakOnError": "All",
             "launchBrowser": true,
@@ -27,5 +41,7 @@
             "enableSqlInformationDebugger": true,
             "schemaUpdateMode": "ForceSync"
         }
+       
+        
     ]
 }

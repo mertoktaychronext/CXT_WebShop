@@ -166,6 +166,12 @@ table 60312 "CXW Sales Price Checking"
             end;
 
         }
+        field(28; "CXW Price Includes VAT"; Boolean)
+        {
+            Caption = 'Price Includes VAT';
+            DataClassification = ToBeClassified;
+            InitValue = true;
+        }
         field(50000; "CXW Version No."; Integer)
         {
             Caption = 'Version No.';
