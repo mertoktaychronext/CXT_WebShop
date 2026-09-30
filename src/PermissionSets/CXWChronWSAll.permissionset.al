@@ -1,5 +1,3 @@
-namespace SL;
-
 permissionset 60336 CXWChronWSAll
 {
     Assignable = true;

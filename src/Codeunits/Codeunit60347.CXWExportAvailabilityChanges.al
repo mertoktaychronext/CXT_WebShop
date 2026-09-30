@@ -261,8 +261,8 @@ codeunit 60347 "CXW Export Availability Change"
         JsonObj.Add('variantKey', VariantKey);
         JsonObj.Add('countryRegionCode', AvailabilityInventoryTime."CXW Country/Region Code");
         JsonObj.Add('channel', StockChannelLbl);
-        JsonObj.Add(AvailabilityInventoryTime."CXW Inventory Type", AvailabilityInventoryTime."CXW Delivery Days");
-        JsonObj.Add('_type', AvailabilityInventoryTime."CXW Inventory Type");
+        JsonObj.Add(LowerCase(AvailabilityInventoryTime."CXW Inventory Type"), AvailabilityInventoryTime."CXW Delivery Days");
+        JsonObj.Add('_type', LowerCase(AvailabilityInventoryTime."CXW Inventory Type"));
         JsonObj.WriteTo(JsonText);
     end;
 

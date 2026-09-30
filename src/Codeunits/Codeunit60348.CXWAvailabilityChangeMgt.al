@@ -324,17 +324,18 @@ codeunit 60348 "CXW Availability Change Mgt"
 
     local procedure RefreshInventoryTimesForCountry(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; AvailabilityCalculation: Codeunit "CXW Availability Calculation")
     var
+        NonStockDeliveryDays: Integer;
         DeliveryDays: Integer;
     begin
-        if AvailabilityCalculation.TryGetStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, DeliveryDays)
-        else
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, 0);
+        if not AvailabilityCalculation.TryGetNonStockDeliveryDays(ItemNo, CountryRegionCode, NonStockDeliveryDays) then
+            NonStockDeliveryDays := 0;
 
-        if AvailabilityCalculation.TryGetNonStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, DeliveryDays)
-        else
-            UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, 0);
+        // If the article is not available, STOCK must use the same delivery time as NON-STOCK.
+        if not AvailabilityCalculation.TryGetStockDeliveryDays(ItemNo, CountryRegionCode, DeliveryDays) then
+            DeliveryDays := NonStockDeliveryDays;
+
+        UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeStockTypeLbl, DeliveryDays);
+        UpsertInventoryTime(ItemNo, VariantCode, CountryRegionCode, InventoryTimeNonStockTypeLbl, NonStockDeliveryDays);
     end;
 
     local procedure UpsertInventoryTime(ItemNo: Code[20]; VariantCode: Code[20]; CountryRegionCode: Code[10]; InventoryType: Code[10]; DeliveryDays: Integer)
