@@ -1,8 +1,8 @@
 # Gesamtübersicht – AL Funktionsregister
 
-**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei.
+**Erstellt am:** 2026-08-11, zuletzt vollständig gegengeprüft und aktualisiert am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; neue Bereiche On-Demand-Beschaffung, Webshop-Verfügbarkeit & Lieferzeiten ergänzt, SalesPrice-Export über Aufgabenwarteschlange und Workshop-Bestelldaten nachgezogen), am 2026-09-30 "Auftrag halten" nach CHX.Base verschoben. Frühere Stände siehe Git-Historie dieser Datei. Aktualisiert am 2026-09-30: SellWatch: Artikelvorlage je Angebotsart, neue Prozedur `GetSellWatchItemTemplateCode`.
 **Analysierte Projekte:** 1
-**Gesamtanzahl Funktionen:** 325
+**Gesamtanzahl Funktionen:** 326
 
 ---
 
@@ -10,8 +10,8 @@
 
 | Projekt | Version | Objekte | Prozeduren | Trigger | Events | Aktionen | Gesamt |
 |---|---|---|---|---|---|---|---|
-| CHX.Webshop | 27.0.0.10 | 90 | 212 | 67 | 10 | 36 | 325 |
-| **Gesamt** | – | **90** | **212** | **67** | **10** | **36** | **325** |
+| CHX.Webshop | 27.0.0.10 | 90 | 213 | 67 | 10 | 36 | 326 |
+| **Gesamt** | – | **90** | **213** | **67** | **10** | **36** | **326** |
 
 > Nur ein AL-Projekt vorhanden. Es bündelt sieben Funktionsbereiche (das Kennzeichen "Auftrag halten" liegt seit 27.0.0.10 in CHX.Base):
 >
@@ -21,7 +21,7 @@
 > | Verkaufspreisverwaltung (inkl. Export über Aufgabenwarteschlange) | 75 |
 > | On-Demand-Beschaffung | 62 |
 > | Workshop-Ankaufsprüfung | 41 |
-> | SellWatch (Uhren-Ankauf) | 22 |
+> | SellWatch (Uhren-Ankauf) | 23 |
 > | Gemeinsame HTTP-Infrastruktur | 21 |
 > | Kommissionsverkauf (verzögerte EK-Faktura) | 8 |
 >
@@ -46,7 +46,8 @@
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`) und gibt die Bestellung sofort frei. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
-| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile einen neuen Artikel anhand der in der Einkaufseinrichtung hinterlegten Artikelvorlage ("SellWatch Item Template") an (Beschreibung aus Marke/Modell/Baujahr, zweite Beschreibungszeile aus der Referenz) inklusive passender Basis-Mengeneinheit; bricht kontrolliert ab, wenn keine Vorlage eingerichtet ist oder die eingerichtete Vorlage nicht mehr existiert. |
+| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile über die Standard-Artikelanlage aus Vorlage einen neuen Artikel an; übernimmt dabei Werte, Standarddimensionen, Basis-Mengeneinheit und – falls an der Vorlage hinterlegt – die Nummernserie der Vorlage. Setzt danach Beschreibung, zweite Beschreibungszeile und bei Kommission das Kennzeichen Kommissionsware. |
+| CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `GetSellWatchItemTemplateCode` | Prozedur | Internal | Wählt je nach Angebotsart die passende Artikelvorlage (Kommission oder Standard) und bricht kontrolliert ab, wenn die benötigte Vorlage fehlt oder nicht mehr existiert. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
 | CHX.Webshop | CXW SellWatch Mgt (60305) | Codeunit | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
 | CHX.Webshop | CXW SellWatch-Overview (60307) | Seite | `ShowDocument` | Aktion | – | Öffnet die zur Anfrage gehörende Einkaufsbestellung. |
