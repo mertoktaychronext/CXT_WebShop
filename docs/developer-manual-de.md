@@ -453,7 +453,7 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | 60318 CXW Workshop Line | Document Type, Document No., Line No. | Ein Datensatz je an die Werkstatt übergebener Bestellzeile: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), isAuthentic (Echtheits-Kennzeichen), acht fachlich benannte Attributfelder (Dial Color … Features) + zwei Platzhalter (Attribut 9/10), Created At, Checked At, Last Error |
 | 60341 CXW Consignment Posting Entry | Entry No (AutoIncrement) | Ein Datensatz je gebuchter VK-Rechnungszeile eines Kommissionsartikels: Item No., Purchase Order No. (leer bei Erkennungsfehler), Sales Invoice No., Sales Posting Date, Due Date, Status (Enum 60343: Open/Posted/Error), Error Text |
 
-**Table Extension 60300 "CXW Sales Header"** ("Sales Header"): Feld 60300 "CXW Hold Order" (Boolean, Caption "Hold Order"/"Auftrag halten") – rein informatives Kennzeichen ohne Sperrwirkung. `OnValidate` prüft `TestField(Status, Status::Open)`, sobald sich der Wert ändert (erneutes Validieren desselben Werts ist erlaubt). Angezeigt in PageExt 60334 "CXW Sales Order" (Gruppe General, `Editable` nur bei Status Offen) und PageExt 60337 "CXW Sales Order List". Spezifikation: `openspec/changes/sales-order-hold-flag`.
+**Kennzeichen "Auftrag halten":** Die frühere Table Extension 60300 "CXW Sales Header" (Feld "CXW Hold Order") und PageExtension 60337 "CXW Sales Order List" wurden mit Version 27.0.0.10 entfernt; das Feld liegt jetzt in CHX.Base (ab 27.0.3.5, TableExt 60212 "CXB Sales Header Ext.", Feld "CXB Hold Order"). Change: `openspec/changes/move-hold-order-to-chx-base`.
 
 ## Permission Set
 

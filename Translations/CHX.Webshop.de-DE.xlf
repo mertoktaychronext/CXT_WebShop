@@ -4457,18 +4457,6 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Sales Order - Action CXWOnDemandLines - Property Caption</note>
         </trans-unit>
-        <trans-unit id="PageExtension 3176337790 - Control 2888132791 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 1673401186">
-          <source>Specifies that the order is on hold. This is for information only and does not block releasing, posting or shipping. You can only change it while the order is open.</source>
-          <target>Gibt an, dass der Auftrag angehalten ist. Das Feld dient nur zur Information und sperrt weder Freigabe noch Buchung oder Versand. Es kann nur geändert werden, solange der Auftrag offen ist.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Sales Order - Control CXW Hold Order - Property ToolTip</note>
-        </trans-unit>
-        <trans-unit id="PageExtension 832214972 - Control 2888132791 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 3332899200">
-          <source>Specifies that the order is on hold. This is for information only and does not block releasing, posting or shipping. You can only change it while the order is open.</source>
-          <target>Gibt an, dass der Auftrag angehalten ist. Das Feld dient nur zur Information und sperrt weder Freigabe noch Buchung oder Versand. Es kann nur geändert werden, solange der Auftrag offen ist.</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">PageExtension CXW Sales Order List - Control CXW Hold Order - Property ToolTip</note>
-        </trans-unit>
         <trans-unit id="PageExtension 1190084260 - Control 2536215954 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Page 2026081320">
           <source>Specifies the linked purchase order line number for this sales line.</source>
           <target>Gibt die Nummer der verknüpften Einkaufsbestellungszeile für diese Verkaufszeile an.</target>
@@ -4636,12 +4624,6 @@
           <target>Bestellnr.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW On Demand Sales Line - Field CXW Purchase Order No. - Property Caption</note>
-        </trans-unit>
-        <trans-unit id="TableExtension 1059673637 - Field 2888132791 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1192395785">
-          <source>Hold Order</source>
-          <target>Auftrag halten</target>
-          <note from="Developer" annotates="general" priority="2"></note>
-          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Sales Header - Field CXW Hold Order - Property Caption</note>
         </trans-unit>
         <trans-unit id="TableExtension 2827071395 - Field 169060713 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
           <source>Comment</source>

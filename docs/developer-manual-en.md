@@ -454,7 +454,7 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 | 60318 CXW Workshop Line | Document Type, Document No., Line No. | One record per purchase line handed over to the workshop: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), isAuthentic (authenticity flag), eight business-named attribute fields (Dial Color … Features) + two placeholders (Attribut 9/10), Created At, Checked At, Last Error |
 | 60341 CXW Consignment Posting Entry | Entry No (AutoIncrement) | One record per posted sales invoice line for a consignment item: Item No., Purchase Order No. (blank on a detection failure), Sales Invoice No., Sales Posting Date, Due Date, Status (Enum 60343: Open/Posted/Error), Error Text |
 
-**Table Extension 60300 "CXW Sales Header"** ("Sales Header"): field 60300 "CXW Hold Order" (Boolean, caption "Hold Order"/"Auftrag halten") — an informational flag that blocks nothing. `OnValidate` checks `TestField(Status, Status::Open)` whenever the value changes (re-validating the same value is allowed). Shown in PageExt 60334 "CXW Sales Order" (group General, `Editable` only in status Open) and PageExt 60337 "CXW Sales Order List". Specification: `openspec/changes/sales-order-hold-flag`.
+**"Hold Order" flag:** The former Table Extension 60300 "CXW Sales Header" (field "CXW Hold Order") and PageExtension 60337 "CXW Sales Order List" were removed in version 27.0.0.10; the field now lives in CHX.Base (from 27.0.3.5, TableExt 60212 "CXB Sales Header Ext.", field "CXB Hold Order"). Change: `openspec/changes/move-hold-order-to-chx-base`.
 
 ## Permission Set
 

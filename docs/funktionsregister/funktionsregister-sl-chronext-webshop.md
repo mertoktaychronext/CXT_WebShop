@@ -1,9 +1,9 @@
 # Funktionsregister – CHX.Webshop
 
-**Version:** 27.0.0.8
+**Version:** 27.0.0.10
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen), vollständig gegengeprüft und nachgezogen am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; 35 bisher fehlende Objekte ergänzt – neue Bereiche **On-Demand-Beschaffung**, **Webshop-Verfügbarkeit & Lieferzeiten** und **Kennzeichen "Auftrag halten"**, dazu SalesPrice-Export über Aufgabenwarteschlange [Table/Page 60320, Codeunit 60332–60334, EnumExt 60300, PageExt 60336] und Workshop-Bestelldaten [Codeunit 60335/60336]; Codeunit 60329 und Aktion "Release Sales Prices" auf Page 60322 neu beschrieben; TableExtension 60346 entfernt [Länderfelder liegen jetzt in ChronextBC]; API-Pfad von Page 60339 korrigiert – Version 27.0.0.8, 92 Objekte / 326 Funktionen)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen), vollständig gegengeprüft und nachgezogen am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; 35 bisher fehlende Objekte ergänzt – neue Bereiche **On-Demand-Beschaffung**, **Webshop-Verfügbarkeit & Lieferzeiten** und **Kennzeichen "Auftrag halten"**, dazu SalesPrice-Export über Aufgabenwarteschlange [Table/Page 60320, Codeunit 60332–60334, EnumExt 60300, PageExt 60336] und Workshop-Bestelldaten [Codeunit 60335/60336]; Codeunit 60329 und Aktion "Release Sales Prices" auf Page 60322 neu beschrieben; TableExtension 60346 entfernt [Länderfelder liegen jetzt in ChronextBC]; API-Pfad von Page 60339 korrigiert – Version 27.0.0.8, 92 Objekte / 326 Funktionen), aktualisiert am 2026-09-30 (Kennzeichen "Auftrag halten" nach CHX.Base verschoben: TableExtension 60300 und PageExtension 60337 entfernt, Feld aus PageExtension 60334 entfernt – Version 27.0.0.10, 90 Objekte / 325 Funktionen; seit 29.09. neu hinzugekommene Objekte anderer Entwickler, z. B. Codeunit 60350, sind noch nicht erfasst)
 **Abhängigkeiten:** CHX.Base (27.0.3.4), ChronextBC (liefert "Data Export Entry"/"Data Export API Setup" sowie die Länderfelder für Verkaufspreise und Lieferzeiten)
 
 ---
@@ -12,7 +12,7 @@
 
 CHX.Webshop bündelt vier weitgehend eigenständige Funktionsbereiche unter einem Dach: **SellWatch** wickelt den automatisierten Ankauf gebrauchter Uhren ab (eingehende Verkaufsanfragen – inzwischen auch per API von außen anlegbar –, automatische Lieferanten- und Bestellanlage, Online-Sichtbarkeitsprüfung beim Partner SellWatch), die **Workshop-Ankaufsprüfung** bindet eine externe Werkstatt in den Einkaufsprozess ein (Übergabe angekommener Bestellzeilen inkl. Herstellerseriennummer, externe Echtheits-/Attributprüfung per API, automatisierter Wareneingang bei Echtheit bzw. Stornierung bei Nicht-Echtheit), der neue Bereich **Kommissionsverkauf** bucht die Einkaufsrechnung zu auf Kommission verkaufter Ware nicht sofort, sondern verzögert und automatisiert nach der VK-Rechnungsbuchung (einrichtbare Anzahl Tage, mit Fehlerwarteschlange und manueller Nachbearbeitung), und die **Verkaufspreisverwaltung** steuert die Pflege, Prüfung, Freigabe und den Export von Webshop-Verkaufspreisen an ein externes System. Alle Bereiche teilen sich ein gemeinsames HTTP-Aufrufprotokoll bzw. folgen demselben Zwischentabellen-plus-API-Muster (bzw. beim Kommissionsverkauf einem Zwischentabellen-plus-Job-Queue-Muster); die Verkaufspreisverwaltung nutzt zusätzlich eine gemeinsame Schnittstellen-Konfigurationstabelle mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4) sowie einen CSV-Importweg für Preisdaten und eine automatische Mehrwährungs-Ableitung. SellWatch besitzt seit einer früheren Erweiterung eine eigene, separat berechtigte API-Schreibschnittstelle für externe Systeme; die Workshop-Ankaufsprüfung folgt demselben Prinzip mit einer eigenen, bidirektionalen API für die externe Werkstatt. Der Kommissionsverkauf setzt auf das Artikel-Kennzeichen "Kommissionsverkauf" auf, das die Dependency CHX.Base bereitstellt.
 
-Seit der letzten Gesamtprüfung sind drei weitere Bereiche hinzugekommen: Die **On-Demand-Beschaffung** verknüpft Verkaufsauftragszeilen wiederbeschaffbarer Artikel mit passenden Einkaufsbestellzeilen (manuell oder durch automatische Anlage einer Bestellung) und zeigt den Beschaffungsstand direkt am Verkaufsauftrag. Der Bereich **Webshop-Verfügbarkeit & Lieferzeiten** erkennt Bestandsänderungen in den Webshop-Lagerorten automatisch, berechnet je Land Lieferzeiten und Lagerzeiten und überträgt beides über die ChronextBC-Exportinfrastruktur an den Webshop. Das **Kennzeichen "Auftrag halten"** erlaubt es, Verkaufsaufträge als angehalten zu markieren, ohne einen Prozess zu sperren. Die Verkaufspreisverwaltung versendet freigegebene Preise inzwischen nicht mehr direkt, sondern stellt sie in eine Exportwarteschlange, die eine Aufgabenwarteschlange mit automatischer Wiederholung abarbeitet.
+Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **On-Demand-Beschaffung** verknüpft Verkaufsauftragszeilen wiederbeschaffbarer Artikel mit passenden Einkaufsbestellzeilen (manuell oder durch automatische Anlage einer Bestellung) und zeigt den Beschaffungsstand direkt am Verkaufsauftrag. Der Bereich **Webshop-Verfügbarkeit & Lieferzeiten** erkennt Bestandsänderungen in den Webshop-Lagerorten automatisch, berechnet je Land Lieferzeiten und Lagerzeiten und überträgt beides über die ChronextBC-Exportinfrastruktur an den Webshop. Das zwischenzeitlich hier angelegte **Kennzeichen "Auftrag halten"** liegt seit Version 27.0.0.10 in CHX.Base. Die Verkaufspreisverwaltung versendet freigegebene Preise inzwischen nicht mehr direkt, sondern stellt sie in eine Exportwarteschlange, die eine Aufgabenwarteschlange mit automatischer Wiederholung abarbeitet.
 
 ---
 
@@ -22,15 +22,15 @@ Seit der letzten Gesamtprüfung sind drei weitere Bereiche hinzugekommen: Die **
 |---|---|
 | Codeunits | 16 |
 | Tabellen | 16 |
-| Tabellenerweiterungen | 8 |
+| Tabellenerweiterungen | 7 |
 | Seiten | 22 |
-| Seitenerweiterungen | 13 |
+| Seitenerweiterungen | 12 |
 | Xmlports | 1 |
 | Enums | 9 |
 | Enum-Erweiterungen | 1 |
 | Permission Sets | 6 |
-| **Gesamt Objekte** | **92** |
-| **Gesamt Prozeduren/Trigger/Events** | **326** |
+| **Gesamt Objekte** | **90** |
+| **Gesamt Prozeduren/Trigger/Events** | **325** |
 
 ---
 
@@ -716,7 +716,7 @@ Zeigt in den Bestellzeilen den verknüpften Verkaufsauftrag an und ergänzt Akti
 
 ### Seitenerweiterung: CXW Sales Order (ID: 60334)
 
-Ergänzt den Verkaufsauftrag um die Aktion "On-Demand-Zeilen" und das Feld "Auftrag halten" (siehe unten).
+Ergänzt den Verkaufsauftrag um die Aktion "On-Demand-Zeilen".
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -866,22 +866,6 @@ Ergänzt den Lagerort um das Kennzeichen "Hauptlagerort", das festlegt, ob der L
 ### Seitenerweiterung: CXW Location Card (ID: 60348)
 
 Zeigt auf der Lagerortkarte das Kennzeichen "Hauptlagerort" an. *Keine eigenen Trigger – reine Seitenerweiterung.*
-
-### Kennzeichen "Auftrag halten"
-
-Rein informatives Kennzeichen am Verkaufsauftrag, das keinen Prozess sperrt (Spezifikation: `openspec/specs/sales-order-hold-flag`).
-
-### Tabellenerweiterung: CXW Sales Header (ID: 60300)
-
-Ergänzt den Verkaufskopf um das Feld "Auftrag halten".
-
-| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
-|---|---|---|---|---|
-| 1 | `CXW Hold Order – OnValidate` | Trigger | – | Erlaubt eine Änderung des Kennzeichens nur, solange der Auftrag offen ist; erneutes Setzen desselben Werts bleibt auch bei freigegebenen Aufträgen möglich. |
-
-### Seitenerweiterung: CXW Sales Order List (ID: 60337)
-
-Zeigt in der Verkaufsauftragsliste die Spalte "Auftrag halten" an, damit nach angehaltenen Aufträgen gefiltert werden kann. Auf dem Verkaufsauftrag selbst steht das Feld über PageExtension 60334 (nur bei offenen Aufträgen bearbeitbar). *Keine eigenen Trigger – reine Seitenerweiterung.*
 
 ---
 
