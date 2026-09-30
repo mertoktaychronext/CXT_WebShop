@@ -30,6 +30,168 @@ codeunit 60335 "CXW Workshop Line Mgt."
         WorkshopLine."CXW Certificate" := GetItemAttributeValue(PurchLine."No.", CertificateAttributeId());
     end;
 
+    // Prefills the attribute fields the workshop reports back with the item's current values;
+    // the workshop may correct them before they are written back on processing.
+    procedure PrefillEmptyWorkshopAttributes(var WorkshopLine: Record "CXW Workshop Line")
+    begin
+        FillEmptyWorkshopAttributes(WorkshopLine, WorkshopLine."CXW Item No.");
+    end;
+
+    procedure WorkshopAttributeCount(): Integer
+    begin
+        exit(10);
+    end;
+
+    // Single mapping workshop line field -> item attribute name, used for prefilling and for writing back.
+    // TODO: Attributnamen für Attribut 9/10 final klären (Platzhalter!)
+    procedure GetWorkshopAttributeName(AttributeIndex: Integer): Text[250]
+    begin
+        case AttributeIndex of
+            1:
+                exit('Dial Color');
+            2:
+                exit('Case Diameter');
+            3:
+                exit('Bracelet Material');
+            4:
+                exit('Case Material');
+            5:
+                exit('Movement');
+            6:
+                exit('Gender');
+            7:
+                exit('Crystal');
+            8:
+                exit('Features');
+            9:
+                exit('Attribut 9');
+            10:
+                exit('Attribut 10');
+        end;
+    end;
+
+    // Fallback for the prefill only: ChronextBC attribute (ID = field no. in "Item Attribute Collection")
+    // used when the item has no value for the attribute above; 0 = no fallback.
+    local procedure GetWorkshopAttributeFallbackId(AttributeIndex: Integer): Integer
+    begin
+        case AttributeIndex of
+            1:
+                exit(22); // Zifferblatt Farbe 1
+            2:
+                exit(18); // Gehäuse Größe
+            3:
+                exit(23); // Armband Material
+            4:
+                exit(16); // Gehäuse Material
+            5:
+                exit(15); // Werk
+            6:
+                exit(24); // Geschlecht
+            7:
+                exit(20); // Glas
+        end;
+        exit(0);
+    end;
+
+    procedure GetWorkshopAttributeValue(WorkshopLine: Record "CXW Workshop Line"; AttributeIndex: Integer): Text[250]
+    begin
+        case AttributeIndex of
+            1:
+                exit(WorkshopLine."CXW Dial Color");
+            2:
+                exit(WorkshopLine."CXW Case Diameter");
+            3:
+                exit(WorkshopLine."CXW Bracelet Material");
+            4:
+                exit(WorkshopLine."CXW Case Material");
+            5:
+                exit(WorkshopLine."CXW Movement");
+            6:
+                exit(WorkshopLine."CXW Gender");
+            7:
+                exit(WorkshopLine."CXW Crystal");
+            8:
+                exit(WorkshopLine."CXW Features");
+            9:
+                exit(WorkshopLine."CXW Attribute 9");
+            10:
+                exit(WorkshopLine."CXW Attribute 10");
+        end;
+    end;
+
+    procedure SetWorkshopAttributeValue(var WorkshopLine: Record "CXW Workshop Line"; AttributeIndex: Integer; Value: Text[250])
+    begin
+        case AttributeIndex of
+            1:
+                WorkshopLine."CXW Dial Color" := Value;
+            2:
+                WorkshopLine."CXW Case Diameter" := Value;
+            3:
+                WorkshopLine."CXW Bracelet Material" := Value;
+            4:
+                WorkshopLine."CXW Case Material" := Value;
+            5:
+                WorkshopLine."CXW Movement" := Value;
+            6:
+                WorkshopLine."CXW Gender" := Value;
+            7:
+                WorkshopLine."CXW Crystal" := Value;
+            8:
+                WorkshopLine."CXW Features" := Value;
+            9:
+                WorkshopLine."CXW Attribute 9" := Value;
+            10:
+                WorkshopLine."CXW Attribute 10" := Value;
+        end;
+    end;
+
+    // True if the value was prefilled from the ChronextBC fallback and the workshop left it unchanged:
+    // the named attribute has no value on the item and the value equals the fallback attribute value.
+    // Such values are not written back, so the named attribute is not filled with the fallback text.
+    procedure IsUnchangedFallbackValue(pItemNo: Code[20]; AttributeIndex: Integer; Value: Text[250]): Boolean
+    var
+        AttributeId: Integer;
+    begin
+        if GetWorkshopAttributeFallbackId(AttributeIndex) = 0 then
+            exit(false);
+        AttributeId := FindItemAttributeId(GetWorkshopAttributeName(AttributeIndex));
+        if AttributeId <> 0 then
+            if GetItemAttributeValue(pItemNo, AttributeId) <> '' then
+                exit(false);
+        exit(Value = GetItemAttributeValue(pItemNo, GetWorkshopAttributeFallbackId(AttributeIndex)));
+    end;
+
+    // Fills only empty fields, so values the workshop already reported are never overwritten.
+    local procedure FillEmptyWorkshopAttributes(var WorkshopLine: Record "CXW Workshop Line"; pItemNo: Code[20])
+    var
+        AttributeIndex: Integer;
+        AttributeId: Integer;
+        AttributeValue: Text[250];
+    begin
+        for AttributeIndex := 1 to WorkshopAttributeCount() do
+            if GetWorkshopAttributeValue(WorkshopLine, AttributeIndex) = '' then begin
+                // A missing attribute leaves the field empty; attributes are only created when writing back.
+                AttributeValue := '';
+                AttributeId := FindItemAttributeId(GetWorkshopAttributeName(AttributeIndex));
+                if AttributeId <> 0 then
+                    AttributeValue := GetItemAttributeValue(pItemNo, AttributeId);
+                if (AttributeValue = '') and (GetWorkshopAttributeFallbackId(AttributeIndex) <> 0) then
+                    AttributeValue := GetItemAttributeValue(pItemNo, GetWorkshopAttributeFallbackId(AttributeIndex));
+                SetWorkshopAttributeValue(WorkshopLine, AttributeIndex, AttributeValue);
+            end;
+    end;
+
+    local procedure FindItemAttributeId(pAttributeName: Text[250]): Integer
+    var
+        ItemAttribute: Record "Item Attribute";
+    begin
+        ItemAttribute.SetLoadFields(ID, Name);
+        ItemAttribute.SetRange(Name, pAttributeName);
+        if ItemAttribute.FindFirst() then
+            exit(ItemAttribute.ID);
+        exit(0);
+    end;
+
     local procedure GetCurrencyCode(pCurrencyCode: Code[10]): Code[10]
     var
         GLSetup: Record "General Ledger Setup";

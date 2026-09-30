@@ -6,12 +6,29 @@ codeunit 60336 "CXW Workshop Upgrade"
     var
         UpgradeTag: Codeunit "Upgrade Tag";
     begin
-        if UpgradeTag.HasUpgradeTag(GetWorkshopLinePurchaseDataTag()) then
-            exit;
+        if not UpgradeTag.HasUpgradeTag(GetWorkshopLinePurchaseDataTag()) then begin
+            FillPurchaseDataOnOpenLines();
+            UpgradeTag.SetUpgradeTag(GetWorkshopLinePurchaseDataTag());
+        end;
 
-        FillPurchaseDataOnOpenLines();
+        if not UpgradeTag.HasUpgradeTag(GetWorkshopLineAttributePrefillTag()) then begin
+            PrefillAttributesOnNewLines();
+            UpgradeTag.SetUpgradeTag(GetWorkshopLineAttributePrefillTag());
+        end;
+    end;
 
-        UpgradeTag.SetUpgradeTag(GetWorkshopLinePurchaseDataTag());
+    // Only lines the workshop has not reported on yet; filled fields are never overwritten.
+    local procedure PrefillAttributesOnNewLines()
+    var
+        WorkshopLine: Record "CXW Workshop Line";
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
+    begin
+        WorkshopLine.SetRange("CXW Status", WorkshopLine."CXW Status"::"new");
+        if WorkshopLine.FindSet(true) then
+            repeat
+                WorkshopLineMgt.PrefillEmptyWorkshopAttributes(WorkshopLine);
+                WorkshopLine.Modify(false);
+            until WorkshopLine.Next() = 0;
     end;
 
     // Lines the workshop still works on get the purchase and watch data; processed lines stay as they are.
@@ -36,9 +53,15 @@ codeunit 60336 "CXW Workshop Upgrade"
         exit('CXW-WORKSHOPLINE-PURCHASEDATA-20260928');
     end;
 
+    local procedure GetWorkshopLineAttributePrefillTag(): Code[250]
+    begin
+        exit('CXW-WORKSHOPLINE-ATTRIBUTEPREFILL-20260930');
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Upgrade Tag", 'OnGetPerCompanyUpgradeTags', '', false, false)]
     local procedure RegisterPerCompanyTags(var PerCompanyUpgradeTags: List of [Code[250]])
     begin
         PerCompanyUpgradeTags.Add(GetWorkshopLinePurchaseDataTag());
+        PerCompanyUpgradeTags.Add(GetWorkshopLineAttributePrefillTag());
     end;
 }
