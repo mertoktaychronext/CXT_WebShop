@@ -3863,6 +3863,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW On Demand Sales Line - Field CXW Purchase Order No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="TableExtension 1059673637 - Field 2888132791 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 1192395785">
+          <source>Hold Order</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">TableExtension CXW Sales Header - Field CXW Hold Order - Property Caption</note>
+        </trans-unit>
         <trans-unit id="TableExtension 2827071395 - Field 169060713 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve" al-object-target="Table 2243515271">
           <source>Comment</source>
           <note from="Developer" annotates="general" priority="2"></note>
