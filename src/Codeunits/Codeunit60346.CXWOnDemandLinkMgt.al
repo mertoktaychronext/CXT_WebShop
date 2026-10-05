@@ -81,7 +81,12 @@ codeunit 60346 "CXW On Demand Link Mgt"
             exit('');
 
         if not PurchaseLine.Get(PurchaseLine."Document Type"::Order, SalesLine."CXW Purchase Order No.", SalesLine."CXW Purchase Line No.") then
-            exit(PurchaseLineMissingLbl);
+            exit(GetPostedPurchaseStatusText(SalesLine."CXW Purchase Order No.", SalesLine."CXW Purchase Line No."));
+
+        if (PurchaseLine."Quantity Received" >= PurchaseLine.Quantity) and
+           (PurchaseLine."Quantity Invoiced" >= PurchaseLine.Quantity)
+        then
+            exit(ReceivedAndInvoicedLbl);
 
         if PurchaseLine."Quantity Received" >= PurchaseLine.Quantity then
             exit(ReceivedLbl);
@@ -98,6 +103,25 @@ codeunit 60346 "CXW On Demand Link Mgt"
             else
                 exit(OpenLbl);
         end;
+    end;
+
+    local procedure GetPostedPurchaseStatusText(PurchaseOrderNo: Code[20]; PurchaseLineNo: Integer): Text[50]
+    var
+        PurchInvLine: Record "Purch. Inv. Line";
+        PurchRcptLine: Record "Purch. Rcpt. Line";
+    begin
+        // Fully received and invoiced purchase orders are deleted on posting, so fall back to the posted documents
+        PurchInvLine.SetRange("Order No.", PurchaseOrderNo);
+        PurchInvLine.SetRange("Order Line No.", PurchaseLineNo);
+        if not PurchInvLine.IsEmpty() then
+            exit(ReceivedAndInvoicedLbl);
+
+        PurchRcptLine.SetRange("Order No.", PurchaseOrderNo);
+        PurchRcptLine.SetRange("Order Line No.", PurchaseLineNo);
+        if not PurchRcptLine.IsEmpty() then
+            exit(ReceivedLbl);
+
+        exit(PurchaseLineMissingLbl);
     end;
 
     procedure LookupPurchaseLineForSalesLine(SalesLine: Record "Sales Line"; var PurchaseLine: Record "Purchase Line"): Boolean
@@ -402,6 +426,7 @@ codeunit 60346 "CXW On Demand Link Mgt"
         PurchaseLineMissingLbl: Label 'Linked purchase line missing';
         PurchaseOrderMissingLbl: Label 'Linked purchase order missing';
         ReceivedLbl: Label 'Received';
+        ReceivedAndInvoicedLbl: Label 'Received and Invoiced';
         PartiallyReceivedLbl: Label 'Partially Received';
         ReleasedLbl: Label 'Released';
         OpenLbl: Label 'Open';

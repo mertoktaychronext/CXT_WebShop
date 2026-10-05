@@ -1718,6 +1718,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW On Demand Link Mgt - NamedType PurchaseOrderOnlyErr</note>
         </trans-unit>
+        <trans-unit id="Codeunit 394255360 - NamedType 459890669" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Received and Invoiced</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Codeunit CXW On Demand Link Mgt - NamedType ReceivedAndInvoicedLbl</note>
+        </trans-unit>
         <trans-unit id="Codeunit 394255360 - NamedType 27710823" size-unit="char" translate="yes" xml:space="preserve">
           <source>Received</source>
           <note from="Developer" annotates="general" priority="2"></note>
