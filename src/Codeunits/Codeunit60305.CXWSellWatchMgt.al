@@ -59,11 +59,10 @@ codeunit 60305 "CXW SellWatch Mgt"
             VendorRec."Address 2" := SellWatchVendorInfo."CXW Address 2";
             VendorRec.City := SellWatchVendorInfo."CXW City";
             VendorRec.County := SellWatchVendorInfo."CXW County";
-            VendorRec."Country/Region Code" := CopyStr(SellWatchVendorInfo."CXW CountryCode", 1, 2);
             VendorRec."Post Code" := SellWatchVendorInfo."CXW Post Code";
+            SetCountryRegionCode(CopyStr(SellWatchVendorInfo."CXW CountryCode", 1, 2));
             VendorRec."Phone No." := SellWatchVendorInfo."CXW PhoneNo";
             VendorRec."E-Mail" := SellWatchVendorInfo."CXW Email";
-            VendorRec.SetPostingGroups();
             if SellWatchVendorInfo."CXW CurrencyCode" <> 'EUR' then
                 VendorRec."Currency Code" := SellWatchVendorInfo."CXW CurrencyCode";
             if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
@@ -82,6 +81,19 @@ codeunit 60305 "CXW SellWatch Mgt"
         end;
         CreatePurchaseOrder();
         SellWatchOffer := SellWatchVendorInfo;
+    end;
+
+    // Validate lets the Salini Base App default the posting groups from the country template
+    // (replaces CHX.Base Vendor.SetPostingGroups since CHX.Base 28.0). Unknown country codes are
+    // still accepted as before, just without posting-group defaulting.
+    local procedure SetCountryRegionCode(CountryRegionCode: Code[10])
+    var
+        CountryRegion: Record "Country/Region";
+    begin
+        if CountryRegion.Get(CountryRegionCode) then
+            VendorRec.Validate("Country/Region Code", CountryRegionCode)
+        else
+            VendorRec."Country/Region Code" := CountryRegionCode;
     end;
 
     local procedure CreatePurchaseOrder()
