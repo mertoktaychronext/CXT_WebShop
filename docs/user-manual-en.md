@@ -103,6 +103,11 @@ Once entered successfully, the line is marked "Sent to Workshop" and its fields 
 
 > A line that has already been sent cannot be transmitted a second time through this action.
 
+If workshop lines already exist for the order, the system points this out when you run "Send to Workshop" again:
+
+- If all lines have already been sent, a message states that there are no further lines to send to the workshop — nothing is processed.
+- If there are still open lines (e.g. previously marked "Not Arrived"), the system shows the number of existing workshop lines and asks whether the remaining lines should be sent. Choosing "No" cancels the action.
+
 ### What happens automatically afterwards
 
 The actual check by the workshop, and the follow-up processing based on the check result, run fully automatically in the background — no further action is needed on your part:
@@ -113,6 +118,8 @@ The actual check by the workshop, and the follow-up processing based on the chec
 ## Viewing Workshop lines
 
 The **"CXW Workshop Lines"** page shows every line handed over to the workshop, its current check status (New / WS checked / Processed / Error), the item attributes reported by the workshop, and — if automatic processing failed — the most recent error message. This page is read-only.
+
+On the **purchase order** itself, the field **"No. of Workshop Lines"** (General FastTab) shows how many workshop lines exist for the order; blank means none. Choosing the value opens the workshop lines filtered to this order.
 
 > If a line shows status "Error", a problem occurred during the last automatic processing attempt (e.g. a closed posting period). Contact a key user or the development team in this case (see the Key User Manual).
 
