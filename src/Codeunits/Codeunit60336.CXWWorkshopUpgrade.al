@@ -15,6 +15,11 @@ codeunit 60336 "CXW Workshop Upgrade"
             PrefillAttributesOnNewLines();
             UpgradeTag.SetUpgradeTag(GetWorkshopLineAttributePrefillTag());
         end;
+
+        if not UpgradeTag.HasUpgradeTag(GetHoldOrderMigrationTag()) then begin
+            MigrateHoldOrderToBase();
+            UpgradeTag.SetUpgradeTag(GetHoldOrderMigrationTag());
+        end;
     end;
 
     // Only lines the workshop has not reported on yet; filled fields are never overwritten.
@@ -48,6 +53,23 @@ codeunit 60336 "CXW Workshop Upgrade"
             until WorkshopLine.Next() = 0;
     end;
 
+    local procedure MigrateHoldOrderToBase()
+    var
+        SalesHeader: Record "Sales Header";
+    begin
+        SalesHeader.SetRange("CXW Hold Order", true);
+        if not SalesHeader.FindSet(true) then
+            exit;
+
+        repeat
+            if not SalesHeader."CXB Hold Order" then begin
+                // Do not validate: historical released orders may also have the legacy flag set.
+                SalesHeader."CXB Hold Order" := true;
+                SalesHeader.Modify(false);
+            end;
+        until SalesHeader.Next() = 0;
+    end;
+
     local procedure GetWorkshopLinePurchaseDataTag(): Code[250]
     begin
         exit('CXW-WORKSHOPLINE-PURCHASEDATA-20260928');
@@ -58,10 +80,16 @@ codeunit 60336 "CXW Workshop Upgrade"
         exit('CXW-WORKSHOPLINE-ATTRIBUTEPREFILL-20260930');
     end;
 
+    local procedure GetHoldOrderMigrationTag(): Code[250]
+    begin
+        exit('CXW-HOLD-ORDER-TO-BASE-20261001');
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Upgrade Tag", 'OnGetPerCompanyUpgradeTags', '', false, false)]
     local procedure RegisterPerCompanyTags(var PerCompanyUpgradeTags: List of [Code[250]])
     begin
         PerCompanyUpgradeTags.Add(GetWorkshopLinePurchaseDataTag());
         PerCompanyUpgradeTags.Add(GetWorkshopLineAttributePrefillTag());
+        PerCompanyUpgradeTags.Add(GetHoldOrderMigrationTag());
     end;
 }

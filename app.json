@@ -2,7 +2,7 @@
   "id": "5df32934-5708-418c-ba16-44b30feb51f4",
   "name": "CHX.Webshop",
   "publisher": "Salini Life",
-  "version": "27.0.0.13",
+  "version": "27.0.0.15",
   "brief": "CHX.Webshop",
   "description": "CHX.Webshop",
   "privacyStatement": "",
@@ -15,7 +15,7 @@
       "id": "5409da1c-726d-4b56-a383-e6f433d36d03",
       "name": "CHX.Base",
       "publisher": "Salini Life",
-      "version": "27.0.3.5"
+      "version": "28.0.0.0"
     },
     
     {  "id": "9699be36-20ce-4911-a988-5eb58385243f",
