@@ -1,5 +1,22 @@
 pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
 {
+    layout
+    {
+        addlast(General)
+        {
+            field("CXW No. of Workshop Lines"; Rec."CXW No. of Workshop Lines")
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies how many workshop lines exist for this order. Choose the value to open the workshop lines of this order.';
+
+                trigger OnDrillDown()
+                begin
+                    ShowWorkshopLines();
+                end;
+            }
+        }
+    }
+
     actions
     {
         addlast(Processing)
@@ -18,12 +35,31 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         }
     }
 
+    local procedure ShowWorkshopLines()
+    var
+        WorkshopLine: Record "CXW Workshop Line";
+    begin
+        WorkshopLine.SetRange("CXW Document Type", Rec."Document Type");
+        WorkshopLine.SetRange("CXW Document No.", Rec."No.");
+        Page.Run(Page::"CXW Workshop Lines", WorkshopLine);
+    end;
+
+    local procedure CountWorkshopLines(): Integer
+    var
+        WorkshopLine: Record "CXW Workshop Line";
+    begin
+        WorkshopLine.SetRange("CXW Document Type", Rec."Document Type");
+        WorkshopLine.SetRange("CXW Document No.", Rec."No.");
+        exit(WorkshopLine.Count());
+    end;
+
     local procedure SendLinesToWorkshop()
     var
         PurchLine: Record "Purchase Line";
         LineNos: List of [Integer];
         LineNo: Integer;
         ErrorLines: Text;
+        NoOfWorkshopLines: Integer;
     begin
         // Collect first: ProcessLine changes the filter field "CXW Sent to Workshop" and commits per line.
         PurchLine.SetRange("Document Type", Rec."Document Type");
@@ -36,6 +72,17 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
             repeat
                 LineNos.Add(PurchLine."Line No.");
             until PurchLine.Next() = 0;
+
+        // Repeated call: point out existing workshop lines; open lines (e.g. not arrived) may still be sent.
+        NoOfWorkshopLines := CountWorkshopLines();
+        if NoOfWorkshopLines > 0 then begin
+            if LineNos.Count() = 0 then begin
+                Message(AllLinesAlreadySentMsg);
+                exit;
+            end;
+            if not Confirm(WorkshopLinesExistQst, false, NoOfWorkshopLines) then
+                exit;
+        end;
 
         foreach LineNo in LineNos do begin
             PurchLine.Reset();
@@ -151,4 +198,6 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         NoSerialNosErr: Label 'No serial number is assigned and the item has no serial no. series.';
         ErrorLineTxt: Label 'Line %1 (%2): %3', Comment = '%1 = line no., %2 = item no., %3 = reason';
         LinesNotSentMsg: Label 'The following lines were not sent to the workshop:\%1', Comment = '%1 = list of line errors';
+        WorkshopLinesExistQst: Label 'There are already %1 workshop lines for this order. Do you want to send the remaining lines to the workshop?', Comment = '%1 = number of existing workshop lines';
+        AllLinesAlreadySentMsg: Label 'Workshop lines already exist for this order. There are no further lines to send to the workshop.';
 }

@@ -116,9 +116,13 @@ For every incoming SellWatch offer, Business Central automatically creates a new
 
 The new item takes over all values maintained on the template (e.g. posting groups, base unit of measure, item category) as well as the template's **default dimensions**. Description (brand, model, construction year) and Description 2 (reference) always come from the SellWatch offer.
 
+In addition, the system fills the watch data of the offer into **item attributes**: brand → Marke (1), model → Modell (2), reference → Referenz (5), construction year → Jahr (8), condition → Zustand (10), box available → Box (11, "ja"/"nein"), taxation → Besteuerung (12), papers available → Zertifikat (13, "ja"/"nein"), gender → Geschlecht (24). Empty values are skipped, as is a construction year that is not a whole number (e.g. "ca. 2015") — the offer is still created. If a value is not yet in the attribute's value list (e.g. a new model), it is added there. These attributes later appear as master data on the workshop line.
+
 **Item numbers:** If a series is set in the template's **"No. Series"** field, the item gets its number from that series — this lets commission and standard items have their own number ranges. If none is set, the item number series from the inventory setup applies. The series must allow default numbers.
 
 > **Important:** Both fields must be filled in before SellWatch processing runs. If the commission template is missing, processing does **not** fall back to the standard template — the offer stays unprocessed with an error message. Tip: test each template once via "Items → New" by selecting the template; if an item can be created there, it will also work for SellWatch.
+
+> **Serial number tracking is mandatory:** Every SellWatch item is created with serial number tracking. Set up an **item tracking code** with serial number tracking for purchases on **both** templates. If it is missing or does not track serial numbers, no item is created and the offer stays open with an error message. Recommended: also maintain the **Serial Nos.** on the templates; without them, "Send to Workshop" cannot assign a serial number automatically later.
 
 ## SellWatch – Errors during automatic processing
 
@@ -164,23 +168,24 @@ Codeunit **"CXW Process Workshop Lines"** processes all Workshop lines with stat
 
 ### 3. Item attributes — meaning of the attribute fields
 
-The workshop reports back up to ten attributes per watch. Eight of them have a defined business meaning and are automatically written to the item as standard item attributes once authenticity is confirmed:
+The workshop reports back up to ten check attributes per watch. Seven of them are mapped to an existing item attribute (by attribute ID) and are automatically written to the item once authenticity is confirmed:
 
-| Attribute no. | Meaning |
+| Field on the workshop line | Item attribute (ID) |
 |---|---|
-| 1 | Dial Color |
-| 2 | Case Diameter |
-| 3 | Bracelet Material |
-| 4 | Case Material |
-| 5 | Movement |
-| 6 | Gender |
-| 7 | Crystal |
-| 8 | Features |
-| 9–10 | Not yet assigned a business meaning (placeholder) |
+| Dial Color | Zifferblatt Farbe 1 (22) |
+| Case Diameter | Gehäuse Größe (18) — a number, e.g. "41" |
+| Bracelet Material | Armband Material (23) |
+| Case Material | Gehäuse Material (16) |
+| Movement | Werk (15) |
+| Gender | Geschlecht (24) |
+| Crystal | Glas (20) |
+| Features, Attribut 9, Attribut 10 | no attribute yet (placeholders) — neither prefilled nor written back |
 
-> Missing standard item attributes are created automatically as needed (type Text) — no manual pre-setup required.
+> **No new item attributes** are created. If the workshop reports a value that is not yet in the attribute's value list, it is added there as a new value. A non-numeric value for "Gehäuse Größe" (e.g. "41 mm") sets the line to status **Error**.
 
-> **Prefill:** On "Send to Workshop", these ten fields are prefilled with the current values of the item attributes of the same name (e.g. item attribute "Dial Color"). If that attribute is not maintained on the item, the corresponding German attribute is used (e.g. "Zifferblatt Farbe 1", "Gehäuse Größe", "Armband Material", "Gehäuse Material", "Werk", "Geschlecht", "Glas"); if that has no value either, the field stays empty. If the workshop corrects such a value, the correction is stored in the English-named attribute. If the workshop confirms a value from the German attribute unchanged, nothing is written back. The workshop checks the values and corrects them if needed; the corrected values are written back to the item on processing. Therefore maintain the attributes before "Send to Workshop" where possible. A field cleared by the workshop does not remove the value from the item.
+> **Prefill:** On "Send to Workshop", the seven mapped fields are prefilled with the current values of these attributes; if the item has no value, the field stays empty. The workshop checks the values and corrects them if needed; on processing, the values are written back to the same attribute. A field cleared by the workshop does not remove the value from the item.
+
+> **Where the attribute values come from:** For items created from a SellWatch offer, the system fills Marke (1), Modell (2), Referenz (5), Jahr (8), Zustand (10), Box (11), Besteuerung (12), Zertifikat (13) and Geschlecht (24) automatically from the offer (see SellWatch). For manually created items, the attributes must be maintained manually before "Send to Workshop".
 
 ## Status and error handling of Workshop lines
 
@@ -246,6 +251,7 @@ Access to all sales price management objects is controlled through the **"CXWChr
 | Problem | Cause / Solution |
 |---|---|
 | SellWatch offer is not processed; on the SellWatch Overview, "Last Error" says "No … item template is set up" or "The item template … no longer exists" | On the purchases & payables setup ("SellWatch" section), set or correct the template matching the offer type — commission → "SellWatch Item Template (Commission)", all others → "SellWatch Item Template (Standard)". The offer is processed again automatically on the next run. |
+| "Last Error" says the item template has no item tracking code with serial number tracking | Set up an item tracking code with serial number tracking for purchases on the named item template. The offer is processed again automatically on the next run. |
 | SellWatch offer stays open, "Last Error" shows a different message | Read the message and fix the setup it names (e.g. posting groups of the item template, payment methods `C2C`/`RG`, location `HL`). The offer is processed again automatically on the next run; other offers are not blocked. |
 | "Import CSV" cannot be run | Base settings (Minimum Margin %, Stock Price Threshold %) are not filled in, or the list still contains price lines from a previous run. |
 | "Add all Countries" produces no line for a specific country | Check that "Sales Price Activated" is enabled for that country on the "Countries/Regions" page. |

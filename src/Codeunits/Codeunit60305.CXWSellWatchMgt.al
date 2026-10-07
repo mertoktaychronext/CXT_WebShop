@@ -165,8 +165,46 @@ codeunit 60305 "CXW SellWatch Mgt"
         Item.Validate("Description 2", CopyStr(SellWatchVendorInfo."CXW Reference", 1, MaxStrLen(Item."Description 2")));
         if SellWatchVendorInfo."CXW Offer Type" = 'commission' then
             Item.Validate("CXB Consignment Sales", true);
+        // Attributes first: Item.Modify triggers the ChronextBC item export, which snapshots the item attributes.
+        SetSellWatchItemAttributes(Item."No.");
         Item.Modify(true);
         exit(Item."No.");
+    end;
+
+    // Writes the watch data of the offer to the item attributes (IDs = field no. in ChronextBC "Item Attribute Collection"),
+    // so the workshop line gets them as master data. Empty values are skipped; a construction year that is not a whole
+    // number is skipped instead of failing the whole offer on the integer attribute.
+    local procedure SetSellWatchItemAttributes(ItemNo: Code[20])
+    var
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
+        ConstructionYear: Integer;
+    begin
+        SetItemAttributeIfNotEmpty(ItemNo, 1, SellWatchVendorInfo."CXW Brand"); // Marke
+        SetItemAttributeIfNotEmpty(ItemNo, 2, SellWatchVendorInfo."CXW Model"); // Modell
+        SetItemAttributeIfNotEmpty(ItemNo, 5, SellWatchVendorInfo."CXW Reference"); // Referenz
+        if Evaluate(ConstructionYear, SellWatchVendorInfo."CXW Construction Year") then
+            WorkshopLineMgt.SetItemAttributeValue(ItemNo, 8, Format(ConstructionYear, 0, 9)); // Jahr
+        SetItemAttributeIfNotEmpty(ItemNo, 10, SellWatchVendorInfo."CXW Watch Condition"); // Zustand
+        WorkshopLineMgt.SetItemAttributeValue(ItemNo, 11, YesNoAttributeValue(SellWatchVendorInfo."CXW Box Available")); // Box
+        SetItemAttributeIfNotEmpty(ItemNo, 12, SellWatchVendorInfo."CXW Taxation"); // Besteuerung
+        WorkshopLineMgt.SetItemAttributeValue(ItemNo, 13, YesNoAttributeValue(SellWatchVendorInfo."CXW Paper Available")); // Zertifikat
+        SetItemAttributeIfNotEmpty(ItemNo, 24, SellWatchVendorInfo."CXW Gender"); // Geschlecht
+    end;
+
+    local procedure SetItemAttributeIfNotEmpty(ItemNo: Code[20]; AttributeId: Integer; Value: Text[250])
+    var
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
+    begin
+        if Value <> '' then
+            WorkshopLineMgt.SetItemAttributeValue(ItemNo, AttributeId, Value);
+    end;
+
+    // Values of the option list of the attributes Box and Zertifikat.
+    local procedure YesNoAttributeValue(Value: Boolean): Text[250]
+    begin
+        if Value then
+            exit('ja');
+        exit('nein');
     end;
 
     local procedure GetSellWatchItemTemplateCode(): Code[20]
@@ -187,7 +225,22 @@ codeunit 60305 "CXW SellWatch Mgt"
         end;
         if not ItemTempl.Get(ItemTemplCode) then
             Error(ItemTemplateNotFoundErr, ItemTemplCode);
+        // Every SellWatch watch is serial-number tracked; the item takes the tracking code from the template.
+        // Same condition as "Send to Workshop" requires, so a wrong template fails here instead of at the workshop.
+        if not IsSerialNoTrackingCode(ItemTempl."Item Tracking Code") then
+            Error(ItemTemplateNoSNTrackingErr, ItemTemplCode);
         exit(ItemTemplCode);
+    end;
+
+    local procedure IsSerialNoTrackingCode(ItemTrackingCodeCode: Code[10]): Boolean
+    var
+        ItemTrackingCode: Record "Item Tracking Code";
+    begin
+        if ItemTrackingCodeCode = '' then
+            exit(false);
+        if not ItemTrackingCode.Get(ItemTrackingCodeCode) then
+            exit(false);
+        exit(ItemTrackingCode."SN Purchase Inbound Tracking");
     end;
 
     local procedure CreatePurchaseOrderinBV()
@@ -290,4 +343,5 @@ codeunit 60305 "CXW SellWatch Mgt"
         NoConsignItemTemplateSetUpErr: Label 'No commission item template is set up for SellWatch item creation. Please set the SellWatch Item Template (Commission) field on the Purchases & Payables Setup page.';
         ItemNotCreatedFromTemplateErr: Label 'The item for the SellWatch offer could not be created from item template %1.', Comment = '%1 = item template code';
         ItemTemplateNotFoundErr: Label 'The item template %1 set up on the Purchases & Payables Setup page no longer exists. Cannot create an item for the SellWatch offer.', Comment = '%1 = item template code';
+        ItemTemplateNoSNTrackingErr: Label 'The item template %1 has no item tracking code with serial number tracking for purchases. SellWatch items must be serial-number tracked. Set up such an item tracking code on the item template.', Comment = '%1 = item template code';
 }

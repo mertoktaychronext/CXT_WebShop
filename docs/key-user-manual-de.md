@@ -116,9 +116,13 @@ Für jedes eingehende SellWatch-Angebot legt Business Central automatisch einen 
 
 Aus der Vorlage übernimmt der neue Artikel alle dort gepflegten Werte (z. B. Buchungsgruppen, Basiseinheit, Artikelkategorie) sowie die **Standarddimensionen** der Vorlage. Beschreibung (Marke, Modell, Baujahr) und Beschreibung 2 (Referenz) kommen immer aus dem SellWatch-Angebot.
 
+Zusätzlich trägt das System die Uhrendaten des Angebots als **Artikelattribute** ein: Marke → Marke (1), Modell → Modell (2), Referenz → Referenz (5), Baujahr → Jahr (8), Zustand → Zustand (10), Box vorhanden → Box (11, „ja“/„nein“), Besteuerung → Besteuerung (12), Papiere vorhanden → Zertifikat (13, „ja“/„nein“), Geschlecht → Geschlecht (24). Leere Angaben werden übersprungen, ein Baujahr, das keine ganze Zahl ist (z. B. „ca. 2015“), ebenfalls – das Angebot wird trotzdem angelegt. Steht ein Wert noch nicht in der Werteliste des Attributs (z. B. ein neues Modell), wird er dort neu angelegt. Diese Attribute erscheinen später als Stammdaten auf der Werkstattzeile.
+
 **Artikelnummern:** Ist an der Vorlage im Feld **"Nummernserie"** eine Serie hinterlegt, erhält der Artikel seine Nummer aus dieser Serie – so können Kommissions- und Standardartikel eigene Nummernkreise bekommen. Ist dort nichts hinterlegt, gilt die Artikelnummernserie der Lagereinrichtung. Die Serie muss Standardnummern erlauben.
 
 > **Wichtig:** Beide Felder müssen gefüllt sein, bevor die SellWatch-Verarbeitung läuft. Fehlt die Vorlage für Kommission, wird **nicht** auf die Standardvorlage ausgewichen – das Angebot bleibt mit einer Fehlermeldung unverarbeitet. Tipp: Testen Sie jede Vorlage einmal über „Artikel → Neu“ mit Auswahl der Vorlage; lässt sich dort ein Artikel anlegen, funktioniert sie auch für SellWatch.
+
+> **Seriennummernverfolgung ist Pflicht:** Jeder SellWatch-Artikel wird mit Seriennummernverfolgung angelegt. Hinterlegen Sie an **beiden** Vorlagen einen **Artikelverfolgungscode**, bei dem die Seriennummernverfolgung im Einkauf aktiv ist. Fehlt er oder verfolgt er keine Seriennummern, wird kein Artikel angelegt, und das Angebot bleibt mit Fehlermeldung offen. Empfohlen: Pflegen Sie an den Vorlagen auch die **Seriennr.-Nummern**. Ohne sie kann "Send to Workshop" später keine Seriennummer automatisch vergeben.
 
 ## SellWatch – Fehler bei der automatischen Verarbeitung
 
@@ -164,23 +168,24 @@ Codeunit **"CXW Process Workshop Lines"** verarbeitet alle Workshop-Zeilen im St
 
 ### 3. Artikelattribute – fachliche Bedeutung der Attributfelder
 
-Die Werkstatt meldet je Uhr bis zu zehn Attribute zurück. Acht davon sind fachlich benannt und werden bei bestätigter Echtheit automatisch als Standard-Artikelattribut auf den Artikel übernommen:
+Die Werkstatt meldet je Uhr bis zu zehn Prüfmerkmale zurück. Sieben davon sind fest einem vorhandenen Artikelattribut zugeordnet (über die Attribut-ID) und werden bei bestätigter Echtheit automatisch auf den Artikel übernommen:
 
-| Attribut-Nr. | Bedeutung |
+| Feld auf der Werkstattzeile | Artikelattribut (ID) |
 |---|---|
-| 1 | Zifferblattfarbe (Dial Color) |
-| 2 | Gehäusedurchmesser (Case Diameter) |
-| 3 | Armbandmaterial (Bracelet Material) |
-| 4 | Gehäusematerial (Case Material) |
-| 5 | Werk (Movement) |
-| 6 | Geschlecht (Gender) |
-| 7 | Glas (Crystal) |
-| 8 | Ausstattung (Features) |
-| 9–10 | Noch ohne fachliche Bezeichnung (Platzhalter) |
+| Dial Color | Zifferblatt Farbe 1 (22) |
+| Case Diameter | Gehäuse Größe (18) – Zahl, z. B. „41“ |
+| Bracelet Material | Armband Material (23) |
+| Case Material | Gehäuse Material (16) |
+| Movement | Werk (15) |
+| Gender | Geschlecht (24) |
+| Crystal | Glas (20) |
+| Features, Attribut 9, Attribut 10 | noch kein Attribut (Platzhalter) – werden weder vorbefüllt noch zurückgeschrieben |
 
-> Fehlende Standard-Artikelattribute legt das System bei Bedarf automatisch an (Typ Text) – keine manuelle Voreinrichtung nötig.
+> Es werden **keine neuen Artikelattribute** angelegt. Meldet die Werkstatt einen Wert, der in der Werteliste des Attributs noch nicht vorkommt, wird er dort als neuer Wert angelegt. Ein nicht numerischer Wert für "Gehäuse Größe" (z. B. „41 mm“) führt zu Status **Fehler** auf der Zeile.
 
-> **Vorbefüllung:** Beim "Send to Workshop" werden diese zehn Felder mit den aktuellen Werten der gleichnamigen Artikelattribute des Artikels vorbefüllt (z. B. Artikelattribut "Dial Color"). Ist dieses Attribut am Artikel nicht gepflegt, wird das entsprechende deutsche Attribut verwendet (z. B. "Zifferblatt Farbe 1", "Gehäuse Größe", "Armband Material", "Gehäuse Material", "Werk", "Geschlecht", "Glas"); gibt es auch dort keinen Wert, bleibt das Feld leer. Korrigiert die Werkstatt einen solchen Wert, wird die Korrektur im englisch benannten Attribut gespeichert. Bestätigt die Werkstatt einen Wert aus dem deutschen Attribut unverändert, wird nichts zurückgeschrieben. Die Werkstatt prüft die Werte und korrigiert sie bei Bedarf; die korrigierten Werte gehen bei der Verarbeitung zurück an den Artikel. Pflegen Sie die Attribute daher möglichst vor dem "Send to Workshop". Ein von der Werkstatt geleertes Feld entfernt den Wert am Artikel nicht.
+> **Vorbefüllung:** Beim "Send to Workshop" werden die sieben zugeordneten Felder mit den aktuellen Werten dieser Attribute vorbefüllt; ist am Artikel kein Wert gepflegt, bleibt das Feld leer. Die Werkstatt prüft die Werte und korrigiert sie bei Bedarf; bei der Verarbeitung gehen die Werte in dasselbe Attribut zurück. Ein von der Werkstatt geleertes Feld entfernt den Wert am Artikel nicht.
+
+> **Woher die Attributwerte kommen:** Bei Artikeln aus einer SellWatch-Anfrage trägt das System Marke (1), Modell (2), Referenz (5), Jahr (8), Zustand (10), Box (11), Besteuerung (12), Zertifikat (13) und Geschlecht (24) automatisch aus der Anfrage ein (siehe SellWatch). Bei manuell angelegten Artikeln müssen die Attribute vor dem "Send to Workshop" manuell gepflegt werden.
 
 ## Status und Fehlerbehandlung der Workshop-Zeilen
 
@@ -246,6 +251,7 @@ Der Zugriff auf alle Objekte der Verkaufspreisverwaltung ist über das Permissio
 | Problem | Ursache / Lösung |
 |---|---|
 | SellWatch-Angebot wird nicht verarbeitet, in der SellWatch-Übersicht steht unter "Letzter Fehler" „keine Artikelvorlage … eingerichtet“ oder „Artikelvorlage … existiert nicht mehr“ | In der Einkaufseinrichtung (Bereich "SellWatch") die zur Angebotsart passende Vorlage hinterlegen bzw. korrigieren – Kommission → "SellWatch-Artikelvorlage (Kommission)", alle anderen → "SellWatch-Artikelvorlage (Standard)". Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet. |
+| "Letzter Fehler" meldet, die Artikelvorlage habe keinen Artikelverfolgungscode mit Seriennummernverfolgung | An der genannten Artikelvorlage einen Artikelverfolgungscode mit Seriennummernverfolgung im Einkauf hinterlegen. Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet. |
 | SellWatch-Angebot bleibt offen, "Letzter Fehler" zeigt eine andere Meldung | Meldung lesen und die genannte Einrichtung korrigieren (z. B. Buchungsgruppen der Artikelvorlage, Zahlungsformen `C2C`/`RG`, Lagerort `HL`). Das Angebot wird beim nächsten Lauf automatisch erneut verarbeitet; andere Angebote sind nicht blockiert. |
 | Import CSV lässt sich nicht ausführen | Grundeinstellungen (Mindestmarge %, Schwellenwert Lagerpreis %) sind nicht befüllt, oder die Liste enthält noch Preiszeilen aus einem vorherigen Durchlauf. |
 | "Add all Countries" erzeugt keine Zeile für ein bestimmtes Land | Prüfen Sie, ob für das Land (Seite "Countries/Regions") "Verkaufspreis aktiviert" gesetzt ist. |
