@@ -42,37 +42,10 @@ codeunit 60335 "CXW Workshop Line Mgt."
         exit(10);
     end;
 
-    // Single mapping workshop line field -> item attribute name, used for prefilling and for writing back.
-    // TODO: Attributnamen für Attribut 9/10 final klären (Platzhalter!)
-    procedure GetWorkshopAttributeName(AttributeIndex: Integer): Text[250]
-    begin
-        case AttributeIndex of
-            1:
-                exit('Dial Color');
-            2:
-                exit('Case Diameter');
-            3:
-                exit('Bracelet Material');
-            4:
-                exit('Case Material');
-            5:
-                exit('Movement');
-            6:
-                exit('Gender');
-            7:
-                exit('Crystal');
-            8:
-                exit('Features');
-            9:
-                exit('Attribut 9');
-            10:
-                exit('Attribut 10');
-        end;
-    end;
-
-    // Fallback for the prefill only: ChronextBC attribute (ID = field no. in "Item Attribute Collection")
-    // used when the item has no value for the attribute above; 0 = no fallback.
-    local procedure GetWorkshopAttributeFallbackId(AttributeIndex: Integer): Integer
+    // Single mapping workshop line field -> item attribute ID (= field no. in ChronextBC "Item Attribute Collection"),
+    // used for prefilling and for writing back. 0 = placeholder without an attribute: neither prefilled nor written back;
+    // assigning an ID here enables both.
+    procedure GetWorkshopAttributeId(AttributeIndex: Integer): Integer
     begin
         case AttributeIndex of
             1:
@@ -90,6 +63,7 @@ codeunit 60335 "CXW Workshop Line Mgt."
             7:
                 exit(20); // Glas
         end;
+        // 8 Features, 9 Attribut 9, 10 Attribut 10: placeholders
         exit(0);
     end;
 
@@ -145,51 +119,57 @@ codeunit 60335 "CXW Workshop Line Mgt."
         end;
     end;
 
-    // True if the value was prefilled from the ChronextBC fallback and the workshop left it unchanged:
-    // the named attribute has no value on the item and the value equals the fallback attribute value.
-    // Such values are not written back, so the named attribute is not filled with the fallback text.
-    procedure IsUnchangedFallbackValue(pItemNo: Code[20]; AttributeIndex: Integer; Value: Text[250]): Boolean
-    var
-        AttributeId: Integer;
-    begin
-        if GetWorkshopAttributeFallbackId(AttributeIndex) = 0 then
-            exit(false);
-        AttributeId := FindItemAttributeId(GetWorkshopAttributeName(AttributeIndex));
-        if AttributeId <> 0 then
-            if GetItemAttributeValue(pItemNo, AttributeId) <> '' then
-                exit(false);
-        exit(Value = GetItemAttributeValue(pItemNo, GetWorkshopAttributeFallbackId(AttributeIndex)));
-    end;
-
     // Fills only empty fields, so values the workshop already reported are never overwritten.
     local procedure FillEmptyWorkshopAttributes(var WorkshopLine: Record "CXW Workshop Line"; pItemNo: Code[20])
     var
         AttributeIndex: Integer;
-        AttributeId: Integer;
-        AttributeValue: Text[250];
     begin
         for AttributeIndex := 1 to WorkshopAttributeCount() do
-            if GetWorkshopAttributeValue(WorkshopLine, AttributeIndex) = '' then begin
-                // A missing attribute leaves the field empty; attributes are only created when writing back.
-                AttributeValue := '';
-                AttributeId := FindItemAttributeId(GetWorkshopAttributeName(AttributeIndex));
-                if AttributeId <> 0 then
-                    AttributeValue := GetItemAttributeValue(pItemNo, AttributeId);
-                if (AttributeValue = '') and (GetWorkshopAttributeFallbackId(AttributeIndex) <> 0) then
-                    AttributeValue := GetItemAttributeValue(pItemNo, GetWorkshopAttributeFallbackId(AttributeIndex));
-                SetWorkshopAttributeValue(WorkshopLine, AttributeIndex, AttributeValue);
-            end;
+            if (GetWorkshopAttributeId(AttributeIndex) <> 0) and (GetWorkshopAttributeValue(WorkshopLine, AttributeIndex) = '') then
+                SetWorkshopAttributeValue(WorkshopLine, AttributeIndex, GetItemAttributeValue(pItemNo, GetWorkshopAttributeId(AttributeIndex)));
     end;
 
-    local procedure FindItemAttributeId(pAttributeName: Text[250]): Integer
+    // Assigns a value to an existing item attribute of the item, used by the SellWatch item creation and the
+    // workshop write-back. A value not yet in the attribute's value list is created; the attribute itself is never
+    // created. Validating the value lets the standard reject non-numeric values for integer/decimal attributes.
+    internal procedure SetItemAttributeValue(pItemNo: Code[20]; pAttributeId: Integer; pValue: Text[250])
     var
         ItemAttribute: Record "Item Attribute";
+        ItemAttributeValueMapping: Record "Item Attribute Value Mapping";
+        ValueId: Integer;
     begin
-        ItemAttribute.SetLoadFields(ID, Name);
-        ItemAttribute.SetRange(Name, pAttributeName);
-        if ItemAttribute.FindFirst() then
-            exit(ItemAttribute.ID);
-        exit(0);
+        ItemAttribute.Get(pAttributeId);
+        ValueId := GetOrCreateAttributeValueId(pAttributeId, pValue);
+
+        if ItemAttributeValueMapping.Get(Database::Item, pItemNo, pAttributeId) then begin
+            if ItemAttributeValueMapping."Item Attribute Value ID" = ValueId then
+                exit;
+            ItemAttributeValueMapping."Item Attribute Value ID" := ValueId;
+            ItemAttributeValueMapping.Modify();
+        end else begin
+            ItemAttributeValueMapping.Init();
+            ItemAttributeValueMapping."Table ID" := Database::Item;
+            ItemAttributeValueMapping."No." := pItemNo;
+            ItemAttributeValueMapping."Item Attribute ID" := pAttributeId;
+            ItemAttributeValueMapping."Item Attribute Value ID" := ValueId;
+            ItemAttributeValueMapping.Insert();
+        end;
+    end;
+
+    local procedure GetOrCreateAttributeValueId(pAttributeId: Integer; pValue: Text[250]): Integer
+    var
+        ItemAttributeValue: Record "Item Attribute Value";
+    begin
+        ItemAttributeValue.SetRange("Attribute ID", pAttributeId);
+        ItemAttributeValue.SetRange(Value, pValue);
+        if ItemAttributeValue.FindFirst() then
+            exit(ItemAttributeValue.ID);
+
+        ItemAttributeValue.Init();
+        ItemAttributeValue."Attribute ID" := pAttributeId;
+        ItemAttributeValue.Validate(Value, pValue);
+        ItemAttributeValue.Insert(true);
+        exit(ItemAttributeValue.ID);
     end;
 
     // Serial number handling for "Send to Workshop": the watch is identified by its BC serial number,

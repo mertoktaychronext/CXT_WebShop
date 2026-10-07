@@ -54,52 +54,52 @@ page 60338 "CXW Workshop Lines"
                 field("CXW Dial Color"; Rec."CXW Dial Color")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Dial Color". It is prefilled from the item when the line is sent to the workshop (from "Zifferblatt Farbe 1" if "Dial Color" is not maintained), may be corrected by the workshop, and is written back to "Dial Color" when the line is processed. A value taken from "Zifferblatt Farbe 1" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Zifferblatt Farbe 1" (ID 22). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Case Diameter"; Rec."CXW Case Diameter")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Case Diameter". It is prefilled from the item when the line is sent to the workshop (from "Gehäuse Größe" if "Case Diameter" is not maintained), may be corrected by the workshop, and is written back to "Case Diameter" when the line is processed. A value taken from "Gehäuse Größe" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Gehäuse Größe" (ID 18). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Bracelet Material"; Rec."CXW Bracelet Material")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Bracelet Material". It is prefilled from the item when the line is sent to the workshop (from "Armband Material" if "Bracelet Material" is not maintained), may be corrected by the workshop, and is written back to "Bracelet Material" when the line is processed. A value taken from "Armband Material" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Armband Material" (ID 23). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Case Material"; Rec."CXW Case Material")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Case Material". It is prefilled from the item when the line is sent to the workshop (from "Gehäuse Material" if "Case Material" is not maintained), may be corrected by the workshop, and is written back to "Case Material" when the line is processed. A value taken from "Gehäuse Material" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Gehäuse Material" (ID 16). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Movement"; Rec."CXW Movement")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Movement". It is prefilled from the item when the line is sent to the workshop (from "Werk" if "Movement" is not maintained), may be corrected by the workshop, and is written back to "Movement" when the line is processed. A value taken from "Werk" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Werk" (ID 15). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Gender"; Rec."CXW Gender")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Gender". It is prefilled from the item when the line is sent to the workshop (from "Geschlecht" if "Gender" is not maintained), may be corrected by the workshop, and is written back to "Gender" when the line is processed. A value taken from "Geschlecht" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Geschlecht" (ID 24). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Crystal"; Rec."CXW Crystal")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Crystal". It is prefilled from the item when the line is sent to the workshop (from "Glas" if "Crystal" is not maintained), may be corrected by the workshop, and is written back to "Crystal" when the line is processed. A value taken from "Glas" and left unchanged is not written back.';
+                    ToolTip = 'Specifies the value of the item attribute "Glas" (ID 20). It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the same attribute when the line is processed.';
                 }
                 field("CXW Features"; Rec."CXW Features")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Features". It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the item when the line is processed.';
+                    ToolTip = 'Specifies an additional value reported by the workshop. No item attribute is assigned to this field yet, so it is neither prefilled nor written back to the item.';
                 }
                 field("CXW Attribute 9"; Rec."CXW Attribute 9")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Attribut 9". It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the item when the line is processed.';
+                    ToolTip = 'Specifies an additional value reported by the workshop. No item attribute is assigned to this field yet, so it is neither prefilled nor written back to the item.';
                 }
                 field("CXW Attribute 10"; Rec."CXW Attribute 10")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the item attribute "Attribut 10". It is prefilled from the item when the line is sent to the workshop, may be corrected by the workshop, and is written back to the item when the line is processed.';
+                    ToolTip = 'Specifies an additional value reported by the workshop. No item attribute is assigned to this field yet, so it is neither prefilled nor written back to the item.';
                 }
                 field("CXW Created At"; Rec."CXW Created At")
                 {
