@@ -1,10 +1,10 @@
 # Funktionsregister – CHX.Webshop
 
-**Version:** 27.0.0.10
+**Version:** 27.0.0.16
 **Publisher:** Salini Life
 **Extension-ID:** 5df32934-5708-418c-ba16-44b30feb51f4
-**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen), vollständig gegengeprüft und nachgezogen am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; 35 bisher fehlende Objekte ergänzt – neue Bereiche **On-Demand-Beschaffung**, **Webshop-Verfügbarkeit & Lieferzeiten** und **Kennzeichen "Auftrag halten"**, dazu SalesPrice-Export über Aufgabenwarteschlange [Table/Page 60320, Codeunit 60332–60334, EnumExt 60300, PageExt 60336] und Workshop-Bestelldaten [Codeunit 60335/60336]; Codeunit 60329 und Aktion "Release Sales Prices" auf Page 60322 neu beschrieben; TableExtension 60346 entfernt [Länderfelder liegen jetzt in ChronextBC]; API-Pfad von Page 60339 korrigiert – Version 27.0.0.8, 92 Objekte / 326 Funktionen), aktualisiert am 2026-09-30 (Kennzeichen "Auftrag halten" nach CHX.Base verschoben: TableExtension 60300 und PageExtension 60337 entfernt, Feld aus PageExtension 60334 entfernt – Version 27.0.0.10, 90 Objekte / 325 Funktionen; seit 29.09. neu hinzugekommene Objekte anderer Entwickler, z. B. Codeunit 60350, sind noch nicht erfasst), aktualisiert am 2026-09-30 (SellWatch: zwei Artikelvorlagen je Angebotsart, Artikelanlage über Standard "Item Templ. Mgt.", neue Prozedur `GetSellWatchItemTemplateCode` – 326 Funktionen), aktualisiert am 2026-09-30 (SellWatch: Einzelverarbeitung je Angebot mit Fehlerprotokoll – neuer Codeunit 60351, Prozeduren `ProcessOffer`/`ProcessOfferWithErrorHandling`, Trigger `OnAfterGetRecord` auf Page 60307 – 91 Objekte / 330 Funktionen), aktualisiert am 2026-09-30 (Send to Workshop: Seriennr.-Informationskarte statt Page 60340, Seriennummer-Prozeduren in Codeunit 60335, `TryCheckPresenceMandatory` in PageExtension 60328 – 90 Objekte / 334 Funktionen)
-**Abhängigkeiten:** CHX.Base (27.0.3.4), ChronextBC (liefert "Data Export Entry"/"Data Export API Setup" sowie die Länderfelder für Verkaufspreise und Lieferzeiten)
+**Erstellt am:** 2026-08-11, vollständig neu erstellt am 2026-08-12, aktualisiert am 2026-08-12 (Workshop-Ankaufsprüfung ergänzt, SellWatch-Artikelanlage auf Item-Template umgestellt), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Status "Fehler" und Feld "Letzter Fehler" ergänzt), vollständig gegengeprüft am 2026-08-13 (alle 50 AL-Dateien erneut gegen den Code geprüft; fehlende Aktion "Upload Sales Price" auf Seite 60322 ergänzt, sonst keine Abweichungen gefunden), aktualisiert am 2026-08-13 (Workshop-Ankaufsprüfung: Attribut 1–8 fachlich benannt statt Platzhalter), erneut gegengeprüft am 2026-08-13 (nur AL-Bezeichner der Felder 11–18 auf Tabelle 60318 umbenannt [z. B. "CXW Attribute 1" → "CXW Dial Color"], Captions unverändert; Verweise in Codeunit 60331, Seite 60338 und Seite 60339 gegen den aktuellen Code geprüft – Beschreibungen weiterhin korrekt, keine Änderung nötig), aktualisiert am 2026-08-14 (Kommissionsverkauf: verzögerte EK-Faktura ergänzt – neue Tabelle 60341, Enum 60343, Seite 60342, Codeunit 60344/60345; Permission Set 60301 erweitert; außerdem den seit Version 27.0.1.1 bereits real existierenden Bereich TableExtension 60322/PageExtension 60330 "CXW SW Purchases Setup" nachträglich erfasst und dabei die Objektzählung korrigiert [Tabellenerweiterungen und Seitenerweiterungen waren zuvor je um 1 zu niedrig]), vollständig gegengeprüft am 2026-09-02 (alle 57 AL-Objekte erneut Zeile für Zeile gegen den aktuellen Code abgeglichen – keine strukturellen Abweichungen; `CreateSellWatchItem` in Codeunit 60305 präzisiert: die Artikelvorlage wird jetzt aus dem Feld "SellWatch Item Template" der Einkaufseinrichtung gelesen, nicht mehr fest als erste vorhandene Vorlage; Version auf 27.0.0.2 nachgezogen), aktualisiert am 2026-09-23 (Verkaufspreisverwaltung: Aktion "Add all Currencies" durch "Add all Countries" ersetzt, neue Prozeduren `fnAddAllCountries`/`CreateCountryLine` auf Page 60322, Tabellen-/Seitenerweiterung 60320/60327 auf Währung entfernt und durch 60346/60347 auf Land/Region ersetzt, `CreateExternalInterfaceFile` um Ländercode erweitert – 57 Objekte / 124 Funktionen), aktualisiert am 2026-09-24 (SalesPrice-Export protokolliert Übertragungen in der ChronextBC-Tabelle „Data Export Entry" statt in Tabelle 60314; neue Prozedur `CreateDataExportEntry` in Codeunit 60329; Tabelle 60314 als veraltet markiert, Version 27.0.0.3 – 57 Objekte / 125 Funktionen), vollständig gegengeprüft und nachgezogen am 2026-09-29 (alle 92 AL-Objekte gegen den Code abgeglichen; 35 bisher fehlende Objekte ergänzt – neue Bereiche **On-Demand-Beschaffung**, **Webshop-Verfügbarkeit & Lieferzeiten** und **Kennzeichen "Auftrag halten"**, dazu SalesPrice-Export über Aufgabenwarteschlange [Table/Page 60320, Codeunit 60332–60334, EnumExt 60300, PageExt 60336] und Workshop-Bestelldaten [Codeunit 60335/60336]; Codeunit 60329 und Aktion "Release Sales Prices" auf Page 60322 neu beschrieben; TableExtension 60346 entfernt [Länderfelder liegen jetzt in ChronextBC]; API-Pfad von Page 60339 korrigiert – Version 27.0.0.8, 92 Objekte / 326 Funktionen), aktualisiert am 2026-09-30 (Kennzeichen "Auftrag halten" nach CHX.Base verschoben: TableExtension 60300 und PageExtension 60337 entfernt, Feld aus PageExtension 60334 entfernt – Version 27.0.0.10, 90 Objekte / 325 Funktionen; seit 29.09. neu hinzugekommene Objekte anderer Entwickler, z. B. Codeunit 60350, sind noch nicht erfasst), aktualisiert am 2026-09-30 (SellWatch: zwei Artikelvorlagen je Angebotsart, Artikelanlage über Standard "Item Templ. Mgt.", neue Prozedur `GetSellWatchItemTemplateCode` – 326 Funktionen), aktualisiert am 2026-09-30 (SellWatch: Einzelverarbeitung je Angebot mit Fehlerprotokoll – neuer Codeunit 60351, Prozeduren `ProcessOffer`/`ProcessOfferWithErrorHandling`, Trigger `OnAfterGetRecord` auf Page 60307 – 91 Objekte / 330 Funktionen), aktualisiert am 2026-09-30 (Send to Workshop: Seriennr.-Informationskarte statt Page 60340, Seriennummer-Prozeduren in Codeunit 60335, `TryCheckPresenceMandatory` in PageExtension 60328 – 90 Objekte / 334 Funktionen), aktualisiert am 2026-10-06 (Werkstattzeilen auf der Einkaufsbestellung: FlowField "Anzahl Werkstattzeilen" in TableExtension 60304 mit `OnDrillDown` auf PageExtension 60328, neue Prozeduren `ShowWorkshopLines`/`CountWorkshopLines`, Hinweis bzw. Rückfrage in `SendLinesToWorkshop` bei bereits vorhandenen Werkstattzeilen – Version 27.0.0.16, 90 Objekte / 337 Funktionen; nur die geänderten Objekte geprüft, keine vollständige Gegenprüfung), vollständig gegengeprüft am 2026-10-06 (alle 95 AL-Dateien gegen das Register abgeglichen – Objektliste, jede Prozedur/jeder Trigger je Objekt und die Gesamtsumme aus dem Code nachgezählt; neu erfasst: Bereich **Echtzeit-Lagerbestand** [Table/Page/Codeunit/Permission Set 60350] und die wieder vorhandene, als veraltet markierte TableExtension 60300 "CXW Sales Header"; nachgezogen: Vorbelegung der Werkstatt-Attribute [9 neue Prozeduren in Codeunit 60335, Attribut-Zuordnung aus Codeunit 60331 dorthin verschoben], zwei weitere Upgrade-Schritte in Codeunit 60336, `SetCountryRegionCode` in Codeunit 60305, Statusermittlung aus gebuchten Belegen in Codeunit 60346 – Version 27.0.0.16, 95 Objekte / 355 Funktionen), aktualisiert am 2026-10-06 (Artikelattribute per ID: SellWatch-Artikelanlage trägt die Uhrendaten als Artikelattribute ein [`SetSellWatchItemAttributes`, `SetItemAttributeIfNotEmpty`, `YesNoAttributeValue` in Codeunit 60305], Werkstatt-Prüfmerkmale über feste Attribut-IDs statt englischer Namen [`GetWorkshopAttributeId` statt `GetWorkshopAttributeName`, Ersatz-Logik `GetWorkshopAttributeFallbackId`/`IsUnchangedFallbackValue`/`FindItemAttributeId` entfernt], Schreiblogik `SetItemAttributeValue`/`GetOrCreateAttributeValueId` von Codeunit 60331 nach 60335 verschoben, `GetOrCreateAttributeId` entfernt; SellWatch-Artikelvorlage muss Seriennummernverfolgung haben [`IsSerialNoTrackingCode` in Codeunit 60305] – 95 Objekte / 355 Funktionen)
+**Abhängigkeiten:** CHX.Base (28.0.0.0), ChronextBC (liefert "Data Export Entry"/"Data Export API Setup" sowie die Länderfelder für Verkaufspreise und Lieferzeiten)
 
 ---
 
@@ -12,7 +12,7 @@
 
 CHX.Webshop bündelt vier weitgehend eigenständige Funktionsbereiche unter einem Dach: **SellWatch** wickelt den automatisierten Ankauf gebrauchter Uhren ab (eingehende Verkaufsanfragen – inzwischen auch per API von außen anlegbar –, automatische Lieferanten- und Bestellanlage, Online-Sichtbarkeitsprüfung beim Partner SellWatch), die **Workshop-Ankaufsprüfung** bindet eine externe Werkstatt in den Einkaufsprozess ein (Übergabe angekommener Bestellzeilen inkl. Herstellerseriennummer, externe Echtheits-/Attributprüfung per API, automatisierter Wareneingang bei Echtheit bzw. Stornierung bei Nicht-Echtheit), der neue Bereich **Kommissionsverkauf** bucht die Einkaufsrechnung zu auf Kommission verkaufter Ware nicht sofort, sondern verzögert und automatisiert nach der VK-Rechnungsbuchung (einrichtbare Anzahl Tage, mit Fehlerwarteschlange und manueller Nachbearbeitung), und die **Verkaufspreisverwaltung** steuert die Pflege, Prüfung, Freigabe und den Export von Webshop-Verkaufspreisen an ein externes System. Alle Bereiche teilen sich ein gemeinsames HTTP-Aufrufprotokoll bzw. folgen demselben Zwischentabellen-plus-API-Muster (bzw. beim Kommissionsverkauf einem Zwischentabellen-plus-Job-Queue-Muster); die Verkaufspreisverwaltung nutzt zusätzlich eine gemeinsame Schnittstellen-Konfigurationstabelle mit austauschbarer Authentifizierung (API-Schlüssel, Basis-Authentifizierung oder AWS Signature V4) sowie einen CSV-Importweg für Preisdaten und eine automatische Mehrwährungs-Ableitung. SellWatch besitzt seit einer früheren Erweiterung eine eigene, separat berechtigte API-Schreibschnittstelle für externe Systeme; die Workshop-Ankaufsprüfung folgt demselben Prinzip mit einer eigenen, bidirektionalen API für die externe Werkstatt. Der Kommissionsverkauf setzt auf das Artikel-Kennzeichen "Kommissionsverkauf" auf, das die Dependency CHX.Base bereitstellt.
 
-Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **On-Demand-Beschaffung** verknüpft Verkaufsauftragszeilen wiederbeschaffbarer Artikel mit passenden Einkaufsbestellzeilen (manuell oder durch automatische Anlage einer Bestellung) und zeigt den Beschaffungsstand direkt am Verkaufsauftrag. Der Bereich **Webshop-Verfügbarkeit & Lieferzeiten** erkennt Bestandsänderungen in den Webshop-Lagerorten automatisch, berechnet je Land Lieferzeiten und Lagerzeiten und überträgt beides über die ChronextBC-Exportinfrastruktur an den Webshop. Das zwischenzeitlich hier angelegte **Kennzeichen "Auftrag halten"** liegt seit Version 27.0.0.10 in CHX.Base. Die Verkaufspreisverwaltung versendet freigegebene Preise inzwischen nicht mehr direkt, sondern stellt sie in eine Exportwarteschlange, die eine Aufgabenwarteschlange mit automatischer Wiederholung abarbeitet.
+Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **On-Demand-Beschaffung** verknüpft Verkaufsauftragszeilen wiederbeschaffbarer Artikel mit passenden Einkaufsbestellzeilen (manuell oder durch automatische Anlage einer Bestellung) und zeigt den Beschaffungsstand direkt am Verkaufsauftrag. Der Bereich **Webshop-Verfügbarkeit & Lieferzeiten** erkennt Bestandsänderungen in den Webshop-Lagerorten automatisch, berechnet je Land Lieferzeiten und Lagerzeiten und überträgt beides über die ChronextBC-Exportinfrastruktur an den Webshop. Das zwischenzeitlich hier angelegte **Kennzeichen "Auftrag halten"** liegt seit Version 27.0.0.10 in CHX.Base; das alte Feld bleibt nur noch als veraltet markiertes Feld bestehen, seine Werte wurden per Upgrade in das CHX.Base-Feld übernommen. Neu ist der kleine Bereich **Echtzeit-Lagerbestand**, der auf Knopfdruck eine Momentaufnahme aller offenen Lagerbestände des Mandanten mit Seriennummer, Preisen, Uhrenmerkmalen und Einkaufsherkunft aufbaut. Die Verkaufspreisverwaltung versendet freigegebene Preise inzwischen nicht mehr direkt, sondern stellt sie in eine Exportwarteschlange, die eine Aufgabenwarteschlange mit automatischer Wiederholung abarbeitet.
 
 ---
 
@@ -20,17 +20,17 @@ Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **
 
 | Objekttyp | Anzahl |
 |---|---|
-| Codeunits | 17 |
-| Tabellen | 16 |
-| Tabellenerweiterungen | 7 |
-| Seiten | 21 |
+| Codeunits | 18 |
+| Tabellen | 17 |
+| Tabellenerweiterungen | 8 |
+| Seiten | 22 |
 | Seitenerweiterungen | 12 |
 | Xmlports | 1 |
 | Enums | 9 |
 | Enum-Erweiterungen | 1 |
-| Permission Sets | 6 |
-| **Gesamt Objekte** | **90** |
-| **Gesamt Prozeduren/Trigger/Events** | **334** |
+| Permission Sets | 7 |
+| **Gesamt Objekte** | **95** |
+| **Gesamt Prozeduren/Trigger/Events** | **355** |
 
 ---
 
@@ -68,7 +68,7 @@ Ergänzt die Standard-Einkaufszeile um das Kennzeichen "Gebraucht", damit von Se
 
 ### Tabellenerweiterung: CXW SW Purchase Header (ID: 60304)
 
-Ergänzt den Standard-Einkaufskopf um eine Sendungsverfolgungsnummer, die auf eine SellWatch-Bestellung eingetragen und später an SellWatch zurückgemeldet werden kann.
+Ergänzt den Standard-Einkaufskopf um eine Sendungsverfolgungsnummer, die auf eine SellWatch-Bestellung eingetragen und später an SellWatch zurückgemeldet werden kann, sowie um das berechnete Feld "Anzahl Werkstattzeilen", das zählt, wie viele Werkstattzeilen es zur Bestellung gibt (Workshop-Ankaufsprüfung, Anzeige auf PageExtension 60328).
 
 *Keine eigenen Trigger – reine Felderweiterung.*
 
@@ -82,13 +82,18 @@ Legt aus eingehenden SellWatch-Verkaufsanfragen automatisch Lieferanten und Eink
 | 2 | `ValidateAndCreateVendor` | Prozedur | Internal | Ermittelt alle noch offenen Anfragen und verarbeitet sie nacheinander einzeln, sodass eine fehlerhafte Anfrage die übrigen nicht blockiert. |
 | 3 | `ProcessOfferWithErrorHandling` | Prozedur | Internal | Verarbeitet eine einzelne Anfrage abgeschlossen für sich; scheitert sie, wird alles für diese Anfrage Angelegte verworfen und die Fehlermeldung samt Zeitpunkt an der Anfrage gespeichert. Die Anfrage wird beim nächsten Lauf erneut versucht. |
 | 4 | `ProcessOffer` | Prozedur | Protected | Sucht für eine Anfrage einen passenden Lieferanten anhand von Name/Adresse/Telefon/E-Mail oder legt einen neuen Lieferanten samt Bankverbindung an und erzeugt anschließend die Einkaufsbestellung (siehe `CreatePurchaseOrder`). |
-| 5 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`), gibt die Bestellung sofort frei, markiert die Anfrage als angelegt und leert eventuelle Fehlerangaben. |
-| 6 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
-| 7 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
-| 8 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile über die Standard-Artikelanlage aus Vorlage einen neuen Artikel an; übernimmt dabei Werte, Standarddimensionen, Basis-Mengeneinheit und – falls an der Vorlage hinterlegt – die Nummernserie der Vorlage. Setzt danach Beschreibung (Marke/Modell/Baujahr), zweite Beschreibungszeile (Referenz) und bei Kommission das Kennzeichen Kommissionsware. |
-| 9 | `GetSellWatchItemTemplateCode` | Prozedur | Internal | Wählt je nach Angebotsart die passende Artikelvorlage aus der Einkaufseinrichtung (Kommission oder Standard) und bricht kontrolliert ab, wenn die benötigte Vorlage nicht eingerichtet ist oder nicht mehr existiert – ohne Ausweichen auf die jeweils andere Vorlage. |
-| 10 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
-| 11 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
+| 5 | `SetCountryRegionCode` | Prozedur | Internal | Trägt beim neuen Lieferanten das Land ein; ist das Land in BC angelegt, übernimmt die Salini Base App dabei die Buchungsgruppen aus der Länder-Vorlage, ein unbekannter Ländercode wird ohne Buchungsgruppen übernommen. |
+| 6 | `CreatePurchaseOrder` | Prozedur | Internal | Legt zu einer Anfrage eine Einkaufsbestellung mit einer Position an, lässt dafür dynamisch einen neuen Artikel anlegen (siehe `CreateSellWatchItem`), gibt die Bestellung sofort frei, markiert die Anfrage als angelegt und leert eventuelle Fehlerangaben. |
+| 7 | `CreatePurchaseOrderinBV` | Prozedur | Internal | Verarbeitet nachträglich alle Anfragen, die für die Bestellanlage in der niederländischen Gesellschaft vorgemerkt wurden. |
+| 8 | `CreatePurchaseOrderinGmBH` | Prozedur | Internal | Entscheidet je nach Angebotsart, ob die Bestellung direkt in der deutschen Gesellschaft angelegt wird oder für die niederländische Gesellschaft vorgemerkt wird. |
+| 9 | `CreateSellWatchItem` | Prozedur | Internal | Legt für eine SellWatch-Bestellzeile über die Standard-Artikelanlage aus Vorlage einen neuen Artikel an; übernimmt dabei Werte, Standarddimensionen, Basis-Mengeneinheit und – falls an der Vorlage hinterlegt – die Nummernserie der Vorlage. Setzt danach Beschreibung (Marke/Modell/Baujahr), zweite Beschreibungszeile (Referenz) und bei Kommission das Kennzeichen Kommissionsware. Trägt anschließend die Uhrendaten der Anfrage als Artikelattribute ein (siehe `SetSellWatchItemAttributes`). |
+| 10 | `SetSellWatchItemAttributes` | Prozedur | Internal | Trägt Marke, Modell, Referenz, Baujahr, Zustand, Box, Besteuerung, Zertifikat (Papiere) und Geschlecht aus der Anfrage als Artikelattribute ein (IDs 1, 2, 5, 8, 10, 11, 12, 13, 24); leere Angaben und ein nicht ganzzahliges Baujahr werden übersprungen, ohne die Anfrage scheitern zu lassen. |
+| 11 | `SetItemAttributeIfNotEmpty` | Prozedur | Internal | Trägt einen Attributwert nur ein, wenn die Anfrage einen Wert liefert. |
+| 12 | `YesNoAttributeValue` | Prozedur | Internal | Wandelt "vorhanden ja/nein" in die Listenwerte "ja"/"nein" der Attribute Box und Zertifikat um. |
+| 13 | `GetSellWatchItemTemplateCode` | Prozedur | Internal | Wählt je nach Angebotsart die passende Artikelvorlage aus der Einkaufseinrichtung (Kommission oder Standard) und bricht kontrolliert ab, wenn die benötigte Vorlage nicht eingerichtet ist, nicht mehr existiert oder keinen Artikelverfolgungscode mit Seriennummernverfolgung im Einkauf hat – ohne Ausweichen auf die jeweils andere Vorlage. |
+| 14 | `IsSerialNoTrackingCode` | Prozedur | Internal | Prüft, ob ein Artikelverfolgungscode Seriennummern im Einkauf verfolgt (dieselbe Bedingung wie bei "Send to Workshop"). |
+| 15 | `CreateSourceFilePurchaseRequest` | Prozedur | Public | Baut eine JSON-Rückmeldung mit Referenznummer, Bestellnummer und – falls vorhanden – Sendungsverfolgungsnummer; aktuell ohne Aufrufer im Code. |
+| 16 | `CreateSourceFileOrderStatusSE` | Prozedur | Public | Baut eine ausführliche JSON-Statusrückmeldung (Kontaktdaten, Uhrendetails, Link, Auszahlungsbetrag) für eine SellWatch-Anfrage; aktuell ohne Aufrufer im Code. |
 
 ### Codeunit: CXW SellWatch Process Offer (ID: 60351)
 
@@ -176,16 +181,19 @@ Ergänzt die Standard-Einkaufszeile um Herstellerseriennummer, ein Kennzeichen "
 
 ### Seitenerweiterung: CXW Workshop Purchase Order (ID: 60328)
 
-Ergänzt die Standard-Einkaufsbestellung um die Aktion "An Werkstatt senden".
+Ergänzt die Standard-Einkaufsbestellung um die Aktion "An Werkstatt senden" und das Feld "Anzahl Werkstattzeilen", über das die Werkstattzeilen der Bestellung direkt aufgerufen werden können.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
 | 1 | `CXW Send to Workshop` | Aktion | – | Fragt für jede offene, noch nicht übertragene Bestellzeile die Ankunft ab, vergibt bei Bestätigung – falls noch keine vorhanden – die nächste Seriennummer, öffnet die Seriennr.-Informationskarte zur Erfassung von Herstellerseriennummer, Box und Papieren und legt daraus eine Werkstattzeile an; nicht angekommene oder unvollständige Zeilen werden übersprungen, ohne die übrigen Zeilen zu blockieren. |
-| 2 | `SendLinesToWorkshop` | Prozedur | Internal | Ermittelt alle offenen, noch nicht an die Werkstatt gesendeten Bestellzeilen und verarbeitet sie nacheinander; zeigt am Ende eine Sammelmeldung zu nicht übertragenen Zeilen an. |
-| 3 | `ProcessLine` | Prozedur | Internal | Führt für eine einzelne Bestellzeile die Ankunftsabfrage aus, prüft Menge 1 und Seriennummernverfolgung, ermittelt oder vergibt die Seriennummer, öffnet die Seriennr.-Informationskarte und legt bei vollständigen Angaben die Werkstattzeile an. |
-| 4 | `TryCheckPresenceMandatory` | Prozedur | Internal | Prüft über CHX.Base, ob alle für den Artikelverfolgungscode verpflichtenden Angaben (Herstellerseriennummer, Box, Papiere) auf der Seriennr.-Information gepflegt sind, und meldet Fehlendes als Zeilenfehler statt die Aktion abzubrechen. |
-| 5 | `AddErrorLine` | Prozedur | Internal | Trägt eine nicht übertragene Zeile mit Grund in die Sammelmeldung ein. |
-| 6 | `CreateWorkshopLine` | Prozedur | Internal | Legt zu einer erfolgreich erfassten Bestellzeile die zugehörige Werkstattzeile mit Status "Neu" an und übernimmt dabei die Bestell- und Uhrendaten (über Codeunit 60335). |
+| 2 | `CXW No. of Workshop Lines – OnDrillDown` | Trigger | – | Öffnet beim Klick auf die Anzahl Werkstattzeilen die Liste der Werkstattzeilen, eingeschränkt auf diese Bestellung. |
+| 3 | `ShowWorkshopLines` | Prozedur | Internal | Öffnet die Werkstattzeilen-Liste gefiltert auf Belegart und Nummer der aktuellen Bestellung. |
+| 4 | `CountWorkshopLines` | Prozedur | Internal | Ermittelt, wie viele Werkstattzeilen es für die aktuelle Bestellung bereits gibt. |
+| 5 | `SendLinesToWorkshop` | Prozedur | Internal | Ermittelt alle offenen, noch nicht an die Werkstatt gesendeten Bestellzeilen und verarbeitet sie nacheinander; gibt es für die Bestellung bereits Werkstattzeilen, meldet es, dass nichts mehr zu senden ist, bzw. fragt vor dem Senden der übrigen Zeilen nach. Zeigt am Ende eine Sammelmeldung zu nicht übertragenen Zeilen an. |
+| 6 | `ProcessLine` | Prozedur | Internal | Führt für eine einzelne Bestellzeile die Ankunftsabfrage aus, prüft Menge 1 und Seriennummernverfolgung, ermittelt oder vergibt die Seriennummer, öffnet die Seriennr.-Informationskarte und legt bei vollständigen Angaben die Werkstattzeile an. |
+| 7 | `TryCheckPresenceMandatory` | Prozedur | Internal | Prüft über CHX.Base, ob alle für den Artikelverfolgungscode verpflichtenden Angaben (Herstellerseriennummer, Box, Papiere) auf der Seriennr.-Information gepflegt sind, und meldet Fehlendes als Zeilenfehler statt die Aktion abzubrechen. |
+| 8 | `AddErrorLine` | Prozedur | Internal | Trägt eine nicht übertragene Zeile mit Grund in die Sammelmeldung ein. |
+| 9 | `CreateWorkshopLine` | Prozedur | Internal | Legt zu einer erfolgreich erfassten Bestellzeile die zugehörige Werkstattzeile mit Status "Neu" an und übernimmt dabei die Bestell- und Uhrendaten (über Codeunit 60335). |
 
 ### Seitenerweiterung: CXW Workshop Purch Order Subf (ID: 60329)
 
@@ -220,17 +228,12 @@ Als Aufgabenwarteschlangen-Eintrag lauffähige Hintergrundverarbeitung, die alle
 | 2 | `ProcessCheckedLines` | Prozedur | Internal | Ermittelt alle geprüften Werkstattzeilen und übergibt sie einzeln zur Verarbeitung. |
 | 3 | `ProcessLineWithErrorHandling` | Prozedur | Internal | Verarbeitet eine Zeile fehlerisoliert: bei Fehlschlag werden der Fehlertext und der Status "Fehler" auf der Zeile vermerkt, ohne die Verarbeitung der übrigen Zeilen zu blockieren. |
 | 4 | `TryProcessLine` | Prozedur | Internal | Entscheidet anhand des Echtheits-Kennzeichens, ob die Zeile als echt oder nicht echt weiterverarbeitet wird. |
-| 5 | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit ausschließlich den Wareneingang der zugehörigen Bestellung (keine Rechnung) und überträgt die gemeldeten Attribute auf den Artikel; setzt danach den Status auf "Verarbeitet" und löscht einen zuvor vermerkten Fehlertext. |
+| 5 | `ProcessGenuineLine` | Prozedur | Internal | Bucht bei bestätigter Echtheit ausschließlich den Wareneingang der zugehörigen Bestellung (keine Rechnung) und schreibt die gemeldeten Prüfmerkmale in die zugeordneten Artikelattribute zurück (über Codeunit 60335; Platzhalter ohne Attribut werden übersprungen); setzt danach den Status auf "Verarbeitet" und löscht einen zuvor vermerkten Fehlertext. |
 | 6 | `ProcessNonGenuineLine` | Prozedur | Internal | Storniert bei widerlegter Echtheit die zugehörige Bestellung (öffnet sie bei Bedarf zuvor wieder) und setzt den Status auf "Verarbeitet" sowie den Fehlertext zurück, bevor die Bestellung gelöscht wird, damit die Werkstattzeile als Nachweis erhalten bleibt. |
-| 7 | `GetWorkshopLineAttributeValue` | Prozedur | Internal | Liest den Wert eines der zehn Attributfelder einer Werkstattzeile anhand seiner laufenden Nummer aus. |
-| 8 | `GetAttributeMapping` | Prozedur | Internal | Liefert den Artikelattribut-Namen für ein Werkstattzeilen-Attribut (für Attribut 1–8 fachliche Namen wie "Dial Color"/"Case Diameter"; Attribut 9/10 weiterhin Platzhalternamen, finale Benennung offen). |
-| 9 | `SetItemAttributeValue` | Prozedur | Internal | Trägt einen Attributwert als Standard-Artikelattribut auf dem Artikel ein und legt fehlende Attribute/Attributwerte automatisch an. |
-| 10 | `GetOrCreateAttributeId` | Prozedur | Internal | Sucht ein Standard-Artikelattribut anhand des Namens oder legt es neu an (Typ Text). |
-| 11 | `GetOrCreateAttributeValueId` | Prozedur | Internal | Sucht einen Attributwert anhand des Textes oder legt ihn neu an. |
 
 ### Codeunit: CXW Workshop Line Mgt. (ID: 60335)
 
-Stellt beim Senden an die Werkstatt die Bestell- und Uhrendaten einer Werkstattzeile zusammen.
+Stellt beim Senden an die Werkstatt die Bestell- und Uhrendaten einer Werkstattzeile zusammen, belegt die von der Werkstatt zu prüfenden Uhrenmerkmale vor und hält die gemeinsame Zuordnung Werkstattfeld ↔ Artikelattribut, die auch die Rückübertragung in Codeunit 60331 nutzt.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
@@ -239,21 +242,31 @@ Stellt beim Senden an die Werkstatt die Bestell- und Uhrendaten einer Werkstattz
 | 3 | `GetItemAttributeValue` | Prozedur | Internal | Liest den Text eines bestimmten Artikelattributs des Artikels; leer, wenn kein Wert zugeordnet ist. |
 | 4 | `GetItemAttributeInteger` | Prozedur | Internal | Liest ein Artikelattribut als Zahl (für das Baujahr); ein nicht ganzzahliger Wert ergibt 0. |
 | 5–12 | `BrandAttributeId` … `CertificateAttributeId` | Prozedur | Internal | [8 interne Hilfsfunktionen] Liefern die mit der Werkstatt vereinbarten Artikelattribut-IDs (1, 2, 3, 5, 8, 10, 11, 13) für Marke, Modell, Untermodell, Referenz, Baujahr, Zustand, Box und Zertifikat. |
-| 13 | `IsSerialNoTracked` | Prozedur | Protected | Prüft, ob der Artikel im Einkauf mit Seriennummern verfolgt wird. |
-| 14 | `FindPurchLineSerialNo` | Prozedur | Protected | Liefert die Seriennummer, die der Bestellzeile bereits in der Artikelverfolgung zugeordnet ist (leer, wenn keine). |
-| 15 | `AssignNextSerialNo` | Prozedur | Protected | Zieht die nächste Nummer aus der Seriennummernserie des Artikels und ordnet sie der Bestellzeile als Artikelverfolgung zu, damit der spätere Wareneingang gebucht werden kann; leer, wenn am Artikel keine Serie hinterlegt ist. |
-| 16 | `GetOrCreateSerialNoInformation` | Prozedur | Protected | Liest die Seriennr.-Information zu Artikel, Variante und Seriennummer oder legt sie an. |
+| 13 | `PrefillEmptyWorkshopAttributes` | Prozedur | Public | Belegt die sieben zugeordneten Prüfmerkmale (z. B. Zifferblattfarbe, Gehäusedurchmesser) mit den aktuellen Attributwerten des Artikels vor; bereits gefüllte Felder und die Platzhalter bleiben unverändert. |
+| 14 | `WorkshopAttributeCount` | Prozedur | Public | Liefert die Anzahl der Werkstatt-Merkmale (10). |
+| 15 | `GetWorkshopAttributeId` | Prozedur | Public | Liefert zu einem Werkstatt-Merkmal die fest zugeordnete Artikelattribut-ID (z. B. Zifferblattfarbe → 22 "Zifferblatt Farbe 1", Gender → 24 "Geschlecht"); 0 für die Platzhalter Features, Attribut 9 und 10, die weder vorbelegt noch zurückgeschrieben werden. |
+| 16 | `GetWorkshopAttributeValue` | Prozedur | Public | Liest den Wert eines Werkstatt-Merkmals von der Werkstattzeile. |
+| 17 | `SetWorkshopAttributeValue` | Prozedur | Public | Schreibt den Wert eines Werkstatt-Merkmals auf die Werkstattzeile. |
+| 18 | `SetItemAttributeValue` | Prozedur | Protected | Ordnet dem Artikel einen Wert für ein vorhandenes Artikelattribut zu; ein noch unbekannter Wert wird in der Werteliste angelegt, ein neues Attribut nie. Gemeinsam genutzt von der SellWatch-Artikelanlage und der Werkstatt-Verarbeitung. |
+| 19 | `FillEmptyWorkshopAttributes` | Prozedur | Internal | Füllt jedes leere, zugeordnete Werkstatt-Merkmal aus dem Artikelattribut mit derselben ID. |
+| 20 | `GetOrCreateAttributeValueId` | Prozedur | Internal | Sucht einen Attributwert anhand des Textes oder legt ihn neu an; bei Zahlen-Attributen (z. B. Gehäuse Größe) wird der Wert dabei geprüft. |
+| 21 | `IsSerialNoTracked` | Prozedur | Protected | Prüft, ob der Artikel im Einkauf mit Seriennummern verfolgt wird. |
+| 22 | `FindPurchLineSerialNo` | Prozedur | Protected | Liefert die Seriennummer, die der Bestellzeile bereits in der Artikelverfolgung zugeordnet ist (leer, wenn keine). |
+| 23 | `AssignNextSerialNo` | Prozedur | Protected | Zieht die nächste Nummer aus der Seriennummernserie des Artikels und ordnet sie der Bestellzeile als Artikelverfolgung zu, damit der spätere Wareneingang gebucht werden kann; leer, wenn am Artikel keine Serie hinterlegt ist. |
+| 24 | `GetOrCreateSerialNoInformation` | Prozedur | Protected | Liest die Seriennr.-Information zu Artikel, Variante und Seriennummer oder legt sie an. |
 
 ### Codeunit: CXW Workshop Upgrade (ID: 60336)
 
-Upgrade-Routine, die beim Einspielen der Version mit den neuen Bestelldaten bestehende Werkstattzeilen einmalig nachbefüllt.
+Upgrade-Routine, die beim Einspielen neuer Versionen bestehende Daten einmalig nachzieht: Bestelldaten und Merkmal-Vorbelegung auf Werkstattzeilen sowie die Übernahme des Kennzeichens "Auftrag halten" nach CHX.Base.
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `OnUpgradePerCompany` | Trigger | – | Führt je Mandant einmalig die Nachbefüllung aus und merkt sich per Upgrade-Kennzeichen, dass sie erledigt ist. |
-| 2 | `FillPurchaseDataOnOpenLines` | Prozedur | Internal | Ergänzt bei allen noch nicht abgeschlossenen Werkstattzeilen (Status "Neu" und "WS geprüft") mit vorhandener Bestellzeile die Bestell- und Uhrendaten. |
-| 3 | `GetWorkshopLinePurchaseDataTag` | Prozedur | Internal | Liefert den Namen des Upgrade-Kennzeichens für diese Nachbefüllung. |
-| 4 | `RegisterPerCompanyTags` | Event Subscriber | Internal | Meldet das Upgrade-Kennzeichen beim Standard-Upgrade-Modul an, damit neue Mandanten die Nachbefüllung nicht unnötig ausführen. |
+| 1 | `OnUpgradePerCompany` | Trigger | – | Führt je Mandant die drei Nachbearbeitungen jeweils einmalig aus und merkt sich per Upgrade-Kennzeichen, welche schon erledigt sind. |
+| 2 | `PrefillAttributesOnNewLines` | Prozedur | Internal | Belegt bei allen Werkstattzeilen im Status "Neu" die noch leeren Uhrenmerkmale aus den Artikelattributen vor. |
+| 3 | `FillPurchaseDataOnOpenLines` | Prozedur | Internal | Ergänzt bei allen noch nicht abgeschlossenen Werkstattzeilen (Status "Neu" und "WS geprüft") mit vorhandener Bestellzeile die Bestell- und Uhrendaten. |
+| 4 | `MigrateHoldOrderToBase` | Prozedur | Internal | Überträgt das alte Kennzeichen "Auftrag halten" aller Verkaufsaufträge in das gleichnamige Feld von CHX.Base, ohne dabei Prüfungen auszulösen. |
+| 5–7 | `GetWorkshopLinePurchaseDataTag`, `GetWorkshopLineAttributePrefillTag`, `GetHoldOrderMigrationTag` | Prozedur | Internal | [3 interne Hilfsfunktionen] Liefern die Namen der Upgrade-Kennzeichen für die drei Nachbearbeitungen. |
+| 8 | `RegisterPerCompanyTags` | Event Subscriber | Internal | Meldet die Upgrade-Kennzeichen beim Standard-Upgrade-Modul an, damit neue Mandanten die Nachbearbeitungen nicht unnötig ausführen. |
 
 ### Permission Set: CXW Workshop All (ID: 60301)
 
@@ -636,7 +649,7 @@ Zentrale Logik der On-Demand-Beschaffung: erkennt On-Demand-Artikel und -Zeilen,
 | 2 | `IsOnDemandSalesLine` | Prozedur | Public | Prüft, ob eine Verkaufszeile eine offene Artikelzeile eines Verkaufsauftrags für einen On-Demand-Artikel ist. |
 | 3 | `SalesLineNeedsOnDemandAssignment` | Prozedur | Public | Prüft, ob eine On-Demand-Verkaufszeile noch beschafft werden muss: Auftrag nicht freigegeben und keine Reservierung vorhanden. |
 | 4 | `HasReservation` | Prozedur | Public | Prüft, ob für eine Verkaufszeile bereits eine Reservierung besteht. |
-| 5 | `GetPurchaseStatusText` | Prozedur | Public | Liefert den Beschaffungsstand einer verknüpften Verkaufszeile als Text: offen, freigegeben, teilweise geliefert, geliefert oder "Bestellzeile/Bestellung fehlt". |
+| 5 | `GetPurchaseStatusText` | Prozedur | Public | Liefert den Beschaffungsstand einer verknüpften Verkaufszeile als Text: offen, freigegeben, teilweise geliefert, geliefert, geliefert und fakturiert oder "Bestellzeile/Bestellung fehlt"; ist die Bestellung nach vollständiger Buchung schon gelöscht, wird der Stand aus den gebuchten Belegen ermittelt. |
 | 6 | `LookupPurchaseLineForSalesLine` | Prozedur | Public | Öffnet eine Auswahl offener Einkaufsbestellzeilen desselben Artikels und gibt die gewählte Zeile zurück. |
 | 7 | `LookupSalesLineForPurchaseLine` | Prozedur | Public | Öffnet eine Auswahl noch nicht verknüpfter On-Demand-Verkaufszeilen desselben Artikels und gibt die gewählte Zeile zurück. |
 | 8 | `LinkSalesLineToPurchaseLine` | Prozedur | Public | Verknüpft eine Verkaufs- mit einer Einkaufszeile desselben Artikels; löst dabei bestehende Verknüpfungen beider Zeilen und öffnet eine freigegebene Bestellung bei Bedarf wieder. Bricht ab, wenn die Artikelnummern abweichen. |
@@ -647,7 +660,7 @@ Zentrale Logik der On-Demand-Beschaffung: erkennt On-Demand-Artikel und -Zeilen,
 | 13 | `CreatePurchaseOrderForSalesLines` | Prozedur | Public | Legt für die gewählten Verkaufszeilen eine neue Einkaufsbestellung beim angegebenen Kreditor an (je Verkaufszeile eine Bestellzeile mit offener Menge und Lagerort) und verknüpft jede neue Zeile mit ihrer Verkaufszeile. |
 | 14 | `ClearLinkedPurchaseForDeletedSalesLine` | Prozedur | Public | Entfernt beim Löschen einer Verkaufszeile den Verweis auf der verknüpften Einkaufszeile. |
 | 15 | `ClearLinkedSalesForDeletedPurchaseLine` | Prozedur | Public | Entfernt beim Löschen einer Einkaufszeile den Verweis auf der verknüpften Verkaufszeile. |
-| 16–23 | `CreatePurchaseHeader` … `EnsurePurchaseLineDocumentOpen` | Prozedur | Internal | [8 interne Hilfsfunktionen] Legen Bestellkopf und -zeilen an, ermitteln die nächste Zeilennummer, prüfen Verkaufs- und Einkaufszeilen auf Verknüpfbarkeit (nur Auftrags-/Bestellzeilen vom Typ Artikel, On-Demand-Artikel), löschen die Verknüpfung jeweils auf einer Seite und öffnen eine freigegebene Bestellung vor einer Änderung wieder. |
+| 16–24 | `GetPostedPurchaseStatusText`, `CreatePurchaseHeader` … `EnsurePurchaseLineDocumentOpen` | Prozedur | Internal | [9 interne Hilfsfunktionen] Ermitteln den Beschaffungsstand aus gebuchten Wareneingängen und Rechnungen, legen Bestellkopf und -zeilen an, ermitteln die nächste Zeilennummer, prüfen Verkaufs- und Einkaufszeilen auf Verknüpfbarkeit (nur Auftrags-/Bestellzeilen vom Typ Artikel, On-Demand-Artikel), löschen die Verknüpfung jeweils auf einer Seite und öffnen eine freigegebene Bestellung vor einer Änderung wieder. |
 
 ### Seite: CXW On Demand Sales Lines (ID: 60341)
 
@@ -876,6 +889,41 @@ Ergänzt den Lagerort um das Kennzeichen "Hauptlagerort", das festlegt, ob der L
 
 Zeigt auf der Lagerortkarte das Kennzeichen "Hauptlagerort" an. *Keine eigenen Trigger – reine Seitenerweiterung.*
 
+### Echtzeit-Lagerbestand
+
+Baut auf Knopfdruck eine Momentaufnahme aller offenen Lagerbestände des aktuellen Mandanten auf – je Bestandsposten mit Seriennummer, Lagerort, Uhrenmerkmalen, Verkaufs- und Einstandspreis sowie Kreditor und Einkaufsbestellung der Herkunft.
+
+### Tabelle: CXW Realtime Inventory (ID: 60350)
+
+Zwischenspeicher der Momentaufnahme: eine Zeile je offenem Artikelposten mit Artikel, Variante, Menge, Mandant, Lagerort, Seriennummer, Verkaufs- und Einstandspreis, Marke, Modell, Referenz, Variantenkategorie, Zustand, Sichtbarkeit, Zertifikat, Differenzbesteuerung, Buchungsdatum, Einkaufsbestellung und Kreditor. *Keine eigenen Trigger – reine Datentabelle.*
+
+### Codeunit: CXW Realtime Inventory Mgt. (ID: 60350)
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `RefreshCurrentCompany` | Prozedur | Public | Löscht die bisherige Momentaufnahme und baut sie aus allen offenen Artikelposten mit Restmenge neu auf; der Verpackungsartikel "BOX" wird nicht berücksichtigt. |
+| 2 | `CreateRealtimeInventoryEntry` | Prozedur | Internal | Legt für einen offenen Artikelposten eine Zeile an und übernimmt Menge, Lagerort, Seriennummer, Differenzbesteuerung (CHX.Base), Einstandspreis, Uhrenmerkmale aus den Artikelattributen sowie den zuletzt hinterlegten Verkaufspreis. |
+| 3 | `SetPurchaseDetails` | Prozedur | Internal | Ermittelt Kreditor und Einkaufsbestellung der Herkunft – bei Seriennummernartikeln über den ursprünglichen Einkaufsposten, sonst über den Posten selbst, sofern er von einem Kreditor stammt. |
+| 4 | `GetItemAttributeValue` | Prozedur | Internal | Liest den Text eines bestimmten Artikelattributs des Artikels; leer, wenn kein Wert zugeordnet ist. |
+
+### Seite: CXW Realtime Inventory (ID: 60350)
+
+Schreibgeschützte Liste der Momentaufnahme, über die Suche erreichbar.
+
+| Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
+|---|---|---|---|---|
+| 1 | `Refresh` | Aktion | – | Baut nach Rückfrage die Momentaufnahme für den aktuellen Mandanten neu auf und bestätigt das Ende mit einer Meldung. |
+
+### Permission Set: CXW Real. Inventory (ID: 60350)
+
+Berechtigt zum Aufbauen und Anzeigen des Echtzeit-Lagerbestands (Lesezugriff auf Artikelposten, Artikel, Verkaufspreise und Artikelattribute).
+
+### Veraltete Objekte
+
+### Tabellenerweiterung: CXW Sales Header (ID: 60300)
+
+Enthält nur noch das alte Feld "Auftrag halten", das aus Kompatibilitätsgründen bestehen bleibt und als veraltet markiert ist; maßgeblich ist das Feld "Auftrag halten" aus CHX.Base, in das die Werte per Upgrade (Codeunit 60336) übernommen wurden. *Keine eigenen Trigger – reine Felderweiterung.*
+
 ---
 
 ## Auslagerungs-Kandidaten
@@ -889,4 +937,5 @@ Zeigt auf der Lagerortkarte das Kennzeichen "Hauptlagerort" an. *Keine eigenen T
 | On-Demand-Beschaffung als eigenständige Extension | TableExtension 60323 (+ Felder in 60303); Codeunit 60346; Page 60341, 60343, 60344, 60345; PageExtension 60332, 60333, 60335 (+ Aktion in 60334); PermissionSet 60337 | Klar abgegrenzter Prozess mit eigenem Berechtigungssatz und ausschließlich öffentlichen Einstiegspunkten in Codeunit 60346 – technisch gut isolierbar. Kopplung: die Verknüpfungsfelder liegen in denselben Tabellenerweiterungen wie SellWatch-Felder (60303) und würden bei einer Auslagerung mitwandern müssen. |
 | Gemeinsame HTTP-Infrastruktur (Aufrufprotokoll + Schnittstellen-Konfiguration) als Basis-Baustein | Table 60302 „CXW Http Call Log", Table 60317 „CXW API Interface Setup", Page 60309, 60324, 60325 | Wird von SellWatch UND Verkaufspreisverwaltung gleichermaßen genutzt (Authentifizierung, Protokollierung, Signaturberechnung). Sollte bei einer Aufteilung in zwei Extensions als dritter, gemeinsamer Basis-Baustein bestehen bleiben, statt dupliziert zu werden. |
 | CSV-Import-Pfad der Verkaufspreisverwaltung | Codeunit 60330, Table 60315, 60316, Xmlport 60328 | Laut Code-Kommentaren aktuell nicht produktiv angebunden (unabhängiger Baustein). Eigenständig genug, um bei Bedarf separat weiterzuentwickeln oder zu entfernen, ohne den produktiven Preis-Freigabeprozess zu berühren. |
+| Echtzeit-Lagerbestand als eigenständiger Baustein | Table 60350, Codeunit 60350, Page 60350, PermissionSet 60350 | Vollständig in sich geschlossen (eigene Tabelle, eigener Berechtigungssatz, keine Aufrufe aus anderen Bereichen) und fachlich eher eine Auswertung als Teil des Webshop-Prozesses – technisch die am leichtesten auslagerbare Einheit. Vor einer Auslagerung bzw. produktiven Nutzung klären: Felder der Tabelle und Seite haben weder Beschriftungen noch Tooltips, die Attribut-IDs (1, 2, 5, 10, 13, 37, 41) sind fest im Code hinterlegt, und als Verkaufspreis wird der zuletzt angelegte Preis ohne Rücksicht auf Gültigkeit oder Währung übernommen. |
 | SellWatch-JSON-Rückmeldungen ohne aktuellen Aufrufer | Codeunit 60305 (`CreateSourceFilePurchaseRequest`, `CreateSourceFileOrderStatusSE`), Table 60301 (`CreateJsonObjectCheckOnline`) | Fertige Bausteine für eine Rückmeldung an SellWatch (Bestellstatus, Auszahlungsbetrag), aber im aktuellen Code nirgends aufgerufen. Vor einer Auslagerung klären, ob dieser Rückkanal noch gebraucht wird oder toter Code ist. |

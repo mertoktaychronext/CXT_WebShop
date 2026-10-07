@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Konfigurierbare Artikelvorlagen (Standard und Kommission, Auswahl nach Angebotsart) für die dynamische SellWatch-Artikelanlage über die Einkaufseinrichtung, Anwendung über den BC-Standard "Item Templ. Mgt." sowie Fehlerbehandlung bei fehlender/ungültiger Konfiguration.
+Konfigurierbare Artikelvorlagen (Standard und Kommission, Auswahl nach Angebotsart) für die dynamische SellWatch-Artikelanlage über die Einkaufseinrichtung, Anwendung über den BC-Standard "Item Templ. Mgt." sowie Fehlerbehandlung bei fehlender/ungültiger Konfiguration; außerdem die Pflicht, dass die Vorlage einen Artikelverfolgungscode mit Seriennummernverfolgung im Einkauf hat.
 ## Requirements
 ### Requirement: Konfigurierbare Artikelvorlage für SellWatch-Artikelanlage
 Die Einkaufseinrichtung SHALL zwei Felder bereitstellen, über die die für die automatische SellWatch-Artikelanlage zu verwendenden Artikelvorlagen festgelegt werden: eine Artikelvorlage für Kommissionsangebote und eine Standard-Artikelvorlage für alle anderen Angebotsarten. Die dynamische Artikelanlage für eingehende SellWatch-Ankaufsanfragen SHALL die Artikelvorlage anhand der Angebotsart des SellWatch-Eintrags auswählen: Bei Angebotsart `commission` SHALL die Kommissions-Artikelvorlage verwendet werden, bei jeder anderen Angebotsart (einschließlich leerer Angebotsart) die Standard-Artikelvorlage. Es SHALL keine beliebige Artikelvorlage ausgewählt und kein Auswahldialog angezeigt werden.
@@ -56,4 +56,19 @@ Die SellWatch-Artikelanlage SHALL den Artikel über den Business-Central-Standar
 #### Scenario: Kommissionskennzeichen wird gesetzt
 - **WHEN** eine SellWatch-Ankaufsanfrage mit Angebotsart `commission` verarbeitet wird
 - **THEN** ist beim neuen Artikel das Kennzeichen Kommissionsverkauf gesetzt, unabhängig davon, ob die Kommissions-Artikelvorlage es bereits setzt
+
+### Requirement: SellWatch-Artikel werden mit Seriennummernverfolgung angelegt
+Jeder über SellWatch angelegte Artikel SHALL mit Seriennummernverfolgung angelegt werden. Der Artikelverfolgungscode SHALL an den SellWatch-Artikelvorlagen (Standard und Kommission) eingerichtet werden und wird über die Standard-Artikelanlage aus der Vorlage übernommen. Vor dem Anlegen des Artikels SHALL das System prüfen, dass die für die Angebotsart zuständige Artikelvorlage einen Artikelverfolgungscode hat und dieser Code Seriennummernverfolgung beim Einkauf („SN Purchase Inbound Tracking“) vorsieht. Ist das nicht der Fall, SHALL die Verarbeitung mit einer Fehlermeldung abbrechen, die den Code der Artikelvorlage nennt; es SHALL kein Artikel angelegt werden, und das Angebot SHALL wie bei den übrigen Konfigurationsfehlern mit Fehlertext offen bleiben.
+
+#### Scenario: Vorlage mit Seriennummernverfolgung
+- **WHEN** die zuständige Artikelvorlage den Artikelverfolgungscode „SN-UHR“ mit Seriennummernverfolgung beim Einkauf hat und eine SellWatch-Anfrage verarbeitet wird
+- **THEN** hat der neue Artikel den Artikelverfolgungscode „SN-UHR“
+
+#### Scenario: Vorlage ohne Artikelverfolgungscode
+- **WHEN** an der zuständigen Artikelvorlage kein Artikelverfolgungscode eingerichtet ist und eine SellWatch-Anfrage verarbeitet wird
+- **THEN** wird kein Artikel angelegt, und das Angebot bleibt mit einer Fehlermeldung offen, die die Artikelvorlage nennt und auf die fehlende Seriennummernverfolgung hinweist
+
+#### Scenario: Artikelverfolgungscode ohne Seriennummernverfolgung
+- **WHEN** die zuständige Artikelvorlage einen Artikelverfolgungscode hat, der nur Chargenverfolgung vorsieht
+- **THEN** wird kein Artikel angelegt, und das Angebot bleibt mit derselben Fehlermeldung offen
 

@@ -103,6 +103,11 @@ Nach erfolgreicher Eingabe wird die Zeile als "An Werkstatt gesendet" markiert u
 
 > Eine bereits gesendete Zeile lässt sich über diese Aktion kein zweites Mal übertragen.
 
+Gibt es für die Bestellung bereits Werkstattzeilen, weist das System Sie beim erneuten Ausführen von "Send to Workshop" darauf hin:
+
+- Sind alle Zeilen bereits gesendet, erscheint die Meldung, dass keine weiteren Zeilen an die Werkstatt zu senden sind – es wird nichts verarbeitet.
+- Gibt es noch offene Zeilen (z. B. zuvor als "Nicht angekommen" markiert), fragt das System mit Angabe der Anzahl vorhandener Werkstattzeilen, ob die übrigen Zeilen gesendet werden sollen. Bei "Nein" wird abgebrochen.
+
 ### Was danach automatisch passiert
 
 Die eigentliche Prüfung durch die Werkstatt sowie die Weiterverarbeitung nach dem Prüfergebnis laufen vollautomatisiert im Hintergrund – dafür ist keine weitere Aktion Ihrerseits nötig:
@@ -113,6 +118,8 @@ Die eigentliche Prüfung durch die Werkstatt sowie die Weiterverarbeitung nach d
 ## Workshop-Zeilen einsehen
 
 Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Diese Seite ist schreibgeschützt.
+
+Direkt aus der **Einkaufsbestellung** zeigt das Feld **"Anzahl Werkstattzeilen"** (Inforegister "Allgemein"), wie viele Werkstattzeilen es für diese Bestellung gibt; leer bedeutet keine. Ein Klick auf den Wert öffnet die Workshop-Zeilen gefiltert auf diese Bestellung.
 
 > Steht eine Zeile auf Status "Fehler", ist bei der letzten automatischen Verarbeitung ein Problem aufgetreten (z. B. eine gesperrte Buchungsperiode). Wenden Sie sich in diesem Fall an einen Key User bzw. das Entwicklungsteam (siehe Key-User-Handbuch).
 
