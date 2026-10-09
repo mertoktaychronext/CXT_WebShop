@@ -252,8 +252,13 @@ codeunit 60348 "CXW Availability Change Mgt"
         if not CountryRegion."CXW Webshop Deli. Time Active" then
             exit;
 
-        // Only articles from the change entry log are webshop articles; each one is calculated once.
+        // Only open change entries (delivery or inventory time not yet sent) are calculated, each article once;
+        // the already exported history is left alone.
         AvailabilityChangeEntry.SetCurrentKey("CXW Item No.", "CXW Variant Code");
+        AvailabilityChangeEntry.FilterGroup(-1);
+        AvailabilityChangeEntry.SetRange("CXW Deli. Time Exported", false);
+        AvailabilityChangeEntry.SetRange("CXW Inv. Time Exported", false);
+        AvailabilityChangeEntry.FilterGroup(0);
         AvailabilityChangeEntry.SetLoadFields("CXW Item No.");
         if not AvailabilityChangeEntry.FindSet() then
             exit;
