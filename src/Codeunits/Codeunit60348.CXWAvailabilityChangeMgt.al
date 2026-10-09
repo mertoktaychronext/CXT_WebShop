@@ -9,7 +9,8 @@ codeunit 60348 "CXW Availability Change Mgt"
         if Rec."CXB Additional Delivery Time" = xRec."CXB Additional Delivery Time" then
             exit;
 
-        RefreshDeliveryTimesForItem(Rec."No.");
+        // UPDDLT/UPDIN only send articles from the change entry log, so the changed delivery time has to be logged.
+        PrepareItemForExport(Rec."No.");
     end;
 
     [EventSubscriber(ObjectType::Table, Database::"Item Ledger Entry", 'OnAfterInsertEvent', '', false, false)]
@@ -115,6 +116,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         AvailabilityChangeEntry.SetRange("CXW Diff. Taxation Purchase", DifferentialTaxationPurchase);
         AvailabilityChangeEntry.SetRange("CXW Exported", false);
         if AvailabilityChangeEntry.FindFirst() then begin
+            ReopenTimeExports(AvailabilityChangeEntry);
             AvailabilityChangeEntry.Modify(true);
             RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
             exit;
@@ -127,6 +129,7 @@ codeunit 60348 "CXW Availability Change Mgt"
             AvailabilityChangeEntry.SetRange("CXW Item Ledger Entry No.", 0);
             if AvailabilityChangeEntry.FindFirst() then begin
                 AvailabilityChangeEntry."CXW Item Ledger Entry No." := ItemLedgerEntryNo;
+                ReopenTimeExports(AvailabilityChangeEntry);
                 AvailabilityChangeEntry.Modify(true);
                 RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
                 exit;
@@ -143,6 +146,16 @@ codeunit 60348 "CXW Availability Change Mgt"
         RefreshAvailabilityChangeDetails(AvailabilityChangeEntry);
     end;
 
+    // A reused open entry stands for a new change, so the delivery and inventory times have to be sent again.
+    local procedure ReopenTimeExports(var AvailabilityChangeEntry: Record "CXW Availability Change Entry")
+    begin
+        AvailabilityChangeEntry."CXW Deli. Time Exported" := false;
+        Clear(AvailabilityChangeEntry."CXW Deli. Time Exported At");
+        AvailabilityChangeEntry."CXW Inv. Time Exported" := false;
+        Clear(AvailabilityChangeEntry."CXW Inv. Time Exported At");
+    end;
+
+    // Logs every variant of the article, so all three interfaces send it with their next run.
     procedure PrepareItemForExport(ItemNo: Code[20])
     var
         ItemVariant: Record "Item Variant";
@@ -154,24 +167,6 @@ codeunit 60348 "CXW Availability Change Mgt"
             until ItemVariant.Next() = 0
         else
             PrepareItemVariantForExport(ItemNo, '');
-
-        // The direct export from the item card is a complete snapshot. Re-export the
-        // calculated time records even if their calculated value has not changed.
-        MarkTimeRecordsForExport(ItemNo);
-    end;
-
-    local procedure MarkTimeRecordsForExport(ItemNo: Code[20])
-    var
-        AvailabilityDeliveryTime: Record "CXW Availability Delivery Time";
-        AvailabilityInventoryTime: Record "CXW Availability Inv. Time";
-    begin
-        AvailabilityDeliveryTime.SetRange("CXW Item No.", ItemNo);
-        AvailabilityDeliveryTime.ModifyAll("CXW Exported", false);
-        AvailabilityDeliveryTime.ModifyAll("CXW Exported At", 0DT);
-
-        AvailabilityInventoryTime.SetRange("CXW Item No.", ItemNo);
-        AvailabilityInventoryTime.ModifyAll("CXW Exported", false);
-        AvailabilityInventoryTime.ModifyAll("CXW Exported At", 0DT);
     end;
 
     local procedure PrepareItemVariantForExport(ItemNo: Code[20]; VariantCode: Code[20])
@@ -243,22 +238,10 @@ codeunit 60348 "CXW Availability Change Mgt"
         until CountryRegion.Next() = 0;
     end;
 
-    local procedure RefreshDeliveryTimesForItem(ItemNo: Code[20])
-    var
-        ItemVariant: Record "Item Variant";
-    begin
-        ItemVariant.SetRange("Item No.", ItemNo);
-        if ItemVariant.FindSet() then
-            repeat
-                RefreshDeliveryTimes(ItemNo, ItemVariant.Code);
-            until ItemVariant.Next() = 0
-        else
-            RefreshDeliveryTimes(ItemNo, '');
-    end;
-
     procedure RefreshDeliveryTimesForCountry(CountryRegionCode: Code[10])
     var
         AvailabilityCalculation: Codeunit "CXW Availability Calculation";
+        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
         CountryRegion: Record "Country/Region";
         Item: Record Item;
         ItemVariant: Record "Item Variant";
@@ -271,16 +254,21 @@ codeunit 60348 "CXW Availability Change Mgt"
         if not Item.FindSet() then
             exit;
 
+        AvailabilityChangeEntry.SetCurrentKey("CXW Item No.", "CXW Variant Code");
         repeat
-            ItemVariant.SetRange("Item No.", Item."No.");
-            if ItemVariant.FindSet() then
-                repeat
-                    RefreshDeliveryTimeForCountry(Item."No.", ItemVariant.Code, CountryRegion.Code, AvailabilityCalculation);
-                    RefreshInventoryTimesForCountry(Item."No.", ItemVariant.Code, CountryRegion.Code, AvailabilityCalculation);
-                until ItemVariant.Next() = 0
-            else begin
-                RefreshDeliveryTimeForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
-                RefreshInventoryTimesForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
+            // Only articles from the change entry log are webshop articles; all others get no time records.
+            AvailabilityChangeEntry.SetRange("CXW Item No.", Item."No.");
+            if not AvailabilityChangeEntry.IsEmpty() then begin
+                ItemVariant.SetRange("Item No.", Item."No.");
+                if ItemVariant.FindSet() then
+                    repeat
+                        RefreshDeliveryTimeForCountry(Item."No.", ItemVariant.Code, CountryRegion.Code, AvailabilityCalculation);
+                        RefreshInventoryTimesForCountry(Item."No.", ItemVariant.Code, CountryRegion.Code, AvailabilityCalculation);
+                    until ItemVariant.Next() = 0
+                else begin
+                    RefreshDeliveryTimeForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
+                    RefreshInventoryTimesForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
+                end;
             end;
         until Item.Next() = 0;
     end;
@@ -308,7 +296,7 @@ codeunit 60348 "CXW Availability Change Mgt"
             UpsertDeliveryTime(ItemNo, VariantCode, CountryRegionCode, -1);
     end;
 
-    local procedure GetDeliveryTimeVariantCode(ItemNo: Code[20]; VariantCode: Code[20]): Code[20]
+    procedure GetDeliveryTimeVariantCode(ItemNo: Code[20]; VariantCode: Code[20]): Code[20]
     var
         ItemVariant: Record "Item Variant";
     begin

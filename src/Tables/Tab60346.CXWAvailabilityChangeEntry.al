@@ -58,6 +58,26 @@ table 60346 "CXW Availability Change Entry"
             Caption = 'Differential Taxation Purchase';
             DataClassification = CustomerContent;
         }
+        field(18; "CXW Deli. Time Exported"; Boolean)
+        {
+            Caption = 'Delivery Time Exported';
+            DataClassification = SystemMetadata;
+        }
+        field(19; "CXW Deli. Time Exported At"; DateTime)
+        {
+            Caption = 'Delivery Time Exported At';
+            DataClassification = SystemMetadata;
+        }
+        field(20; "CXW Inv. Time Exported"; Boolean)
+        {
+            Caption = 'Inventory Time Exported';
+            DataClassification = SystemMetadata;
+        }
+        field(21; "CXW Inv. Time Exported At"; DateTime)
+        {
+            Caption = 'Inventory Time Exported At';
+            DataClassification = SystemMetadata;
+        }
     }
 
     keys
@@ -70,6 +90,15 @@ table 60346 "CXW Availability Change Entry"
         {
         }
         key(ItemLedgerEntry; "CXW Item Ledger Entry No.", "CXW Exported")
+        {
+        }
+        key(Item; "CXW Item No.", "CXW Variant Code")
+        {
+        }
+        key(DeliTimeExported; "CXW Deli. Time Exported")
+        {
+        }
+        key(InvTimeExported; "CXW Inv. Time Exported")
         {
         }
     }

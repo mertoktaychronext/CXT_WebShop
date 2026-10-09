@@ -10,36 +10,22 @@ codeunit 60347 "CXW Export Availability Change"
 
     procedure ExportItem(ItemNo: Code[20]; var ExportedCount: Integer; var FailedCount: Integer)
     var
-        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
-        AvailabilityDeliveryTime: Record "CXW Availability Delivery Time";
-        AvailabilityInventoryTime: Record "CXW Availability Inv. Time";
+        StockChangeEntry: Record "CXW Availability Change Entry";
+        DeliveryTimeChangeEntry: Record "CXW Availability Change Entry";
+        InventoryTimeChangeEntry: Record "CXW Availability Change Entry";
         AvailabilityChangeMgt: Codeunit "CXW Availability Change Mgt";
-        CurrentExportedCount: Integer;
-        CurrentFailedCount: Integer;
     begin
+        // Complete snapshot: log every variant, then send the article to all three interfaces.
         AvailabilityChangeMgt.PrepareItemForExport(ItemNo);
 
-        AvailabilityChangeEntry.SetRange("CXW Item No.", ItemNo);
-        AvailabilityChangeEntry.SetRange("CXW Exported", false);
-        ExportSelectedEntries(AvailabilityChangeEntry, CurrentExportedCount, CurrentFailedCount);
-        ExportedCount += CurrentExportedCount;
-        FailedCount += CurrentFailedCount;
+        StockChangeEntry.SetRange("CXW Item No.", ItemNo);
+        ExportSelectedEntries(StockChangeEntry, ExportedCount, FailedCount);
 
-        Clear(CurrentExportedCount);
-        Clear(CurrentFailedCount);
-        AvailabilityDeliveryTime.SetRange("CXW Item No.", ItemNo);
-        AvailabilityDeliveryTime.SetRange("CXW Exported", false);
-        ExportSelectedDeliveryTimes(AvailabilityDeliveryTime, CurrentExportedCount, CurrentFailedCount);
-        ExportedCount += CurrentExportedCount;
-        FailedCount += CurrentFailedCount;
+        DeliveryTimeChangeEntry.SetRange("CXW Item No.", ItemNo);
+        ExportDeliveryTimesForEntries(DeliveryTimeChangeEntry, ExportedCount, FailedCount);
 
-        Clear(CurrentExportedCount);
-        Clear(CurrentFailedCount);
-        AvailabilityInventoryTime.SetRange("CXW Item No.", ItemNo);
-        AvailabilityInventoryTime.SetRange("CXW Exported", false);
-        ExportSelectedInventoryTimes(AvailabilityInventoryTime, CurrentExportedCount, CurrentFailedCount);
-        ExportedCount += CurrentExportedCount;
-        FailedCount += CurrentFailedCount;
+        InventoryTimeChangeEntry.SetRange("CXW Item No.", ItemNo);
+        ExportInventoryTimesForEntries(InventoryTimeChangeEntry, ExportedCount, FailedCount);
     end;
 
     procedure ExportSelectedEntries(var AvailabilityChangeEntry: Record "CXW Availability Change Entry"; var ExportedCount: Integer; var FailedCount: Integer)
@@ -69,10 +55,68 @@ codeunit 60347 "CXW Export Availability Change"
 
     procedure ExportOpenDeliveryTimes(var ExportedCount: Integer; var FailedCount: Integer)
     var
-        AvailabilityDeliveryTime: Record "CXW Availability Delivery Time";
+        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
     begin
-        AvailabilityDeliveryTime.SetRange("CXW Exported", false);
-        ExportSelectedDeliveryTimes(AvailabilityDeliveryTime, ExportedCount, FailedCount);
+        ExportDeliveryTimesForEntries(AvailabilityChangeEntry, ExportedCount, FailedCount);
+    end;
+
+    // UPDDLT only sends articles from the change entry log: per logged article the delivery times of all
+    // active countries are recalculated and always sent, then its change entries are marked as sent.
+    procedure ExportDeliveryTimesForEntries(var AvailabilityChangeEntry: Record "CXW Availability Change Entry"; var ExportedCount: Integer; var FailedCount: Integer)
+    var
+        DataExportApiSetup: Record "Data Export API Setup";
+        AvailabilityChangeMgt: Codeunit "CXW Availability Change Mgt";
+        SentArticles: Dictionary of [Text, Boolean];
+        EntryNos: List of [Integer];
+        EntryNo: Integer;
+        ArticleKey: Text;
+        TimeVariantCode: Code[20];
+        Sent: Boolean;
+    begin
+        LoadDataExportApiSetup(DeliveryTimeExportSetupCodeLbl, DataExportApiSetup);
+        AvailabilityChangeEntry.SetRange("CXW Deli. Time Exported", false);
+        CollectEntryNos(AvailabilityChangeEntry, EntryNos);
+
+        foreach EntryNo in EntryNos do begin
+            AvailabilityChangeEntry.Get(EntryNo);
+            TimeVariantCode := AvailabilityChangeMgt.GetDeliveryTimeVariantCode(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code");
+            ArticleKey := AvailabilityChangeEntry."CXW Item No." + '|' + TimeVariantCode;
+            // Several entries of the same article are sent only once per run.
+            if not SentArticles.Get(ArticleKey, Sent) then begin
+                AvailabilityChangeMgt.RefreshDeliveryTimes(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code");
+                Sent := SendDeliveryTimes(AvailabilityChangeEntry."CXW Item No.", TimeVariantCode, DataExportApiSetup, ExportedCount, FailedCount);
+                SentArticles.Add(ArticleKey, Sent);
+            end;
+
+            if Sent then begin
+                AvailabilityChangeEntry."CXW Deli. Time Exported" := true;
+                AvailabilityChangeEntry."CXW Deli. Time Exported At" := CurrentDateTime;
+                AvailabilityChangeEntry.Modify();
+            end;
+        end;
+    end;
+
+    local procedure SendDeliveryTimes(ItemNo: Code[20]; TimeVariantCode: Code[20]; DataExportApiSetup: Record "Data Export API Setup"; var ExportedCount: Integer; var FailedCount: Integer): Boolean
+    var
+        AvailabilityDeliveryTime: Record "CXW Availability Delivery Time";
+        AllSent: Boolean;
+    begin
+        AllSent := true;
+        AvailabilityDeliveryTime.SetRange("CXW Item No.", ItemNo);
+        AvailabilityDeliveryTime.SetRange("CXW Variant Code", TimeVariantCode);
+        if AvailabilityDeliveryTime.FindSet() then
+            repeat
+                if ExportDeliveryTime(AvailabilityDeliveryTime, DataExportApiSetup) then begin
+                    AvailabilityDeliveryTime."CXW Exported" := true;
+                    AvailabilityDeliveryTime."CXW Exported At" := CurrentDateTime;
+                    AvailabilityDeliveryTime.Modify(true);
+                    ExportedCount += 1;
+                end else begin
+                    FailedCount += 1;
+                    AllSent := false;
+                end;
+            until AvailabilityDeliveryTime.Next() = 0;
+        exit(AllSent);
     end;
 
     procedure ExportSelectedDeliveryTimes(var AvailabilityDeliveryTime: Record "CXW Availability Delivery Time"; var ExportedCount: Integer; var FailedCount: Integer)
@@ -97,10 +141,79 @@ codeunit 60347 "CXW Export Availability Change"
 
     procedure ExportOpenInventoryTimes(var ExportedCount: Integer; var FailedCount: Integer)
     var
-        AvailabilityInventoryTime: Record "CXW Availability Inv. Time";
+        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
     begin
-        AvailabilityInventoryTime.SetRange("CXW Exported", false);
-        ExportSelectedInventoryTimes(AvailabilityInventoryTime, ExportedCount, FailedCount);
+        ExportInventoryTimesForEntries(AvailabilityChangeEntry, ExportedCount, FailedCount);
+    end;
+
+    // UPDIN only sends articles from the change entry log: per logged article the inventory times of all
+    // active countries are recalculated and always sent, then its change entries are marked as sent.
+    procedure ExportInventoryTimesForEntries(var AvailabilityChangeEntry: Record "CXW Availability Change Entry"; var ExportedCount: Integer; var FailedCount: Integer)
+    var
+        DataExportApiSetup: Record "Data Export API Setup";
+        AvailabilityChangeMgt: Codeunit "CXW Availability Change Mgt";
+        SentArticles: Dictionary of [Text, Boolean];
+        EntryNos: List of [Integer];
+        EntryNo: Integer;
+        ArticleKey: Text;
+        TimeVariantCode: Code[20];
+        Sent: Boolean;
+    begin
+        LoadDataExportApiSetup(InventoryTimeExportSetupCodeLbl, DataExportApiSetup);
+        AvailabilityChangeEntry.SetRange("CXW Inv. Time Exported", false);
+        CollectEntryNos(AvailabilityChangeEntry, EntryNos);
+
+        foreach EntryNo in EntryNos do begin
+            AvailabilityChangeEntry.Get(EntryNo);
+            TimeVariantCode := AvailabilityChangeMgt.GetDeliveryTimeVariantCode(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code");
+            ArticleKey := AvailabilityChangeEntry."CXW Item No." + '|' + TimeVariantCode;
+            // Several entries of the same article are sent only once per run.
+            if not SentArticles.Get(ArticleKey, Sent) then begin
+                AvailabilityChangeMgt.RefreshDeliveryTimes(AvailabilityChangeEntry."CXW Item No.", AvailabilityChangeEntry."CXW Variant Code");
+                Sent := SendInventoryTimes(AvailabilityChangeEntry."CXW Item No.", TimeVariantCode, DataExportApiSetup, ExportedCount, FailedCount);
+                SentArticles.Add(ArticleKey, Sent);
+            end;
+
+            if Sent then begin
+                AvailabilityChangeEntry."CXW Inv. Time Exported" := true;
+                AvailabilityChangeEntry."CXW Inv. Time Exported At" := CurrentDateTime;
+                AvailabilityChangeEntry.Modify();
+            end;
+        end;
+    end;
+
+    local procedure SendInventoryTimes(ItemNo: Code[20]; TimeVariantCode: Code[20]; DataExportApiSetup: Record "Data Export API Setup"; var ExportedCount: Integer; var FailedCount: Integer): Boolean
+    var
+        AvailabilityInventoryTime: Record "CXW Availability Inv. Time";
+        AllSent: Boolean;
+    begin
+        AllSent := true;
+        AvailabilityInventoryTime.SetRange("CXW Item No.", ItemNo);
+        AvailabilityInventoryTime.SetRange("CXW Variant Code", TimeVariantCode);
+        if AvailabilityInventoryTime.FindSet() then
+            repeat
+                if ExportInventoryTime(AvailabilityInventoryTime, DataExportApiSetup) then begin
+                    AvailabilityInventoryTime."CXW Exported" := true;
+                    AvailabilityInventoryTime."CXW Exported At" := CurrentDateTime;
+                    AvailabilityInventoryTime.Modify(true);
+                    ExportedCount += 1;
+                end else begin
+                    FailedCount += 1;
+                    AllSent := false;
+                end;
+            until AvailabilityInventoryTime.Next() = 0;
+        exit(AllSent);
+    end;
+
+    // The export modifies the filtered "exported" field, so the entry numbers are collected before sending.
+    local procedure CollectEntryNos(var AvailabilityChangeEntry: Record "CXW Availability Change Entry"; var EntryNos: List of [Integer])
+    begin
+        AvailabilityChangeEntry.SetLoadFields("CXW Entry No.");
+        if AvailabilityChangeEntry.FindSet() then
+            repeat
+                EntryNos.Add(AvailabilityChangeEntry."CXW Entry No.");
+            until AvailabilityChangeEntry.Next() = 0;
+        AvailabilityChangeEntry.SetLoadFields();
     end;
 
     procedure ExportSelectedInventoryTimes(var AvailabilityInventoryTime: Record "CXW Availability Inv. Time"; var ExportedCount: Integer; var FailedCount: Integer)
