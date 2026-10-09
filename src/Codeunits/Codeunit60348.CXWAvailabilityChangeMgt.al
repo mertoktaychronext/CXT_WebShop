@@ -245,20 +245,21 @@ codeunit 60348 "CXW Availability Change Mgt"
         CountryRegion: Record "Country/Region";
         Item: Record Item;
         ItemVariant: Record "Item Variant";
+        LastItemNo: Code[20];
     begin
         if not CountryRegion.Get(CountryRegionCode) then
             exit;
         if not CountryRegion."CXW Webshop Deli. Time Active" then
             exit;
 
-        if not Item.FindSet() then
+        // Only articles from the change entry log are webshop articles; each one is calculated once.
+        AvailabilityChangeEntry.SetCurrentKey("CXW Item No.", "CXW Variant Code");
+        AvailabilityChangeEntry.SetLoadFields("CXW Item No.");
+        if not AvailabilityChangeEntry.FindSet() then
             exit;
 
-        AvailabilityChangeEntry.SetCurrentKey("CXW Item No.", "CXW Variant Code");
         repeat
-            // Only articles from the change entry log are webshop articles; all others get no time records.
-            AvailabilityChangeEntry.SetRange("CXW Item No.", Item."No.");
-            if not AvailabilityChangeEntry.IsEmpty() then begin
+            if (AvailabilityChangeEntry."CXW Item No." <> LastItemNo) and Item.Get(AvailabilityChangeEntry."CXW Item No.") then begin
                 ItemVariant.SetRange("Item No.", Item."No.");
                 if ItemVariant.FindSet() then
                     repeat
@@ -270,7 +271,8 @@ codeunit 60348 "CXW Availability Change Mgt"
                     RefreshInventoryTimesForCountry(Item."No.", Item."No.", CountryRegion.Code, AvailabilityCalculation);
                 end;
             end;
-        until Item.Next() = 0;
+            LastItemNo := AvailabilityChangeEntry."CXW Item No.";
+        until AvailabilityChangeEntry.Next() = 0;
     end;
 
     procedure RefreshDeliveryTimesForActiveCountries()
