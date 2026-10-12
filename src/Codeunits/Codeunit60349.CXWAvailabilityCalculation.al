@@ -252,11 +252,14 @@ codeunit 60349 "CXW Availability Calculation"
     var
         FormulaText: Text;
     begin
-        if not TryLoadSetupValue(CategoryCode, FormulaText) then
-            exit(false);
-
+        FormulaText := GetSetupValue(CategoryCode);
         if FormulaText = '' then
             exit(false);
+
+        // Setup values are maintained in English notation (e.g. 28D). Without angle brackets Evaluate reads the
+        // formula in the session language, so a German job queue session ("T" for day) would reject it.
+        if Evaluate(DeliveryFormula, '<' + DelChr(FormulaText, '<>', '<> ') + '>') then
+            exit(true);
 
         exit(Evaluate(DeliveryFormula, FormulaText));
     end;
@@ -315,8 +318,7 @@ codeunit 60349 "CXW Availability Calculation"
         end;
 
         if CachedAvailabilityLocationFilter = '' then begin
-            if not TryLoadAvailabilityLocationFilter(CachedAvailabilityLocationFilter) then
-                CachedAvailabilityLocationFilter := '';
+            CachedAvailabilityLocationFilter := GetSetupValue(WebshopSetupCategoryLbl);
 
             if CachedAvailabilityLocationFilter = '' then
                 CachedAvailabilityLocationFilter := 'HL';
@@ -325,51 +327,16 @@ codeunit 60349 "CXW Availability Calculation"
         exit(CachedAvailabilityLocationFilter);
     end;
 
-    [TryFunction]
-    local procedure TryLoadAvailabilityLocationFilter(var LocationFilter: Text)
+    // Typed access to the ChronextBC setup table: a renamed field breaks the build instead of silently
+    // returning nothing (the former lookup by field name searched "Category Code" and never found a value).
+    local procedure GetSetupValue(CategoryCode: Code[30]): Text
     var
-        SetupValue: Text;
+        SetupValue: Record "Setup Value";
     begin
-        if not TryLoadSetupValue(WebshopSetupCategoryLbl, SetupValue) then
-            exit;
-
-        LocationFilter := SetupValue;
-    end;
-
-    [TryFunction]
-    local procedure TryLoadSetupValue(CategoryCode: Text; var SetupValue: Text)
-    var
-        SetupValuesRef: RecordRef;
-        ValueFieldRef: FieldRef;
-    begin
-        SetupValuesRef.Open(50116);
-        ApplySetupValueFilter(SetupValuesRef, 'Setup Code', 'AVAILIBILITY');
-        ApplySetupValueFilter(SetupValuesRef, 'Category Code', CategoryCode);
-
-        if not SetupValuesRef.FindFirst() then
-            exit;
-
-        ValueFieldRef := GetFieldRefByName(SetupValuesRef, 'Value');
-        SetupValue := Format(ValueFieldRef.Value);
-    end;
-
-    local procedure ApplySetupValueFilter(var SetupValuesRef: RecordRef; FieldName: Text; FilterValue: Text)
-    var
-        SetupFieldRef: FieldRef;
-    begin
-        SetupFieldRef := GetFieldRefByName(SetupValuesRef, FieldName);
-        SetupFieldRef.SetRange(FilterValue);
-    end;
-
-    local procedure GetFieldRefByName(var SourceRecordRef: RecordRef; SearchFieldName: Text): FieldRef
-    var
-        FieldMetadata: Record Field;
-    begin
-        FieldMetadata.SetRange(TableNo, SourceRecordRef.Number);
-        FieldMetadata.SetRange(FieldName, SearchFieldName);
-        FieldMetadata.FindFirst();
-
-        exit(SourceRecordRef.Field(FieldMetadata."No."));
+        SetupValue.SetRange("Setup Code", AvailabilitySetupCodeLbl);
+        SetupValue.SetRange(Category, CategoryCode);
+        if SetupValue.FindFirst() then
+            exit(SetupValue.Value);
     end;
 
     var
@@ -377,6 +344,7 @@ codeunit 60349 "CXW Availability Calculation"
         ReplenishmentAttributeNameLbl: Label 'Wiederbeschaffbarkeit', Locked = true;
         ReplenishmentYesValueLbl: Label 'ja', Locked = true;
         TransferLocationCodeLbl: Label 'W', Locked = true;
+        AvailabilitySetupCodeLbl: Label 'AVAILIBILITY', Locked = true;
         WebshopSetupCategoryLbl: Label 'WEBSHOP', Locked = true;
         StockSetupCategoryLbl: Label 'STOCK', Locked = true;
         DemandSetupCategoryLbl: Label 'DEMAND', Locked = true;

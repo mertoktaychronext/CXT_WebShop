@@ -422,8 +422,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         end;
 
         if CachedAvailabilityLocationFilter = '' then begin
-            if not TryLoadAvailabilityLocationFilter(CachedAvailabilityLocationFilter) then
-                CachedAvailabilityLocationFilter := '';
+            CachedAvailabilityLocationFilter := LoadAvailabilityLocationFilter();
 
             if CachedAvailabilityLocationFilter = '' then
                 CachedAvailabilityLocationFilter := 'HL';
@@ -432,44 +431,20 @@ codeunit 60348 "CXW Availability Change Mgt"
         exit(CachedAvailabilityLocationFilter);
     end;
 
-    [TryFunction]
-    local procedure TryLoadAvailabilityLocationFilter(var LocationFilter: Text)
+    local procedure LoadAvailabilityLocationFilter(): Text
     var
-        SetupValuesRef: RecordRef;
-        ValueFieldRef: FieldRef;
+        SetupValue: Record "Setup Value";
     begin
-        SetupValuesRef.Open(50116);
-        ApplySetupValueFilter(SetupValuesRef, 'Setup Code', 'AVAILIBILITY');
-        ApplySetupValueFilter(SetupValuesRef, 'Category Code', 'WEBSHOP');
-
-        if not SetupValuesRef.FindFirst() then
-            exit;
-
-        ValueFieldRef := GetFieldRefByName(SetupValuesRef, 'Value');
-        LocationFilter := Format(ValueFieldRef.Value);
-    end;
-
-    local procedure ApplySetupValueFilter(var SetupValuesRef: RecordRef; FieldName: Text; FilterValue: Text)
-    var
-        SetupFieldRef: FieldRef;
-    begin
-        SetupFieldRef := GetFieldRefByName(SetupValuesRef, FieldName);
-        SetupFieldRef.SetRange(FilterValue);
-    end;
-
-    local procedure GetFieldRefByName(var SourceRecordRef: RecordRef; FieldName: Text): FieldRef
-    var
-        FieldMetadata: Record Field;
-    begin
-        FieldMetadata.SetRange(TableNo, SourceRecordRef.Number);
-        FieldMetadata.SetRange(FieldName, FieldName);
-        FieldMetadata.FindFirst();
-
-        exit(SourceRecordRef.Field(FieldMetadata."No."));
+        SetupValue.SetRange("Setup Code", AvailabilitySetupCodeLbl);
+        SetupValue.SetRange(Category, WebshopSetupCategoryLbl);
+        if SetupValue.FindFirst() then
+            exit(SetupValue.Value);
     end;
 
     var
         CachedAvailabilityLocationFilter: Text;
+        AvailabilitySetupCodeLbl: Label 'AVAILIBILITY', Locked = true;
+        WebshopSetupCategoryLbl: Label 'WEBSHOP', Locked = true;
         InventoryTimeStockTypeLbl: Label 'stock', Locked = true;
         InventoryTimeNonStockTypeLbl: Label 'non-stock', Locked = true;
 }
