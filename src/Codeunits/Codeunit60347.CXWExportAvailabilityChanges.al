@@ -304,10 +304,14 @@ codeunit 60347 "CXW Export Availability Change"
     local procedure BuildDeliveryTimeJson(AvailabilityDeliveryTime: Record "CXW Availability Delivery Time"; var JsonText: Text)
     var
         JsonObj: JsonObject;
+        ProductKey: Code[20];
+        VariantKey: Code[20];
     begin
-        // The UPDDLT endpoint accepts the delivery-time values only.
-        JsonObj.Add('itemNo', AvailabilityDeliveryTime."CXW Item No.");
-        JsonObj.Add('variantCode', AvailabilityDeliveryTime."CXW Variant Code");
+        // The UPDDLT endpoint accepts the delivery-time values only. Like UPDSTOFILE and UPDIN, the
+        // webshop identifies the article by "Old Item No."/"Old Variant Code" when they are filled.
+        GetStockKeys(AvailabilityDeliveryTime."CXW Item No.", AvailabilityDeliveryTime."CXW Variant Code", ProductKey, VariantKey);
+        JsonObj.Add('itemNo', ProductKey);
+        JsonObj.Add('variantCode', VariantKey);
         JsonObj.Add('countryRegionCode', AvailabilityDeliveryTime."CXW Country/Region Code");
         JsonObj.Add('deliveryTime', AvailabilityDeliveryTime."CXW Delivery Days");
         JsonObj.WriteTo(JsonText);
@@ -473,7 +477,10 @@ codeunit 60347 "CXW Export Availability Change"
     local procedure CreateProcessedDeliveryTimeDataExportEntry(AvailabilityDeliveryTime: Record "CXW Availability Delivery Time"; JsonText: Text)
     var
         DataExportEntry: Record "Data Export Entry";
+        ProductKey: Code[20];
+        VariantKey: Code[20];
     begin
+        GetStockKeys(AvailabilityDeliveryTime."CXW Item No.", AvailabilityDeliveryTime."CXW Variant Code", ProductKey, VariantKey);
         DataExportEntry.Init();
         DataExportEntry."Payload Format" := DataExportEntry."Payload Format"::JSON;
         DataExportEntry."Destination Code" := DeliveryTimeExportSetupCodeLbl;
@@ -481,8 +488,8 @@ codeunit 60347 "CXW Export Availability Change"
         DataExportEntry.FileName := CopyStr(
             StrSubstNo(
                 'itemNo=%1&variantCode=%2&countryRegionCode=%3',
-                AvailabilityDeliveryTime."CXW Item No.",
-                AvailabilityDeliveryTime."CXW Variant Code",
+                ProductKey,
+                VariantKey,
                 AvailabilityDeliveryTime."CXW Country/Region Code"),
             1,
             MaxStrLen(DataExportEntry.FileName));
