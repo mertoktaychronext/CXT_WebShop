@@ -366,8 +366,9 @@ Codeunit 60331 "CXW Process Workshop Lines" (job-queue-gesteuert, OnRun
           sichert bereits erfolgreiche Zeilen unabhängig vom Ausgang der
           nächsten
 
-Ansicht (read-only): Page 60338 "CXW Workshop Lines" (Liste, alle Felder
-   inkl. Status, Attribute, Last Error)
+Ansicht/Korrektur: Page 60338 "CXW Workshop Lines" (Liste, alle Felder
+   inkl. Status, Attribute, Last Error; bearbeitbar außer Schlüsselfeldern und
+   Artikelnr., kein Anlegen/Löschen; Status-Rückschritte verhindert OnModify der Tabelle)
 
 Löschverhalten (TableExtension 60321, OnDelete der Purchase Line):
    Workshop Line im Status New/WS checked → wird mitgelöscht

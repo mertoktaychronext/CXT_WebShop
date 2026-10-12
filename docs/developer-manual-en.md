@@ -364,8 +364,9 @@ Codeunit 60331 "CXW Process Workshop Lines" (job-queue driven, OnRun
           preserves already-successful lines regardless of the next
           line's outcome
 
-View (read-only): Page 60338 "CXW Workshop Lines" (list, all fields incl.
-   status, attributes, last error)
+View/correction: Page 60338 "CXW Workshop Lines" (list, all fields incl.
+   status, attributes, last error; editable except key fields and item no.,
+   no insert/delete; status regressions are blocked by the table's OnModify)
 
 Delete behavior (TableExtension 60321, OnDelete of the Purchase Line):
    Workshop Line with status New/WS checked → deleted along with the line

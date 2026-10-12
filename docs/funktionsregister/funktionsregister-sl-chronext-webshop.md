@@ -206,7 +206,7 @@ Zeigt auf der Bestellzeilen-Übersicht zusätzlich Herstellerseriennummer und "A
 
 ### Seite: CXW Workshop Lines (ID: 60338)
 
-Nur-Lese-Übersicht aller Werkstattzeilen (inkl. Attribute, Status, Prüfzeitpunkt, letztem Verarbeitungsfehler sowie den an die Werkstatt übergebenen Bestell- und Uhrendaten) für die interne Nachverfolgung. *Keine eigenen Prozeduren oder Trigger.*
+Übersicht aller Werkstattzeilen, auf der Status und Merkmale korrigiert werden können (Bestellbezug und Artikelnummer gesperrt, kein Anlegen/Löschen) (inkl. Attribute, Status, Prüfzeitpunkt, letztem Verarbeitungsfehler sowie den an die Werkstatt übergebenen Bestell- und Uhrendaten) für die interne Nachverfolgung. *Keine eigenen Prozeduren oder Trigger.*
 
 ### Seite: CXW Workshop Line API (ID: 60339)
 

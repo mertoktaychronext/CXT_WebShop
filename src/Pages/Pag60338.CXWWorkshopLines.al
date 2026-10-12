@@ -3,10 +3,10 @@ page 60338 "CXW Workshop Lines"
     Caption = 'Workshop Lines';
     PageType = List;
     SourceTable = "CXW Workshop Line";
-    Editable = false;
+    Editable = true;
     InsertAllowed = false;
     DeleteAllowed = false;
-    ModifyAllowed = false;
+    ModifyAllowed = true;
     ApplicationArea = All;
     UsageCategory = Lists;
 
@@ -16,24 +16,29 @@ page 60338 "CXW Workshop Lines"
         {
             repeater(Group)
             {
+                // Key and item fields link the line to its purchase line; changing them would rename or detach it.
                 field("CXW Document Type"; Rec."CXW Document Type")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                     ToolTip = 'Specifies the purchase document type this workshop line belongs to.';
                 }
                 field("CXW Document No."; Rec."CXW Document No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                     ToolTip = 'Specifies the purchase document number this workshop line belongs to.';
                 }
                 field("CXW Line No."; Rec."CXW Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                     ToolTip = 'Specifies the purchase line number this workshop line belongs to.';
                 }
                 field("CXW Item No."; Rec."CXW Item No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                     ToolTip = 'Specifies the item that was sent to the workshop.';
                 }
                 field("CXW Manufacturer Serial No."; Rec."CXW Manufacturer Serial No.")
