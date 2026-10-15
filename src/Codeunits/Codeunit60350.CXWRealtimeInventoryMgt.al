@@ -29,7 +29,7 @@ codeunit 60350 "CXW Realtime Inventory Mgt."
         RealtimeInventory."CXW Company Name" := CompanyName;
         RealtimeInventory."CXW Location Code" := ItemLedgerEntry."Location Code";
         RealtimeInventory."CXW Serial No." := ItemLedgerEntry."Serial No.";
-        RealtimeInventory."CXW Differential Taxation" := ItemLedgerEntry."CXB Margin Taxation";
+        RealtimeInventory."CXW Differential Taxation" := ItemLedgerEntry."SLPSBC Margin Taxation";
         RealtimeInventory."CXW Posting Date" := ItemLedgerEntry."Posting Date";
         ItemLedgerEntry.CalcFields("Cost Amount (Actual)");
         RealtimeInventory."CXW Purchase Price" := ItemLedgerEntry."Cost Amount (Actual)";

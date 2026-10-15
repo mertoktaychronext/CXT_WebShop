@@ -88,7 +88,7 @@ codeunit 60348 "CXW Availability Change Mgt"
     begin
         QueueAvailabilityChange(
             ItemLedgerEntry."Item No.", ItemLedgerEntry."Variant Code", ItemLedgerEntry."Location Code",
-            ItemLedgerEntry."Entry No.", ItemLedgerEntry."CXB Margin Taxation");
+            ItemLedgerEntry."Entry No.", ItemLedgerEntry."SLPSBC Margin Taxation");
     end;
 
     local procedure QueueTransferLineChange(TransferLine: Record "Transfer Line")
@@ -187,7 +187,7 @@ codeunit 60348 "CXW Availability Change Mgt"
             Clear(AvailabilityChangeEntry."CXW Diff. Taxation Purchase");
 
             if ItemLedgerEntry.Get(AvailabilityChangeEntry."CXW Item Ledger Entry No.") then
-                AvailabilityChangeEntry."CXW Diff. Taxation Purchase" := ItemLedgerEntry."CXB Margin Taxation";
+                AvailabilityChangeEntry."CXW Diff. Taxation Purchase" := ItemLedgerEntry."SLPSBC Margin Taxation";
         end;
 
         AvailabilityChangeEntry."CXW Inventory Quantity" := GetAvailableInventoryQuantity(
@@ -209,7 +209,7 @@ codeunit 60348 "CXW Availability Change Mgt"
         ItemLedgerEntry.SetRange("Variant Code", VariantCode);
         ItemLedgerEntry.SetFilter("Location Code", GetAvailabilityLocationFilter());
         ItemLedgerEntry.SetRange(Open, true);
-        ItemLedgerEntry.SetRange("CXB Margin Taxation", DifferentialTaxationPurchase);
+        ItemLedgerEntry.SetRange("SLPSBC Margin Taxation", DifferentialTaxationPurchase);
         if ItemLedgerEntry.FindSet() then
             repeat begin
                 ItemLedgerEntry.CalcFields("Reserved Quantity");
