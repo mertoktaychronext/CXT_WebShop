@@ -1,0 +1,22 @@
+{
+    "folders": [
+        {
+            "name": "app",
+            "path": "app"
+        },
+        {
+            "name": "test",
+            "path": "test"
+        },
+        {
+            "name": "root",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "app/": true,
+            "test/": true
+        }
+    }
+}

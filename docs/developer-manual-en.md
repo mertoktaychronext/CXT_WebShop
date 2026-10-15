@@ -62,8 +62,8 @@ As a fourth, new component, the extension includes **Consignment Sales** (Enum 6
 ## Project Structure
 
 ```
-app.json                          # Extension manifest, idRanges 51000-51049 + 60300-60349, CHX.Base dependency
-src/
+app/app.json                      # Extension manifest, idRanges 51000-51049 + 60300-60349, CHX.Base dependency
+app/src/
   Tables/                         # 12 tables (60300-60302 SellWatch; 60311-60317 sales price management; 60318 Workshop; 60341 Consignment Sales)
   TableExtensions/                # 6 extensions (Purchase Line, Purchase Header, Purchases & Payables Setup – SellWatch/Consignment; Sales Price, Country/Region – sales price management; Purchase Line – Workshop)
   PageExtensions/                 # 5 extensions (Sales Prices, Countries/Regions – sales price management; Purchase Order, Purchase Order Subform – Workshop; Purchases & Payables Setup – SellWatch/Consignment)
@@ -71,7 +71,8 @@ src/
   Codeunits/                      # 6 codeunits (SellWatch Mgt, SellWatch Process Offer – SellWatch; Export Gateway Sales Price, Import Sales Prices – sales price management; Process Workshop Lines – Workshop; Consignment Sale Detection, Post Consignment Purchases – Consignment Sales)
   Enums/                          # 9 enums (SW Order Status – SellWatch; 6 more – sales price management; Workshop Line Status – Workshop; Consignment Posting Status – Consignment Sales)
   PermissionSets/                 # 5 permission sets (CXW SWChronWSAll, CXW Sell Watch API – SellWatch; CXWChronWSAll – sales price management; CXW Workshop All [also covers Consignment Sales since this update], CXW Workshop API – Workshop)
-Translations/                     # .g.xlf (generated) + de-DE.xlf (maintained)
+app/Translations/                 # .g.xlf (generated) + de-DE.xlf (maintained)
+test/                             # test app "CHX.Webshop Tests" (IDs 50400-50499, see Running Tests)
 openspec/
   specs/                          # durable capability specs (e.g. sales-price-country-copy, sellwatch-http-call-logging, sellwatch-standard-table-extensions)
   changes/                        # in-progress and archived change proposals
@@ -497,28 +498,42 @@ Full list of all objects and their function counts: see `docs/funktionsregister/
 
 ## Permission Set
 
-The **`CXWChronWSAll`** permission set (ID 60336, `src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. Since 27.0.0.3 the set also grants `RIM` on the ChronextBC table "Data Export Entry" that the price export writes to. Since 27.0.0.6 it additionally covers `RIMD` on Table 60320, Page 60320 and Codeunits 60332–60334; the job queue entry's user needs this set. The set still needs to be actively assigned to a user group.
+The **`CXWChronWSAll`** permission set (ID 60336, `app/src/PermissionSets/CXWChronWSAll.permissionset.al`) covers read/write access to all seven sales price management tables plus — since the HTTP-logging update — the shared Table 60302 "CXW Http Call Log", along with execute rights for both codeunits, Xmlport 60328, and the five pages (the four sales-price-management pages plus Page 60309 "CXW Http Call Log"). Table and page extensions don't need their own entries, since they're covered by the base object's permissions (e.g. standard access to "Currency"); the standard "Sales Price" table that Codeunit 60329 writes to is likewise covered by base app permissions, not by this set. Since 27.0.0.3 the set also grants `RIM` on the ChronextBC table "Data Export Entry" that the price export writes to. Since 27.0.0.6 it additionally covers `RIMD` on Table 60320, Page 60320 and Codeunits 60332–60334; the job queue entry's user needs this set. The set still needs to be actively assigned to a user group.
 
-For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the two SellWatch-only tables (60300–60301) plus the shared Table 60302 "CXW Http Call Log", along with execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309, where Page 60309 "CXW Http Call Log" is likewise shared). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
+For SellWatch, the separate **`CXW SWChronWSAll`** permission set (ID 60310, `app/src/PermissionSets/CXWSWChronWSAll.permissionset.al`) covers RIMD access to the two SellWatch-only tables (60300–60301) plus the shared Table 60302 "CXW Http Call Log", along with execute rights for Codeunit 60305 and the three SellWatch pages (60307–60309, where Page 60309 "CXW Http Call Log" is likewise shared). Table extensions 60303/60304 on "Purchase Line"/"Purchase Header" don't need their own entries either, for the same reason as sales price management's extensions — they're covered by the base table's standard permissions. This set also still needs to be actively assigned to a user group.
 
-For the Workshop authenticity check, there are two separate permission sets: **`CXW Workshop All`** (ID 60301, `src/PermissionSets/CXWWorkshopAll.permissionset.al`) for full internal access to Table 60318, all Workshop pages, and Codeunit 60331 — including the standard tables needed for goods receipt, cancellation, and item attributes (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping; for "Send to Workshop" additionally Reservation Entry and Serial No. Information with RIM, No. Series Line with RM and Item Tracking Code with R), so the job queue codeunit can run standalone — and **`CXW Workshop API`** (ID 60302, `src/PermissionSets/CXWWorkshopAPI.permissionset.al`) as a lean counterpart exclusively for the external workshop user: only `tabledata "CXW Workshop Line" = RM`, no insert/delete, no access to Purchase Line or Item. Both sets still need to be actively assigned (`CXW Workshop All` to internal staff / the job queue execution user, `CXW Workshop API` exclusively to the workshop's dedicated OAuth2-S2S user).
+For the Workshop authenticity check, there are two separate permission sets: **`CXW Workshop All`** (ID 60301, `app/src/PermissionSets/CXWWorkshopAll.permissionset.al`) for full internal access to Table 60318, all Workshop pages, and Codeunit 60331 — including the standard tables needed for goods receipt, cancellation, and item attributes (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping; for "Send to Workshop" additionally Reservation Entry and Serial No. Information with RIM, No. Series Line with RM and Item Tracking Code with R), so the job queue codeunit can run standalone — and **`CXW Workshop API`** (ID 60302, `app/src/PermissionSets/CXWWorkshopAPI.permissionset.al`) as a lean counterpart exclusively for the external workshop user: only `tabledata "CXW Workshop Line" = RM`, no insert/delete, no access to Purchase Line or Item. Both sets still need to be actively assigned (`CXW Workshop All` to internal staff / the job queue execution user, `CXW Workshop API` exclusively to the workshop's dedicated OAuth2-S2S user).
 
 **`CXW Workshop All`** now also covers Table 60341, Codeunit 60344/60345, and Page 60342 since the Consignment Sales update, including read access to the standard tables `Sales Invoice Header`/`Sales Invoice Line` (for the event subscriber) and `Purchases & Payables Setup` (for the new delay field) — the job queue execution user for Codeunit 60345 therefore needs the same permission set as for Workshop processing.
 
 ## Running Tests
 
-There are currently **no** AL test codeunits in this project. The specification `openspec/specs/sales-price-country-copy/spec.md` (scenarios for the country setup and the "Add all Countries" action) is a good basis for future tests. For SellWatch, `openspec/specs/sellwatch-http-call-logging/spec.md` (scenarios for success/failure logging, API key redaction, and telemetry from `CreateEntryInexternalFile`) and `openspec/specs/sellwatch-standard-table-extensions/spec.md` (scenarios for "CXW Used good" and "CXW Tracking Number") offer a comparable starting point. For the Workshop authenticity check, scenarios are still spread across several, partly unarchived OpenSpec changes (`openspec/changes/purchase-workshop-integration/specs/` plus the deltas built on top of it in `openspec/changes/archive/2026-08-13-workshop-line-error-handling/` and `openspec/changes/archive/2026-08-13-workshop-attribute-*`) — before writing tests, these should be consolidated into a canonical spec under `openspec/specs/workshop-line-processing/` (see Known Limitations).
+The automated tests are in the test app **CHX.Webshop Tests** under `test/` (IDs 50400–50499; 50300–50399 is used by CHX.Base Tests). It is never shipped to customers. Open the workspace `CHX.Webshop.code-workspace`, run *AL: Download Symbols* in the `test` folder, publish the app and the test app, and run the tests in the Test Explorer (BC 28 or later). Please use a dedicated test sandbox (`test/.vscode/launch.json`: `ChronextAutoTest`).
+
+| Codeunit | Content |
+|---|---|
+| 50400 CXW Test API Interface Setup | Field relevance per auth type, activation guard, display of secrets (simplest starting point) |
+| 50401 CXW Test Workshop Line Data | Prefill of the check attributes, purchase and watch data for the workshop API |
+| 50402 CXW Test Sales Price WriteBack | Write-back into "Sales Price", Unit Price (LCY), archive |
+| 50403 CXW Test Sales Price Export | Release, payload, log, export job, settings |
+| 50404 CXW Test Permissions | All objects are covered by the app's permission sets |
+| 50499 CXW Test Library | Test data helpers |
+
+`[HttpClientHandler]` is only available OnPrem. The export tests therefore send to a `.invalid` address that can never be reached, and only check what is stored before and after sending. A successful transmission is not tested automatically.
+
+Not yet covered by automated tests (basis for further test codeunits): country expansion (`openspec/specs/sales-price-country-copy/spec.md`, logic on Page 60322), SellWatch, consignment sales, availability/delivery times, On Demand, and the processing of workshop lines. For SellWatch, `openspec/specs/sellwatch-http-call-logging/spec.md` (scenarios for success/failure logging, API key redaction, and telemetry from `CreateEntryInexternalFile`) and `openspec/specs/sellwatch-standard-table-extensions/spec.md` (scenarios for "CXW Used good" and "CXW Tracking Number") offer a comparable starting point. For the Workshop authenticity check, scenarios are still spread across several, partly unarchived OpenSpec changes (`openspec/changes/purchase-workshop-integration/specs/` plus the deltas built on top of it in `openspec/changes/archive/2026-08-13-workshop-line-error-handling/` and `openspec/changes/archive/2026-08-13-workshop-attribute-*`) — before writing tests, these should be consolidated into a canonical spec under `openspec/specs/workshop-line-processing/` (see Known Limitations).
 
 ## Deployment
 
-No CI/CD setup (e.g. an AL-Go workflow) was found in the project. Deployment is currently manual via "AL: Publish" from VS Code into the target environment.
+Azure DevOps pipeline `azure-pipelines.yml` (scripts in `.pipelines/`): on every push, build with CodeCop/UICop and all tests of the test app in a BC container (agent pool `SelfHosted-BCServer`); nightly also against NextMinor/NextMajor. The dependencies (Salini Base App, CHX.Base, ChronextBC) are stored as `.app` files in `.pipelines/dependencies`, the SalLicenseCheckApp stub in `.pipelines/stubs`. The build artifact `CHXWebshop-de` contains only the app. Deployment is still manual via "AL: Publish" from VS Code or the admin center.
 
 ## Contributing / Conventions
 
 - All new objects get IDs in the registered **60300–60349** range (see `app.json`, `idRanges`; the older 51000–51049 range remains registered but, since the 2026-08-10 rename, is no longer occupied), counted independently per object type.
 - The code deliberately contains **no comments** (removed at the customer's explicit request) — business context and design decisions are documented here and in the function register instead. Please keep this style when making changes, and add context here rather than in the code.
 - Completed, functional changes are documented as an OpenSpec change (`openspec/changes/`, archived under `openspec/changes/archive/` once finished) and captured as a durable spec under `openspec/specs/`.
-- Translations: `.g.xlf` is generated by the compiler and must **not** be edited manually; maintain translations only in `Translations/CHX.Webshop.de-DE.xlf`.
+- Translations: `.g.xlf` is generated by the compiler and must **not** be edited manually; maintain translations only in `app/Translations/CHX.Webshop.de-DE.xlf`.
+- Add new tables, pages, reports, codeunits, queries and XMLports to a permission set of the app (X, for tables also `tabledata` RIMD), otherwise `CXW Test Permissions` (50404) fails.
 
 ## Known Limitations
 
