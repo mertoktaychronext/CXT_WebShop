@@ -38,7 +38,7 @@ table 60317 "CXW API Interface Setup"
                     if IsApiKeyFieldRelevant() and not IsAwsFieldsRelevant() and (GetApiKey() = '') then
                         Error(MissingApiKeyErr, "CXW Auth Type");
                     if IsAwsFieldsRelevant() then
-                        if ("CXW AWS Access Key ID" = '') or ("CXW AWS Region" = '') or ("CXW AWS Service" = '') or (GetAwsSecretAccessKey() = '') then
+                        if ("CXW AWS Access Key ID" = '') or ("CXW AWS Region" = '') or ("CXW AWS Service" = '') then
                             Error(MissingAwsCredentialsErr);
                 end;
             end;
@@ -165,6 +165,35 @@ table 60317 "CXW API Interface Setup"
         exit(StrSubstNo('SLAPIInterfaceSetup_AwsSessionToken_%1', "CXW Code"));
     end;
 
+    procedure GetApiKeyHint(): Text
+    begin
+        exit(GetSecretHint(GetApiKey()));
+    end;
+
+    procedure GetAwsSecretAccessKeyHint(): Text
+    begin
+        exit(GetSecretHint(GetAwsSecretAccessKey()));
+    end;
+
+    procedure GetAwsSessionTokenHint(): Text
+    begin
+        exit(GetSecretHint(GetAwsSessionToken()));
+    end;
+
+    // Shows only the last 4 characters so a stored secret can be recognized without exposing it.
+    // Secrets of 4 characters or less are fully masked, otherwise the hint would reveal the whole value.
+    local procedure GetSecretHint(SecretValue: Text): Text
+    var
+        SecretLength: Integer;
+    begin
+        SecretLength := StrLen(SecretValue);
+        if SecretLength = 0 then
+            exit(NotStoredLbl);
+        if SecretLength <= 4 then
+            exit(SecretMaskTok);
+        exit(SecretMaskTok + CopyStr(SecretValue, SecretLength - 3));
+    end;
+
     procedure IsApiKeyFieldRelevant(): Boolean
     begin
         exit("CXW Auth Type" <> "CXW Auth Type"::None);
@@ -177,5 +206,7 @@ table 60317 "CXW API Interface Setup"
 
     var
         MissingApiKeyErr: Label 'Auth Type is set to %1, but no API key has been entered for this interface.', Comment = '%1 = selected authentication type';
-        MissingAwsCredentialsErr: Label 'Auth Type is set to AWS Signature V4, but the AWS Access Key ID, Region, Service, or Secret Access Key has not been fully entered for this interface.';
+        MissingAwsCredentialsErr: Label 'Auth Type is set to AWS Signature V4, but the AWS Access Key ID, Region, or Service has not been fully entered for this interface.';
+        NotStoredLbl: Label '(not stored)';
+        SecretMaskTok: Label '••••••', Locked = true;
 }

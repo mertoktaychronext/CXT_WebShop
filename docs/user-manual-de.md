@@ -117,7 +117,7 @@ Die eigentliche Prüfung durch die Werkstatt sowie die Weiterverarbeitung nach d
 
 ## Workshop-Zeilen einsehen
 
-Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Diese Seite ist schreibgeschützt.
+Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Status und Merkmale können Sie dort korrigieren; Bestellbezug und Artikelnummer sind gesperrt, Zeilen lassen sich weder anlegen noch löschen.
 
 Direkt aus der **Einkaufsbestellung** zeigt das Feld **"Anzahl Werkstattzeilen"** (Inforegister "Allgemein"), wie viele Werkstattzeilen es für diese Bestellung gibt; leer bedeutet keine. Ein Klick auf den Wert öffnet die Workshop-Zeilen gefiltert auf diese Bestellung.
 

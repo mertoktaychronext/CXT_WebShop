@@ -20,6 +20,22 @@ codeunit 60336 "CXW Workshop Upgrade"
             MigrateHoldOrderToBase();
             UpgradeTag.SetUpgradeTag(GetHoldOrderMigrationTag());
         end;
+
+        if not UpgradeTag.HasUpgradeTag(GetAvailabilityTimeExportTag()) then begin
+            MarkSentEntriesAsTimeExported();
+            UpgradeTag.SetUpgradeTag(GetAvailabilityTimeExportTag());
+        end;
+    end;
+
+    // UPDDLT/UPDIN now work off the change entry log. Entries already sent as stock count as sent for the
+    // time interfaces too, otherwise the first run after the upgrade would send the whole history again.
+    local procedure MarkSentEntriesAsTimeExported()
+    var
+        AvailabilityChangeEntry: Record "CXW Availability Change Entry";
+    begin
+        AvailabilityChangeEntry.SetRange("CXW Exported", true);
+        AvailabilityChangeEntry.ModifyAll("CXW Deli. Time Exported", true, false);
+        AvailabilityChangeEntry.ModifyAll("CXW Inv. Time Exported", true, false);
     end;
 
     // Only lines the workshop has not reported on yet; filled fields are never overwritten.
@@ -85,11 +101,17 @@ codeunit 60336 "CXW Workshop Upgrade"
         exit('CXW-HOLD-ORDER-TO-BASE-20261001');
     end;
 
+    local procedure GetAvailabilityTimeExportTag(): Code[250]
+    begin
+        exit('CXW-AVAILABILITY-TIME-EXPORT-LOG-20261009');
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Upgrade Tag", 'OnGetPerCompanyUpgradeTags', '', false, false)]
     local procedure RegisterPerCompanyTags(var PerCompanyUpgradeTags: List of [Code[250]])
     begin
         PerCompanyUpgradeTags.Add(GetWorkshopLinePurchaseDataTag());
         PerCompanyUpgradeTags.Add(GetWorkshopLineAttributePrefillTag());
         PerCompanyUpgradeTags.Add(GetHoldOrderMigrationTag());
+        PerCompanyUpgradeTags.Add(GetAvailabilityTimeExportTag());
     end;
 }

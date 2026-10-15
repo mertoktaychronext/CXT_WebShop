@@ -12,6 +12,8 @@ As a third, likewise functionally independent component, the extension includes 
 
 As a fourth, new component, the extension includes **Consignment Sales** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): when a sales invoice is posted with a line for an item whose `"CXB Consignment Sales"` = true (a field supplied by the CHX.Base dependency), an event subscriber on `Codeunit "Sales-Post"` creates a consignment posting entry and automatically resolves the matching, received-but-not-yet-invoiced purchase order. A job-queue-driven codeunit posts due entries (due date = sales invoice posting date + a configurable delay in days) automatically as a purchase invoice. See the "Consignment Sales" section below for details.
 
+> **Update 2026-10-14 (margin taxation from the Salini Base App, version 27.0.0.26):** Availability changes (Codeunit 60348 "CXW Availability Change Mgt.": `QueueItemLedgerEntryChange`, refresh of "CXW Diff. Taxation Purchase", filter in `GetAvailableInventoryQuantity`) and realtime inventory (Codeunit 60350 "CXW Realtime Inventory Mgt.": "CXW Differential Taxation") now read the item ledger entry flag from `"SLPSBC Margin Taxation"` (Salini Base App) instead of the obsolete `"CXB Margin Taxation"` (CHX.Base). **Prerequisites:** CHX.Base ≥ 28.0.0.1 and Salini Base App ≥ 28.0.0.13 (new direct dependency). **Deploy only together with CHX.Base 28.0.0.1** in the same maintenance window; the CHX.Base upgrade migrates the item ledger entry values. No schema change, no upgrade code of its own. Details: `openspec/changes/margin-taxation-salini-field/`.
+
 > **Update 2026-09-28 (sales price export via the job queue, version 27.0.0.6):** "Upload Sales Price" has been replaced by "Release Sales Prices". The action no longer sends; it writes back, archives **only the archive country** (new setup field "CXW Archive Country Code", default DE), stores the price of every country in the new Table 60320 "CXW Sales Price Export", and creates a "Data Export Entry" (`SALESPRICE`) in the new status **"CXW Pending"** (enumextension 60300 on "Data Export Statuses") that only points to Table 60320 via `Source Record ID`. Source lines without a country are skipped. Codeunit 60332 "CXW Export Sales Price Job" builds the JSON in the **NAV-compatible format** (29 camelCase keys, see below) and sends it; retries up to "CXW Max. Export Attempts", after that manually via "Requeue Sales Price" (PageExtension 60336). Details: `openspec/changes/sales-price-export-job-queue/`.
 >
 > Sample payload:
@@ -174,7 +176,13 @@ Job queue: Codeunit 60332 "CXW Export Sales Price Job"
           fields) based on the selected "CXW Auth Type", driven by the new
           Table 60317 procedures `IsApiKeyFieldRelevant()` /
           `IsAwsFieldsRelevant()` — the same procedures the `"CXW Active"`
-          activation guard uses, so the two can't drift apart. Page 60324
+          activation guard uses, so the two can't drift apart. The fields sit
+          in caption-less subgroups (ApiKeyGroup/AwsGroup) whose Visible the
+          page re-evaluates via CurrPage.Update — Visible on the field itself
+          would only be evaluated when the page opens. Below each secret, a
+          read-only field shows the last 4 characters of the stored value
+          (Get…Hint on Table 60317). For AWSSigV4, activation only requires
+          Access Key ID, Region, and Service, not the Secret Access Key. Page 60324
           itself now only shows overview columns (Code, Description, Endpoint
           URL, Auth Type, Active); see
           `openspec/changes/api-interface-setup-conditional-fields/design.md`
@@ -364,8 +372,9 @@ Codeunit 60331 "CXW Process Workshop Lines" (job-queue driven, OnRun
           preserves already-successful lines regardless of the next
           line's outcome
 
-View (read-only): Page 60338 "CXW Workshop Lines" (list, all fields incl.
-   status, attributes, last error)
+View/correction: Page 60338 "CXW Workshop Lines" (list, all fields incl.
+   status, attributes, last error; editable except key fields and item no.,
+   no insert/delete; status regressions are blocked by the table's OnModify)
 
 Delete behavior (TableExtension 60321, OnDelete of the Purchase Line):
    Workshop Line with status New/WS checked → deleted along with the line
@@ -450,6 +459,7 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 | Page 60322 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Calculates the non-stock price for lines within a price range. Currently not called from any active code path. |
 | Codeunit 60330 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Raised when the automated file import changes an existing sales price. Currently has no subscriber. |
 | Table 60317 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Stores/reads the API key for an interface in Isolated Storage (module scope) rather than in a plain table field. |
+| Table 60317 | `GetApiKeyHint()` / `GetAwsSecretAccessKeyHint()` / `GetAwsSessionTokenHint(): Text` | Returns, for display on Page 60325, only the last 4 characters of the stored secret behind a mask prefix, "(not stored)" when empty, and a mask only for values of 4 characters or less. The plain text never leaves the table. |
 | Codeunit 60305 | `OnRun` / `ValidateAndCreateVendor` (local) | Processes every Table 60300 row with "CXW Created" = false individually, each in its own transaction (`Commit` + `Codeunit.Run` on Codeunit 60351); if an offer fails, the error text/time are stored on the offer and the others continue. No caller of this `OnRun` found anywhere in the project (see Known Limitations). |
 | Codeunit 60305 | `internal ProcessOffer(var SellWatchOffer: Record "CXW SellWatch Vendor Info")` | Processes exactly one offer: finds or creates a vendor plus bank account, then creates and releases a purchase order with a new item. Only called via Codeunit 60351 "CXW SellWatch Process Offer" (`TableNo` = Table 60300). |
 | Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON for a purchase-order acknowledgment (SRid, purchase_order, optional tracking_number). Currently not called from anywhere else in the code. |

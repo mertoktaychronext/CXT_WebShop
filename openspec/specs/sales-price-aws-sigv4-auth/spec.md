@@ -27,14 +27,18 @@ The system SHALL let a user configure, per `"CXW API Interface Setup"` record, a
 - **THEN** the system treats the credentials as a long-lived (non-temporary) IAM credential and omits any session-token-related header from signed requests for that interface
 
 ### Requirement: Interfaces cannot be activated without complete AWS SigV4 configuration
-When `"CXW Auth Type" = AWSSigV4`, the system SHALL require the AWS Access Key ID, Region, Service, and Secret Access Key to be set before the interface can be marked `"CXW Active"`, mirroring the existing requirement that `ApiKeyHeader`/`BasicAuth` interfaces have an API key before activation.
+When `"CXW Auth Type" = AWSSigV4`, the system SHALL require the AWS Access Key ID, Region, and Service to be set before the interface can be marked `"CXW Active"`, mirroring the existing requirement that `ApiKeyHeader`/`BasicAuth` interfaces have an API key before activation. The AWS Secret Access Key SHALL NOT be required for activation, so an interface can be activated before the secret is provided; requests sent without a stored Secret Access Key are expected to be rejected by the AWS endpoint.
 
 #### Scenario: Activating an incomplete AWS SigV4 interface is blocked
-- **WHEN** a user attempts to set `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` while any of the AWS Access Key ID, Region, Service, or Secret Access Key is blank
+- **WHEN** a user attempts to set `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` while any of the AWS Access Key ID, Region, or Service is blank
 - **THEN** the system raises an error and does not activate the interface
 
 #### Scenario: Activating a complete AWS SigV4 interface succeeds
-- **WHEN** a user sets `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` and all of the AWS Access Key ID, Region, Service, and Secret Access Key are set
+- **WHEN** a user sets `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` and all of the AWS Access Key ID, Region, and Service are set
+- **THEN** the system activates the interface
+
+#### Scenario: Missing Secret Access Key does not block activation
+- **WHEN** a user sets `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` whose AWS Access Key ID, Region, and Service are set but no AWS Secret Access Key is stored
 - **THEN** the system activates the interface
 
 ### Requirement: AWS SigV4 Request Signing

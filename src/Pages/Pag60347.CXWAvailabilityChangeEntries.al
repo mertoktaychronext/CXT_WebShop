@@ -66,6 +66,26 @@ page 60347 "CXWAvailabilityChange Entries"
                     ApplicationArea = All;
                     ToolTip = 'Specifies when the availability change entry was exported.';
                 }
+                field("CXW Deli. Time Exported"; Rec."CXW Deli. Time Exported")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether the delivery times of the article have been sent to the UPDDLT interface for this entry.';
+                }
+                field("CXW Deli. Time Exported At"; Rec."CXW Deli. Time Exported At")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies when the delivery times of the article were sent to the UPDDLT interface for this entry.';
+                }
+                field("CXW Inv. Time Exported"; Rec."CXW Inv. Time Exported")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies whether the inventory times of the article have been sent to the UPDIN interface for this entry.';
+                }
+                field("CXW Inv. Time Exported At"; Rec."CXW Inv. Time Exported At")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies when the inventory times of the article were sent to the UPDIN interface for this entry.';
+                }
             }
         }
     }

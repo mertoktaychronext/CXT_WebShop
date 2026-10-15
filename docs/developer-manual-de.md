@@ -12,6 +12,8 @@ Als dritter, ebenfalls fachlich unabhängiger Baustein enthält die Erweiterung 
 
 Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): Wird eine VK-Rechnung mit einer Zeile eines Artikels mit `"CXB Consignment Sales"` = true (Feld aus der Dependency CHX.Base) gebucht, legt ein Event-Subscriber auf `Codeunit "Sales-Post"` einen Kommissions-Buchungseintrag an und ermittelt dabei automatisch die zugehörige, wareneingebuchte, noch nicht fakturierte Einkaufsbestellung. Eine job-queue-gesteuerte Codeunit bucht fällige Einträge (Fälligkeitsdatum = VK-Buchungsdatum + einrichtbare Verzögerung in Tagen) automatisiert als Einkaufsrechnung. Details siehe Abschnitt "Kommissionsverkauf" unten.
 
+> **Update 2026-10-14 (Differenzbesteuerung aus der Salini Base App, Version 27.0.0.26):** Verfügbarkeitsänderungen (Codeunit 60348 "CXW Availability Change Mgt.": `QueueItemLedgerEntryChange`, Aktualisierung von "CXW Diff. Taxation Purchase", Filter in `GetAvailableInventoryQuantity`) und Echtzeitbestand (Codeunit 60350 "CXW Realtime Inventory Mgt.": "CXW Differential Taxation") lesen das Kennzeichen am Artikelposten jetzt aus `"SLPSBC Margin Taxation"` (Salini Base App) statt aus dem veralteten `"CXB Margin Taxation"` (CHX.Base). **Voraussetzungen:** CHX.Base ≥ 28.0.0.1 und Salini Base App ≥ 28.0.0.13 (neue direkte Abhängigkeit). **Auslieferung nur zusammen mit CHX.Base 28.0.0.1** im selben Wartungsfenster; die Datenübernahme der Artikelposten erledigt das Upgrade von CHX.Base. Keine Schema-Änderung, kein eigener Upgrade-Code. Details: `openspec/changes/margin-taxation-salini-field/`.
+
 > **Update 2026-09-28 (SalesPrice-Export über die Aufgabenwarteschlange, Version 27.0.0.6):** "Upload Sales Price" ist durch "Release Sales Prices" ersetzt. Die Aktion sendet nicht mehr, sondern schreibt zurück, archiviert **nur noch das Archivland** (neues Setup-Feld "CXW Archive Country Code", Standard DE), speichert den Preis jedes Landes in der neuen Table 60320 "CXW Sales Price Export" und legt einen "Data Export Entry" (`SALESPRICE`) im neuen Status **"CXW Pending"** (Enumextension 60300 auf "Data Export Statuses") an, der nur per `Source Record ID` auf Table 60320 verweist. Quellzeilen ohne Land werden übersprungen. Codeunit 60332 "CXW Export Sales Price Job" baut das JSON im **NAV-kompatiblen Format** (29 camelCase-Schlüssel, siehe unten) und sendet es; Wiederholung bis "CXW Max. Export Attempts", danach manuell über "Requeue Sales Price" (PageExtension 60336). Details: `openspec/changes/sales-price-export-job-queue/`.
 >
 > Beispiel-Payload:
@@ -176,7 +178,14 @@ Aufgabenwarteschlange: Codeunit 60332 "CXW Export Sales Price Job"
           die neuen Table-60317-Prozeduren `IsApiKeyFieldRelevant()` /
           `IsAwsFieldsRelevant()` – dieselben Prozeduren, die auch die
           Aktivierungssperre auf "CXW Active" verwendet, damit beide Stellen
-          nicht auseinanderlaufen können. Page 60324 selbst zeigt nur noch die
+          nicht auseinanderlaufen können. Die Felder liegen dafür in
+          Untergruppen ohne Überschrift (ApiKeyGroup/AwsGroup), deren Visible
+          die Seite per CurrPage.Update neu auswertet – Visible direkt am Feld
+          würde nur beim Öffnen der Seite ausgewertet. Unter jedem Geheimnis
+          zeigt ein schreibgeschütztes Feld die letzten 4 Zeichen des
+          gespeicherten Werts (Get…Hint auf Table 60317). Die Aktivierung
+          verlangt bei AWSSigV4 nur Access Key ID, Region und Service, nicht
+          den Secret Access Key. Page 60324 selbst zeigt nur noch die
           Übersichtsspalten (Code, Description, Endpoint URL, Auth Type,
           Active); Details siehe
           `openspec/changes/api-interface-setup-conditional-fields/design.md`.
@@ -366,8 +375,9 @@ Codeunit 60331 "CXW Process Workshop Lines" (job-queue-gesteuert, OnRun
           sichert bereits erfolgreiche Zeilen unabhängig vom Ausgang der
           nächsten
 
-Ansicht (read-only): Page 60338 "CXW Workshop Lines" (Liste, alle Felder
-   inkl. Status, Attribute, Last Error)
+Ansicht/Korrektur: Page 60338 "CXW Workshop Lines" (Liste, alle Felder
+   inkl. Status, Attribute, Last Error; bearbeitbar außer Schlüsselfeldern und
+   Artikelnr., kein Anlegen/Löschen; Status-Rückschritte verhindert OnModify der Tabelle)
 
 Löschverhalten (TableExtension 60321, OnDelete der Purchase Line):
    Workshop Line im Status New/WS checked → wird mitgelöscht
@@ -451,6 +461,7 @@ Vollständige Liste aller Prozeduren, Trigger und Events: siehe `docs/funktionsr
 | Page 60322 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Berechnet den Nicht-Lagerpreis für Zeilen innerhalb einer Preisspanne. Aktuell aus keiner aktiven Stelle im Code aufgerufen. |
 | Codeunit 60330 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Wird ausgelöst, wenn der automatisierte Dateiimport einen bestehenden Verkaufspreis ändert. Aktuell ohne Subscriber. |
 | Table 60317 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Speichert/liest den API-Schlüssel einer Schnittstelle im Isolated Storage (Modul-Scope) statt in einem Klartext-Tabellenfeld. |
+| Table 60317 | `GetApiKeyHint()` / `GetAwsSecretAccessKeyHint()` / `GetAwsSessionTokenHint(): Text` | Liefert für die Anzeige auf Page 60325 nur die letzten 4 Zeichen des gespeicherten Geheimnisses mit vorangestellter Maske, "(not stored)" wenn leer, und eine reine Maske bei höchstens 4 Zeichen. Der Klartext verlässt die Tabelle nicht. |
 | Codeunit 60305 | `OnRun` / `ValidateAndCreateVendor` (lokal) | Verarbeitet alle Table-60300-Zeilen mit "CXW Created" = false einzeln in je eigener Transaktion (`Commit` + `Codeunit.Run` auf Codeunit 60351); scheitert ein Angebot, werden Fehlertext/-zeitpunkt am Angebot gespeichert und die übrigen weiterverarbeitet. Kein Aufrufer dieses `OnRun` im Projekt gefunden (siehe Bekannte Einschränkungen). |
 | Codeunit 60305 | `internal ProcessOffer(var SellWatchOffer: Record "CXW SellWatch Vendor Info")` | Verarbeitet genau ein Angebot: Lieferant + Bankverbindung anlegen/finden, Einkaufsbestellung mit Artikel erzeugen und freigeben. Nur über Codeunit 60351 „CXW SellWatch Process Offer“ (`TableNo` = Table 60300) aufgerufen. |
 | Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Baut das JSON für eine Bestellrückmeldung (SRid, purchase_order, optional tracking_number). Aktuell aus keiner anderen Stelle im Code aufgerufen. |

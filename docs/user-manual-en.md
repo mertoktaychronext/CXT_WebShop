@@ -117,7 +117,7 @@ The actual check by the workshop, and the follow-up processing based on the chec
 
 ## Viewing Workshop lines
 
-The **"CXW Workshop Lines"** page shows every line handed over to the workshop, its current check status (New / WS checked / Processed / Error), the item attributes reported by the workshop, and — if automatic processing failed — the most recent error message. This page is read-only.
+The **"CXW Workshop Lines"** page shows every line handed over to the workshop, its current check status (New / WS checked / Processed / Error), the item attributes reported by the workshop, and — if automatic processing failed — the most recent error message. You can correct the status and the attributes there; the purchase order reference and item no. are locked, and lines can be neither created nor deleted.
 
 On the **purchase order** itself, the field **"No. of Workshop Lines"** (General FastTab) shows how many workshop lines exist for the order; blank means none. Choosing the value opens the workshop lines filtered to this order.
 
