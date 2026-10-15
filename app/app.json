@@ -1,0 +1,52 @@
+{
+  "id": "5df32934-5708-418c-ba16-44b30feb51f4",
+  "name": "CHX.Webshop",
+  "publisher": "Salini Life",
+  "version": "27.0.0.27",
+  "brief": "CHX.Webshop",
+  "description": "CHX.Webshop",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [
+    {
+      "id": "5409da1c-726d-4b56-a383-e6f433d36d03",
+      "name": "CHX.Base",
+      "publisher": "Salini Life",
+      "version": "28.0.0.1"
+    },
+    {
+      "id": "bea6c3c4-7d98-4740-ba0c-1a3c7e1ff49a",
+      "name": "Salini Base App",
+      "publisher": "Salini Life GmbH",
+      "version": "28.0.0.13"
+    },
+
+    {  "id": "9699be36-20ce-4911-a988-5eb58385243f",
+      "name": "ChronextBC",
+      "publisher": "Default Publisher",
+      "version": "1.0.0.0"
+    }
+
+  ],
+  "screenshots": [],
+  "platform": "26.0.0.0",
+  "application": "26.0.0.0",
+  "idRanges": [
+    {
+      "from": 60300,
+      "to": 60359
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "17.0",
+  "features": [
+    "NoImplicitWith","TranslationFile"
+  ]
+}
