@@ -1,6 +1,6 @@
 # Gesamtübersicht – nur öffentliche Prozeduren
 
-**Stand:** 2026-10-06 (aus `gesamtuebersicht.md` gefiltert, CHX.Webshop 27.0.0.16)
+**Stand:** 2026-10-07 (aus `gesamtuebersicht.md` gefiltert, CHX.Webshop 27.0.0.18)
 
 Alle Prozeduren mit Sichtbarkeit **Public** – also die Funktionen, die andere Erweiterungen oder externe Aufrufer nutzen können. Sie zeigen, wo die Bereiche miteinander bzw. mit anderen Apps verbunden sind, und sind damit die wichtigste Grundlage für Auslagerungsentscheidungen.
 
@@ -20,6 +20,7 @@ Alle Prozeduren mit Sichtbarkeit **Public** – also die Funktionen, die andere 
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `GetAwsSecretAccessKey` | Prozedur | Public | Liest den gespeicherten AWS Secret Access Key für die Signaturberechnung aus. |
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `SetAwsSessionToken` | Prozedur | Public | Speichert ein temporäres AWS Session Token sicher im Isolated Storage. |
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `GetAwsSessionToken` | Prozedur | Public | Liest das gespeicherte AWS Session Token für die Signaturberechnung aus. |
+| CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `GetApiKeyHint`, `GetAwsSecretAccessKeyHint`, `GetAwsSessionTokenHint` | Prozedur | Public | [3 Anzeigefunktionen] Liefern für die Detailkarte nur die letzten 4 Zeichen des hinterlegten API-Schlüssels, geheimen AWS-Zugriffsschlüssels bzw. AWS-Sitzungstokens (z. B. `••••••a3F9`), damit man den hinterlegten Wert erkennt, ohne ihn offenzulegen. |
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `IsApiKeyFieldRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart ein API-Schlüssel-Feld angezeigt werden muss. |
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `IsAwsFieldsRelevant` | Prozedur | Public | Ermittelt, ob für die gewählte Authentifizierungsart die AWS-Felder benötigt werden. |
 | CHX.Webshop | CXW Sales Price Checking List (60322) | Seite | `fnCalcNonStockPrice` | Prozedur | Public | Berechnet für eine Preisspanne den Nicht-Lagerpreis anhand eines hinterlegten Prozentaufschlags. |
@@ -67,4 +68,4 @@ Alle Prozeduren mit Sichtbarkeit **Public** – also die Funktionen, die andere 
 | CHX.Webshop | CXW Availability Check Dialog (60348) | Seite | `GetCountryRegionCode`, `GetZoneCode`, `GetBinCode` | Prozedur | Public | Geben die im Dialog eingegebenen Werte an den Aufrufer zurück. |
 | CHX.Webshop | CXW Realtime Inventory Mgt. (60350) | Codeunit | `RefreshCurrentCompany` | Prozedur | Public | Baut die Momentaufnahme aller offenen Lagerbestände des Mandanten neu auf (ohne Verpackungsartikel "BOX"). |
 
-> 60 öffentliche Einträge. Vollständige Liste inkl. interner Funktionen, Trigger und Aktionen: `gesamtuebersicht.md`.
+> 61 öffentliche Einträge. Vollständige Liste inkl. interner Funktionen, Trigger und Aktionen: `gesamtuebersicht.md`.

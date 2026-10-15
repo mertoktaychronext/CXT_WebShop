@@ -174,7 +174,13 @@ Job queue: Codeunit 60332 "CXW Export Sales Price Job"
           fields) based on the selected "CXW Auth Type", driven by the new
           Table 60317 procedures `IsApiKeyFieldRelevant()` /
           `IsAwsFieldsRelevant()` — the same procedures the `"CXW Active"`
-          activation guard uses, so the two can't drift apart. Page 60324
+          activation guard uses, so the two can't drift apart. The fields sit
+          in caption-less subgroups (ApiKeyGroup/AwsGroup) whose Visible the
+          page re-evaluates via CurrPage.Update — Visible on the field itself
+          would only be evaluated when the page opens. Below each secret, a
+          read-only field shows the last 4 characters of the stored value
+          (Get…Hint on Table 60317). For AWSSigV4, activation only requires
+          Access Key ID, Region, and Service, not the Secret Access Key. Page 60324
           itself now only shows overview columns (Code, Description, Endpoint
           URL, Auth Type, Active); see
           `openspec/changes/api-interface-setup-conditional-fields/design.md`
@@ -451,6 +457,7 @@ Full list of all procedures, triggers, and events: see `docs/funktionsregister/f
 | Page 60322 | `fnCalcNonStockPrice(p_decStockPriceFrom, p_decStockPriceTo, p_decNonStockPercent: Decimal)` | Calculates the non-stock price for lines within a price range. Currently not called from any active code path. |
 | Codeunit 60330 | `[IntegrationEvent] OnAfterSalesPriceModify(var SalesPriceRec, var SalesPricexRec: Record "Sales Price"; RunTrigger: Boolean)` | Raised when the automated file import changes an existing sales price. Currently has no subscriber. |
 | Table 60317 | `SetApiKey(NewApiKey: Text)` / `GetApiKey(): Text` | Stores/reads the API key for an interface in Isolated Storage (module scope) rather than in a plain table field. |
+| Table 60317 | `GetApiKeyHint()` / `GetAwsSecretAccessKeyHint()` / `GetAwsSessionTokenHint(): Text` | Returns, for display on Page 60325, only the last 4 characters of the stored secret behind a mask prefix, "(not stored)" when empty, and a mask only for values of 4 characters or less. The plain text never leaves the table. |
 | Codeunit 60305 | `OnRun` / `ValidateAndCreateVendor` (local) | Processes every Table 60300 row with "CXW Created" = false individually, each in its own transaction (`Commit` + `Codeunit.Run` on Codeunit 60351); if an offer fails, the error text/time are stored on the offer and the others continue. No caller of this `OnRun` found anywhere in the project (see Known Limitations). |
 | Codeunit 60305 | `internal ProcessOffer(var SellWatchOffer: Record "CXW SellWatch Vendor Info")` | Processes exactly one offer: finds or creates a vendor plus bank account, then creates and releases a purchase order with a new item. Only called via Codeunit 60351 "CXW SellWatch Process Offer" (`TableNo` = Table 60300). |
 | Codeunit 60305 | `CreateSourceFilePurchaseRequest(PurchaseHeader: Record "Purchase Header"): Text` | Builds the JSON for a purchase-order acknowledgment (SRid, purchase_order, optional tracking_number). Currently not called from anywhere else in the code. |

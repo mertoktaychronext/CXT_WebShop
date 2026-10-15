@@ -37,9 +37,10 @@ The **"API Interface Setup"** navigation button on the "General Sales Price Setu
 | Auth Type | Authentication method: **None**, **API Key (Header)**, **Basic Authentication**, or **AWS Signature V4**. The detail card shows the relevant input fields based on the selection. |
 | API Key | The API key or token used for authentication (for "API Key (Header)" / "Basic Authentication"; for "AWS Signature V4" optionally as an additional `X-API-Key` header). Stored encrypted in isolated storage and no longer shown in plain text after saving. Required for "API Key (Header)" and "Basic Authentication". |
 | AWS Access Key ID / AWS Region / AWS Service | Only for Auth Type = "AWS Signature V4": plain-text values for request signing (service typically `execute-api` for API Gateway). |
-| AWS Secret Access Key / AWS Session Token | Only for Auth Type = "AWS Signature V4": stored encrypted in isolated storage. Secret Access Key is required; Session Token only for temporary/STS credentials. |
+| AWS Secret Access Key / AWS Session Token | Only for Auth Type = "AWS Signature V4": stored encrypted in isolated storage. The Secret Access Key is needed to sign every request but is not required for activation — without it, AWS rejects the requests (`403 SignatureDoesNotMatch`). Session Token only for temporary/STS credentials. |
+| Stored API Key / Stored AWS Secret Access Key / Stored AWS Session Token | Display only: shows the last 4 characters of the stored value (e.g. `••••••a3F9`), so you can check which key is stored without revealing it. "(not stored)" means no value is stored. Values of 4 characters or less are fully masked. |
 | Source Table No. | The table this interface transmits data for (for the price export: the table number of "Sales Price"). |
-| Active | Must be enabled for the interface to be selectable on the base settings. Activating it automatically checks that the Endpoint URL and — depending on the Auth Type — the API Key or the AWS fields are fully set. |
+| Active | Must be enabled for the interface to be selectable on the base settings. Activating it automatically checks that the Endpoint URL and — depending on the Auth Type — the API Key or the AWS Access Key ID, AWS Region, and AWS Service are set. |
 
 > Without an active, fully configured interface, transmission by the sales price export job fails; the affected entries go to "Error" and are resent up to the maximum number of attempts.
 

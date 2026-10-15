@@ -67,5 +67,5 @@ The system SHALL let a user open the detail editing page for a specific interfac
 The existing activation guard on `"CXW Active"` SHALL use the same relevance procedures as the detail editing page, rather than separately duplicated conditions, so the two cannot drift out of sync.
 
 #### Scenario: Activation still blocked for incomplete AWS Signature V4 configuration
-- **WHEN** a user attempts to set `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` while any AWS-specific field required for relevance is blank
-- **THEN** the system raises an error and does not activate the interface, using the same relevance determination the detail editing page uses to decide field visibility
+- **WHEN** a user attempts to set `"CXW Active" = true` on an interface with `"CXW Auth Type" = AWSSigV4` while any of the AWS Access Key ID, Region, or Service is blank
+- **THEN** the system raises an error and does not activate the interface, using the same relevance determination the detail editing page uses to decide field visibility; a missing AWS Secret Access Key or Session Token does not block activation

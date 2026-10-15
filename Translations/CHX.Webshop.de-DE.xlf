@@ -70,10 +70,16 @@
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - NamedType MissingApiKeyErr</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - NamedType 3367367240" size-unit="char" translate="yes" xml:space="preserve">
-          <source>Auth Type is set to AWS Signature V4, but the AWS Access Key ID, Region, Service, or Secret Access Key has not been fully entered for this interface.</source>
-          <target>Die Authentifizierungsart ist auf AWS Signature V4 gesetzt, aber die AWS-Zugriffsschlüssel-ID, Region, der AWS-Service oder der geheime AWS-Zugriffsschlüssel wurden für diese Schnittstelle nicht vollständig hinterlegt.</target>
+          <source>Auth Type is set to AWS Signature V4, but the AWS Access Key ID, Region, or Service has not been fully entered for this interface.</source>
+          <target>Die Authentifizierungsart ist auf AWS Signature V4 gesetzt, aber die AWS-Zugriffsschlüssel-ID, Region oder der AWS-Service wurden für diese Schnittstelle nicht vollständig hinterlegt.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - NamedType MissingAwsCredentialsErr</note>
+        </trans-unit>
+        <trans-unit id="Table 3927493386 - NamedType 4267723288" size-unit="char" translate="yes" xml:space="preserve">
+          <source>(not stored)</source>
+          <target>(nicht hinterlegt)</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW API Interface Setup - NamedType NotStoredLbl</note>
         </trans-unit>
         <trans-unit id="Table 3927493386 - Field 3927073500 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Active</source>
@@ -2205,6 +2211,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control ApiKey - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2881309096 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the last 4 characters of the stored API key, so you can check which key is in use without revealing it.</source>
+          <target>Gibt die letzten 4 Zeichen des hinterlegten API-Schlüssels an, damit Sie prüfen können, welcher Schlüssel verwendet wird, ohne ihn offenzulegen.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control ApiKeyHint - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2881309096 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stored API Key</source>
+          <target>Hinterlegter API-Schlüssel</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control ApiKeyHint - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2709840718 - Control 2897115708 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the AWS Secret Access Key used to sign requests with AWS Signature V4. The value is stored securely and is not shown again once saved.</source>
           <target>Gibt den geheimen AWS-Zugriffsschlüssel an, mit dem Anfragen mittels AWS Signature V4 signiert werden. Der Wert wird sicher gespeichert und nach dem Speichern nicht mehr angezeigt.</target>
@@ -2217,6 +2235,18 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSecretAccessKey - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 131499085 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the last 4 characters of the stored AWS Secret Access Key, so you can check which key is in use without revealing it.</source>
+          <target>Gibt die letzten 4 Zeichen des hinterlegten geheimen AWS-Zugriffsschlüssels an, damit Sie prüfen können, welcher Schlüssel verwendet wird, ohne ihn offenzulegen.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSecretAccessKeyHint - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 131499085 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stored AWS Secret Access Key</source>
+          <target>Hinterlegter geheimer AWS-Zugriffsschlüssel</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSecretAccessKeyHint - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Page 2709840718 - Control 1346322124 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the AWS Session Token used for temporary/STS-issued credentials when signing requests with AWS Signature V4. Leave blank for long-lived credentials. The value is stored securely and is not shown again once saved.</source>
           <target>Gibt das AWS-Sitzungstoken an, das für temporäre, von STS ausgestellte Anmeldeinformationen beim Signieren von Anfragen mit AWS Signature V4 verwendet wird. Bei dauerhaften Anmeldeinformationen leer lassen. Der Wert wird sicher gespeichert und nach dem Speichern nicht mehr angezeigt.</target>
@@ -2228,6 +2258,18 @@
           <target>AWS-Sitzungstoken</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSessionToken - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2072783933 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the last 4 characters of the stored AWS Session Token, so you can check which token is in use without revealing it.</source>
+          <target>Gibt die letzten 4 Zeichen des hinterlegten AWS-Sitzungstokens an, damit Sie prüfen können, welches Token verwendet wird, ohne es offenzulegen.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSessionTokenHint - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 2709840718 - Control 2072783933 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Stored AWS Session Token</source>
+          <target>Hinterlegtes AWS-Sitzungstoken</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW API Interface Setup Card - Control AwsSessionTokenHint - Property Caption</note>
         </trans-unit>
         <trans-unit id="Page 2709840718 - Control 605607497 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the AWS Access Key ID used to sign requests with AWS Signature V4.</source>
@@ -4913,7 +4955,7 @@
         </trans-unit>
         <trans-unit id="Enum 4148423094 - EnumValue 1371923692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source> </source>
-          <target>[NAB: REVIEW] </target>
+          <target> </target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW SW Order Status - EnumValue   - Property Caption</note>
@@ -4956,7 +4998,7 @@
         </trans-unit>
         <trans-unit id="Enum 3011355328 - EnumValue 1371923692 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source> </source>
-          <target>[NAB: REVIEW] </target>
+          <target> </target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="NAB AL Tool Refresh Xlf" annotates="general" priority="3">Source contains only white-space, consider using 'Locked = true' to avoid translation of unnecessary texts. This note can be toggled with the setting 'NAB.PreferLockedTranslations'.</note>
           <note from="Xliff Generator" annotates="general" priority="3">Enum CXW Taxation Type - EnumValue   - Property Caption</note>
