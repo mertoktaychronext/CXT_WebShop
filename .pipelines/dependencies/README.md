@@ -6,7 +6,7 @@ Die Pipeline installiert diese Apps vor CHX.Webshop im Container, in dieser Reih
 |---|---|---|---|
 | Salini Base App | `Salini Life GmbH_Salini Base App_<Version>.app` | laut `app/app.json` | 28.0.0.13, aus `CHX.Base/.pipelines/dependencies` |
 | CHX.Base | `Salini Life_CHX.Base_<Version>.app` | laut `app/app.json` | 28.0.0.1, lokaler Build aus dem CHX.Base-Repo |
-| ChronextBC | `Default Publisher_ChronextBC_<Version>.app` | laut `app/app.json` | **fehlt noch** |
+| ChronextBC | `Default Publisher_ChronextBC_<Version>.app` | laut `app/app.json` | 1.0.1.17, lokal aus dem Hersteller-Quellcode kompiliert (`app.json` ohne `build`-Abschnitt) |
 
 Heruntergeladene Symbole aus `.alpackages` reichen nicht, es muss jeweils die vollständige, veröffentlichbare App sein.
 
