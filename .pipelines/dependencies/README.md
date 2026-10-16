@@ -12,7 +12,7 @@ Heruntergeladene Symbole aus `.alpackages` reichen nicht, es muss jeweils die vo
 
 `Invoke-AlPipeline.ps1` bricht ab, wenn eine Datei fehlt, mehrfach vorhanden ist oder älter ist als die Abhängigkeit in `app/app.json`.
 
-ChronextBC verlangt selbst CHX.Base ≥ 27.0.3.8 und Salini Base App ≥ 28.0.0.11 sowie BC 28. Darum gibt es keinen Lauf „Minimum“.
+ChronextBC 1.0.1.17 verlangt selbst CHX.Base ≥ 27.0.3.8 und Salini Base App ≥ 28.0.0.13 sowie BC 28. Darum gibt es keinen Lauf „Minimum“.
 
 ## Aktualisieren
 
