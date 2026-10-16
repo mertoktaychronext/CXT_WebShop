@@ -52,7 +52,7 @@ As a fourth, new component, the extension includes **Consignment Sales** (Enum 6
 
 | Component | Technology | Version |
 |---|---|---|
-| Extension type | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 26.0.0.0 |
+| Extension type | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 28.0.0.0 |
 | Runtime | AL Runtime | 17.0 |
 | Object ID range | Customer range | 60300–60349 (used: 60300–60310 SellWatch, 60311–60336 sales price management, 60318–60345 Workshop authenticity check + Consignment Sales — object types overlap since each object type has its own ID namespace; only 4 IDs remain free after Consignment Sales, 60346–60349); 51000–51049 remains registered but, since the 2026-08-10 rename, is no longer occupied by any object in this extension |
 | Dependencies | CHX.Base | 27.0.1.1 (provides, among other things, the `"CXB Consignment Sales"` item field that Consignment Sales relies on) |
@@ -86,7 +86,7 @@ docs/                             # this manual + function register
 ### Prerequisites
 
 - Visual Studio Code with the official **AL Language** extension.
-- Access to a Business Central environment (sandbox or on-premises) on version 26.0 or compatible.
+- Access to a Business Central environment (sandbox or on-premises) on version 28.0 or later.
 - Symbols for the target environment (`.alpackages/`, generated via the AL extension's "Download Symbols", excluded from version control via `.gitignore`).
 
 ### Installation

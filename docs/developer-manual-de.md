@@ -52,7 +52,7 @@ Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** 
 
 | Komponente | Technologie | Version |
 |---|---|---|
-| Erweiterungstyp | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 26.0.0.0 |
+| Erweiterungstyp | Microsoft Dynamics 365 Business Central (AL) | Platform/Application 28.0.0.0 |
 | Runtime | AL Runtime | 17.0 |
 | Objekt-ID-Bereich | Kundenbereich | 60300–60349 (genutzt: 60300–60310 SellWatch, 60311–60336 Verkaufspreisverwaltung, 60318–60345 Workshop-Ankaufsprüfung + Kommissionsverkauf – Objekttypen überschneiden sich, da jeder Objekttyp einen eigenen ID-Namensraum hat; nach dem Kommissionsverkauf sind nur noch 4 IDs frei, 60346–60349); 51000–51049 bleibt registriert, wird aber seit dem Rename vom 2026-08-10 von keinem Objekt dieser Erweiterung mehr belegt |
 | Abhängigkeiten | CHX.Base | 27.0.1.1 (liefert u. a. das Item-Feld `"CXB Consignment Sales"`, das der Kommissionsverkauf voraussetzt) |
@@ -86,7 +86,7 @@ docs/                             # dieses Handbuch + Funktionsregister
 ### Voraussetzungen
 
 - Visual Studio Code mit der offiziellen **AL Language**-Extension.
-- Zugriff auf eine Business-Central-Umgebung (Sandbox oder On-Premises) mit Version 26.0 oder kompatibel.
+- Zugriff auf eine Business-Central-Umgebung (Sandbox oder On-Premises) mit Version 28.0 oder höher.
 - Die Symbole der Zielumgebung (`.alpackages/`, wird per "Download Symbols" der AL-Extension erzeugt, ist per `.gitignore` von der Versionierung ausgeschlossen).
 
 ### Installation
