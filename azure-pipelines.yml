@@ -1,5 +1,5 @@
 # CI für CHX.Webshop
-# - Bei jedem Push: Build + CodeCop/UICop + Tests der Test-App gegen die aktuelle BC-Version (DE)
+# - Nach jedem Merge in 02-DEV/development und 01-Master/master: Build + CodeCop/UICop + Tests der Test-App gegen die aktuelle BC-Version (DE)
 # - Als Build-Validierung in den Branch Policies von 02-DEV/development und 01-Master/master eintragen
 #   (Azure Repos ignoriert "pr:"-Trigger, PR-Validierung läuft ausschließlich über Branch Policies)
 # - Nachts (Mo–Fr): Tests gegen die niedrigste unterstützte (app.json), die nächste Minor- und die nächste Major-Version
@@ -8,14 +8,11 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
+  batch: true                     # mehrere Merges kurz hintereinander → ein Lauf
   branches:
-    include:
-      - 01-Master/*
-      - 02-DEV/*
-      - 02-Dev/*
-      - 03-Features/*
-      - 04-HotFix/*
-      - 05-Release/*
+    include:                      # nur nach dem Merge; Feature-Branches prüft die PR-Validierung (Branch Policy)
+      - 02-DEV/development
+      - 01-Master/master
   paths:
     exclude:
       - docs/*
