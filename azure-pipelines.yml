@@ -2,7 +2,7 @@
 # - Bei jedem Push: Build + CodeCop/UICop + Tests der Test-App gegen die aktuelle BC-Version (DE)
 # - Als Build-Validierung in den Branch Policies von 02-DEV/development und 01-Master/master eintragen
 #   (Azure Repos ignoriert "pr:"-Trigger, PR-Validierung läuft ausschließlich über Branch Policies)
-# - Nachts (Mo–Fr): Tests gegen die nächste Minor- und Major-Version
+# - Nachts (Mo–Fr): Tests gegen die niedrigste unterstützte (app.json), die nächste Minor- und die nächste Major-Version
 # - Salini Base App, CHX.Base, ChronextBC und SalLicenseCheckApp-Attrappe kommen aus .pipelines\ (siehe README dort)
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
@@ -36,7 +36,7 @@ parameters:
     displayName: BC-Version (nur bei manuellem Start)
     type: string
     default: Current
-    values: [Current, NextMinor, NextMajor]
+    values: [Current, Minimum, NextMinor, NextMajor]
   - name: country
     displayName: Lokalisierung
     type: string
@@ -64,6 +64,9 @@ jobs:
     strategy:
       maxParallel: 1
       matrix:
+        Minimum_DE:                 # niedrigste Version laut app.json ("application")
+          BcSelect: Minimum
+          BcCountry: de
         NextMinor_DE:
           BcSelect: NextMinor
           BcCountry: de

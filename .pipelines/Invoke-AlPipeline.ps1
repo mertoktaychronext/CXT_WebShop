@@ -20,7 +20,7 @@
     AppSourceCop ist aus: CHX.Webshop ist eine PTE ohne app\AppSourceCop.json.
 #>
 param(
-    [ValidateSet('Current', 'NextMinor', 'NextMajor')]
+    [ValidateSet('Current', 'Minimum', 'NextMinor', 'NextMajor')]
     [string] $Select = 'Current',
 
     [string] $Country = 'de',
@@ -39,13 +39,19 @@ if (-not (Get-Module -ListAvailable -Name BcContainerHelper)) {
 Import-Module BcContainerHelper -DisableNameChecking
 
 # --- BC-Version wählen ---------------------------------------------------------------------------
-# Kein Lauf "Minimum": app\app.json nennt application 26.0, ChronextBC verlangt aber bereits BC 28.
 $insider = $Select -in @('NextMinor', 'NextMajor')
-if ($Select -eq 'Current') {
-    $artifactUrl = Get-BCArtifactUrl -type Sandbox -country $Country -select Current
-}
-else {
-    $artifactUrl = Get-BCArtifactUrl -type Sandbox -country $Country -select $Select -accept_insiderEula
+switch ($Select) {
+    'Current' {
+        $artifactUrl = Get-BCArtifactUrl -type Sandbox -country $Country -select Current
+    }
+    'Minimum' {
+        # Niedrigste unterstützte Version laut app.json ("application"), z. B. 28.0.0.0 → erster Build von 28.0
+        $major = $appJson.application.Split('.')[0]
+        $artifactUrl = Get-BCArtifactUrl -type Sandbox -country $Country -version "$major.0" -select First
+    }
+    default {
+        $artifactUrl = Get-BCArtifactUrl -type Sandbox -country $Country -select $Select -accept_insiderEula
+    }
 }
 if (-not $artifactUrl) { throw "Keine BC-Artefakte für '$Select' / '$Country' gefunden." }
 Write-Host "BC-Artefakt: $artifactUrl"

@@ -1,9 +1,18 @@
 # Gemeinsame Schritte für CI und Nightly.
-# Erwartet die Variablen BcSelect (Current|NextMinor|NextMajor) und BcCountry.
+# Erwartet die Variablen BcSelect (Current|Minimum|NextMinor|NextMajor) und BcCountry.
 
 steps:
   - checkout: self
     clean: true
+
+  # Reste eines abgebrochenen Laufs entfernen, bevor ein neuer Container 8 GB belegt
+  - task: PowerShell@2
+    displayName: Build-Agent aufräumen (vorher)
+    inputs:
+      targetType: filePath
+      filePath: $(Build.SourcesDirectory)/.pipelines/Clear-BuildAgent.ps1
+      arguments: -PipelineName CHXWebshop
+      pwsh: false
 
   - task: PowerShell@2
     displayName: Build & Test ($(BcSelect), $(BcCountry))
@@ -39,3 +48,13 @@ steps:
     inputs:
       targetPath: $(Build.ArtifactStagingDirectory)/app
       artifact: CHXWebshop-$(BcCountry)
+
+  # Läuft auch nach Fehler und Abbruch: Run-AlPipeline räumt dann nicht mehr selbst auf
+  - task: PowerShell@2
+    displayName: Build-Agent aufräumen (nachher)
+    condition: always()
+    inputs:
+      targetType: filePath
+      filePath: $(Build.SourcesDirectory)/.pipelines/Clear-BuildAgent.ps1
+      arguments: -PipelineName CHXWebshop
+      pwsh: false
