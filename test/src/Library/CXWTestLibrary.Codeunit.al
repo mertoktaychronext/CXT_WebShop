@@ -7,6 +7,7 @@ using Microsoft.Inventory.Item;
 using Microsoft.Inventory.Item.Attribute;
 using Microsoft.Purchases.Document;
 using Microsoft.Sales.Pricing;
+using System.Environment.Configuration;
 using System.TestLibraries.Utilities;
 using System.Threading;
 
@@ -21,6 +22,7 @@ codeunit 50499 "CXW Test Library"
     var
         Any: Codeunit Any;
         SalesPriceEndpointTok: Label 'https://salesprice.test.invalid/prices', Locked = true;
+        WebshopAppIdTok: Label '5df32934-5708-418c-ba16-44b30feb51f4', Locked = true;
 
     #region Codes
 
@@ -230,6 +232,28 @@ codeunit 50499 "CXW Test Library"
         GenSPSetup."CXW Max. Export Attempts" := 3;
         GenSPSetup."CXW Archive Country Code" := ArchiveCountryCode;
         GenSPSetup.Modify(false);
+
+        AllowHttpClientRequests();
+    end;
+
+    /// <summary>
+    /// Sandboxes ask "Allow Always/Allow Once/Block Always/Block Once" on the first outbound request of an
+    /// extension - unhandled UI in a test run. Allowing it up front is harmless: the endpoint is a ".invalid"
+    /// domain that never resolves, so Send returns false without any server receiving the request.
+    /// </summary>
+    local procedure AllowHttpClientRequests()
+    var
+        NAVAppSetting: Record "NAV App Setting";
+        WebshopAppId: Guid;
+    begin
+        Evaluate(WebshopAppId, WebshopAppIdTok);
+        if not NAVAppSetting.Get(WebshopAppId) then begin
+            NAVAppSetting.Init();
+            NAVAppSetting."App ID" := WebshopAppId;
+            NAVAppSetting.Insert(false);
+        end;
+        NAVAppSetting."Allow HttpClient Requests" := true;
+        NAVAppSetting.Modify(false);
     end;
 
     procedure SetArchiveCountry(ArchiveCountryCode: Code[10])

@@ -102,6 +102,13 @@ table 60311 "CXW General Sales Price Setup"
             DataClassification = ToBeClassified;
             InitValue = 3;
             MinValue = 1;
+
+            trigger OnValidate()
+            begin
+                // MinValue is only enforced on page input, not on Validate from code.
+                if "CXW Max. Export Attempts" < 1 then
+                    FieldError("CXW Max. Export Attempts");
+            end;
         }
         field(17; "CXW Archive Country Code"; Code[10])
         {

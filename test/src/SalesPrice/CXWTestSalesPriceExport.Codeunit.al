@@ -9,8 +9,9 @@ using System.TestLibraries.Utilities;
 /// Sources: openspec/specs/sales-price-api-export, sales-price-export-job, sales-price-http-call-logging.
 ///
 /// HTTP: [HttpClientHandler] is OnPrem only and cannot be used in online sandboxes. The export therefore
-/// targets a ".invalid" domain (RFC 2606) that never resolves, so no server can receive a request; sandboxes
-/// without "Allow HttpClient Requests" block the call anyway. Every attempt fails - the tests only check what
+/// targets a ".invalid" domain (RFC 2606) that never resolves, so no server can receive a request. The test
+/// library allows HttpClient requests for CHX.Webshop, otherwise the sandbox asks "Allow Always/Allow Once/..."
+/// on the first request - unhandled UI in a test run. Every attempt fails - the tests only check what
 /// the app stores before and after sending (payload, attempt, log). A successful transmission is not tested here.
 /// </summary>
 codeunit 50403 "CXW Test Sales Price Export"
