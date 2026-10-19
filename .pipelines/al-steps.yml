@@ -1,0 +1,60 @@
+# Gemeinsame Schritte für CI und Nightly.
+# Erwartet die Variablen BcSelect (Current|Minimum|NextMinor|NextMajor) und BcCountry.
+
+steps:
+  - checkout: self
+    clean: true
+
+  # Reste eines abgebrochenen Laufs entfernen, bevor ein neuer Container 8 GB belegt
+  - task: PowerShell@2
+    displayName: Build-Agent aufräumen (vorher)
+    inputs:
+      targetType: filePath
+      filePath: $(Build.SourcesDirectory)/.pipelines/Clear-BuildAgent.ps1
+      arguments: -PipelineName CHXWebshop
+      pwsh: false
+
+  - task: PowerShell@2
+    displayName: Build & Test ($(BcSelect), $(BcCountry))
+    inputs:
+      targetType: filePath
+      filePath: $(Build.SourcesDirectory)/.pipelines/Invoke-AlPipeline.ps1
+      arguments: -Select $(BcSelect) -Country $(BcCountry) -OutputFolder "$(Build.SourcesDirectory)/.output"
+      pwsh: false                # BcContainerHelper läuft am stabilsten in Windows PowerShell 5.1
+
+  - task: PublishTestResults@2
+    displayName: Testergebnisse veröffentlichen
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/TestResults.xml'
+      searchFolder: $(Build.SourcesDirectory)   # Run-AlPipeline schreibt sie in .output bzw. den Repo-Root
+      testRunTitle: CHX.Webshop – $(BcSelect) $(BcCountry)
+      failTaskOnFailedTests: true
+
+  # Nur die eigene App als Build-Artefakt – weder Test-App, Abhängigkeiten noch Lizenz-Attrappe gehören dazu.
+  - task: CopyFiles@2
+    displayName: App-Datei einsammeln
+    condition: and(succeeded(), eq(variables['BcSelect'], 'Current'))
+    inputs:
+      SourceFolder: $(Build.SourcesDirectory)/.output
+      Contents: '**/Salini Life_CHX.Webshop_*.app'
+      TargetFolder: $(Build.ArtifactStagingDirectory)/app
+      flattenFolders: true
+
+  - task: PublishPipelineArtifact@1
+    displayName: App als Artefakt veröffentlichen
+    condition: and(succeeded(), eq(variables['BcSelect'], 'Current'))
+    inputs:
+      targetPath: $(Build.ArtifactStagingDirectory)/app
+      artifact: CHXWebshop-$(BcCountry)
+
+  # Läuft auch nach Fehler und Abbruch: Run-AlPipeline räumt dann nicht mehr selbst auf
+  - task: PowerShell@2
+    displayName: Build-Agent aufräumen (nachher)
+    condition: always()
+    inputs:
+      targetType: filePath
+      filePath: $(Build.SourcesDirectory)/.pipelines/Clear-BuildAgent.ps1
+      arguments: -PipelineName CHXWebshop
+      pwsh: false

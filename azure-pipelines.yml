@@ -1,0 +1,74 @@
+# CI für CHX.Webshop
+# - Nach jedem Merge in 02-DEV/development und 01-Master/master: Build + CodeCop/UICop + Tests der Test-App gegen die aktuelle BC-Version (DE)
+# - Als Build-Validierung in den Branch Policies von 02-DEV/development und 01-Master/master eintragen
+#   (Azure Repos ignoriert "pr:"-Trigger, PR-Validierung läuft ausschließlich über Branch Policies)
+# - Nachts (Mo–Fr): Tests gegen die niedrigste unterstützte (app.json), die nächste Minor- und die nächste Major-Version
+# - Salini Base App, CHX.Base, ChronextBC und SalLicenseCheckApp-Attrappe kommen aus .pipelines\ (siehe README dort)
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  batch: true                     # mehrere Merges kurz hintereinander → ein Lauf
+  branches:
+    include:                      # nur nach dem Merge; Feature-Branches prüft die PR-Validierung (Branch Policy)
+      - 02-DEV/development
+      - 01-Master/master
+  paths:
+    exclude:
+      - docs/*
+      - openspec/*
+      - Objekte/*
+      - '*.md'
+
+schedules:
+  - cron: '0 3 * * 1-5'          # 03:00 UTC = 05:00 MESZ (eine Stunde nach CHX.Base)
+    displayName: Nightly – kommende BC-Versionen
+    branches:
+      include:
+        - 02-DEV/development
+    always: true
+
+parameters:
+  - name: bcVersion
+    displayName: BC-Version (nur bei manuellem Start)
+    type: string
+    default: Current
+    values: [Current, Minimum, NextMinor, NextMajor]
+  - name: country
+    displayName: Lokalisierung
+    type: string
+    default: de
+    values: [de, at, w1]
+
+pool:
+  name: SelfHosted-BCServer                 # Self-hosted Agent-Pool (Windows + Docker), wie CHX.Base
+
+jobs:
+  - job: CI
+    displayName: Build & Test (${{ parameters.bcVersion }}, ${{ parameters.country }})
+    condition: ne(variables['Build.Reason'], 'Schedule')
+    timeoutInMinutes: 120
+    variables:
+      BcSelect: ${{ parameters.bcVersion }}
+      BcCountry: ${{ parameters.country }}
+    steps:
+      - template: .pipelines/al-steps.yml
+
+  - job: Nightly
+    displayName: Nightly
+    condition: eq(variables['Build.Reason'], 'Schedule')
+    timeoutInMinutes: 120
+    strategy:
+      maxParallel: 1
+      matrix:
+        Minimum_DE:                 # niedrigste Version laut app.json ("application")
+          BcSelect: Minimum
+          BcCountry: de
+        NextMinor_DE:
+          BcSelect: NextMinor
+          BcCountry: de
+        NextMajor_DE:
+          BcSelect: NextMajor
+          BcCountry: de
+    steps:
+      - template: .pipelines/al-steps.yml
