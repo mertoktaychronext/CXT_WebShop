@@ -13,6 +13,3 @@
 .snapshots
 #For Prettier
 .prettierrc.json
-#Test results
-.output/
-TestResults.xml
