@@ -38,6 +38,12 @@ if (-not (Get-Module -ListAvailable -Name BcContainerHelper)) {
 }
 Import-Module BcContainerHelper -DisableNameChecking
 
+# In BC-29-Containern stürzt WinRM ab und reißt die Session mit "An internal error occurred" ab
+# (BcContainerHelper-Issue offen, BC 28.5 nicht betroffen). Mit Hyper-V-Isolation nutzt BcContainerHelper
+# sonst WinRM über SSL; usePwshForBc24 allein ändert nur die PowerShell-Version, nicht die Verbindungsart.
+$bcContainerHelperConfig.useWinRmSession = 'never'   # PowerShell Direct statt WinRM
+$bcContainerHelperConfig.usePwshForBc24 = $false
+
 # --- BC-Version wählen ---------------------------------------------------------------------------
 $insider = $Select -in @('NextMinor', 'NextMajor')
 switch ($Select) {
