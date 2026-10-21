@@ -152,7 +152,7 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         PurchLine."CXW Sent to Workshop" := true;
         PurchLine.Modify();
 
-        CreateWorkshopLine(PurchLine);
+        CreateWorkshopLine(PurchLine, SerialNo);
     end;
 
     // Read-only check from CHX.Base (manufacturer serial no./box/papers mandatory per item tracking code);
@@ -172,7 +172,7 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         ErrorLines += StrSubstNo(ErrorLineTxt, PurchLine."Line No.", PurchLine."No.", Reason);
     end;
 
-    local procedure CreateWorkshopLine(PurchLine: Record "Purchase Line")
+    local procedure CreateWorkshopLine(PurchLine: Record "Purchase Line"; SerialNo: Code[50])
     var
         WorkshopLine: Record "CXW Workshop Line";
         WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
@@ -183,6 +183,7 @@ pageextension 60328 "CXW Workshop Purchase Order" extends "Purchase Order"
         WorkshopLine."CXW Line No." := PurchLine."Line No.";
         WorkshopLine."CXW Item No." := PurchLine."No.";
         WorkshopLine."CXW Manufacturer Serial No." := PurchLine."CXW Manufacturer Serial No.";
+        WorkshopLine."CXW Serial No." := SerialNo;
         WorkshopLine."CXW Status" := WorkshopLine."CXW Status"::"new";
         WorkshopLineMgt.FillPurchaseData(WorkshopLine, PurchLine);
         WorkshopLineMgt.PrefillEmptyWorkshopAttributes(WorkshopLine);

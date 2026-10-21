@@ -144,6 +144,8 @@ The workshop checks purchased watches externally for authenticity and reports th
 > - a **serial no. series** (item card, field "Serial Nos.") — the next number is drawn from it automatically if the purchase line has no serial number yet.
 >
 > For SellWatch items, the easiest way is to set both up in the **SellWatch item templates**. Which details are mandatory on the card (manufacturer serial no., box, papers) is controlled by the flags on the item tracking code from CHX.Base. Lines with a quantity other than 1 are not supported.
+>
+> The BC serial number is stored on the workshop line when it is sent. It is shown in the **Workshop Lines** overview next to the manufacturer serial number and is passed to the workshop through the API as `serialNo` (the manufacturer serial number still as `manufacturerSerialNo`). Workshop lines that were already processed before version 27.0.0.28 have no BC serial number.
 
 ### 1. OAuth2 S2S (Entra) for the Workshop API
 

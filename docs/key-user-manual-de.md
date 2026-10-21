@@ -144,6 +144,8 @@ Die Werkstatt prüft angekaufte Uhren extern auf Echtheit und liefert das Ergebn
 > - eine **Seriennr.-Nummernserie** (Artikelkarte, Feld "Seriennummern") haben – daraus wird automatisch die nächste Nummer gezogen, wenn die Bestellzeile noch keine Seriennummer hat.
 >
 > Für SellWatch-Artikel richten Sie beides am einfachsten in den **SellWatch-Artikelvorlagen** ein. Welche Angaben auf der Karte Pflicht sind (Herstellerseriennummer, Box, Papiere), steuern die Kennzeichen am Artikelverfolgungscode aus CHX.Base. Zeilen mit Menge ungleich 1 werden nicht unterstützt.
+>
+> Die BC-Seriennummer wird beim Senden auf der Werkstattzeile gespeichert. Sie ist in der Übersicht **Workshop Lines** neben der Herstellerseriennummer zu sehen und wird der Werkstatt über die API als `serialNo` mitgeliefert (die Herstellerseriennummer weiterhin als `manufacturerSerialNo`). Werkstattzeilen, die vor Version 27.0.0.28 bereits verarbeitet wurden, haben keine BC-Seriennummer.
 
 ### 1. OAuth2 S2S (Entra) für die Workshop-API
 

@@ -39,6 +39,10 @@ page 60339 "CXW Workshop Line API"
                 {
                     Editable = false;
                 }
+                field(serialNo; Rec."CXW Serial No.")
+                {
+                    Editable = false;
+                }
                 field(status; Rec."CXW Status") { }
                 field(genuine; Rec."CXW isAuthentic") { }
                 field(dialColor; Rec."CXW Dial Color") { }
@@ -143,6 +147,8 @@ page 60339 "CXW Workshop Line API"
             Error(FieldNotEditableErr, Rec.FieldCaption("CXW Item No."));
         if Rec."CXW Manufacturer Serial No." <> xRec."CXW Manufacturer Serial No." then
             Error(FieldNotEditableErr, Rec.FieldCaption("CXW Manufacturer Serial No."));
+        if Rec."CXW Serial No." <> xRec."CXW Serial No." then
+            Error(FieldNotEditableErr, Rec.FieldCaption("CXW Serial No."));
         CheckPurchaseDataUnchanged();
         exit(true);
     end;
