@@ -46,6 +46,11 @@ page 60338 "CXW Workshop Lines"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the manufacturer serial number captured when the item was sent to the workshop.';
                 }
+                field("CXW Serial No."; Rec."CXW Serial No.")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the Business Central serial number of the watch, as assigned in the item tracking of the purchase line when the line was sent to the workshop.';
+                }
                 field("CXW Status"; Rec."CXW Status")
                 {
                     ApplicationArea = All;

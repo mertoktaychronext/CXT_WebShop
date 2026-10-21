@@ -171,6 +171,13 @@ table 60318 "CXW Workshop Line"
             Editable = false;
             DataClassification = ToBeClassified;
         }
+        // BC serial number from the item tracking of the purchase line; the manufacturer serial number is field 5.
+        field(39; "CXW Serial No."; Code[50])
+        {
+            Caption = 'Serial No.';
+            Editable = false;
+            DataClassification = ToBeClassified;
+        }
         field(40; "CXW Brand"; Text[250])
         {
             Caption = 'Brand';

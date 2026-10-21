@@ -25,6 +25,28 @@ codeunit 60336 "CXW Workshop Upgrade"
             MarkSentEntriesAsTimeExported();
             UpgradeTag.SetUpgradeTag(GetAvailabilityTimeExportTag());
         end;
+
+        if not UpgradeTag.HasUpgradeTag(GetWorkshopLineSerialNoTag()) then begin
+            FillSerialNoOnOpenLines();
+            UpgradeTag.SetUpgradeTag(GetWorkshopLineSerialNoTag());
+        end;
+    end;
+
+    // Only lines the workshop still works on; after posting the receipt the purchase line has no item tracking left.
+    local procedure FillSerialNoOnOpenLines()
+    var
+        WorkshopLine: Record "CXW Workshop Line";
+        PurchLine: Record "Purchase Line";
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
+    begin
+        WorkshopLine.SetFilter("CXW Status", '%1|%2', WorkshopLine."CXW Status"::"new", WorkshopLine."CXW Status"::"WS checked");
+        WorkshopLine.SetRange("CXW Serial No.", '');
+        if WorkshopLine.FindSet(true) then
+            repeat
+                if PurchLine.Get(WorkshopLine."CXW Document Type", WorkshopLine."CXW Document No.", WorkshopLine."CXW Line No.") then
+                    if WorkshopLineMgt.FillSerialNoFromPurchLine(WorkshopLine, PurchLine) then
+                        WorkshopLine.Modify(false);
+            until WorkshopLine.Next() = 0;
     end;
 
     // UPDDLT/UPDIN now work off the change entry log. Entries already sent as stock count as sent for the
@@ -106,6 +128,11 @@ codeunit 60336 "CXW Workshop Upgrade"
         exit('CXW-AVAILABILITY-TIME-EXPORT-LOG-20261009');
     end;
 
+    local procedure GetWorkshopLineSerialNoTag(): Code[250]
+    begin
+        exit('CXW-WORKSHOPLINE-SERIALNO-20261021');
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Upgrade Tag", 'OnGetPerCompanyUpgradeTags', '', false, false)]
     local procedure RegisterPerCompanyTags(var PerCompanyUpgradeTags: List of [Code[250]])
     begin
@@ -113,5 +140,6 @@ codeunit 60336 "CXW Workshop Upgrade"
         PerCompanyUpgradeTags.Add(GetWorkshopLineAttributePrefillTag());
         PerCompanyUpgradeTags.Add(GetHoldOrderMigrationTag());
         PerCompanyUpgradeTags.Add(GetAvailabilityTimeExportTag());
+        PerCompanyUpgradeTags.Add(GetWorkshopLineSerialNoTag());
     end;
 }

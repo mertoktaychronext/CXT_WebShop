@@ -1,6 +1,6 @@
 # Gesamtübersicht – nur öffentliche Prozeduren
 
-**Stand:** 2026-10-07 (aus `gesamtuebersicht.md` gefiltert, CHX.Webshop 27.0.0.18)
+**Stand:** 2026-10-21 (aus `gesamtuebersicht.md` gefiltert, CHX.Webshop 27.0.0.28)
 
 Alle Prozeduren mit Sichtbarkeit **Public** – also die Funktionen, die andere Erweiterungen oder externe Aufrufer nutzen können. Sie zeigen, wo die Bereiche miteinander bzw. mit anderen Apps verbunden sind, und sind damit die wichtigste Grundlage für Auslagerungsentscheidungen.
 
@@ -13,6 +13,7 @@ Alle Prozeduren mit Sichtbarkeit **Public** – also die Funktionen, die andere 
 | CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `FillPurchaseData` | Prozedur | Public | Übernimmt Kreditor, Lieferantenbestellnr., Währung, Variante, Beschreibung, Menge, EK-Preis und Gebrauchtware aus Bestellkopf und -zeile sowie Marke, Modell, Untermodell, Referenz, Baujahr, Zustand, Box und Zertifikat aus den Artikelattributen auf die Werkstattzeile; fehlende Attributwerte bleiben leer, ohne das Senden zu verhindern. |
 | CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `PrefillEmptyWorkshopAttributes` | Prozedur | Public | Belegt die sieben zugeordneten Prüfmerkmale mit den aktuellen Attributwerten des Artikels vor; gefüllte Felder und Platzhalter bleiben unverändert. |
 | CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `WorkshopAttributeCount`, `GetWorkshopAttributeId`, `GetWorkshopAttributeValue`, `SetWorkshopAttributeValue` | Prozedur | Public | [4 Hilfsfunktionen] Gemeinsame Zuordnung Werkstatt-Merkmal ↔ Artikelattribut-ID (22, 18, 23, 16, 15, 24, 20; Features/Attribut 9/10 = Platzhalter ohne ID) für Vorbelegung und Rückschreiben, Wert lesen/schreiben. |
+| CHX.Webshop | CXW Workshop Line Mgt. (60335) | Codeunit | `FillSerialNoFromPurchLine` | Prozedur | Public | Übernimmt die Seriennummer aus der Artikelverfolgung der Bestellzeile auf die Werkstattzeile (Upgrade bestehender Zeilen). |
 | CHX.Webshop | CXW Consignment Sale Detection (60344) | Codeunit | `SetPurchaseOrder` | Prozedur | Public | Ermittelt die offene, wareneingebuchte, aber noch nicht fakturierte Einkaufsbestellung zu einem Artikel; bei eindeutigem Treffer wird der Eintrag auf "Offen" gesetzt, bei keinem oder mehreren Treffern auf "Fehler" mit sprechendem Hinweistext. Wird auch von der Job-Queue-Verarbeitung (Codeunit 60345) für die "Erneut versuchen"-Funktion wiederverwendet. |
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `SetApiKey` | Prozedur | Public | Speichert einen API-Schlüssel sicher im Isolated Storage statt im Klartext-Tabellenfeld. |
 | CHX.Webshop | CXW API Interface Setup (60317) | Tabelle | `GetApiKey` | Prozedur | Public | Liest den gespeicherten API-Schlüssel für den Versand einer Anfrage aus. |

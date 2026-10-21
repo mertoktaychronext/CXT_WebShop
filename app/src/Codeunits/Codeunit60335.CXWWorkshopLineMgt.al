@@ -30,6 +30,19 @@ codeunit 60335 "CXW Workshop Line Mgt."
         WorkshopLine."CXW Certificate" := GetItemAttributeValue(PurchLine."No.", CertificateAttributeId());
     end;
 
+    // Takes the serial no. from the item tracking of the purchase line, used by the upgrade of existing lines;
+    // "Send to Workshop" passes the serial no. it determined directly. Returns false if the line has none.
+    procedure FillSerialNoFromPurchLine(var WorkshopLine: Record "CXW Workshop Line"; PurchLine: Record "Purchase Line"): Boolean
+    var
+        SerialNo: Code[50];
+    begin
+        SerialNo := FindPurchLineSerialNo(PurchLine);
+        if SerialNo = '' then
+            exit(false);
+        WorkshopLine."CXW Serial No." := SerialNo;
+        exit(true);
+    end;
+
     // Prefills the attribute fields the workshop reports back with the item's current values;
     // the workshop may correct them before they are written back on processing.
     procedure PrefillEmptyWorkshopAttributes(var WorkshopLine: Record "CXW Workshop Line")
