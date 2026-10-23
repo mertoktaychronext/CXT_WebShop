@@ -34,6 +34,7 @@ codeunit 50404 "CXW Test Permissions"
         SellWatchApiTok: Label 'CXW SELL WATCH API', Locked = true;
         WorkshopApiTok: Label 'CXW WORKSHOP API', Locked = true;
         WorkshopAllTok: Label 'CXW WORKSHOP ALL', Locked = true;
+        WorkshopDeleteTok: Label 'CXW WORKSHOP DELETE', Locked = true;
         MissingObjectTok: Label '%1 %2 (%3)', Locked = true;
         MissingPermissionSetMsg: Label 'Permission set %1 must exist.', Locked = true;
         NotAssignableMsg: Label 'Permission set %1 must be assignable.', Locked = true;
@@ -101,6 +102,27 @@ codeunit 50404 "CXW Test Permissions"
         LibraryAssert.AreEqual('', MissingObjects, StrSubstNo(MissingTableDataMsg, MissingObjects));
     end;
 
+    [Test]
+    procedure OnlyWorkshopDeleteMayDeleteWorkshopLinesDirectly()
+    var
+        MetadataPermission: Record "Metadata Permission";
+        MetadataPermissionSetRel: Record "Metadata Permission Set Rel.";
+    begin
+        // Spec workshop-line-delete: Requirement "Löschen nur mit eigenem Berechtigungssatz"
+        // [GIVEN] The permission sets "CXW Workshop All" and "CXW Workshop Delete"
+        // [WHEN] Reading their delete permission on the workshop line table
+        // [THEN] "CXW Workshop All" may only delete indirectly (cascade from the purchase line via the codeunit)
+        LibraryAssert.IsTrue(GetWorkshopLinePermission(MetadataPermission, WorkshopAllTok), 'CXW Workshop All must grant permissions on the workshop line.');
+        LibraryAssert.AreEqual(MetadataPermission."Delete Permission"::Indirect, MetadataPermission."Delete Permission", 'Delete permission of CXW Workshop All');
+
+        // [THEN] "CXW Workshop Delete" may delete directly and includes "CXW Workshop All"
+        LibraryAssert.IsTrue(GetWorkshopLinePermission(MetadataPermission, WorkshopDeleteTok), 'CXW Workshop Delete must grant permissions on the workshop line.');
+        LibraryAssert.AreEqual(MetadataPermission."Delete Permission"::Yes, MetadataPermission."Delete Permission", 'Delete permission of CXW Workshop Delete');
+        LibraryAssert.IsTrue(
+            MetadataPermissionSetRel.Get(GetAppId(), WorkshopDeleteTok, GetAppId(), WorkshopAllTok),
+            'CXW Workshop Delete must include CXW Workshop All.');
+    end;
+
     local procedure GetRoleIds() RoleIds: List of [Text]
     begin
         RoleIds.Add(SalesPriceAllTok);
@@ -110,6 +132,16 @@ codeunit 50404 "CXW Test Permissions"
         RoleIds.Add(SellWatchApiTok);
         RoleIds.Add(WorkshopApiTok);
         RoleIds.Add(WorkshopAllTok);
+        RoleIds.Add(WorkshopDeleteTok);
+    end;
+
+    local procedure GetWorkshopLinePermission(var MetadataPermission: Record "Metadata Permission"; RoleId: Text): Boolean
+    begin
+        MetadataPermission.SetRange("App ID", GetAppId());
+        MetadataPermission.SetRange("Role ID", RoleId);
+        MetadataPermission.SetRange("Object Type", MetadataPermission."Object Type"::"Table Data");
+        MetadataPermission.SetRange("Object ID", Database::"CXW Workshop Line");
+        exit(MetadataPermission.FindFirst());
     end;
 
     local procedure CheckPermissionSetIsAssignable(RoleId: Code[20])
@@ -164,8 +196,8 @@ codeunit 50404 "CXW Test Permissions"
     local procedure FilterPermissions(var MetadataPermission: Record "Metadata Permission"; ObjectType: Integer; ObjectId: Integer)
     begin
         MetadataPermission.SetRange("App ID", GetAppId());
-        MetadataPermission.SetFilter("Role ID", '%1|%2|%3|%4|%5|%6|%7',
-            SalesPriceAllTok, OnDemandAllTok, RealtimeInventoryTok, SellWatchAllTok, SellWatchApiTok, WorkshopApiTok, WorkshopAllTok);
+        MetadataPermission.SetFilter("Role ID", '%1|%2|%3|%4|%5|%6|%7|%8',
+            SalesPriceAllTok, OnDemandAllTok, RealtimeInventoryTok, SellWatchAllTok, SellWatchApiTok, WorkshopApiTok, WorkshopAllTok, WorkshopDeleteTok);
         MetadataPermission.SetRange("Object Type", ObjectType);
         MetadataPermission.SetRange("Object ID", ObjectId);
     end;

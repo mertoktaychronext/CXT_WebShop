@@ -21,14 +21,13 @@ tableextension 60321 "CXW Workshop Purchase Line" extends "Purchase Line"
 
     trigger OnDelete()
     var
-        WorkshopLine: Record "CXW Workshop Line";
         OnDemandLinkMgt: Codeunit "CXW On Demand Link Mgt";
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
     begin
         OnDemandLinkMgt.ClearLinkedSalesForDeletedPurchaseLine(Rec);
 
-        if WorkshopLine.Get(Rec."Document Type", Rec."Document No.", Rec."Line No.") then
-            if WorkshopLine."CXW Status" <> WorkshopLine."CXW Status"::"Processed" then
-                WorkshopLine.Delete();
         // Workshop Lines im Status "Processed" bleiben als Prüfnachweis bestehen (kein Cascade-Delete).
+        // Über die Codeunit, weil "CXW Workshop All" nur indirektes Löschrecht auf die Workshop Line hat.
+        WorkshopLineMgt.DeleteForDeletedPurchLine(Rec);
     end;
 }
