@@ -99,7 +99,7 @@ Open the relevant **purchase order** and click **"Send to Workshop"**. The syste
 
 > Lines with a quantity greater than 1 or items without serial number tracking cannot be sent to the workshop; they also appear in the summary message. In that case, contact a key user.
 
-Once entered successfully, the line is marked "Sent to Workshop" and its fields on the purchase line become **read-only** (item, quantity, price, etc.) — this prevents a line already handed over to the workshop from being changed afterwards while the check is still in progress.
+Once entered successfully, the line is marked "Sent to Workshop" and its fields on the purchase line become **read-only** (item, quantity, etc.) — this prevents a line already handed over to the workshop from being changed afterwards while the check is still in progress. Only the **direct unit cost** stays editable at all times; a later price change is not passed on to the workshop, though.
 
 > A line that has already been sent cannot be transmitted a second time through this action.
 

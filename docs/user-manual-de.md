@@ -99,7 +99,7 @@ Für angekaufte Uhren, die vor der Einlagerung von einer externen Werkstatt auf 
 
 > Zeilen mit einer Menge größer 1 oder Artikel ohne Seriennummernverfolgung können nicht an die Werkstatt gesendet werden; sie erscheinen ebenfalls in der Sammelmeldung. Wenden Sie sich in diesem Fall an einen Key User.
 
-Nach erfolgreicher Eingabe wird die Zeile als "An Werkstatt gesendet" markiert und ist auf der Bestellzeile **nicht mehr editierbar** (Artikel, Menge, Preis etc.) – so wird verhindert, dass eine bereits an die Werkstatt übergebene Zeile nachträglich verändert wird, während die Prüfung noch läuft.
+Nach erfolgreicher Eingabe wird die Zeile als "An Werkstatt gesendet" markiert und ist auf der Bestellzeile **nicht mehr editierbar** (Artikel, Menge etc.) – so wird verhindert, dass eine bereits an die Werkstatt übergebene Zeile nachträglich verändert wird, während die Prüfung noch läuft. Nur der **EK-Preis** bleibt jederzeit änderbar; eine spätere Preisänderung wird allerdings nicht an die Werkstatt übermittelt.
 
 > Eine bereits gesendete Zeile lässt sich über diese Aktion kein zweites Mal übertragen.
 
