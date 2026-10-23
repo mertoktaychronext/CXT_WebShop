@@ -1,5 +1,34 @@
 codeunit 60335 "CXW Workshop Line Mgt."
 {
+    // Indirect delete: users without "CXW Workshop Delete" may not delete workshop lines themselves,
+    // but deleting a purchase line still removes its open workshop line.
+    Permissions = tabledata "CXW Workshop Line" = d;
+
+    // Called from the OnDelete of the purchase line. Deletes without trigger: the purchase line is being
+    // deleted itself, so it must not be reset, and the status check of the workshop line does not apply.
+    // Processed workshop lines stay as proof of the workshop check.
+    internal procedure DeleteForDeletedPurchLine(PurchLine: Record "Purchase Line")
+    var
+        WorkshopLine: Record "CXW Workshop Line";
+    begin
+        if WorkshopLine.Get(PurchLine."Document Type", PurchLine."Document No.", PurchLine."Line No.") then
+            if WorkshopLine."CXW Status" <> WorkshopLine."CXW Status"::"Processed" then
+                WorkshopLine.Delete();
+    end;
+
+    // Called from the OnDelete of the workshop line: the purchase line can be sent to the workshop again.
+    // Item tracking and serial no. information are kept and reused when the line is sent again.
+    internal procedure ResetPurchLineOnDelete(WorkshopLine: Record "CXW Workshop Line")
+    var
+        PurchLine: Record "Purchase Line";
+    begin
+        if not PurchLine.Get(WorkshopLine."CXW Document Type", WorkshopLine."CXW Document No.", WorkshopLine."CXW Line No.") then
+            exit;
+        PurchLine."CXW Sent to Workshop" := false;
+        PurchLine."CXW Manufacturer Serial No." := '';
+        PurchLine.Modify();
+    end;
+
     // Copies the purchase order and watch data the workshop needs onto the workshop line
     // (snapshot at hand-over), used by "Send to Workshop" and by the upgrade of existing lines.
     procedure FillPurchaseData(var WorkshopLine: Record "CXW Workshop Line"; PurchLine: Record "Purchase Line")
