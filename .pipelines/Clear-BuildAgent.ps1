@@ -58,28 +58,55 @@ Write-DiskInfo 'Vorher'
 Write-Host 'Laufende Container auf dem Host:'
 docker ps --format '  {{.Names}}  ({{.Image}}, seit {{.RunningFor}})'
 
-Import-Module BcContainerHelper -DisableNameChecking
-
-$existing = docker ps -a --filter "name=^/$ContainerName$" --format '{{.Names}}'
-if ($existing) {
-    Write-Host "Container $ContainerName existiert noch (abgebrochener Lauf?) – wird entfernt."
-    Remove-BcContainer -containerName $ContainerName   # entfernt auch Hosts-Einträge und Session
+# Entfernt BC-Images, die kein Container nutzt und deren Artefakte nicht mehr im Cache liegen –
+# dieselbe Regel wie Flush-ContainerHelperCache -cache images. Das kann nicht selbst aufgerufen werden:
+# BcContainerHelper läuft mit StrictMode, und ein Image ohne Umgebungsvariablen bricht die Funktion
+# mit "Die Eigenschaft "Env" wurde für dieses Objekt nicht gefunden" ab (6.1.19).
+function Remove-UnusedBcImages {
+    $cacheFolder = $bcContainerHelperConfig.bcartifactsCacheFolder
+    $usedImages = @(docker ps -a --no-trunc --format '{{.Image}}')
+    foreach ($line in @(docker images --no-trunc --format '{{.Repository}}:{{.Tag}}|{{.ID}}')) {
+        $imageName, $imageId = $line.Split('|')
+        if ($usedImages -contains $imageName -or $usedImages -contains $imageId) { continue }
+        $artifactUrl = @(docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' $imageId) |
+            Where-Object { $_ -like 'artifactUrl=*' } | Select-Object -First 1
+        if (-not $artifactUrl) { continue }   # kein auf Artefakten gebautes Image – nicht anfassen
+        # artifactUrl=https://<host>/sandbox/28.0.12345.0/de?... → <cache>\sandbox\28.0.12345.0\de
+        $artifactPath = ([uri]$artifactUrl.Substring('artifactUrl='.Length).Split('?')[0]).AbsolutePath.TrimStart('/')
+        if (-not (Test-Path (Join-Path $cacheFolder $artifactPath))) {
+            Write-Host "Image $imageName ($artifactPath) – Artefakte nicht mehr im Cache, wird entfernt."
+            docker rmi --force $imageId | Out-Null
+        }
+    }
+    docker image prune -f | Out-Null   # verwaiste Zwischen-Layer
 }
-else {
-    Write-Host "Kein Container $ContainerName vorhanden."
+
+try {
+    Import-Module BcContainerHelper -DisableNameChecking
+
+    $existing = docker ps -a --filter "name=^/$ContainerName$" --format '{{.Names}}'
+    if ($existing) {
+        Write-Host "Container $ContainerName existiert noch (abgebrochener Lauf?) – wird entfernt."
+        Remove-BcContainer -containerName $ContainerName   # entfernt auch Hosts-Einträge und Session
+    }
+    else {
+        Write-Host "Kein Container $ContainerName vorhanden."
+    }
+
+    # Cache-Namen kleingeschrieben angeben, BcContainerHelper vergleicht sie nach ToLowerInvariant() case-sensitiv.
+    Write-Host "Artefakte und Images entfernen, die seit $KeepDays Tagen nicht benutzt wurden."
+    Flush-ContainerHelperCache -cache 'bcartifacts' -keepDays $KeepDays
+    Remove-UnusedBcImages
+
+    if ((Get-FreeDiskPercent) -lt $MinFreePercent) {
+        Write-Host "##[warning]Weniger als $MinFreePercent % frei auf C:\ – alle ungenutzten Artefakte und Images werden entfernt."
+        Flush-ContainerHelperCache -cache 'bcartifacts' -keepDays 0
+        Remove-UnusedBcImages
+    }
 }
-
-# Images, deren Artefakte gelöscht wurden, entfernt Flush-ContainerHelperCache gleich mit.
-# Images laufender Container bleiben stehen. Cache-Namen kleingeschrieben angeben, BcContainerHelper
-# vergleicht sie nach ToLowerInvariant() case-sensitiv.
-Write-Host "Artefakte und Images entfernen, die seit $KeepDays Tagen nicht benutzt wurden."
-Flush-ContainerHelperCache -cache 'bcartifacts,images' -keepDays $KeepDays
-docker image prune -f | Out-Null                       # verwaiste Zwischen-Layer
-
-if ((Get-FreeDiskPercent) -lt $MinFreePercent) {
-    Write-Host "##[warning]Weniger als $MinFreePercent % frei auf C:\ – alle ungenutzten Artefakte und Images werden entfernt."
-    Flush-ContainerHelperCache -cache 'bcartifacts,images' -keepDays 0
-    docker image prune -f | Out-Null
+catch {
+    # Aufräumen darf den Build nie scheitern lassen – terminierende Fehler aus BcContainerHelper hier abfangen
+    Write-Host "##[warning]Aufräumen unvollständig: $($_.Exception.Message)"
 }
 
 Write-Host 'Docker-Speicher:'

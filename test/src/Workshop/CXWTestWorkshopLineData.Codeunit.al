@@ -2,13 +2,14 @@ namespace CHX.Webshop.Test;
 
 using Microsoft.Finance.GeneralLedger.Setup;
 using Microsoft.Inventory.Item;
+using Microsoft.Inventory.Tracking;
 using Microsoft.Purchases.Document;
 using System.TestLibraries.Utilities;
 
 /// <summary>
 /// Data that "Send to Workshop" copies onto the workshop line (Codeunit "CXW Workshop Line Mgt."):
 /// prefill of the check attributes from the item attributes and the snapshot of purchase and watch data.
-/// Sources: openspec/specs/workshop-line-attribute-prefill, workshop-line-api-purchase-data.
+/// Sources: openspec/specs/workshop-line-attribute-prefill, workshop-line-api-purchase-data, workshop-line-serial-no.
 /// The workshop line is only built in memory - the procedures under test do not read or write it.
 /// </summary>
 codeunit 50401 "CXW Test Workshop Line Data"
@@ -259,6 +260,77 @@ codeunit 50401 "CXW Test Workshop Line Data"
     end;
 
     #endregion
+
+    #region Serial number from the item tracking
+
+    [Test]
+    procedure SerialNoIsTakenFromItemTracking()
+    var
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        PurchaseLine: Record "Purchase Line";
+        WorkshopLine: Record "CXW Workshop Line";
+        SerialNo: Code[50];
+    begin
+        Initialize();
+        // Spec workshop-line-serial-no: Scenario "Open line is filled"
+        // [GIVEN] A purchase line with a serial no. in its item tracking
+        TestLibrary.CreateItem(Item);
+        TestLibrary.CreatePurchaseOrder(PurchaseHeader, '');
+        TestLibrary.CreatePurchaseLine(PurchaseLine, PurchaseHeader, Item."No.");
+        SerialNo := TestLibrary.NewCode20();
+        CreateSerialNoTracking(PurchaseLine, SerialNo);
+
+        // [WHEN] Taking the serial no. onto the workshop line
+        // [THEN] The workshop line holds the serial no. of the item tracking
+        LibraryAssert.IsTrue(WorkshopLineMgt.FillSerialNoFromPurchLine(WorkshopLine, PurchaseLine), 'Serial no. found');
+        LibraryAssert.AreEqual(SerialNo, WorkshopLine."CXW Serial No.", 'Serial no.');
+    end;
+
+    [Test]
+    procedure PurchLineWithoutItemTrackingLeavesSerialNoEmpty()
+    var
+        Item: Record Item;
+        PurchaseHeader: Record "Purchase Header";
+        PurchaseLine: Record "Purchase Line";
+        WorkshopLine: Record "CXW Workshop Line";
+    begin
+        Initialize();
+        // Spec workshop-line-serial-no: Scenario "Purchase line without item tracking"
+        // [GIVEN] A purchase line without item tracking
+        TestLibrary.CreateItem(Item);
+        TestLibrary.CreatePurchaseOrder(PurchaseHeader, '');
+        TestLibrary.CreatePurchaseLine(PurchaseLine, PurchaseHeader, Item."No.");
+
+        // [WHEN] Taking the serial no. onto the workshop line
+        // [THEN] Nothing is found, the field stays empty and no error occurs
+        LibraryAssert.IsFalse(WorkshopLineMgt.FillSerialNoFromPurchLine(WorkshopLine, PurchaseLine), 'Serial no. found');
+        LibraryAssert.AreEqual('', WorkshopLine."CXW Serial No.", 'Serial no.');
+    end;
+
+    #endregion
+
+    // Minimal surplus entry as "Send to Workshop" creates it via "Create Reserv. Entry".
+    local procedure CreateSerialNoTracking(PurchaseLine: Record "Purchase Line"; SerialNo: Code[50])
+    var
+        ReservationEntry: Record "Reservation Entry";
+        EntryNo: Integer;
+    begin
+        if ReservationEntry.FindLast() then
+            EntryNo := ReservationEntry."Entry No.";
+        ReservationEntry.Init();
+        ReservationEntry."Entry No." := EntryNo + 1;
+        ReservationEntry.Positive := true;
+        ReservationEntry."Item No." := PurchaseLine."No.";
+        ReservationEntry."Reservation Status" := ReservationEntry."Reservation Status"::Surplus;
+        ReservationEntry."Source Type" := Database::"Purchase Line";
+        ReservationEntry."Source Subtype" := PurchaseLine."Document Type".AsInteger();
+        ReservationEntry."Source ID" := PurchaseLine."Document No.";
+        ReservationEntry."Source Ref. No." := PurchaseLine."Line No.";
+        ReservationEntry."Serial No." := SerialNo;
+        ReservationEntry."Quantity (Base)" := 1;
+        ReservationEntry.Insert();
+    end;
 
     local procedure SetAttribute(ItemNo: Code[20]; AttributeId: Integer) Value: Text[250]
     begin

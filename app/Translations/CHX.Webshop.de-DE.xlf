@@ -1821,6 +1821,12 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Manufacturer Serial No. - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3127986241 - Field 2773132357 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Serial No.</source>
+          <target>Seriennr.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Field CXW Serial No. - Property Caption</note>
+        </trans-unit>
         <trans-unit id="Table 3127986241 - Field 244065445 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
           <source>Model</source>
           <target>Modell</target>
@@ -4154,6 +4160,12 @@
           <target>Gibt die Herstellerseriennummer an, die beim Senden des Artikels an die Werkstatt erfasst wurde.</target>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Manufacturer Serial No. - Property ToolTip</note>
+        </trans-unit>
+        <trans-unit id="Page 1262482968 - Control 2773132357 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Specifies the Business Central serial number of the watch, as assigned in the item tracking of the purchase line when the line was sent to the workshop.</source>
+          <target>Gibt die Business-Central-Seriennummer der Uhr an, wie sie beim Senden an die Werkstatt in der Artikelverfolgung der Einkaufszeile vergeben war.</target>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">Page CXW Workshop Lines - Control CXW Serial No. - Property ToolTip</note>
         </trans-unit>
         <trans-unit id="Page 1262482968 - Control 244065445 - Property 1295455071" size-unit="char" translate="yes" xml:space="preserve">
           <source>Specifies the model of the watch from the item attributes, as sent to the workshop.</source>

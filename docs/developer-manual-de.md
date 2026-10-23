@@ -12,6 +12,10 @@ Als dritter, ebenfalls fachlich unabhängiger Baustein enthält die Erweiterung 
 
 Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): Wird eine VK-Rechnung mit einer Zeile eines Artikels mit `"CXB Consignment Sales"` = true (Feld aus der Dependency CHX.Base) gebucht, legt ein Event-Subscriber auf `Codeunit "Sales-Post"` einen Kommissions-Buchungseintrag an und ermittelt dabei automatisch die zugehörige, wareneingebuchte, noch nicht fakturierte Einkaufsbestellung. Eine job-queue-gesteuerte Codeunit bucht fällige Einträge (Fälligkeitsdatum = VK-Buchungsdatum + einrichtbare Verzögerung in Tagen) automatisiert als Einkaufsrechnung. Details siehe Abschnitt "Kommissionsverkauf" unten.
 
+> **Update 2026-10-23 (EK-Preis nach "Send to Workshop" bearbeitbar, Version 27.0.0.29):** PageExtension 60329 sperrt `"Direct Unit Cost"` nicht mehr; die übrigen Zeilenfelder bleiben ab `"CXW Sent to Workshop"` = true gesperrt. `"CXW Unit Price"` auf Table 60318 bleibt eine Momentaufnahme vom Zeitpunkt des Sendens – eine spätere Preisänderung erreicht die Werkstattzeile bzw. die API nicht.
+
+> **Update 2026-10-21 (BC-Seriennummer auf der Werkstattzeile, Version 27.0.0.28):** Table 60318 hat das neue Feld 39 `"CXW Serial No."` (Code[50], nicht editierbar) mit der BC-Seriennummer der Uhr. "Send to Workshop" übergibt die ermittelte bzw. gezogene Seriennummer an `CreateWorkshopLine` (PageExtension 60328), das sie als Momentaufnahme speichert. Page 60338 zeigt das Feld neben der Herstellerseriennummer, die API `workshopLines` liefert es als `serialNo` (nur lesend, PATCH-Änderungen werden abgelehnt; keine zusätzlichen Rechte für "CXW Workshop API"). Die Upgrade-Codeunit 60336 befüllt offene Zeilen (New/WS checked) einmalig aus der Artikelverfolgung der Einkaufszeile (`FillSerialNoFromPurchLine` in Codeunit 60335, Upgrade-Tag `CXW-WORKSHOPLINE-SERIALNO-20261021`); verarbeitete Zeilen bleiben leer. Details: `openspec/changes/workshop-line-serial-no/`.
+
 > **Update 2026-10-14 (Differenzbesteuerung aus der Salini Base App, Version 27.0.0.26):** Verfügbarkeitsänderungen (Codeunit 60348 "CXW Availability Change Mgt.": `QueueItemLedgerEntryChange`, Aktualisierung von "CXW Diff. Taxation Purchase", Filter in `GetAvailableInventoryQuantity`) und Echtzeitbestand (Codeunit 60350 "CXW Realtime Inventory Mgt.": "CXW Differential Taxation") lesen das Kennzeichen am Artikelposten jetzt aus `"SLPSBC Margin Taxation"` (Salini Base App) statt aus dem veralteten `"CXB Margin Taxation"` (CHX.Base). **Voraussetzungen:** CHX.Base ≥ 28.0.0.1 und Salini Base App ≥ 28.0.0.13 (neue direkte Abhängigkeit). **Auslieferung nur zusammen mit CHX.Base 28.0.0.1** im selben Wartungsfenster; die Datenübernahme der Artikelposten erledigt das Upgrade von CHX.Base. Keine Schema-Änderung, kein eigener Upgrade-Code. Details: `openspec/changes/margin-taxation-salini-field/`.
 
 > **Update 2026-09-28 (SalesPrice-Export über die Aufgabenwarteschlange, Version 27.0.0.6):** "Upload Sales Price" ist durch "Release Sales Prices" ersetzt. Die Aktion sendet nicht mehr, sondern schreibt zurück, archiviert **nur noch das Archivland** (neues Setup-Feld "CXW Archive Country Code", Standard DE), speichert den Preis jedes Landes in der neuen Table 60320 "CXW Sales Price Export" und legt einen "Data Export Entry" (`SALESPRICE`) im neuen Status **"CXW Pending"** (Enumextension 60300 auf "Data Export Statuses") an, der nur per `Source Record ID` auf Table 60320 verweist. Quellzeilen ohne Land werden übersprungen. Codeunit 60332 "CXW Export Sales Price Job" baut das JSON im **NAV-kompatiblen Format** (29 camelCase-Schlüssel, siehe unten) und sendet es; Wiederholung bis "CXW Max. Export Attempts", danach manuell über "Requeue Sales Price" (PageExtension 60336). Details: `openspec/changes/sales-price-export-job-queue/`.
@@ -336,7 +340,8 @@ Evaluate → Integer, 10 Zustand, 11 Box, 13 Zertifikat – fehlt ein Wert,
 bleibt das Feld leer bzw. 0) auf Felder 30–38/40–47 der Workshop Line
    │
    │  PageExtension 60329 "CXW Workshop Purch Order Subf" sperrt ab
-   │  "Sent to Workshop" = true die Standardfelder der Zeile (Editable = false)
+   │  "Sent to Workshop" = true die Standardfelder der Zeile (Editable = false),
+   │  ausgenommen "Direct Unit Cost"
    ▼
 Externe Werkstatt liest/schreibt über
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
@@ -344,7 +349,8 @@ Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
    workshopLines; Insert/Delete gesperrt, Statusrückschritte gesperrt)
    │  Werkstatt liest zusätzlich (nur lesend, PATCH-Änderungen abgelehnt):
    │  tenant (zur Laufzeit aus "Purchases & Payables Setup"."CXW Workshop
-   │  Tenant", z. B. "GmbH"), vendorOrderNo, vendorNo, vendorName,
+   │  Tenant", z. B. "GmbH"), serialNo (BC-Seriennr.), vendorOrderNo,
+   │  vendorNo, vendorName,
    │  variantCode, description, quantity, unitPrice, seller_currency,
    │  usedGoods, brand, model, subModel, ref, year, condition, box,
    │  certificate – alles außer tenant aus der Workshop Line selbst;
@@ -493,7 +499,7 @@ Vollständige Liste aller Objekte mit Funktionsanzahl: siehe `docs/funktionsregi
 | 60315 CXW Sales Price Inbound File | Entry No. | Für automatisierten Dateiimport (nicht produktiv angebunden) |
 | 60316 CXW Price Import Protocol | Entry No. | Fehlerprotokoll zum automatisierten Import (fachlich weiterhin das Sales-Price-Import-Protokoll; „Sales" im technischen Bezeichner wegen des 30-Zeichen-Limits von AL entfallen) |
 | 60317 CXW API Interface Setup | Code | Endpunkt-URL, Authentifizierungsart und (im Isolated Storage abgelegter) API-Schlüssel je externer Schnittstelle; bei "CXW Auth Type" = AWSSigV4 zusätzlich AWS Access Key ID/Region/Service (Klartextfelder) sowie AWS Secret Access Key/Session Token (im Isolated Storage) |
-| 60318 CXW Workshop Line | Document Type, Document No., Line No. | Ein Datensatz je an die Werkstatt übergebener Bestellzeile: Item No., Manufacturer Serial No., Status (Enum 60337: New/WS checked/Processed/Error), isAuthentic (Echtheits-Kennzeichen), acht fachlich benannte Attributfelder (Dial Color … Features) + zwei Platzhalter (Attribut 9/10), Created At, Checked At, Last Error |
+| 60318 CXW Workshop Line | Document Type, Document No., Line No. | Ein Datensatz je an die Werkstatt übergebener Bestellzeile: Item No., Manufacturer Serial No., Serial No. (BC-Seriennr.), Status (Enum 60337: New/WS checked/Processed/Error), isAuthentic (Echtheits-Kennzeichen), acht fachlich benannte Attributfelder (Dial Color … Features) + zwei Platzhalter (Attribut 9/10), Created At, Checked At, Last Error |
 | 60341 CXW Consignment Posting Entry | Entry No (AutoIncrement) | Ein Datensatz je gebuchter VK-Rechnungszeile eines Kommissionsartikels: Item No., Purchase Order No. (leer bei Erkennungsfehler), Sales Invoice No., Sales Posting Date, Due Date, Status (Enum 60343: Open/Posted/Error), Error Text |
 
 **Kennzeichen "Auftrag halten":** Die frühere Table Extension 60300 "CXW Sales Header" (Feld "CXW Hold Order") und PageExtension 60337 "CXW Sales Order List" wurden mit Version 27.0.0.10 entfernt; das Feld liegt jetzt in CHX.Base (ab 27.0.3.5, TableExt 60212 "CXB Sales Header Ext.", Feld "CXB Hold Order"). Change: `openspec/changes/move-hold-order-to-chx-base`.

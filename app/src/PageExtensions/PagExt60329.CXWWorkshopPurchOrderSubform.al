@@ -20,6 +20,7 @@ pageextension 60329 "CXW Workshop Purch Order Subf" extends "Purchase Order Subf
 
         // Sperrt die Standardfelder der Zeile, sobald sie bereits an den Workshop
         // gesendet wurde (siehe design.md, "Sperrung der Purchase Line nach Übertragung").
+        // "Direct Unit Cost" bleibt bewusst immer editierbar.
         modify(Type)
         {
             Editable = LineEditable;
@@ -45,10 +46,6 @@ pageextension 60329 "CXW Workshop Purch Order Subf" extends "Purchase Order Subf
             Editable = LineEditable;
         }
         modify("Unit of Measure Code")
-        {
-            Editable = LineEditable;
-        }
-        modify("Direct Unit Cost")
         {
             Editable = LineEditable;
         }

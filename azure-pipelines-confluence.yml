@@ -1,0 +1,45 @@
+# Veröffentlicht die Handbücher aus docs/ nach Confluence
+# (Space "Interne Projekte", Seite "CHX.Webshop" im Ordner "Chronext")
+# - Nach jedem Merge in 01-Master/master, wenn sich docs/ oder das Skript geändert hat
+# - Azure Repos ignoriert "pr:"-Trigger: Für den Dry-Run im PR die Pipeline optional als
+#   Build-Validierung in den Branch Policies von 01-Master/master eintragen
+
+trigger:
+  branches:
+    include:
+      - 01-Master/master
+  paths:
+    include:
+      - docs/
+      - tools/publish_confluence.py
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # Variable Group in Pipelines > Library anlegen:
+  #   CONFLUENCE_USER  = E-Mail des technischen Atlassian-Kontos
+  #   CONFLUENCE_TOKEN = API-Token (als Secret markieren)
+  - group: confluence-publishing
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.12'
+    displayName: Python bereitstellen
+
+  - script: pip install --quiet markdown requests
+    displayName: Abhängigkeiten installieren
+
+  - script: python tools/publish_confluence.py --config docs/confluence-pages.json --dry-run
+    displayName: Markdown prüfen (Dry-Run)
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+
+  - script: python tools/publish_confluence.py --config docs/confluence-pages.json
+    displayName: Nach Confluence veröffentlichen
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    env:
+      CONFLUENCE_USER: $(CONFLUENCE_USER)
+      CONFLUENCE_TOKEN: $(CONFLUENCE_TOKEN)   # Secrets müssen explizit gemappt werden
