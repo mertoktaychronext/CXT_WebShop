@@ -256,6 +256,21 @@ table 60318 "CXW Workshop Line"
             "CXW Checked At" := CurrentDateTime;
     end;
 
+    // Not called when the purchase line is deleted: that cascade deletes without trigger
+    // (Codeunit "CXW Workshop Line Mgt.", DeleteForDeletedPurchLine).
+    trigger OnDelete()
+    var
+        WorkshopLineMgt: Codeunit "CXW Workshop Line Mgt.";
+    begin
+        // Allow list, so a new status is not deletable by default; "WS checked" holds the workshop's result,
+        // "Processed" is the proof of the workshop check.
+        if not ("CXW Status" in ["CXW Status"::"new", "CXW Status"::Error]) then
+            Error(DeleteNotAllowedErr, "CXW Status");
+
+        WorkshopLineMgt.ResetPurchLineOnDelete(Rec);
+    end;
+
     var
         StatusRegressionErr: Label 'The status cannot be changed from %1 to %2.', Comment = '%1 = old status, %2 = new status';
+        DeleteNotAllowedErr: Label 'Workshop lines with status %1 cannot be deleted. Only workshop lines with status New or Error can be deleted.', Comment = '%1 = status';
 }

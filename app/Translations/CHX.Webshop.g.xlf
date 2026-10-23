@@ -1413,6 +1413,11 @@
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - Property Caption</note>
         </trans-unit>
+        <trans-unit id="Table 3127986241 - NamedType 658144035" size-unit="char" translate="yes" xml:space="preserve">
+          <source>Workshop lines with status %1 cannot be deleted. Only workshop lines with status New or Error can be deleted.</source>
+          <note from="Developer" annotates="general" priority="2">%1 = status</note>
+          <note from="Xliff Generator" annotates="general" priority="3">Table CXW Workshop Line - NamedType DeleteNotAllowedErr</note>
+        </trans-unit>
         <trans-unit id="Table 3127986241 - NamedType 3960573474" size-unit="char" translate="yes" xml:space="preserve">
           <source>The status cannot be changed from %1 to %2.</source>
           <note from="Developer" annotates="general" priority="2">%1 = old status, %2 = new status</note>
@@ -4267,6 +4272,11 @@
           <source>CXW Workshop API</source>
           <note from="Developer" annotates="general" priority="2"></note>
           <note from="Xliff Generator" annotates="general" priority="3">PermissionSet CXW Workshop API - Property Caption</note>
+        </trans-unit>
+        <trans-unit id="PermissionSet 2278605916 - Property 2879900210" size-unit="char" translate="yes" xml:space="preserve">
+          <source>CXW Workshop Delete</source>
+          <note from="Developer" annotates="general" priority="2"></note>
+          <note from="Xliff Generator" annotates="general" priority="3">PermissionSet CXW Workshop Delete - Property Caption</note>
         </trans-unit>
       </group>
     </body>

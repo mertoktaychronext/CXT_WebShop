@@ -28,9 +28,9 @@ Seit der letzten Gesamtprüfung sind zwei weitere Bereiche hinzugekommen: Die **
 | Xmlports | 1 |
 | Enums | 9 |
 | Enum-Erweiterungen | 1 |
-| Permission Sets | 7 |
-| **Gesamt Objekte** | **95** |
-| **Gesamt Prozeduren/Trigger/Events** | **355** |
+| Permission Sets | 8 |
+| **Gesamt Objekte** | **96** |
+| **Gesamt Prozeduren/Trigger/Events** | **358** |
 
 ---
 
@@ -170,6 +170,7 @@ Ein Datensatz je an die Werkstatt übergebener Bestellzeile: hält die Herstelle
 |---|---|---|---|---|
 | 1 | `OnInsert` | Trigger | – | Trägt beim Anlegen einer Werkstattzeile automatisch den Erstellungszeitpunkt ein. |
 | 2 | `OnModify` | Trigger | – | Verhindert einen Rückschritt des Prüfstatus (von "WS geprüft" zurück auf "Neu" oder weg von "Verarbeitet") sowie einen Wechsel auf "Fehler" aus einem anderen Status als "WS geprüft" heraus, unabhängig davon, ob die Änderung über die API oder intern erfolgt; trägt beim Wechsel auf "WS geprüft" automatisch den Prüfzeitpunkt ein. |
+| 3 | `OnDelete` | Trigger | – | Lässt das Löschen einer Werkstattzeile nur in den Status "Neu" und "Fehler" zu – "WS geprüft" (Ergebnis der Werkstatt) und "Verarbeitet" (Prüfnachweis) werden mit einer Meldung abgelehnt – und gibt danach die zugehörige Bestellzeile wieder frei, sodass sie erneut an die Werkstatt gesendet werden kann. |
 
 ### Tabellenerweiterung: CXW Workshop Purchase Line (ID: 60321)
 
@@ -177,7 +178,7 @@ Ergänzt die Standard-Einkaufszeile um Herstellerseriennummer, ein Kennzeichen "
 
 | Nr. | Prozedur / Trigger / Event | Typ | Sichtbarkeit | Beschreibung |
 |---|---|---|---|---|
-| 1 | `OnDelete` | Trigger | – | Löscht beim Löschen einer Einkaufszeile die zugehörige Werkstattzeile automatisch mit, sofern diese noch nicht abschließend verarbeitet wurde; bereits verarbeitete Werkstattzeilen bleiben als Prüfnachweis bestehen. |
+| 1 | `OnDelete` | Trigger | – | Löscht beim Löschen einer Einkaufszeile die zugehörige Werkstattzeile automatisch mit (über Codeunit 60335, daher auch für Benutzer ohne eigenes Löschrecht), sofern diese noch nicht abschließend verarbeitet wurde; bereits verarbeitete Werkstattzeilen bleiben als Prüfnachweis bestehen. |
 
 ### Seitenerweiterung: CXW Workshop Purchase Order (ID: 60328)
 
@@ -255,6 +256,8 @@ Stellt beim Senden an die Werkstatt die Bestell- und Uhrendaten einer Werkstattz
 | 23 | `AssignNextSerialNo` | Prozedur | Protected | Zieht die nächste Nummer aus der Seriennummernserie des Artikels und ordnet sie der Bestellzeile als Artikelverfolgung zu, damit der spätere Wareneingang gebucht werden kann; leer, wenn am Artikel keine Serie hinterlegt ist. |
 | 24 | `GetOrCreateSerialNoInformation` | Prozedur | Protected | Liest die Seriennr.-Information zu Artikel, Variante und Seriennummer oder legt sie an. |
 | 25 | `FillSerialNoFromPurchLine` | Prozedur | Public | Übernimmt die Seriennummer aus der Artikelverfolgung der Bestellzeile auf die Werkstattzeile (für das Upgrade bestehender Zeilen); meldet zurück, ob eine gefunden wurde. |
+| 26 | `DeleteForDeletedPurchLine` | Prozedur | Protected | Löscht beim Löschen einer Bestellzeile die zugehörige, noch nicht verarbeitete Werkstattzeile mit; die Codeunit besitzt dafür das indirekte Löschrecht, sodass auch Benutzer ohne "CXW Workshop Delete" Bestellungen löschen können. |
+| 27 | `ResetPurchLineOnDelete` | Prozedur | Protected | Setzt beim Löschen einer Werkstattzeile auf der Bestellzeile "An Werkstatt gesendet" und die Herstellerseriennummer zurück; Seriennummer und Seriennr.-Information bleiben für ein erneutes Senden erhalten. |
 
 ### Codeunit: CXW Workshop Upgrade (ID: 60336)
 
@@ -273,7 +276,11 @@ Upgrade-Routine, die beim Einspielen neuer Versionen bestehende Daten einmalig n
 
 ### Permission Set: CXW Workshop All (ID: 60301)
 
-Berechtigt zum vollständigen internen Arbeiten mit den Workshop-Tabellen, -Seiten und der Verarbeitungslogik – inklusive der für Wareneingang, Stornierung und Artikelattribute benötigten Standardtabellen (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping), damit die Job-Queue-Codeunit 60331 eigenständig lauffähig ist. Deckt zusätzlich den Kommissionsverkauf ab (Table 60341, Codeunit 60344/60345, Page 60342) inklusive des dafür benötigten Lesezugriffs auf Sales Invoice Header/Line und die Einkaufseinrichtung, die Tabellen der Webshop-Verfügbarkeit (60346–60348) sowie Lesezugriff auf die Finanzbuchhaltungs-Einrichtung und die Ausführung von Codeunit 60335 für "An Werkstatt senden".
+Berechtigt zum vollständigen internen Arbeiten mit den Workshop-Tabellen, -Seiten und der Verarbeitungslogik – inklusive der für Wareneingang, Stornierung und Artikelattribute benötigten Standardtabellen (Purchase Header/Line, Item, Item Attribute, Item Attribute Value, Item Attribute Value Mapping), damit die Job-Queue-Codeunit 60331 eigenständig lauffähig ist. Deckt zusätzlich den Kommissionsverkauf ab (Table 60341, Codeunit 60344/60345, Page 60342) inklusive des dafür benötigten Lesezugriffs auf Sales Invoice Header/Line und die Einkaufseinrichtung, die Tabellen der Webshop-Verfügbarkeit (60346–60348) sowie Lesezugriff auf die Finanzbuchhaltungs-Einrichtung und die Ausführung von Codeunit 60335 für "An Werkstatt senden". Werkstattzeilen selbst löschen darf dieser Satz nicht (nur indirekt beim Löschen einer Bestellzeile).
+
+### Permission Set: CXW Workshop Delete (ID: 60303)
+
+Für Sachbearbeiter, die zusätzlich Werkstattzeilen im Status "Neu" oder "Fehler" auf der Seite "CXW Workshop Lines" löschen dürfen. Enthält "CXW Workshop All" vollständig und ergänzt das direkte Löschrecht auf die Tabelle "CXW Workshop Line"; die Zuweisung dieses einen Satzes genügt.
 
 ### Permission Set: CXW Workshop API (ID: 60302)
 

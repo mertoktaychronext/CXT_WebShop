@@ -5,7 +5,8 @@ page 60338 "CXW Workshop Lines"
     SourceTable = "CXW Workshop Line";
     Editable = true;
     InsertAllowed = false;
-    DeleteAllowed = false;
+    // Only lines with status New or Error, and only with permission set "CXW Workshop Delete" (see table OnDelete).
+    DeleteAllowed = true;
     ModifyAllowed = true;
     ApplicationArea = All;
     UsageCategory = Lists;

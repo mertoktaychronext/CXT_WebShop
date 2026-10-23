@@ -117,7 +117,15 @@ Die eigentliche Prüfung durch die Werkstatt sowie die Weiterverarbeitung nach d
 
 ## Workshop-Zeilen einsehen
 
-Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Status und Merkmale können Sie dort korrigieren; Bestellbezug und Artikelnummer sind gesperrt, Zeilen lassen sich weder anlegen noch löschen.
+Über die Seite **"CXW Workshop Lines"** sehen Sie alle an die Werkstatt übergebenen Zeilen mit ihrem aktuellen Prüfstatus (Neu / WS geprüft / Verarbeitet / Fehler), den von der Werkstatt gemeldeten Artikelmerkmalen sowie – falls die automatische Verarbeitung fehlgeschlagen ist – dem zuletzt aufgetretenen Fehlertext. Status und Merkmale können Sie dort korrigieren; Bestellbezug und Artikelnummer sind gesperrt, Zeilen lassen sich dort nicht anlegen.
+
+### Werkstattzeile löschen
+
+Wurde eine Uhr versehentlich oder mit falschen Angaben an die Werkstatt gesendet, können Sie die Werkstattzeile auf der Seite **"CXW Workshop Lines"** löschen – sofern Ihnen der Berechtigungssatz **"CXW Workshop Delete"** zugewiesen ist.
+
+- Gelöscht werden können nur Zeilen im Status **"Neu"** oder **"Fehler"**. Zeilen im Status **"WS geprüft"** (die Werkstatt hat ihr Ergebnis bereits gemeldet) und **"Verarbeitet"** (Prüfnachweis) lassen sich nicht löschen.
+- Nach dem Löschen ist die zugehörige Bestellzeile wieder offen: "Sent to Workshop" ist zurückgesetzt, die Herstellernummer auf der Zeile ist leer, und die Zeile ist wieder bearbeitbar.
+- Mit **"Send to Workshop"** können Sie die Zeile anschließend erneut senden. Die bereits vergebene Seriennummer und die Seriennr.-Information mit der Herstellernummer bleiben erhalten und werden dabei wiederverwendet.
 
 Direkt aus der **Einkaufsbestellung** zeigt das Feld **"Anzahl Werkstattzeilen"** (Inforegister "Allgemein"), wie viele Werkstattzeilen es für diese Bestellung gibt; leer bedeutet keine. Ein Klick auf den Wert öffnet die Workshop-Zeilen gefiltert auf diese Bestellung.
 

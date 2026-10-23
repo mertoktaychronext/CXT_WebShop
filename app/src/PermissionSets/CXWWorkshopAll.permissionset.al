@@ -1,7 +1,9 @@
 permissionset 60301 "CXW Workshop All"
 {
     Assignable = true;
-    Permissions = tabledata "CXW Workshop Line" = RIMD,
+    // Indirect delete only: deleting a purchase line removes its open workshop line; deleting workshop lines
+    // directly requires "CXW Workshop Delete".
+    Permissions = tabledata "CXW Workshop Line" = RIMd,
         tabledata "Purchase Header" = RMD,
         tabledata "Purchase Line" = RMD,
         tabledata Item = RM,
