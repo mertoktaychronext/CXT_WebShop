@@ -12,6 +12,8 @@ Als dritter, ebenfalls fachlich unabhängiger Baustein enthält die Erweiterung 
 
 Als vierter, neuer Baustein enthält die Erweiterung den **Kommissionsverkauf** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): Wird eine VK-Rechnung mit einer Zeile eines Artikels mit `"CXB Consignment Sales"` = true (Feld aus der Dependency CHX.Base) gebucht, legt ein Event-Subscriber auf `Codeunit "Sales-Post"` einen Kommissions-Buchungseintrag an und ermittelt dabei automatisch die zugehörige, wareneingebuchte, noch nicht fakturierte Einkaufsbestellung. Eine job-queue-gesteuerte Codeunit bucht fällige Einträge (Fälligkeitsdatum = VK-Buchungsdatum + einrichtbare Verzögerung in Tagen) automatisiert als Einkaufsrechnung. Details siehe Abschnitt "Kommissionsverkauf" unten.
 
+> **Update 2026-10-23 (EK-Preis nach "Send to Workshop" bearbeitbar, Version 27.0.0.29):** PageExtension 60329 sperrt `"Direct Unit Cost"` nicht mehr; die übrigen Zeilenfelder bleiben ab `"CXW Sent to Workshop"` = true gesperrt. `"CXW Unit Price"` auf Table 60318 bleibt eine Momentaufnahme vom Zeitpunkt des Sendens – eine spätere Preisänderung erreicht die Werkstattzeile bzw. die API nicht.
+
 > **Update 2026-10-21 (BC-Seriennummer auf der Werkstattzeile, Version 27.0.0.28):** Table 60318 hat das neue Feld 39 `"CXW Serial No."` (Code[50], nicht editierbar) mit der BC-Seriennummer der Uhr. "Send to Workshop" übergibt die ermittelte bzw. gezogene Seriennummer an `CreateWorkshopLine` (PageExtension 60328), das sie als Momentaufnahme speichert. Page 60338 zeigt das Feld neben der Herstellerseriennummer, die API `workshopLines` liefert es als `serialNo` (nur lesend, PATCH-Änderungen werden abgelehnt; keine zusätzlichen Rechte für "CXW Workshop API"). Die Upgrade-Codeunit 60336 befüllt offene Zeilen (New/WS checked) einmalig aus der Artikelverfolgung der Einkaufszeile (`FillSerialNoFromPurchLine` in Codeunit 60335, Upgrade-Tag `CXW-WORKSHOPLINE-SERIALNO-20261021`); verarbeitete Zeilen bleiben leer. Details: `openspec/changes/workshop-line-serial-no/`.
 
 > **Update 2026-10-14 (Differenzbesteuerung aus der Salini Base App, Version 27.0.0.26):** Verfügbarkeitsänderungen (Codeunit 60348 "CXW Availability Change Mgt.": `QueueItemLedgerEntryChange`, Aktualisierung von "CXW Diff. Taxation Purchase", Filter in `GetAvailableInventoryQuantity`) und Echtzeitbestand (Codeunit 60350 "CXW Realtime Inventory Mgt.": "CXW Differential Taxation") lesen das Kennzeichen am Artikelposten jetzt aus `"SLPSBC Margin Taxation"` (Salini Base App) statt aus dem veralteten `"CXB Margin Taxation"` (CHX.Base). **Voraussetzungen:** CHX.Base ≥ 28.0.0.1 und Salini Base App ≥ 28.0.0.13 (neue direkte Abhängigkeit). **Auslieferung nur zusammen mit CHX.Base 28.0.0.1** im selben Wartungsfenster; die Datenübernahme der Artikelposten erledigt das Upgrade von CHX.Base. Keine Schema-Änderung, kein eigener Upgrade-Code. Details: `openspec/changes/margin-taxation-salini-field/`.
@@ -338,7 +340,8 @@ Evaluate → Integer, 10 Zustand, 11 Box, 13 Zertifikat – fehlt ein Wert,
 bleibt das Feld leer bzw. 0) auf Felder 30–38/40–47 der Workshop Line
    │
    │  PageExtension 60329 "CXW Workshop Purch Order Subf" sperrt ab
-   │  "Sent to Workshop" = true die Standardfelder der Zeile (Editable = false)
+   │  "Sent to Workshop" = true die Standardfelder der Zeile (Editable = false),
+   │  ausgenommen "Direct Unit Cost"
    ▼
 Externe Werkstatt liest/schreibt über
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,

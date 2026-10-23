@@ -12,6 +12,8 @@ As a third, likewise functionally independent component, the extension includes 
 
 As a fourth, new component, the extension includes **Consignment Sales** (Enum 60343, Table 60341, Codeunit 60344/60345, Page 60342): when a sales invoice is posted with a line for an item whose `"CXB Consignment Sales"` = true (a field supplied by the CHX.Base dependency), an event subscriber on `Codeunit "Sales-Post"` creates a consignment posting entry and automatically resolves the matching, received-but-not-yet-invoiced purchase order. A job-queue-driven codeunit posts due entries (due date = sales invoice posting date + a configurable delay in days) automatically as a purchase invoice. See the "Consignment Sales" section below for details.
 
+> **Update 2026-10-23 (direct unit cost editable after "Send to Workshop", version 27.0.0.29):** PageExtension 60329 no longer locks `"Direct Unit Cost"`; the other line fields stay locked once `"CXW Sent to Workshop"` = true. `"CXW Unit Price"` on Table 60318 remains a snapshot taken at send time — a later price change does not reach the workshop line or the API.
+
 > **Update 2026-10-21 (BC serial number on the workshop line, version 27.0.0.28):** Table 60318 has the new field 39 `"CXW Serial No."` (Code[50], not editable) holding the BC serial number of the watch. "Send to Workshop" passes the determined or drawn serial number to `CreateWorkshopLine` (PageExtension 60328), which stores it as a snapshot. Page 60338 shows the field next to the manufacturer serial number; the `workshopLines` API returns it as `serialNo` (read-only, PATCH changes are rejected; no additional rights for "CXW Workshop API"). Upgrade Codeunit 60336 fills open lines (New/WS checked) once from the purchase line's item tracking (`FillSerialNoFromPurchLine` in Codeunit 60335, upgrade tag `CXW-WORKSHOPLINE-SERIALNO-20261021`); processed lines stay empty. Details: `openspec/changes/workshop-line-serial-no/`.
 
 > **Update 2026-10-14 (margin taxation from the Salini Base App, version 27.0.0.26):** Availability changes (Codeunit 60348 "CXW Availability Change Mgt.": `QueueItemLedgerEntryChange`, refresh of "CXW Diff. Taxation Purchase", filter in `GetAvailableInventoryQuantity`) and realtime inventory (Codeunit 60350 "CXW Realtime Inventory Mgt.": "CXW Differential Taxation") now read the item ledger entry flag from `"SLPSBC Margin Taxation"` (Salini Base App) instead of the obsolete `"CXB Margin Taxation"` (CHX.Base). **Prerequisites:** CHX.Base ≥ 28.0.0.1 and Salini Base App ≥ 28.0.0.13 (new direct dependency). **Deploy only together with CHX.Base 28.0.0.1** in the same maintenance window; the CHX.Base upgrade migrates the item ledger entry values. No schema change, no upgrade code of its own. Details: `openspec/changes/margin-taxation-salini-field/`.
@@ -335,7 +337,8 @@ Evaluate → Integer, 10 condition, 11 box, 13 certificate — a missing value
 leaves the field empty or 0) into fields 30–38/40–47 of the Workshop Line
    │
    │  PageExtension 60329 "CXW Workshop Purch Order Subf" locks the
-   │  standard line fields (Editable = false) once "Sent to Workshop" = true
+   │  standard line fields (Editable = false) once "Sent to Workshop" = true,
+   │  except "Direct Unit Cost"
    ▼
 External workshop reads/writes via
 Page 60339 "CXW Workshop Line API" (PageType = API, OAuth2-S2S,
