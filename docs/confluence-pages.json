@@ -1,0 +1,52 @@
+{
+  "base_url": "https://salini.atlassian.net/wiki",
+  "space_id": "196612",
+  "default_parent_id": "344457224",
+  "pages": [
+    {
+      "file": "docs/README.md",
+      "title": "CHX.Webshop",
+      "page_id": "344457224"
+    },
+    {
+      "file": "docs/user-manual-de.md",
+      "title": "Benutzerhandbuch – CHX.Webshop",
+      "page_id": "345374721"
+    },
+    {
+      "file": "docs/user-manual-en.md",
+      "title": "User Manual – CHX.Webshop",
+      "page_id": "344457232"
+    },
+    {
+      "file": "docs/key-user-manual-de.md",
+      "title": "Key-User-Handbuch – CHX.Webshop",
+      "page_id": "344096791"
+    },
+    {
+      "file": "docs/key-user-manual-en.md",
+      "title": "Key User Manual – CHX.Webshop",
+      "page_id": "344752130"
+    },
+    {
+      "file": "docs/developer-manual-de.md",
+      "title": "Entwicklerhandbuch – CHX.Webshop",
+      "page_id": "345407490"
+    },
+    {
+      "file": "docs/developer-manual-en.md",
+      "title": "Developer Manual – CHX.Webshop",
+      "page_id": "345440258"
+    },
+    {
+      "file": "docs/funktionsregister/funktionsregister-sl-chronext-webshop.md",
+      "title": "Funktionsregister – CHX.Webshop",
+      "page_id": "345473025"
+    },
+    {
+      "file": "docs/funktionsregister/gesamtuebersicht.md",
+      "title": "Funktionsregister Gesamtübersicht – CHX.Webshop",
+      "page_id": "345505793"
+    }
+  ]
+}
