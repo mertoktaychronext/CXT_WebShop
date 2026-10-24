@@ -75,6 +75,8 @@ codeunit 50405 "CXW Test Workshop Line Delete"
         // [GIVEN] A workshop line with status WS checked
         CreateSentPurchLine(PurchaseLine);
         CreateWorkshopLine(WorkshopLine, PurchaseLine, WorkshopLine."CXW Status"::"WS checked");
+        // asserterror rolls back the whole transaction; without Commit the test data would be gone as well.
+        Commit();
 
         // [WHEN] Deleting the workshop line
         asserterror WorkshopLine.Delete(true);
@@ -95,6 +97,8 @@ codeunit 50405 "CXW Test Workshop Line Delete"
         // [GIVEN] A workshop line with status Processed
         CreateSentPurchLine(PurchaseLine);
         CreateWorkshopLine(WorkshopLine, PurchaseLine, WorkshopLine."CXW Status"::"Processed");
+        // asserterror rolls back the whole transaction; without Commit the test data would be gone as well.
+        Commit();
 
         // [WHEN] Deleting the workshop line
         asserterror WorkshopLine.Delete(true);
