@@ -1,8 +1,7 @@
 # Veröffentlicht die Handbücher aus docs/ nach Confluence
 # (Space "Interne Projekte", Seite "CHX.Webshop" im Ordner "Chronext")
 # - Nach jedem Merge in 01-Master/master, wenn sich docs/ oder das Skript geändert hat
-# - Azure Repos ignoriert "pr:"-Trigger: Für den Dry-Run im PR die Pipeline optional als
-#   Build-Validierung in den Branch Policies von 01-Master/master eintragen
+# - Keine PR-Läufe: nicht als Build-Validierung in den Branch Policies eintragen
 
 trigger:
   branches:

@@ -534,7 +534,7 @@ Not yet covered by automated tests (basis for further test codeunits): country e
 
 ## Deployment
 
-Azure DevOps pipeline `azure-pipelines.yml` (scripts in `.pipelines/`): on every push, build with CodeCop/UICop and all tests of the test app in a BC container (agent pool `SelfHosted-BCServer`); nightly also against NextMinor/NextMajor. The dependencies (Salini Base App, CHX.Base, ChronextBC) are stored as `.app` files in `.pipelines/dependencies`, the SalLicenseCheckApp stub in `.pipelines/stubs`. The build artifact `CHXWebshop-de` contains only the app. Deployment is still manual via "AL: Publish" from VS Code or the admin center.
+Azure DevOps pipeline `azure-pipelines.yml` (scripts in `.pipelines/`): after every merge into `02-DEV/development`, build with CodeCop/UICop and all tests of the test app in a BC container (agent pool `SelfHosted-BCServer`); on Fridays (03:00 UTC) also against NextMinor/NextMajor. The dependencies (Salini Base App, CHX.Base, ChronextBC) are stored as `.app` files in `.pipelines/dependencies`, the SalLicenseCheckApp stub in `.pipelines/stubs`. The build artifact `CHXWebshop-de` contains only the app. Deployment is still manual via "AL: Publish" from VS Code or the admin center.
 
 ## Contributing / Conventions
 

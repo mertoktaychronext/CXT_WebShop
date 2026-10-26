@@ -536,7 +536,7 @@ Noch ohne automatische Tests (Grundlage für weitere Testcodeunits): Länder-Exp
 
 ## Deployment
 
-Azure-DevOps-Pipeline `azure-pipelines.yml` (Skripte in `.pipelines/`): bei jedem Push Build mit CodeCop/UICop und alle Tests der Test-App in einem BC-Container (Agent-Pool `SelfHosted-BCServer`), nachts zusätzlich gegen NextMinor/NextMajor. Die Abhängigkeiten (Salini Base App, CHX.Base, ChronextBC) liegen als `.app` in `.pipelines/dependencies`, die SalLicenseCheckApp-Attrappe in `.pipelines/stubs`. Das Build-Artefakt `CHXWebshop-de` enthält nur die App. Deployment erfolgt weiterhin manuell über "AL: Publish" aus VS Code bzw. das Admin Center.
+Azure-DevOps-Pipeline `azure-pipelines.yml` (Skripte in `.pipelines/`): nach jedem Merge in `02-DEV/development` Build mit CodeCop/UICop und alle Tests der Test-App in einem BC-Container (Agent-Pool `SelfHosted-BCServer`), freitags (03:00 UTC) zusätzlich gegen NextMinor/NextMajor. Die Abhängigkeiten (Salini Base App, CHX.Base, ChronextBC) liegen als `.app` in `.pipelines/dependencies`, die SalLicenseCheckApp-Attrappe in `.pipelines/stubs`. Das Build-Artefakt `CHXWebshop-de` enthält nur die App. Deployment erfolgt weiterhin manuell über "AL: Publish" aus VS Code bzw. das Admin Center.
 
 ## Beitragen / Konventionen
 
