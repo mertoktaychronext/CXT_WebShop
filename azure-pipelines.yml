@@ -1,8 +1,8 @@
 # CI für CHX.Webshop
-# - Nach jedem Merge in 02-DEV/development und 01-Master/master: Build + CodeCop/UICop + Tests der Test-App gegen die aktuelle BC-Version (DE)
-# - Als Build-Validierung in den Branch Policies von 02-DEV/development und 01-Master/master eintragen
+# - Nach jedem Merge in 02-DEV/development: Build + CodeCop/UICop + Tests der Test-App gegen die aktuelle BC-Version (DE)
+# - Als Build-Validierung in der Branch Policy von 02-DEV/development eintragen (nicht in 01-Master/master)
 #   (Azure Repos ignoriert "pr:"-Trigger, PR-Validierung läuft ausschließlich über Branch Policies)
-# - Nachts (Mo–Fr): Tests gegen die niedrigste unterstützte (app.json), die nächste Minor- und die nächste Major-Version
+# - Freitags (Nightly): Tests gegen die niedrigste unterstützte (app.json), die nächste Minor- und die nächste Major-Version
 # - Salini Base App, CHX.Base, ChronextBC und SalLicenseCheckApp-Attrappe kommen aus .pipelines\ (siehe README dort)
 
 name: $(Date:yyyyMMdd)$(Rev:.r)
@@ -12,7 +12,6 @@ trigger:
   branches:
     include:                      # nur nach dem Merge; Feature-Branches prüft die PR-Validierung (Branch Policy)
       - 02-DEV/development
-      - 01-Master/master
   paths:
     exclude:
       - docs/*
@@ -21,7 +20,7 @@ trigger:
       - '*.md'
 
 schedules:
-  - cron: '0 3 * * 1-5'          # 03:00 UTC = 05:00 MESZ (eine Stunde nach CHX.Base)
+  - cron: '0 3 * * 5'          # 03:00 UTC freitags = 04:00 MEZ / 05:00 MESZ (eine Stunde nach CHX.Base)
     displayName: Nightly – kommende BC-Versionen
     branches:
       include:
